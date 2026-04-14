@@ -5716,9 +5716,8 @@ function liveRefresh() {
   if (btn){btn.textContent='⏳ Loading…';btn.disabled=true;}
   liveData={};
   var pending=urls.length; var errors=0;
-  var CORS_PROXY='https://api.allorigins.win/raw?url=';
   urls.forEach(function(url) {
-    var fetchUrl = CORS_PROXY + encodeURIComponent(url);
+    var fetchUrl = url;
     console.log('⚡ Fetching:', fetchUrl);
     fetch(fetchUrl)
       .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
