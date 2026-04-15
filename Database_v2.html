@@ -3959,7 +3959,8 @@ function scParseYE(s) {
 }
 function scQ2Row(c, mk) {
   const m=c[mk];
-  if (m.cur_h1==null||m.fy1_fc==null||m.fy1_fc<=0||m.cur_h1<=0) return null;
+  // fc forecast must be positive — historical/current H1 can be negative (recovery situations valid)
+  if (m.cur_h1==null||m.fy1_fc==null||m.fy1_fc<=0) return null;
   const pts=[m.y3_h1_pct,m.y2_h1_pct,m.y1_h1_pct].filter(v=>v!=null);
   if (pts.length<2) return null;
   const avg=+(pts.reduce((a,b)=>a+b,0)/pts.length).toFixed(1);
@@ -3971,6 +3972,8 @@ function scQ2Row(c, mk) {
 }
 function scQ4Row(c, mk) {
   const m=c[mk];
+  // fc forecast must be positive
+  if (m.fy1_fc==null||m.fy1_fc<=0) return null;
   if (m.cur_h2==null||m.y1_h2==null||m.y2_h2==null||m.y2_h2<=0||m.y1_h2<=0) return null;
   const y3G=(m.y3_h2!=null&&m.y2_h2>0&&m.y3_h2>0)?+((m.y2_h2-m.y3_h2)/m.y3_h2*100).toFixed(1):null;
   const prevG=((m.y1_h2-m.y2_h2)/m.y2_h2)*100, curG=((m.cur_h2-m.y1_h2)/m.y1_h2)*100;
@@ -4016,10 +4019,10 @@ function scBuildDiff(currentRows, prevResults, mode, metric) {
   for(const row of currentRows) {
     const prevMode=prevAllMap[row.ticker];
     if (prevMode===undefined) {
-      // Ticker not in prev at all — not a routing flip, just absent. Mark same to hide.
+      // Ticker not in prev at all — mark same to hide
       diff[row.ticker]={status:'same'};
     } else if (prevMode!==mode) {
-      // Was in the other mode (Q4→Q2 or Q2→Q4) — genuine new entry from results
+      // Was in the other mode (Q4→Q2 or Q2→Q4) — genuine routing flip
       diff[row.ticker]={status:'new'};
     } else {
       // Same mode as before — unchanged
