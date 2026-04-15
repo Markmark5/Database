@@ -212,6 +212,10 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .c-amber .verdict{color:var(--amber);}
 .rns-date{font-family:var(--mono);font-size:9px;color:var(--text-dim);}
 .pill-row{display:flex;gap:4px;align-items:center;margin-top:5px;flex-wrap:nowrap;}
+.ep-chip{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:.03em;padding:2px 5px;border-radius:3px;background:#ffffff06;color:var(--text-dim);border:1px solid var(--border);white-space:nowrap;cursor:pointer;transition:all .15s;line-height:1;}
+.ep-chip:hover{color:var(--amber);border-color:var(--amber-mid);background:var(--amber-dim);}
+.ep-chip.set{color:var(--text-secondary);border-color:var(--border);}
+.ep-input{font-family:var(--mono);font-size:8px;font-weight:600;width:48px;padding:2px 4px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber-mid);outline:none;line-height:1;}
 .rns-pill{font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap;}
 .c-red .rns-pill{background:var(--red-dim);color:var(--red);border:1px solid var(--red-mid);}
 .c-green .rns-pill{background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);}
@@ -2959,7 +2963,7 @@ function buildRow(rec){
   return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
     +'<div class="cell-ticker"><div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'
-    +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
+    +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?rec.entryPrice+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
     +'<div class="pill-row"><div class="rns-pill">'+(rec.rnsType||'RNS')+'</div><div class="mode-pill">'+(rec.mode||'')+'</div>'
     +'<button class="analysis-btn'+(hasA?' live':'')+'" onclick="event.stopPropagation();openAnalysis(\''+rec.id+'\')">📄</button>'
     +'<button style="font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-mid);cursor:pointer;margin-left:auto;" onclick="event.stopPropagation();deleteRec(\''+rec.id+'\')">✕</button>'
@@ -3355,6 +3359,39 @@ function openConfirm(opts){
 }
 function closeConfirm(){document.getElementById('confirm-overlay').classList.remove('open');CONFIRM_FN=null;}
 function runConfirm(){if(CONFIRM_FN)CONFIRM_FN();closeConfirm();}
+function epEdit(id, uid) {
+  var chip = document.getElementById('ep-'+uid);
+  if (!chip) return;
+  var rec = ALL.find(function(r){ return r.id===id; });
+  if (!rec) return;
+  var inp = document.createElement('input');
+  inp.className = 'ep-input';
+  inp.type = 'text';
+  inp.inputMode = 'numeric';
+  inp.maxLength = 6;
+  inp.placeholder = 'price';
+  inp.value = rec.entryPrice || '';
+  chip.replaceWith(inp);
+  inp.focus();
+  inp.select();
+  function commit() {
+    var val = parseFloat(inp.value.replace(/[^0-9.]/g,''));
+    if (!isNaN(val) && val > 0) { rec.entryPrice = val; dbPut(rec); }
+    var newChip = document.createElement('span');
+    newChip.className = 'ep-chip' + (rec.entryPrice ? ' set' : '');
+    newChip.id = 'ep-'+uid;
+    newChip.title = 'Entry price — click to edit';
+    newChip.textContent = rec.entryPrice ? rec.entryPrice+'p' : '+ ep';
+    newChip.onclick = function(e){ e.stopPropagation(); epEdit(id, uid); };
+    inp.replaceWith(newChip);
+  }
+  inp.addEventListener('blur', commit);
+  inp.addEventListener('keydown', function(e){
+    if (e.key==='Enter') { inp.blur(); }
+    if (e.key==='Escape') { inp.value=''; inp.blur(); }
+  });
+}
+
 async function deleteRec(id){
   openConfirm({icon:'⚠',t:'Delete this record?',s:'Permanently removes the record.',fn:async function(){
     await dbDel(id);ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');
