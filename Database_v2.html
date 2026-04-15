@@ -1290,16 +1290,19 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
     <!-- BEST / WORST -->
     <div class="db-section" id="bw-section">
       <div class="db-section-hdr">
-        <div class="db-section-title"><span class="dot dot-amber"></span>Best &amp; Worst · 7 days</div>
-        <button class="db-expand-btn" onclick="expandSection('bw-fs','Best &amp; Worst')">⤢</button>
+        <div class="db-section-title"><span class="dot dot-amber"></span><span id="bw-title-txt">Best &amp; Worst · 7 days</span></div>
+        <div style="display:flex;gap:5px;align-items:center;">
+          <button class="db-expand-btn" id="bw-live-btn" onclick="bwToggleLive(this)" style="color:var(--text-dim);">⚡ Since RNS</button>
+          <button class="db-expand-btn" onclick="expandSection('bw-fs','Best &amp; Worst')">⤢</button>
+        </div>
       </div>
       <div class="bw-panel" id="bw-panel">
         <div class="bw-half">
-          <div class="bw-title best">↑ Best 5</div>
+          <div class="bw-title best" id="bw-best-title">↑ Best 5</div>
           <div id="bw-best"></div>
         </div>
         <div class="bw-half">
-          <div class="bw-title worst">↓ Worst 5</div>
+          <div class="bw-title worst" id="bw-worst-title">↓ Worst 5</div>
           <div id="bw-worst"></div>
         </div>
       </div>
@@ -3059,7 +3062,26 @@ function renderPagination(total){
 function goPage(p){PAGE=p;renderRows();}
 
 /* ── BEST/WORST ── */
+var bwLiveMode = false;
+
+function bwToggleLive(btn) {
+  bwLiveMode = !bwLiveMode;
+  if (btn) {
+    btn.style.color = bwLiveMode ? 'var(--amber)' : '';
+    btn.style.borderColor = bwLiveMode ? 'var(--amber-mid)' : '';
+    btn.style.background = bwLiveMode ? 'var(--amber-dim)' : '';
+  }
+  renderBestWorst();
+}
+
 function renderBestWorst(){
+  if (bwLiveMode) { renderBestWorstLive(); return; }
+  const titleEl = document.getElementById('bw-title-txt');
+  if (titleEl) titleEl.innerHTML = 'Best &amp; Worst · 7 days';
+  const bestTitle = document.getElementById('bw-best-title');
+  const worstTitle = document.getElementById('bw-worst-title');
+  if (bestTitle) bestTitle.textContent = '↑ Best 5';
+  if (worstTitle) worstTitle.textContent = '↓ Worst 5';
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-7);
   const cutStr=cutoff.toISOString().split('T')[0];
   const recent=ALL.filter(function(r){return r.date>=cutStr;});
@@ -3081,6 +3103,72 @@ function renderBestWorst(){
   }
   renderList(best,'bw-best');
   renderList(worst,'bw-worst');
+}
+
+function renderBestWorstLive(){
+  const titleEl = document.getElementById('bw-title-txt');
+  if (titleEl) titleEl.innerHTML = '⚡ Since RNS';
+  const bestTitle = document.getElementById('bw-best-title');
+  const worstTitle = document.getElementById('bw-worst-title');
+  if (bestTitle) bestTitle.textContent = '↑ Best movers';
+  if (worstTitle) worstTitle.textContent = '↓ Worst movers';
+
+  const bestEl = document.getElementById('bw-best');
+  const worstEl = document.getElementById('bw-worst');
+
+  // Need both entryPrice and live data
+  if (!Object.keys(liveData).length) {
+    var msg = '<div class="bw-empty">Refresh ⚡ Live data first</div>';
+    if (bestEl) bestEl.innerHTML = msg;
+    if (worstEl) worstEl.innerHTML = msg;
+    return;
+  }
+
+  // Build ranked list — one entry per ticker (latest scorecard if dupes)
+  var tickerMap = {};
+  ALL.forEach(function(r) {
+    if (!r.entryPrice) return;
+    var ld = liveData[r.ticker];
+    if (!ld || isNaN(ld.price) || !ld.price) return;
+    var pct = ((ld.price - r.entryPrice) / r.entryPrice) * 100;
+    // Keep latest scorecard per ticker
+    if (!tickerMap[r.ticker] || r.date > tickerMap[r.ticker].date) {
+      tickerMap[r.ticker] = { rec: r, currentPrice: ld.price, pct: pct };
+    }
+  });
+
+  var entries = Object.values(tickerMap);
+  if (!entries.length) {
+    var noMsg = '<div class="bw-empty">No scorecards with entry price set</div>';
+    if (bestEl) bestEl.innerHTML = noMsg;
+    if (worstEl) worstEl.innerHTML = noMsg;
+    return;
+  }
+
+  entries.sort(function(a,b){ return b.pct - a.pct; });
+  var best = entries.slice(0, 10);
+  var worst = entries.slice(-10).reverse();
+
+  function renderLiveList(items, elId) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    el.innerHTML = items.map(function(e) {
+      var r = e.rec;
+      var sign = e.pct >= 0 ? '+' : '';
+      var col = e.pct >= 0 ? 'var(--green)' : 'var(--red)';
+      return '<div class="bw-row">'
+        + '<div style="display:flex;align-items:center;min-width:0;overflow:hidden;">'
+        + '<span class="bw-name">' + (r.company||r.ticker) + '</span>'
+        + '<span class="bw-ticker"> ' + r.ticker + '</span></div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;">'
+        + '<span style="font-family:var(--mono);font-size:13px;font-weight:700;color:' + col + ';">' + sign + e.pct.toFixed(1) + '%</span>'
+        + '<span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);">' + r.entryPrice + 'p → ' + e.currentPrice.toFixed(1) + 'p</span>'
+        + '</div></div>';
+    }).join('');
+  }
+
+  renderLiveList(best, 'bw-best');
+  renderLiveList(worst, 'bw-worst');
 }
 
 /* ── SIDEBAR STATS ── */
