@@ -6174,12 +6174,25 @@ function dbRestoreApply(backup) {
   var status = document.getElementById('db-restore-status');
   var log = [];
 
-  // Scorecards
-  if (backup.scorecards && Array.isArray(backup.scorecards)) {
-    ALL = backup.scorecards;
-    FILTERED = ALL.slice();
-    log.push(ALL.length+' scorecards');
-    if (typeof renderAll === 'function') renderAll();
+  // Scorecards — write to IndexedDB so they persist on reload
+  if (backup.scorecards && Array.isArray(backup.scorecards) && backup.scorecards.length) {
+    dbClear().then(function() {
+      var puts = backup.scorecards.map(function(r){ return dbPut(r); });
+      Promise.all(puts).then(function() {
+        return dbAll();
+      }).then(function(records) {
+        ALL = records;
+        FILTERED = ALL.slice();
+        log.push(ALL.length+' scorecards');
+        applyFilters(); updateSidebar(); renderBestWorst();
+        var savedAt = backup._meta.savedAtLabel || backup._meta.savedAt || 'unknown date';
+        var msg = '✓ Restored from '+savedAt+' — '+log.join(', ');
+        if (status) status.innerHTML = '<span style="color:var(--green);">'+msg+'</span>';
+        toast('✓ Database restored from backup', 'ok', 4000);
+        setTimeout(function(){ document.getElementById('db-restore-overlay').style.display='none'; }, 2000);
+      });
+    });
+    return; // async path handles completion above
   }
 
   // Broker changes — restore into bkData and re-render
