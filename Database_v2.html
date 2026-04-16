@@ -2028,16 +2028,19 @@ function expandSection(id){
     c.style.display='flex';
     c.style.flexDirection='column';
     c.style.height='calc(90vh - 44px)';
-
-    var bwFsSort='score'; // 'score' | 'pct' | 'az'
-
-    function bwFsRender() {
-      const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
-      const cutStr=cutoff.toISOString().split('T')[0];
-      const recent=ALL.filter(function(r){return r.date>=cutStr;});
-
-      // Build entries with pct if available
-      var entries = recent.map(function(r) {
+    window.bwFsSort = window.bwFsSort || 'score';
+    window.bwFsRender = function() {
+      // All scorecards — no date limit
+      // Use latest scorecard per ticker for price lookup
+      var tickerMap = {};
+      ALL.forEach(function(r) {
+        if (!tickerMap[r.ticker] || r.date > tickerMap[r.ticker].date) {
+          tickerMap[r.ticker] = r;
+        }
+      });
+      // Build entries — one per ticker using latest scorecard
+      var entries = ALL.map(function(r) {
+        var latestRec = tickerMap[r.ticker];
         var pct = null;
         if (r.entryPrice && liveData[r.ticker] && liveData[r.ticker].price) {
           pct = ((liveData[r.ticker].price - r.entryPrice) / r.entryPrice) * 100;
@@ -2045,19 +2048,19 @@ function expandSection(id){
         return { r:r, pct:pct };
       });
 
-      // Sort
       var best, worst;
-      if (bwFsSort === 'score') {
+      if (window.bwFsSort === 'score') {
         best  = [...entries].sort(function(a,b){return b.r.score-a.r.score;});
         worst = [...entries].sort(function(a,b){return a.r.score-b.r.score;});
-      } else if (bwFsSort === 'pct') {
+      } else if (window.bwFsSort === 'pct') {
         var withPct = entries.filter(function(e){return e.pct!==null;});
         best  = [...withPct].sort(function(a,b){return b.pct-a.pct;});
         worst = [...withPct].sort(function(a,b){return a.pct-b.pct;});
-        if (!withPct.length) {
-          best = worst = [];
-        }
-      } else { // az
+        if (!withPct.length) { best = worst = []; }
+      } else if (window.bwFsSort === 'date') {
+        best  = [...entries].sort(function(a,b){return b.r.date.localeCompare(a.r.date);});
+        worst = [];
+      } else {
         best  = [...entries].sort(function(a,b){return (a.r.ticker||'').localeCompare(b.r.ticker||'');});
         worst = [];
       }
@@ -2065,15 +2068,10 @@ function expandSection(id){
       function bwFsRow(e) {
         const r=e.r, b=band(r.score);
         const scoreCol=b==='green'?'var(--green)':b==='amber'?'var(--amber)':'var(--red)';
-        var pctHtml = '';
-        if (e.pct !== null) {
-          var sign = e.pct>=0?'+':'';
-          var col = e.pct>=0?'var(--green)':'var(--red)';
-          pctHtml = '<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:'+col+';margin:0 10px;">'+sign+e.pct.toFixed(1)+'%</span>';
-        } else {
-          pctHtml = '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin:0 10px;">—</span>';
-        }
-        return '<div style="display:grid;grid-template-columns:1fr auto auto auto;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);">'
+        var pctHtml = e.pct !== null
+          ? '<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:'+(e.pct>=0?'var(--green)':'var(--red)')+';margin:0 10px;">'+(e.pct>=0?'+':'')+e.pct.toFixed(1)+'%</span>'
+          : '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin:0 10px;">—</span>';
+        return '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);">'
           +'<div style="min-width:0;">'
             +'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">'+(r.company||r.ticker)+'</span>'
             +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">'+r.ticker+' · '+fmtDate(r.date)+'</span>'
@@ -2089,41 +2087,40 @@ function expandSection(id){
         return hdr+items.map(bwFsRow).join('');
       }
 
-      var noLive = bwFsSort==='pct' && !entries.filter(function(e){return e.pct!==null;}).length;
+      var noLive = window.bwFsSort==='pct' && !entries.filter(function(e){return e.pct!==null;}).length;
       var mainHtml;
-      if (bwFsSort === 'az') {
-        mainHtml = '<div style="height:100%;overflow-y:auto;">'
-          + '<div style="background:var(--surface2);border-right:1px solid var(--border);overflow:hidden;">'
-          + bwFsTable(best, 'A–Z · All ' + entries.length + ' records', 'var(--text-secondary)')
-          + '</div></div>';
+      if (window.bwFsSort === 'az' || window.bwFsSort === 'date') {
+        var listLabel = window.bwFsSort === 'date' ? 'Date · Newest first · ' + entries.length + ' records' : 'A–Z · All ' + entries.length + ' records';
+        mainHtml = '<div style="height:100%;overflow-y:auto;background:var(--surface2);">'
+          + bwFsTable(best, listLabel, 'var(--text-secondary)')
+          + '</div>';
       } else if (noLive) {
         mainHtml = '<div style="padding:40px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-dim);">No entry prices set or live data not loaded — switch to Score sort or set entry prices</div>';
       } else {
         mainHtml =
           '<div style="display:grid;grid-template-columns:1fr 1fr;height:100%;overflow:hidden;">'
             +'<div style="overflow-y:auto;border-right:1px solid var(--border);background:var(--surface2);">'
-              +bwFsTable(best, bwFsSort==='score'?'▲ Best · Score':'▲ Best · Since RNS', 'var(--green)')
+              +bwFsTable(best, window.bwFsSort==='score'?'▲ Best · Score':'▲ Best · Since RNS', 'var(--green)')
             +'</div>'
             +'<div style="overflow-y:auto;background:var(--surface2);">'
-              +bwFsTable(worst, bwFsSort==='score'?'▼ Worst · Score':'▼ Worst · Since RNS', 'var(--red)')
+              +bwFsTable(worst, window.bwFsSort==='score'?'▼ Worst · Score':'▼ Worst · Since RNS', 'var(--red)')
             +'</div>'
           +'</div>';
       }
 
+      var s = window.bwFsSort;
       c.innerHTML =
-        // Controls bar
         '<div style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;">'
           +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:.07em;text-transform:uppercase;margin-right:4px;">Sort:</span>'
-          +'<button onclick="bwFsSort=\'score\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='score'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'">Score</button>'
-          +'<button onclick="bwFsSort=\'pct\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='pct'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'" title="Requires entry price + live data">⚡ Since RNS</button>'
-          +'<button onclick="bwFsSort=\'az\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='az'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'">A–Z</button>'
-          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">Last 30 days · '+recent.length+' records</span>'
+          +'<button onclick="window.bwFsSort=\'score\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='score'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Score</button>'
+          +'<button onclick="window.bwFsSort=\'pct\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='pct'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">⚡ Since RNS</button>'
+          +'<button onclick="window.bwFsSort=\'az\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='az'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">A–Z</button>'
+          +'<button onclick="window.bwFsSort=\'date\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='date'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Date</button>'
+          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">All time · '+ALL.length+' records</span>'
         +'</div>'
-        // Main content
         +'<div style="flex:1;overflow:hidden;">' + mainHtml + '</div>';
-    }
-
-    bwFsRender();
+    };
+    window.bwFsRender();
     return;
   }
   if(id==='h1-fs'){
