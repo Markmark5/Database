@@ -2992,10 +2992,12 @@ function parseScorecard(html){
         const val=(valEl||{}).textContent?.trim()||'';
         const sub=(ri.querySelector('.rev-sub')||{}).textContent?.trim()||'';
         const style=valEl?.getAttribute('style')||'';
+        const cls=valEl?.className||'';
         let color='';
-        if(style.includes('--red')||style.includes('#ff4757'))color='var(--red)';
-        else if(style.includes('--green')||style.includes('#00d97e'))color='var(--green)';
-        else if(style.includes('--amber')||style.includes('#ffb347'))color='var(--amber)';
+        // Check inline style first, then CSS classes
+        if(style.includes('--red')||style.includes('#ff4757')||cls.includes('val-dn'))color='var(--red)';
+        else if(style.includes('--green')||style.includes('#00d97e')||cls.includes('val-up'))color='var(--green)';
+        else if(style.includes('--amber')||style.includes('#ffb347')||cls.includes('val-fl'))color='var(--amber)';
         if(lbl)revisions.push({lbl,val,sub,color});
       });
       const sparkStats=[];
@@ -3004,14 +3006,21 @@ function parseScorecard(html){
         const valEl=ss.querySelector('.sstat-val');
         const val=(valEl||{}).textContent?.trim()||'';
         const style=valEl?.getAttribute('style')||'';
-        if(lbl)sparkStats.push({lbl,val,style});
+        const cls=valEl?.className||'';
+        // Detect colour from inline style or CSS class
+        let sStyle=style;
+        if(!sStyle){if(cls.includes('val-up')||cls.includes('green'))sStyle='color:var(--green)';else if(cls.includes('val-dn')||cls.includes('red'))sStyle='color:var(--red)';else if(cls.includes('val-fl')||cls.includes('amber'))sStyle='color:var(--amber)';}
+        if(lbl)sparkStats.push({lbl,val,style:sStyle});
       });
+      // Capture rendered SVG from spark-wrap so it can be re-injected on render
+      const sparkWrapEl=wrap.querySelector('.spark-wrap');
+      const sparkSVG=sparkWrapEl?sparkWrapEl.innerHTML:'';
       const sparkLabel=(wrap.querySelector('.spark-lbl')||{}).textContent?.trim()||'EPS Consensus Trend';
       const h1Cells=wrap.querySelectorAll('.h1-ind-cell');
       const h1Inds=[],accelInds=[];
       if(h1Cells.length>0){h1Cells[0].querySelectorAll('.h1-sub-ind').forEach(si=>{const lbl=(si.querySelector('.h1-ind-lbl')||{}).textContent?.trim()||'';const mark=(si.querySelector('.h1-ind-mark')||{}).textContent?.trim()||'—';const dev=(si.querySelector('.h1-ind-dev')||{}).textContent?.trim()||'';const cls=si.className;let state='na';if(cls.includes(' pos'))state='pos';else if(cls.includes(' neg'))state='neg';h1Inds.push({lbl,mark,dev,state});});}
       if(h1Cells.length>1){h1Cells[1].querySelectorAll('.h1-sub-ind').forEach(si=>{const lbl=(si.querySelector('.h1-ind-lbl')||{}).textContent?.trim()||'';const mark=(si.querySelector('.h1-ind-mark')||{}).textContent?.trim()||'—';const dev=(si.querySelector('.h1-ind-dev')||{}).textContent?.trim()||'';const cls=si.className;let state='na';if(cls.includes(' pos'))state='pos';else if(cls.includes(' neg'))state='neg';accelInds.push({lbl,mark,dev,state});});}
-      const rec={id:genId(ticker,date),ticker:ticker.toUpperCase(),score,company,verdict,date,rnsType,mode,index,signals,revisions,sparkStats,sparkLabel,h1Inds,accelInds,importedAt:new Date().toISOString(),source:'html-dom'};
+      const rec={id:genId(ticker,date),ticker:ticker.toUpperCase(),score,company,verdict,date,rnsType,mode,index,signals,revisions,sparkStats,sparkLabel,sparkSVG,h1Inds,accelInds,importedAt:new Date().toISOString(),source:'html-dom'};
       records.push(rec);
     }catch(e){console.warn('Row parse:',e);}
   });
@@ -3105,7 +3114,7 @@ function buildRow(rec){
     +'</div></div></div>'
     +'<div class="cell"><div class="signals">'+(sigHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No signals captured</span>')+'</div></div>'
     +'<div class="cell"><div class="revisions">'+(revHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No data</span>')+'</div></div>'
-    +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap"><svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg><div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
+    +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>')+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
     +'<div class="h1-ind-cell">'+h1Html+'</div>'
     +'<div class="h1-ind-cell">'+accelHtml+'</div>'
     +'</div></div>';
@@ -3500,9 +3509,21 @@ function showPreview(src){
     +PENDING.map(function(r){const b=band(r.score);return '<div class="prev-row"><span style="font-family:var(--mono);font-weight:700;color:var(--'+b+')">'+r.ticker+'</span> <span style="color:var(--text-secondary)">'+(r.company||'—')+'</span> <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--'+b+')">'+r.score+'/100</span></div>';}).join('');
   btn.style.display='inline-flex';msg.style.display='none';
 }
-async function commitFile(){if(!PENDING.length)return;for(const r of PENDING)await dbPut(r);ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+PENDING.length+' record(s) imported','ok');closeImport();}
+async function commitFile(){
+  if(!PENDING.length)return;
+  for(const r of PENDING){try{await dbPut(r);}catch(e){}}
+  PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
+  FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');closeImport();
+}
 function onPasteInput(){const html=document.getElementById('paste-box').value;if(html.length<100)return;PENDING=parseScorecard(html);if(PENDING.length)showPreview('paste');}
-async function commitPaste(){if(!PENDING.length)return;for(const r of PENDING)await dbPut(r);ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+PENDING.length+' record(s) imported','ok');closeImport();}
+async function commitPaste(){
+  if(!PENDING.length)return;
+  for(const r of PENDING){try{await dbPut(r);}catch(e){}}
+  PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
+  FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');closeImport();
+}
 async function commitManual(){
   const ticker=document.getElementById('m-ticker').value.trim().toUpperCase();
   const score=parseInt(document.getElementById('m-score').value,10);
@@ -3511,7 +3532,8 @@ async function commitManual(){
   if(!ticker||isNaN(score)||!date){msg.className='mbox err';msg.style.display='block';msg.textContent='Ticker, Score and Date are required.';return;}
   if(score<0||score>100){msg.className='mbox err';msg.style.display='block';msg.textContent='Score must be 0–100.';return;}
   const rec={id:genId(ticker,date),ticker,score,company:document.getElementById('m-company').value.trim(),date,rnsType:document.getElementById('m-rns-type').value,mode:document.getElementById('m-mode').value,index:document.getElementById('m-index').value.trim(),verdict:document.getElementById('m-verdict').value.trim(),signals:[],revisions:[],sparkStats:[],h1Inds:[],accelInds:[],importedAt:new Date().toISOString(),source:'manual'};
-  await dbPut(rec);ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();
+  try{await dbPut(rec);}catch(e){}
+  var idx=ALL.findIndex(function(x){return x.id===rec.id;});if(idx>=0)ALL[idx]=rec;else ALL.push(rec);FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();
 }
 
 /* ── SYNC / EXPORT ── */
@@ -3559,7 +3581,8 @@ async function handleSync(file){
       }
       await dbPut(r);added++;
     }
-    ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();
+    // Refresh ALL from what we just wrote
+    for(const r of PENDING){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);}FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
     const parts=[];if(added)parts.push(added+' new');if(merged)parts.push(merged+' updated');if(skipped)parts.push(skipped+' unchanged');
     msg.className='mbox ok';msg.style.display='block';msg.textContent='✓ '+parts.join(', ')+'.';
     toast('Sync: +'+added+' records','ok');
@@ -3614,7 +3637,7 @@ function epEdit(id, uid) {
 
 async function deleteRec(id){
   openConfirm({icon:'⚠',t:'Delete this record?',s:'Permanently removes the record.',fn:async function(){
-    await dbDel(id);ALL=await dbAll();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');
+    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');
   }});
 }
 
