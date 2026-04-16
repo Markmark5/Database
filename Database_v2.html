@@ -287,7 +287,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .xbtn-primary:hover{background:#fff;}
 
 /* ── BEST/WORST PANEL ── */
-.bw-panel{display:flex;flex-direction:column;gap:0;max-height:calc(100vh - 130px);overflow-y:auto;}
+.bw-panel{display:flex;flex-direction:column;gap:0;max-height:420px;overflow-y:auto;}
 .bw-half{flex:1;padding:14px;}
 .bw-half+.bw-half{border-top:1px solid var(--border);}
 .bw-title{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
@@ -934,7 +934,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   margin-top:10px;
   border:1.5px solid #f5c518;
   border-radius:6px;
-  background:#0d0d00;
+  background:var(--surface);
   box-shadow:0 0 18px #f5c51812, 0 0 4px #f5c51828;
   overflow:hidden;
   transition:box-shadow .2s;
@@ -970,7 +970,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 }
 .live-dot{
   width:6px;height:6px;border-radius:50%;
-  background:#555;transition:background .3s;
+  background:var(--text-dim);transition:background .3s;
 }
 .live-dot.ready{background:#f5c518;box-shadow:0 0 6px #f5c51888;}
 .live-dot.loading{background:#f5c518;animation:livepulse .7s ease infinite alternate;}
@@ -978,43 +978,44 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 
 .live-body{
   display:none;padding:12px 14px 14px;
+  background:var(--surface);
 }
 .live-body.open{display:block;}
 
 /* URL manager */
 .live-url-panel{
-  background:#ffffff04;border:1px solid #f5c51822;border-radius:4px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:4px;
   padding:10px 12px;margin-bottom:10px;
 }
 .live-url-title{
   font-family:var(--mono);font-size:8px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:#a08a10;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);
   margin-bottom:8px;
 }
 .live-url-row{
   display:flex;align-items:center;gap:6px;margin-bottom:5px;
 }
 .live-url-lbl{
-  font-family:var(--mono);font-size:9px;color:#a08a10;
+  font-family:var(--mono);font-size:9px;color:var(--text-dim);
   min-width:44px;
 }
 .live-url-inp{
-  flex:1;background:#0a0a00;border:1px solid #f5c51830;
+  flex:1;background:var(--surface);border:1px solid var(--border);
   border-radius:3px;padding:4px 8px;
-  font-family:var(--mono);font-size:9px;color:#e0c840;
+  font-family:var(--mono);font-size:9px;color:var(--text-secondary);
   outline:none;transition:border-color .15s;
 }
-.live-url-inp:focus{border-color:#f5c518;}
-.live-url-inp::placeholder{color:#555530;}
+.live-url-inp:focus{border-color:var(--border-bright);}
+.live-url-inp::placeholder{color:var(--text-dim);}
 .live-url-save{
   font-family:var(--mono);font-size:9px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;
   padding:4px 10px;border-radius:3px;
-  background:#f5c51818;color:#f5c518;
-  border:1px solid #f5c51844;cursor:pointer;
+  background:var(--green-dim);color:var(--green);
+  border:1px solid var(--green-mid);cursor:pointer;
   transition:all .15s;white-space:nowrap;
 }
-.live-url-save:hover{background:#f5c51830;}
+.live-url-save:hover{background:var(--green-mid);}
 
 /* Controls bar */
 .live-controls{
@@ -1025,18 +1026,18 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   font-family:var(--mono);font-size:9px;font-weight:600;
   letter-spacing:.06em;text-transform:uppercase;
   padding:4px 10px;border-radius:3px;cursor:pointer;
-  background:#f5c51810;color:#a08a10;
-  border:1px solid #f5c51830;
+  background:#ffffff08;color:var(--text-secondary);
+  border:1px solid var(--border);
   transition:all .15s;
 }
-.live-btn:hover{background:#f5c51820;color:#f5c518;border-color:#f5c518;}
-.live-btn.active{background:#f5c51828;color:#f5c518;border-color:#f5c518;}
+.live-btn:hover{background:#ffffff14;color:var(--text-primary);border-color:var(--border-bright);}
+.live-btn.active{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);}
 .live-btn.primary{
-  background:#f5c518;color:#111100;
-  border-color:#f5c518;font-weight:700;
+  background:var(--green);color:#000;
+  border-color:var(--green);font-weight:700;
 }
-.live-btn.primary:hover{background:#ffe040;}
-.live-sep{width:1px;height:16px;background:#f5c51830;}
+.live-btn.primary:hover{background:#00f090;}
+.live-sep{width:1px;height:16px;background:var(--border);}
 
 /* Sector buttons — live */
 .live-sector-btns{
@@ -1047,14 +1048,14 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   font-family:var(--mono);font-size:9px;font-weight:600;
   letter-spacing:.04em;text-transform:uppercase;
   padding:4px 9px;border-radius:3px;cursor:pointer;
-  background:#0d0d00;color:#a08a10;
-  border:1px solid #f5c51830;
+  background:var(--surface2);color:var(--text-secondary);
+  border:1px solid var(--border);
   transition:all .15s;position:relative;overflow:hidden;
 }
-.live-sec-btn:hover{color:#f5c518;border-color:#f5c518;}
-.live-sec-btn.active{background:#f5c51820;color:#f5c518;border-color:#f5c518;}
+.live-sec-btn:hover{color:var(--text-primary);border-color:var(--border-bright);}
+.live-sec-btn.active{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);}
 .live-sec-btn .sec-count{
-  font-size:8px;color:#a08a10;margin-left:4px;
+  font-size:8px;color:var(--text-dim);margin-left:4px;
 }
 .live-sec-btn .sec-bar{
   display:block;position:absolute;bottom:0;left:0;right:0;
@@ -1062,7 +1063,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 }
 
 /* Live ticker table */
-.live-tbl-wrap{overflow-x:auto;border-radius:4px;border:1px solid #f5c51822;}
+.live-tbl-wrap{overflow-x:auto;border-radius:4px;border:1px solid var(--border);}
 .live-tbl{
   width:100%;border-collapse:collapse;
   font-family:var(--mono);font-size:11px;
@@ -1071,39 +1072,39 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   padding:5px 9px;
   font-family:var(--mono);font-size:8px;font-weight:700;
   letter-spacing:.07em;text-transform:uppercase;
-  color:#a08a10;background:#0a0a00;
-  border-bottom:1px solid #f5c51830;
+  color:var(--text-secondary);background:var(--surface2);
+  border-bottom:1px solid var(--border);
   white-space:nowrap;cursor:pointer;
   user-select:none;
 }
-.live-tbl th:hover{color:#f5c518;}
+.live-tbl th:hover{color:var(--text-primary);}
 .live-tbl td{
-  padding:5px 9px;border-bottom:1px solid #f5c51814;
+  padding:5px 9px;border-bottom:1px solid var(--border);
   color:var(--text-secondary);white-space:nowrap;
 }
 .live-tbl tr:last-child td{border-bottom:none;}
-.live-tbl tr:hover td{background:#f5c51808;}
-.live-tbl tr.live-row-sel td{background:#f5c51818 !important;outline:1px solid #f5c51866;}
-.live-tbl .lt-ticker{color:#f5c518;font-weight:700;font-size:10px;}
+.live-tbl tr:hover td{background:#ffffff05;}
+.live-tbl tr.live-row-sel td{background:var(--blue-dim) !important;outline:1px solid var(--blue-mid);}
+.live-tbl .lt-ticker{color:var(--text-primary);font-weight:700;font-size:10px;}
 .live-tbl .lt-name{color:var(--text-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;}
 .live-tbl .lt-up{color:var(--green);font-weight:600;}
 .live-tbl .lt-dn{color:var(--red);font-weight:600;}
-.live-tbl .lt-fl{color:#a08a10;}
+.live-tbl .lt-fl{color:var(--text-dim);}
 .live-tbl .lt-chg{font-weight:600;}
 .live-tbl .lt-eps-chg{font-size:10px;font-weight:600;}
 .live-tbl .lt-today-badge{
   display:inline-block;
   font-size:8px;font-weight:700;letter-spacing:.05em;
   padding:1px 5px;border-radius:2px;
-  background:#f5c51820;color:#f5c518;
-  border:1px solid #f5c51844;
+  background:var(--amber-dim);color:var(--amber);
+  border:1px solid var(--amber-mid);
   margin-left:4px;
 }
-.live-tbl .lt-eps-new{color:#f5c518;}
+.live-tbl .lt-eps-new{color:var(--amber);}
 .live-tbl .lt-eps-old{color:var(--text-dim);text-decoration:line-through;font-size:10px;margin-right:4px;}
 .live-empty{
   text-align:center;padding:28px;
-  font-family:var(--mono);font-size:11px;color:#a08a10;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
 }
 .live-sector-summary{
   display:flex;gap:10px;flex-wrap:wrap;
@@ -1112,10 +1113,10 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .live-sum-chip{
   font-family:var(--mono);font-size:10px;
   padding:3px 9px;border-radius:3px;
-  background:#f5c51810;color:#a08a10;
-  border:1px solid #f5c51828;
+  background:#ffffff08;color:var(--text-secondary);
+  border:1px solid var(--border);
 }
-.live-sum-chip strong{color:#f5c518;}
+.live-sum-chip strong{color:var(--text-primary);}
 </style>
 </head>
 <body>
@@ -2022,41 +2023,107 @@ function expandSection(id){
   document.getElementById(id).classList.add('open');
   if(id==='bw-fs'){
     const c=document.getElementById('bw-fs-content');
-    c.style.padding='20px';
-    c.style.overflowY='auto';
-    // 30-day window, top 10 + bottom 10
-    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
-    const cutStr=cutoff.toISOString().split('T')[0];
-    const recent=ALL.filter(function(r){return r.date>=cutStr;});
-    if(!recent.length){
-      c.innerHTML='<div style="padding:40px;text-align:center;color:var(--text-dim);font-family:var(--mono);font-size:12px;">No data in the last 30 days.</div>';
-      return;
-    }
-    const best=[...recent].sort(function(a,b){return b.score-a.score;}).slice(0,10);
-    const worst=[...recent].sort(function(a,b){return a.score-b.score;}).slice(0,10);
-    function bwRow(r){
-      const b=band(r.score);
-      const scoreCol=b==='green'?'var(--green)':b==='amber'?'var(--amber)':'var(--red)';
-      return '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);">'
-        +'<div style="min-width:0;">'
-          +'<span style="font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">'+(r.company||r.ticker)+'</span>'
-          +'<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">'+r.ticker+'</span>'
+    c.style.padding='0';
+    c.style.overflowY='hidden';
+    c.style.display='flex';
+    c.style.flexDirection='column';
+    c.style.height='calc(90vh - 44px)';
+
+    var bwFsSort='score'; // 'score' | 'pct' | 'az'
+
+    function bwFsRender() {
+      const cutoff=new Date();cutoff.setDate(cutoff.getDate()-30);
+      const cutStr=cutoff.toISOString().split('T')[0];
+      const recent=ALL.filter(function(r){return r.date>=cutStr;});
+
+      // Build entries with pct if available
+      var entries = recent.map(function(r) {
+        var pct = null;
+        if (r.entryPrice && liveData[r.ticker] && liveData[r.ticker].price) {
+          pct = ((liveData[r.ticker].price - r.entryPrice) / r.entryPrice) * 100;
+        }
+        return { r:r, pct:pct };
+      });
+
+      // Sort
+      var best, worst;
+      if (bwFsSort === 'score') {
+        best  = [...entries].sort(function(a,b){return b.r.score-a.r.score;});
+        worst = [...entries].sort(function(a,b){return a.r.score-b.r.score;});
+      } else if (bwFsSort === 'pct') {
+        var withPct = entries.filter(function(e){return e.pct!==null;});
+        best  = [...withPct].sort(function(a,b){return b.pct-a.pct;});
+        worst = [...withPct].sort(function(a,b){return a.pct-b.pct;});
+        if (!withPct.length) {
+          best = worst = [];
+        }
+      } else { // az
+        best  = [...entries].sort(function(a,b){return (a.r.ticker||'').localeCompare(b.r.ticker||'');});
+        worst = [];
+      }
+
+      function bwFsRow(e) {
+        const r=e.r, b=band(r.score);
+        const scoreCol=b==='green'?'var(--green)':b==='amber'?'var(--amber)':'var(--red)';
+        var pctHtml = '';
+        if (e.pct !== null) {
+          var sign = e.pct>=0?'+':'';
+          var col = e.pct>=0?'var(--green)':'var(--red)';
+          pctHtml = '<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:'+col+';margin:0 10px;">'+sign+e.pct.toFixed(1)+'%</span>';
+        } else {
+          pctHtml = '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin:0 10px;">—</span>';
+        }
+        return '<div style="display:grid;grid-template-columns:1fr auto auto auto;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);">'
+          +'<div style="min-width:0;">'
+            +'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">'+(r.company||r.ticker)+'</span>'
+            +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">'+r.ticker+' · '+fmtDate(r.date)+'</span>'
+          +'</div>'
+          +pctHtml
+          +'<span style="font-family:var(--mono);font-size:20px;font-weight:700;color:'+scoreCol+';min-width:40px;text-align:right;">'+r.score+'</span>'
+          +'</div>';
+      }
+
+      function bwFsTable(items, label, accent) {
+        if (!items.length) return '<div style="padding:20px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--text-dim);">No data — set entry prices and refresh live data</div>';
+        const hdr='<div style="padding:8px 14px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+accent+';background:var(--surface3);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2;">'+label+' · '+items.length+'</div>';
+        return hdr+items.map(bwFsRow).join('');
+      }
+
+      var noLive = bwFsSort==='pct' && !entries.filter(function(e){return e.pct!==null;}).length;
+      var mainHtml;
+      if (bwFsSort === 'az') {
+        mainHtml = '<div style="height:100%;overflow-y:auto;">'
+          + '<div style="background:var(--surface2);border-right:1px solid var(--border);overflow:hidden;">'
+          + bwFsTable(best, 'A–Z · All ' + entries.length + ' records', 'var(--text-secondary)')
+          + '</div></div>';
+      } else if (noLive) {
+        mainHtml = '<div style="padding:40px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text-dim);">No entry prices set or live data not loaded — switch to Score sort or set entry prices</div>';
+      } else {
+        mainHtml =
+          '<div style="display:grid;grid-template-columns:1fr 1fr;height:100%;overflow:hidden;">'
+            +'<div style="overflow-y:auto;border-right:1px solid var(--border);background:var(--surface2);">'
+              +bwFsTable(best, bwFsSort==='score'?'▲ Best · Score':'▲ Best · Since RNS', 'var(--green)')
+            +'</div>'
+            +'<div style="overflow-y:auto;background:var(--surface2);">'
+              +bwFsTable(worst, bwFsSort==='score'?'▼ Worst · Score':'▼ Worst · Since RNS', 'var(--red)')
+            +'</div>'
+          +'</div>';
+      }
+
+      c.innerHTML =
+        // Controls bar
+        '<div style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;">'
+          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:.07em;text-transform:uppercase;margin-right:4px;">Sort:</span>'
+          +'<button onclick="bwFsSort=\'score\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='score'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'">Score</button>'
+          +'<button onclick="bwFsSort=\'pct\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='pct'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'" title="Requires entry price + live data">⚡ Since RNS</button>'
+          +'<button onclick="bwFsSort=\'az\';bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;transition:all .15s;'+(bwFsSort==='az'?'background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border);')+'">A–Z</button>'
+          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">Last 30 days · '+recent.length+' records</span>'
         +'</div>'
-        +'<span style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin:0 16px;">'+fmtDate(r.date)+'</span>'
-        +'<span style="font-family:var(--mono);font-size:22px;font-weight:700;color:'+scoreCol+';min-width:44px;text-align:right;">'+r.score+'</span>'
-        +'</div>';
+        // Main content
+        +'<div style="flex:1;overflow:hidden;">' + mainHtml + '</div>';
     }
-    function bwTable(items,label,accent){
-      const hdr='<div style="padding:8px 14px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:'+accent+';background:var(--surface3);border-bottom:1px solid var(--border);">'+label+'</div>';
-      return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden;">'
-        +hdr+items.map(bwRow).join('')+'</div>';
-    }
-    c.innerHTML=
-      '<div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-bottom:16px;letter-spacing:.06em;">BEST &amp; WORST · LAST 30 DAYS · '+recent.length+' RECORDS</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">'
-        +bwTable(best,'▲ Best 10',  'var(--green)')
-        +bwTable(worst,'▼ Worst 10','var(--red)')
-      +'</div>';
+
+    bwFsRender();
     return;
   }
   if(id==='h1-fs'){
@@ -2268,6 +2335,69 @@ document.addEventListener('keydown',e=>{
 
 /* ── BROKER CHANGES WIDGET ── */
 const bkData=[
+{company:"A.G. Barr",tidm:"BAG",broker:"Peel Hunt",old:770,new:800,pct:3.9,date:"2026-04-14"},
+{company:"A.G. Barr",tidm:"BAG",broker:"Deutsche Bank",old:760,new:800,pct:5.3,date:"2026-04-14"},
+{company:"Halma",tidm:"HLMA",broker:"UBS",old:4200,new:4775,pct:13.7,date:"2026-04-14"},
+{company:"Glencore",tidm:"GLEN",broker:"HSBC",old:510,new:620,pct:21.6,date:"2026-04-14"},
+{company:"Weir Group",tidm:"WEIR",broker:"Goldman Sachs",old:3210,new:3340,pct:4.0,date:"2026-04-14"},
+{company:"Rentokil",tidm:"RTO",broker:"Barclays",old:550,new:630,pct:14.5,date:"2026-04-14"},
+{company:"Prudential",tidm:"PRU",broker:"Barclays",old:1330,new:1400,pct:5.3,date:"2026-04-14"},
+{company:"Keller Group",tidm:"KLR",broker:"RBC",old:2050,new:2270,pct:10.7,date:"2026-04-14"},
+{company:"ITM Power",tidm:"ITM",broker:"Berenberg",old:100,new:110,pct:10.0,date:"2026-04-14"},
+{company:"Hammerson",tidm:"HMSO",broker:"Berenberg",old:409,new:448,pct:9.5,date:"2026-04-14"},
+{company:"ConvaTec",tidm:"CTEC",broker:"Morgan Stanley",old:270,new:280,pct:3.7,date:"2026-04-14"},
+{company:"Polar Capital",tidm:"POLR",broker:"Deutsche Bank",old:790,new:900,pct:13.9,date:"2026-04-14"},
+{company:"Barclays",tidm:"BARC",broker:"Exane BNP",old:545,new:485,pct:-11.0,date:"2026-04-14"},
+{company:"HSBC",tidm:"HSBA",broker:"Exane BNP",old:1500,new:1450,pct:-3.3,date:"2026-04-14"},
+{company:"National Grid",tidm:"NG.",broker:"Goldman Sachs",old:1389,new:1386,pct:-0.2,date:"2026-04-14"},
+{company:"Anglo American",tidm:"AAL",broker:"HSBC",old:3150,new:3050,pct:-3.2,date:"2026-04-14"},
+{company:"Aston Martin Lagonda",tidm:"AML",broker:"Deutsche Bank",old:65,new:55,pct:-15.4,date:"2026-04-14"},
+{company:"Baltic Classifieds",tidm:"BCG",broker:"Barclays",old:270,new:260,pct:-3.7,date:"2026-04-14"},
+{company:"Barratt Redrow",tidm:"BTRW",broker:"Morgan Stanley",old:430,new:300,pct:-30.2,date:"2026-04-14"},
+{company:"Berkeley Group",tidm:"BKG",broker:"Morgan Stanley",old:3840,new:2990,pct:-22.1,date:"2026-04-14"},
+{company:"Brooks Macdonald",tidm:"BRK",broker:"RBC",old:1750,new:1600,pct:-8.6,date:"2026-04-14"},
+{company:"CRH",tidm:"CRH",broker:"JP Morgan",old:10430,new:10366,pct:-0.6,date:"2026-04-14"},
+{company:"Integrafin",tidm:"IHP",broker:"RBC",old:450,new:440,pct:-2.2,date:"2026-04-14"},
+{company:"Kingfisher",tidm:"KGF",broker:"Jefferies",old:303,new:291,pct:-4.0,date:"2026-04-14"},
+{company:"Pagegroup",tidm:"PAGE",broker:"RBC",old:305,new:250,pct:-18.0,date:"2026-04-14"},
+{company:"Persimmon",tidm:"PSN",broker:"Morgan Stanley",old:1610,new:1390,pct:-13.7,date:"2026-04-14"},
+{company:"Rathbones",tidm:"RAT",broker:"RBC",old:2500,new:2400,pct:-4.0,date:"2026-04-14"},
+{company:"St James's Place",tidm:"STJ",broker:"RBC",old:1425,new:1400,pct:-1.8,date:"2026-04-14"},
+{company:"Taylor Wimpey",tidm:"TW.",broker:"Morgan Stanley",old:90,new:80,pct:-11.1,date:"2026-04-14"},
+{company:"Unite Group",tidm:"UTG",broker:"Berenberg",old:774,new:623,pct:-19.5,date:"2026-04-14"},
+{company:"Vistry Group",tidm:"VTY",broker:"Morgan Stanley",old:510,new:380,pct:-25.5,date:"2026-04-14"},
+{company:"Intermediate Capital Group",tidm:"ICG",broker:"Citigroup",old:2550,new:2290,pct:-10.2,date:"2026-04-14"},
+{company:"Bridgepoint",tidm:"BPT",broker:"Citigroup",old:415,new:395,pct:-4.8,date:"2026-04-14"},
+{company:"Unilever",tidm:"ULVR",broker:"BofA",old:0,new:5300,pct:0,date:"2026-04-14"},
+{company:"Reckitt",tidm:"RKT",broker:"BofA",old:0,new:6100,pct:0,date:"2026-04-14"},
+{company:"Haleon",tidm:"HLN",broker:"BofA",old:0,new:400,pct:0,date:"2026-04-14"},
+{company:"Essentra",tidm:"ESNT",broker:"Jefferies",old:140,new:130,pct:-7.1,date:"2026-04-14"},
+{company:"Oxford Instruments",tidm:"OXIG",broker:"Jefferies",old:2370,new:2590,pct:9.3,date:"2026-04-14"},
+{company:"Guardian Metal Resources",tidm:"GMET",broker:"BMO",old:0,new:450,pct:0,date:"2026-04-14"},
+{company:"Anglo American",tidm:"AAL",broker:"Deutsche Bank",old:3600,new:3800,pct:5.6,date:"2026-04-15"},
+{company:"Antofagasta",tidm:"ANTO",broker:"Deutsche Bank",old:2900,new:3100,pct:6.9,date:"2026-04-15"},
+{company:"Glencore",tidm:"GLEN",broker:"Deutsche Bank",old:550,new:610,pct:10.9,date:"2026-04-15"},
+{company:"Rio Tinto",tidm:"RIO",broker:"Deutsche Bank",old:6200,new:6900,pct:11.3,date:"2026-04-15"},
+{company:"Airtel Africa",tidm:"AAF",broker:"Goldman Sachs",old:302,new:341,pct:12.9,date:"2026-04-15"},
+{company:"Vodafone",tidm:"VOD",broker:"Citigroup",old:100,new:115,pct:15.0,date:"2026-04-15"},
+{company:"Oxford Instruments",tidm:"OXIG",broker:"Deutsche Bank",old:2675,new:2900,pct:8.4,date:"2026-04-15"},
+{company:"Conduit Holdings",tidm:"CRE",broker:"Barclays",old:340,new:350,pct:2.9,date:"2026-04-15"},
+{company:"Entain",tidm:"ENT",broker:"Peel Hunt",old:850,new:750,pct:-11.8,date:"2026-04-15"},
+{company:"Jet2",tidm:"JET2",broker:"JP Morgan",old:1400,new:1300,pct:-7.1,date:"2026-04-15"},
+{company:"Ryanair",tidm:"RYA",broker:"JP Morgan",old:3800,new:3600,pct:-5.3,date:"2026-04-15"},
+{company:"EasyJet",tidm:"EZJ",broker:"JP Morgan",old:400,new:350,pct:-12.5,date:"2026-04-15"},
+{company:"Wizz Air",tidm:"WIZZ",broker:"JP Morgan",old:1200,new:1100,pct:-8.3,date:"2026-04-15"},
+{company:"Pagegroup",tidm:"PAGE",broker:"Citigroup",old:440,new:300,pct:-31.8,date:"2026-04-15"},
+{company:"AB Foods",tidm:"ABF",broker:"Citigroup",old:1710,new:1600,pct:-6.4,date:"2026-04-15"},
+{company:"Entain",tidm:"ENT",broker:"Deutsche Bank",old:1055,new:1028,pct:-2.6,date:"2026-04-15"},
+{company:"Diageo",tidm:"DGE",broker:"Goldman Sachs",old:2000,new:1800,pct:-10.0,date:"2026-04-15"},
+{company:"Imperial Brands",tidm:"IMB",broker:"Goldman Sachs",old:3600,new:3550,pct:-1.4,date:"2026-04-15"},
+{company:"Imperial Brands",tidm:"IMB",broker:"Citigroup",old:3650,new:3550,pct:-2.7,date:"2026-04-15"},
+{company:"Chesnara",tidm:"CSN",broker:"RBC",old:370,new:360,pct:-2.7,date:"2026-04-15"},
+{company:"Lancashire Holdings",tidm:"LRE",broker:"Barclays",old:590,new:570,pct:-3.4,date:"2026-04-15"},
+{company:"Hiscox",tidm:"HSX",broker:"Barclays",old:1750,new:1730,pct:-1.1,date:"2026-04-15"},
+{company:"Quilter",tidm:"QLT",broker:"Jefferies",old:250,new:220,pct:-12.0,date:"2026-04-15"},
+{company:"Imperial Brands",tidm:"IMB",broker:"UBS",old:0,new:3150,pct:0,date:"2026-04-15"},
 {company:"Playtech",tidm:"PTEC",broker:"Jefferies",old:240,new:405,pct:68.8,date:"2026-04-09"},
 {company:"National Grid",tidm:"NG.",broker:"RBC",old:1125,new:1400,pct:24.4,date:"2026-04-09"},
 {company:"United Utilities",tidm:"UU.",broker:"RBC",old:1175,new:1450,pct:23.4,date:"2026-04-09"},
@@ -2777,6 +2907,8 @@ const dbAll=async()=>{await ensureDB();return new Promise((res,rej)=>{const r=db
 const dbPut=async rec=>{await ensureDB();return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).put(rec);r.onsuccess=()=>res();r.onerror=e=>rej(e);});}
 const dbDel=async id=>{await ensureDB();return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).delete(id);r.onsuccess=()=>res();r.onerror=e=>rej(e);});}
 const dbClear=async()=>{await ensureDB();return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).clear();r.onsuccess=()=>res();r.onerror=e=>rej(e);});}
+// Bulk write all records in a single transaction — much faster and avoids transaction queue issues
+const dbPutAll=async(records)=>{await ensureDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');const store=tx.objectStore(STORE);records.forEach(function(r){store.put(r);});tx.oncomplete=()=>res();tx.onerror=e=>rej(e);tx.onabort=e=>rej(e);});}
 const dbFilePut=async(num,rec)=>{await ensureDB();return new Promise((res,rej)=>{const r=db.transaction(FILE_STORE,'readwrite').objectStore(FILE_STORE).put(rec);r.onsuccess=()=>res();r.onerror=e=>rej(e);});}
 const dbFileGet=async(num)=>{await ensureDB();return new Promise((res,rej)=>{const r=db.transaction(FILE_STORE,'readonly').objectStore(FILE_STORE).get('slot'+num);r.onsuccess=()=>res(r.result||null);r.onerror=e=>rej(e);});}
 
@@ -3085,8 +3217,8 @@ function renderBestWorst(){
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-7);
   const cutStr=cutoff.toISOString().split('T')[0];
   const recent=ALL.filter(function(r){return r.date>=cutStr;});
-  const best=[...recent].sort(function(a,b){return b.score-a.score;}).slice(0,10);
-  const worst=[...recent].sort(function(a,b){return a.score-b.score;}).slice(0,10);
+  const best=[...recent].sort(function(a,b){return b.score-a.score;}).slice(0,12);
+  const worst=[...recent].sort(function(a,b){return a.score-b.score;}).slice(0,12);
   function renderList(items,elId){
     const el=document.getElementById(elId);if(!el)return;
     if(!items.length){el.innerHTML='<div class="bw-empty">No data in last 7 days</div>';return;}
@@ -5925,7 +6057,7 @@ function liveSectorAvgPct(sector) {
 }
 
 function liveSectorBtnColour(avg) {
-  if (isNaN(avg)) return{barBg:'#333',textCol:'#a08a10',border:'#f5c51830'};
+  if (isNaN(avg)) return{barBg:'var(--border)',textCol:'var(--text-dim)',border:'var(--border)'};
   var clamped=Math.max(-5,Math.min(5,avg));
   var t=clamped/5;
   var r,g,b;
@@ -5934,8 +6066,8 @@ function liveSectorBtnColour(avg) {
   else{r=30;g=30;b=45;}
   return{
     barBg:'rgb('+r+','+g+','+b+')',
-    textCol:t>0.3?'#00ff88':t<-0.3?'#ff6677':'#f5c518',
-    border:t>0.3?'#00d97e44':t<-0.3?'#ff475744':'#f5c51830'
+    textCol:t>0.3?'#00ff88':t<-0.3?'#ff6677':'var(--text-secondary)',
+    border:t>0.3?'#00d97e44':t<-0.3?'#ff475744':'var(--border)'
   };
 }
 
@@ -6054,7 +6186,7 @@ function liveRenderTable(sector) {
       +'<span class="live-sum-chip" style="color:var(--green);">▲ <strong>'+risers+'</strong></span>'
       +'<span class="live-sum-chip" style="color:var(--red);">▼ <strong>'+fallers+'</strong></span>'
       +(!isNaN(avgPct)?'<span class="live-sum-chip">Avg: <strong style="color:'+(avgPct>=0?'var(--green)':'var(--red)')+';">'+sign2+avgPct.toFixed(2)+'%</strong></span>':'')
-      +'<span class="live-sum-chip" style="color:#f5c518;">⚡ EPS Δ: <strong>'+changedRows.length+'</strong></span>';
+      +'<span class="live-sum-chip" style="color:var(--amber);">⚡ EPS Δ: <strong>'+changedRows.length+'</strong></span>';
   }
 
   /* Table */
@@ -6244,16 +6376,25 @@ function dbRestoreOpen() {
 function dbRestoreFile(file) {
   if (!file) return;
   var status = document.getElementById('db-restore-status');
-  if (status) status.textContent = 'Reading file…';
+  if (status) status.textContent = 'Reading file… (' + (file.size / 1024 / 1024).toFixed(1) + 'MB)';
   var reader = new FileReader();
   reader.onload = function(e) {
-    try {
-      var backup = JSON.parse(e.target.result);
-      if (!backup._meta) throw new Error('Not a valid database backup file');
-      dbRestoreApply(backup);
-    } catch(err) {
-      if (status) status.innerHTML = '<span style="color:var(--red);">⚠ Error: '+err.message+'</span>';
-    }
+    if (status) status.textContent = 'Parsing JSON…';
+    // Use setTimeout to allow UI to update before blocking JSON.parse
+    setTimeout(function() {
+      try {
+        var backup = JSON.parse(e.target.result);
+        if (!backup._meta) throw new Error('Not a valid database backup file — missing _meta');
+        if (status) status.textContent = 'Restoring ' + (backup.scorecards ? backup.scorecards.length : 0) + ' scorecards…';
+        dbRestoreApply(backup);
+      } catch(err) {
+        if (status) status.innerHTML = '<span style="color:var(--red);">⚠ Error: ' + err.message + '</span>';
+        console.error('Restore error:', err);
+      }
+    }, 50);
+  };
+  reader.onerror = function() {
+    if (status) status.innerHTML = '<span style="color:var(--red);">⚠ File read error — try again</span>';
   };
   reader.readAsText(file);
 }
@@ -6262,98 +6403,102 @@ function dbRestoreApply(backup) {
   var status = document.getElementById('db-restore-status');
   var log = [];
 
-  // Scorecards — write to IndexedDB so they persist on reload
-  if (backup.scorecards && Array.isArray(backup.scorecards) && backup.scorecards.length) {
-    dbClear().then(function() {
-      var puts = backup.scorecards.map(function(r){ return dbPut(r); });
-      Promise.all(puts).then(function() {
-        return dbAll();
-      }).then(function(records) {
-        ALL = records;
-        FILTERED = ALL.slice();
-        log.push(ALL.length+' scorecards');
-        applyFilters(); updateSidebar(); renderBestWorst();
-        var savedAt = backup._meta.savedAtLabel || backup._meta.savedAt || 'unknown date';
-        var msg = '✓ Restored from '+savedAt+' — '+log.join(', ');
-        if (status) status.innerHTML = '<span style="color:var(--green);">'+msg+'</span>';
-        toast('✓ Database restored from backup', 'ok', 4000);
-        setTimeout(function(){ document.getElementById('db-restore-overlay').style.display='none'; }, 2000);
-      });
-    });
-    return; // async path handles completion above
-  }
-
-  // Broker changes — restore into bkData and re-render
-  if (backup.brokerChanges && Array.isArray(backup.brokerChanges)) {
-    // bkData is const so we splice/replace its contents
-    bkData.length = 0;
-    backup.brokerChanges.forEach(function(r){ bkData.push(r); });
-    log.push(bkData.length+' broker changes');
-    if (typeof bkRender === 'function') { bkBuildWeeks(); bkRender(); }
-  }
-
-  // Upload zone rows
-  if (backup.uploadZone) {
-    var uz = backup.uploadZone;
-    if (uz.rows1) { exState.rows1 = uz.rows1; slotState[1] = uz.rows1; }
-    if (uz.rows2) { exState.rows2 = uz.rows2; slotState[2] = uz.rows2; }
-    if (uz.rows3) { exState.rows3 = uz.rows3; slotState[3] = uz.rows3; }
-    if (uz.rows4) { exState.rows4 = uz.rows4; slotState[4] = uz.rows4; }
-    // Restore slot labels and timestamps
-    for (var i=1;i<=4;i++) {
-      var name = uz['slot'+i+'Name'];
-      var date = uz['slot'+i+'Date'];
-      if (name) {
-        try{ localStorage.setItem('db_slot'+i+'_name', name); }catch(ex){}
-        var nameEl = document.getElementById('slot'+i+'-name');
-        if (nameEl) nameEl.textContent = name;
-        var slotEl = document.getElementById('slot'+i);
-        if (slotEl) slotEl.classList.add('loaded');
-      }
-      if (date) {
-        try{ localStorage.setItem('db_slot'+i+'_date', date); }catch(ex){}
-        var dateEl = document.getElementById('slot'+i+'-date');
-        if (dateEl) {
-          var d = new Date(date);
-          var label = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-          var rows = uz['rows'+i];
-          dateEl.textContent = 'Loaded '+label+(rows?' · '+rows.length+' rows':'');
+  function dbRestoreNonScorecard(backup, log) {
+    // Broker changes
+    if (backup.brokerChanges && Array.isArray(backup.brokerChanges)) {
+      bkData.length = 0;
+      backup.brokerChanges.forEach(function(r){ bkData.push(r); });
+      log.push(bkData.length+' broker changes');
+      if (typeof bkRender === 'function') { if(typeof bkBuildWeekBtns==='function')bkBuildWeekBtns(); if(typeof bkBuildDayBtns==='function')bkBuildDayBtns(); bkRender(); }
+    }
+    // Upload zone rows
+    if (backup.uploadZone) {
+      var uz = backup.uploadZone;
+      if (uz.rows1) { exState.rows1 = uz.rows1; slotState[1] = uz.rows1; }
+      if (uz.rows2) { exState.rows2 = uz.rows2; slotState[2] = uz.rows2; }
+      if (uz.rows3) { exState.rows3 = uz.rows3; slotState[3] = uz.rows3; }
+      if (uz.rows4) { exState.rows4 = uz.rows4; slotState[4] = uz.rows4; }
+      for (var i=1;i<=4;i++) {
+        var name = uz['slot'+i+'Name'];
+        var date = uz['slot'+i+'Date'];
+        if (name) {
+          try{ localStorage.setItem('db_slot'+i+'_name', name); }catch(ex){}
+          var nameEl = document.getElementById('slot'+i+'-name');
+          if (nameEl) nameEl.textContent = name;
+          var slotEl = document.getElementById('slot'+i);
+          if (slotEl) slotEl.classList.add('loaded');
+        }
+        if (date) {
+          try{ localStorage.setItem('db_slot'+i+'_date', date); }catch(ex){}
+          var dateEl = document.getElementById('slot'+i+'-date');
+          if (dateEl) {
+            var d = new Date(date);
+            var label = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+            var rows = uz['rows'+i];
+            dateEl.textContent = 'Loaded '+label+(rows?' · '+rows.length+' rows':'');
+          }
         }
       }
+      if (uz.rows1 && typeof exBuildSectorButtons === 'function') {
+        exBuildSectorButtons(uz.rows1, 'restored');
+        var allBtn = document.getElementById('ex-allBtn');
+        if (allBtn) allBtn.disabled = false;
+      }
+      log.push('upload zone files restored');
     }
-    // Rebuild extractor sector buttons if rows1 loaded
-    if (uz.rows1 && typeof exBuildSectorButtons === 'function') {
-      exBuildSectorButtons(uz.rows1, 'restored');
-      var allBtn = document.getElementById('ex-allBtn');
-      if (allBtn) allBtn.disabled = false;
+    // localStorage items
+    if (backup.heatmapCsv) {
+      try{ localStorage.setItem('hm_csv_data', backup.heatmapCsv); }catch(ex){}
+      if (typeof hmInit === 'function') hmInit();
+      log.push('heatmap data');
     }
-    log.push('upload zone files restored');
+    if (backup.liveUrls) {
+      try{ localStorage.setItem('live_sheet_urls', backup.liveUrls); }catch(ex){}
+      if (typeof liveLoadUrls === 'function') liveLoadUrls();
+      log.push('live URLs');
+    }
+    if (backup.liveDataCache) {
+      try{ localStorage.setItem('live_data_cache', backup.liveDataCache); }catch(ex){}
+      try{ localStorage.setItem('live_data_ts', backup.liveDataTs || ''); }catch(ex){}
+      if (typeof liveRestoreCache === 'function') liveRestoreCache();
+      log.push('live data cache');
+    }
+    if (backup.h1Cache) {
+      try{ localStorage.setItem('sc_cache_v1', backup.h1Cache); }catch(ex){}
+      try{ localStorage.setItem('sc_cache_meta_v1', backup.h1CacheMeta || ''); }catch(ex){}
+    }
+    if (backup.fcCache) {
+      try{ localStorage.setItem('fc_cache', backup.fcCache); }catch(ex){}
+    }
   }
 
-  // localStorage items
-  if (backup.heatmapCsv) {
-    try{ localStorage.setItem('hm_csv_data', backup.heatmapCsv); }catch(ex){}
-    if (typeof hmInit === 'function') hmInit();
-    log.push('heatmap data');
-  }
-  if (backup.liveUrls) {
-    try{ localStorage.setItem('live_sheet_urls', backup.liveUrls); }catch(ex){}
-    if (typeof liveLoadUrls === 'function') liveLoadUrls();
-  }
-  if (backup.liveDataCache) {
-    try{ localStorage.setItem('live_data_cache', backup.liveDataCache); }catch(ex){}
-    try{ localStorage.setItem('live_data_ts', backup.liveDataTs || ''); }catch(ex){}
-    if (typeof liveRestoreCache === 'function') liveRestoreCache();
-    log.push('live data cache');
-  }
-  if (backup.h1Cache) {
-    try{ localStorage.setItem('sc_cache_v1', backup.h1Cache); }catch(ex){}
-    try{ localStorage.setItem('sc_cache_meta_v1', backup.h1CacheMeta || ''); }catch(ex){}
-  }
-  if (backup.fcCache) {
-    try{ localStorage.setItem('fc_cache', backup.fcCache); }catch(ex){}
+  // Scorecards — set directly in memory first (works in all environments)
+  // Then attempt IndexedDB write in background for persistence
+  if (backup.scorecards && Array.isArray(backup.scorecards) && backup.scorecards.length) {
+    // Immediately restore to memory so UI works regardless of IndexedDB
+    ALL = backup.scorecards.slice();
+    FILTERED = ALL.slice();
+    if (status) status.textContent = 'Restoring other data…';
+    dbRestoreNonScorecard(backup, log);
+    log.push(ALL.length+' scorecards');
+    applyFilters(); updateSidebar(); renderBestWorst();
+    var savedAt = backup._meta.savedAtLabel || backup._meta.savedAt || 'unknown date';
+    var msg = '✓ Restored from '+savedAt+' — '+log.join(', ');
+    if (status) status.innerHTML = '<span style="color:var(--green);">'+msg+'</span>';
+    toast('✓ Database restored from backup', 'ok', 4000);
+    setTimeout(function(){ document.getElementById('db-restore-overlay').style.display='none'; }, 2000);
+    // Background IndexedDB write — non-blocking, failure is silent
+    try {
+      dbClear().then(function() {
+        var puts = backup.scorecards.map(function(r){ return dbPut(r); });
+        Promise.all(puts).catch(function(){});
+      }).catch(function(){});
+    } catch(e) {}
+    return;
   }
 
+  // No scorecards — still restore everything else
+  dbRestoreNonScorecard(backup, log);
   var savedAt = backup._meta.savedAtLabel || backup._meta.savedAt || 'unknown date';
   var msg = '✓ Restored from '+savedAt+' — '+log.join(', ');
   if (status) status.innerHTML = '<span style="color:var(--green);">'+msg+'</span>';
