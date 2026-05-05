@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-05-01T15:31:01.706Z",
-    "savedAtLabel": "01 May 2026 16:31",
+    "savedAt": "2026-05-05T06:25:12.218Z",
+    "savedAtLabel": "05 May 2026 07:25",
     "source": "github-sync"
   },
   "scorecards": [
@@ -40703,6 +40703,321 @@
         }
       ],
       "entryPrice": 3.86
+    },
+    {
+      "id": "NEWS_2026_05_05",
+      "ticker": "NEWS",
+      "score": 61,
+      "company": "Pathos Communications PLC",
+      "verdict": "Constructive",
+      "date": "2026-05-05",
+      "rnsType": "FY Results",
+      "mode": "Pre-FY",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "EBITDA <span class=\"val-up\">$2.9m +53% YoY</span> · adj diluted EPS <span class=\"val-up\">2.6¢ vs 1.6¢ prior</span> · first clean profit year",
+          "textPlain": "EBITDA $2.9m +53% YoY · adj diluted EPS 2.6¢ vs 1.6¢ prior · first clean profit year"
+        },
+        {
+          "pill": "H2 MOM",
+          "type": "green",
+          "textHTML": "H2 Rev <span class=\"val-up\">$6.7m +15.5% YoY</span> · all FY25 EBITDA in H2 · strong momentum classification",
+          "textPlain": "H2 Rev $6.7m +15.5% YoY · all FY25 EBITDA in H2 · strong momentum classification"
+        },
+        {
+          "pill": "IN LINE",
+          "type": "amber",
+          "textHTML": "FY26 confirms <span class=\"val-fl\">$14.0m / $4.0m</span> consensus · H2-weighted · \"in line with expectations\"",
+          "textPlain": "FY26 confirms $14.0m / $4.0m consensus · H2-weighted · \"in line with expectations\""
+        },
+        {
+          "pill": "DECEL",
+          "type": "red",
+          "textHTML": "Rev growth <span class=\"val-dn\">+92%→+61%→+15%→+7%e</span> · structural deceleration arc · consensus-derived",
+          "textPlain": "Rev growth +92%→+61%→+15%→+7%e · structural deceleration arc · consensus-derived"
+        },
+        {
+          "pill": "FX RISK",
+          "type": "red",
+          "textHTML": "GBP <span class=\"val-dn\">+5% vs FY25 avg</span> · pence EPS 3.5p consensus at risk · USD basis clean",
+          "textPlain": "GBP +5% vs FY25 avg · pence EPS 3.5p consensus at risk · USD basis clean"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY25 EPS",
+          "val": "2.6¢",
+          "sub": "adj diluted · ~2.0p GBP",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26e EPS",
+          "val": "3.5p",
+          "sub": "hold · FX trim risk ~3.0p USD",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY25 Rev",
+          "val": "$13.1m",
+          "sub": "vs $13.2m cons · −0.8% miss",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "$14.0m",
+          "sub": "confirmed · hold",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "3.5p",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "3.5p",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "STALL",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "0%",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "Hold",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "EPS Consensus Trend · FY26e (p)",
+      "sparkSVG": "\n      <svg id=\"spark-NEWS\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L82.66666666666666,6 L161.33333333333331,6 L240,6 L318.66666666666663,40 L397.33333333333337,6 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L82.66666666666666,6 L161.33333333333331,6 L240,6 L318.66666666666663,40 L397.33333333333337,6 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L82.66666666666666,40 L161.33333333333331,40 L240,40 L318.66666666666663,40 L397.33333333333337,40 L476,40 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L82.66666666666666,40 L161.33333333333331,40 L240,40 L318.66666666666663,40 L397.33333333333337,40 L476,40 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">20-Mar-26  3.5p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">01-May-26  3.5p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-NEWS\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-05-05T06:25:02.735Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "20-Mar-26",
+          "eps": 3.5,
+          "price": 43
+        },
+        {
+          "d": "21-Mar-26",
+          "eps": 3.5,
+          "price": 43
+        },
+        {
+          "d": "04-Apr-26",
+          "eps": 3.5,
+          "price": 43
+        },
+        {
+          "d": "11-Apr-26",
+          "eps": 3.5,
+          "price": 43
+        },
+        {
+          "d": "18-Apr-26",
+          "eps": 3.5,
+          "price": 42
+        },
+        {
+          "d": "24-Apr-26",
+          "eps": 3.5,
+          "price": 43
+        },
+        {
+          "d": "01-May-26",
+          "eps": 3.5,
+          "price": 42
+        }
+      ]
+    },
+    {
+      "id": "TIDE_2026_05_05",
+      "ticker": "TIDE",
+      "score": 47,
+      "company": "Crimson Tide PLC",
+      "verdict": "Neutral / Hold",
+      "date": "2026-05-05",
+      "rnsType": "Yr-End Update",
+      "mode": "Pre-FY",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "TURNAROUND",
+          "type": "green",
+          "textHTML": "EBITDA <span class=\"val-up\">£1.2m vs −£0.1m prior</span> · PAT <span class=\"val-up\">~£0.3m</span> · cash <span class=\"val-up\">+62% to £2.1m</span>",
+          "textPlain": "EBITDA £1.2m vs −£0.1m prior · PAT ~£0.3m · cash +62% to £2.1m"
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "Net cash <span class=\"val-up\">£2.1m</span> · zero bank debt · EPS ~<span class=\"val-up\">4.5p</span> first year of profit",
+          "textPlain": "Net cash £2.1m · zero bank debt · EPS ~4.5p first year of profit"
+        },
+        {
+          "pill": "FY27 WARN",
+          "type": "red",
+          "textHTML": "Revenue <span class=\"val-dn\">explicitly guided lower</span> · MRR run-rate <span class=\"val-dn\">£397k = £4.76m annualised</span>",
+          "textPlain": "Revenue explicitly guided lower · MRR run-rate £397k = £4.76m annualised"
+        },
+        {
+          "pill": "MRR DECAY",
+          "type": "red",
+          "textHTML": "MRR <span class=\"val-dn\">£468k→£397k (−15%)</span> · 28% gross churn · FY27 rev headwind ~<span class=\"val-dn\">£1.1m</span>",
+          "textPlain": "MRR £468k→£397k (−15%) · 28% gross churn · FY27 rev headwind ~£1.1m"
+        },
+        {
+          "pill": "NO CONS",
+          "type": "grey",
+          "textHTML": "Zero broker consensus · phantom consensus flag · no upgrade cycle measurable",
+          "textPlain": "Zero broker consensus · phantom consensus flag · no upgrade cycle measurable"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~4.5p",
+          "sub": "de novo · return to profit",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e EPS",
+          "val": "0–2p",
+          "sub": "bridge: churn headwind −7.6p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Rev",
+          "val": "£5.9m",
+          "sub": "flat YoY on 12m pf basis",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27e Rev",
+          "val": "£4.8–5.4m",
+          "sub": "explicitly guided lower",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        }
+      ],
+      "sparkLabel": "EPS Trend — No Consensus Data",
+      "sparkSVG": "\n      <svg id=\"spark-TIDE\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">08-Jun-25  0p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">01-May-26  0p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-TIDE\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-05-05T06:25:02.737Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "08-Jun-25",
+          "eps": 0,
+          "price": 82
+        },
+        {
+          "d": "01-May-26",
+          "eps": 0,
+          "price": 82
+        }
+      ]
     }
   ],
   "brokerChanges": [
