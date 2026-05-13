@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-05-12T12:43:52.575Z",
-    "savedAtLabel": "12 May 2026 13:43",
+    "savedAt": "2026-05-13T06:36:28.965Z",
+    "savedAtLabel": "13 May 2026 07:36",
     "source": "github-sync"
   },
   "scorecards": [
@@ -45025,6 +45025,538 @@
         }
       ],
       "importedAt": "2026-05-12T12:43:43.339Z",
+      "source": "html-dom"
+    },
+    {
+      "id": "AVON_2026_05_13",
+      "ticker": "AVON",
+      "score": 86,
+      "company": "Avon Technologies PLC",
+      "verdict": "Strongly Positive",
+      "date": "2026-05-13",
+      "rnsType": "H1 Results",
+      "mode": "pre-H1",
+      "index": "FTSE 250 · Aerospace & Defence",
+      "signals": [
+        {
+          "pill": "H1 BEAT",
+          "type": "green",
+          "textHTML": "EPS <span class=\"val-up\">56.4c</span> (+45% YoY) = <span class=\"val-up\">47.9% of FY26e</span> vs 29.2% baseline; buy trigger ✓",
+          "textPlain": "EPS 56.4c (+45% YoY) = 47.9% of FY26e vs 29.2% baseline; buy trigger ✓"
+        },
+        {
+          "pill": "UPGRADE",
+          "type": "green",
+          "textHTML": "\"Firmly on track to <span class=\"val-up\">meet or exceed</span> FY26 guidance\" — coded upgrade signal confirmed",
+          "textPlain": "\"Firmly on track to meet or exceed FY26 guidance\" — coded upgrade signal confirmed"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "green",
+          "textHTML": "H1 adj OP margin <span class=\"val-up\">15.2%</span> (+340bps); FY guided \"towards <span class=\"val-up\">top end 14–16%</span>\"",
+          "textPlain": "H1 adj OP margin 15.2% (+340bps); FY guided \"towards top end 14–16%\""
+        },
+        {
+          "pill": "REVENUE",
+          "type": "green",
+          "textHTML": "H1 revenue <span class=\"val-up\">$160.8m</span> (+8.1% reported; +6.8% CC); <span class=\"val-up\">+2.8pp</span> above seasonal baseline",
+          "textPlain": "H1 revenue $160.8m (+8.1% reported; +6.8% CC); +2.8pp above seasonal baseline"
+        },
+        {
+          "pill": "ORDER BK",
+          "type": "amber",
+          "textHTML": "Order book <span class=\"val-fl\">$219.9m</span> (−11.4% CC) — Team Wendy −30%; <span class=\"val-up\">Avon Protection +19%</span>",
+          "textPlain": "Order book $219.9m (−11.4% CC) — Team Wendy −30%; Avon Protection +19%"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "→130–140c",
+          "sub": "vs 117.7c cons · +10–19%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "→155–165c",
+          "sub": "vs 132.1c cons · +17–25%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 REV",
+          "val": "→$340–345m",
+          "sub": "vs $338.5m cons · +0.5–2%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "TP",
+          "val": "→£23–26",
+          "sub": "vs £21.30 cons · +8–22%",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "81.9c",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "117.7c",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+43.7%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "→",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+7.9%",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "↑",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS FORECAST TREND",
+      "sparkSVG": "\n  <svg id=\"spark-AVON\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;\" xmlns=\"http://www.w3.org/2000/svg\"></svg>\n  <div class=\"spark-tt\" id=\"tt-AVON\"></div>\n",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+2.8pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+18.7pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-05-13T06:36:18.891Z",
+      "source": "html-dom"
+    },
+    {
+      "id": "SPX_2026_05_13",
+      "ticker": "SPX",
+      "score": 58,
+      "company": "Spirax Group PLC",
+      "verdict": "Neutral / Hold",
+      "date": "2026-05-13",
+      "rnsType": "Trading Update",
+      "mode": "pre-H1",
+      "index": "FTSE 100 · Industrial Engineering",
+      "signals": [
+        {
+          "pill": "GUIDE REIT",
+          "type": "green",
+          "textHTML": "FY26 guidance <span class=\"val-up\">reiterated</span> post-upgrade cycle; FY26e EPS 320p consensus secured",
+          "textPlain": "FY26 guidance reiterated post-upgrade cycle; FY26e EPS 320p consensus secured"
+        },
+        {
+          "pill": "ETS",
+          "type": "green",
+          "textHTML": "ETS <span class=\"val-up\">double-digit demand growth</span> all divisions incl. Semicon; highest-margin segment",
+          "textPlain": "ETS double-digit demand growth all divisions incl. Semicon; highest-margin segment"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "green",
+          "textHTML": "Organic adj OP margin <span class=\"val-up\">ahead of prior period</span>; FY guided increased on organic basis",
+          "textPlain": "Organic adj OP margin ahead of prior period; FY guided increased on organic basis"
+        },
+        {
+          "pill": "H1 TRACK",
+          "type": "amber",
+          "textHTML": "Mid-single-digit organic implies ~<span class=\"val-fl\">£863m H1</span>; untrackable (no hard data); vs baseline £862m",
+          "textPlain": "Mid-single-digit organic implies ~£863m H1; untrackable (no hard data); vs baseline £862m"
+        },
+        {
+          "pill": "MACRO",
+          "type": "red",
+          "textHTML": "Global IP <span class=\"val-dn\">1.4% Q1</span>; tariffs &amp; Middle East weigh on large STS project pipeline",
+          "textPlain": "Global IP 1.4% Q1; tariffs & Middle East weigh on large STS project pipeline"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "HOLD",
+          "sub": "320p consensus; no revision",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "HOLD",
+          "sub": "357.9p consensus; no revision",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 REV",
+          "val": "HOLD",
+          "sub": "£1,763.6m; upgrade cycle complete",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "TP",
+          "val": "£81.00",
+          "sub": "vs £74.56 price · 8.6% upside",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "289.8p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "320.0p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+10.4%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "↓",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+4.9%",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "→",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS FORECAST TREND",
+      "sparkSVG": "\n  <svg id=\"spark-SPX\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;\" xmlns=\"http://www.w3.org/2000/svg\"></svg>\n  <div class=\"spark-tt\" id=\"tt-SPX\"></div>\n",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-05-13T06:36:18.891Z",
+      "source": "html-dom"
+    },
+    {
+      "id": "ITIM_2026_05_13",
+      "ticker": "ITIM",
+      "score": 54,
+      "company": "Itim Group PLC",
+      "verdict": "Constructive",
+      "date": "2026-05-13",
+      "rnsType": "FY Results",
+      "mode": "pre-FY",
+      "index": "AIM · Software & Computer Services",
+      "signals": [
+        {
+          "pill": "ARR",
+          "type": "green",
+          "textHTML": "ARR <span class=\"val-up\">+9% to £14.2m</span> = 80.7% of FY26e revenue; structural FY26 upgrade foundation",
+          "textPlain": "ARR +9% to £14.2m = 80.7% of FY26e revenue; structural FY26 upgrade foundation"
+        },
+        {
+          "pill": "EPS BEAT",
+          "type": "green",
+          "textHTML": "Adj EPS <span class=\"val-up\">−0.47p</span> vs <span class=\"val-dn\">−0.70p</span> consensus; <span class=\"val-up\">+33% beat</span>; cost saves flowing in H2",
+          "textPlain": "Adj EPS −0.47p vs −0.70p consensus; +33% beat; cost saves flowing in H2"
+        },
+        {
+          "pill": "H2 EPS",
+          "type": "green",
+          "textHTML": "Implied H2 adj EPS <span class=\"val-up\">+1.13p</span> vs FY24 H2 +0.8p — <span class=\"val-up\">+41% YoY</span>; RNS-derived",
+          "textPlain": "Implied H2 adj EPS +1.13p vs FY24 H2 +0.8p — +41% YoY; RNS-derived"
+        },
+        {
+          "pill": "REV MISS",
+          "type": "red",
+          "textHTML": "FY revenue <span class=\"val-dn\">−2.2% YoY</span> to £17.5m; services project delays; UK retail headwinds",
+          "textPlain": "FY revenue −2.2% YoY to £17.5m; services project delays; UK retail headwinds"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "red",
+          "textHTML": "EBITDA margin <span class=\"val-dn\">−4pp to 10%</span>; gross margin −2.6pp; single broker (Zeus) only",
+          "textPlain": "EBITDA margin −4pp to 10%; gross margin −2.6pp; single broker (Zeus) only"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "→+0.7–0.9p",
+          "sub": "vs +0.5p cons · +40–80%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "UNCONF",
+          "sub": "Single broker; phantom consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 REV",
+          "val": "HOLD",
+          "sub": "£17.5–18.0m; flat recovery",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "TP",
+          "val": "N/A",
+          "sub": "No consensus TP; Zeus update due",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "2.0p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "-0.7p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "-135%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "→",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "-5.4%",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "?",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS FORECAST TREND",
+      "sparkSVG": "\n  <svg id=\"spark-ITIM\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;\" xmlns=\"http://www.w3.org/2000/svg\"></svg>\n  <div class=\"spark-tt\" id=\"tt-ITIM\"></div>\n",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-05-13T06:36:18.892Z",
+      "source": "html-dom"
+    },
+    {
+      "id": "MSLH_2026_05_13",
+      "ticker": "MSLH",
+      "score": 43,
+      "company": "Marshalls PLC",
+      "verdict": "Neutral / Hold",
+      "date": "2026-05-13",
+      "rnsType": "AGM Update",
+      "mode": "pre-H1",
+      "index": "FTSE 250 · Construction & Materials",
+      "signals": [
+        {
+          "pill": "COST SAVE",
+          "type": "green",
+          "textHTML": "£11m Landscaping cost saves <span class=\"val-up\">on track</span> for year-end delivery; direct FY26 EPS driver confirmed",
+          "textPlain": "£11m Landscaping cost saves on track for year-end delivery; direct FY26 EPS driver confirmed"
+        },
+        {
+          "pill": "IN LINE",
+          "type": "amber",
+          "textHTML": "\"Board expectations <span class=\"val-fl\">unchanged</span>\"; 4m YTD revenue £205m (FY25: £207m) — <span class=\"val-fl\">−1% YoY</span>",
+          "textPlain": "\"Board expectations unchanged\"; 4m YTD revenue £205m (FY25: £207m) — −1% YoY"
+        },
+        {
+          "pill": "BALANCE SHT",
+          "type": "green",
+          "textHTML": "Pre-IFRS16 ND <span class=\"val-up\">£167m</span> (FY25: £171m); RCF <span class=\"val-up\">£107m undrawn</span>; de-lever on track",
+          "textPlain": "Pre-IFRS16 ND £167m (FY25: £171m); RCF £107m undrawn; de-lever on track"
+        },
+        {
+          "pill": "HOUSING",
+          "type": "red",
+          "textHTML": "Bricks &amp; Masonry <span class=\"val-dn\">impacted by housing weakness</span>; Roofing YTD <span class=\"val-dn\">−3%</span>; competitive",
+          "textPlain": "Bricks & Masonry impacted by housing weakness; Roofing YTD −3%; competitive"
+        },
+        {
+          "pill": "MOMENTUM",
+          "type": "red",
+          "textHTML": "EPS 4-wk trend <span class=\"val-dn\">FALLING</span>; price −62% from May 2025 vs EPS −7.4%; stale TP £240p",
+          "textPlain": "EPS 4-wk trend FALLING; price −62% from May 2025 vs EPS −7.4%; stale TP £240p"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "HOLD",
+          "sub": "15.0p; no revision trigger",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "HOLD",
+          "sub": "17.4p; stable",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 REV",
+          "val": "HOLD",
+          "sub": "£640.4m; no upgrade catalyst",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "TP",
+          "val": "240p",
+          "sub": "vs 135.9p price · stale; 77% gap",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "16.2p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "15.0p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "-7.4%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "↓",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "-0.1%",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "→",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS FORECAST TREND",
+      "sparkSVG": "\n  <svg id=\"spark-MSLH\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;\" xmlns=\"http://www.w3.org/2000/svg\"></svg>\n  <div class=\"spark-tt\" id=\"tt-MSLH\"></div>\n",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-05-13T06:36:18.892Z",
       "source": "html-dom"
     }
   ],
