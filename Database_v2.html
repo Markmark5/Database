@@ -4752,6 +4752,7 @@ function scHandleSort(key) {
   if (key===scState.sortKey) scState.sortDir=scState.sortDir==='desc'?'asc':'desc';
   else { scState.sortKey=key; scState.sortDir=key==='change'?'asc':'desc'; }
   scRenderAll();
+  if (document.getElementById('h1-fs').classList.contains('open')) scFsRefresh();
 }
 
 /* ── File loading ── */
