@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-05-18T06:27:49.752Z",
-    "savedAtLabel": "18 May 2026 07:27",
+    "savedAt": "2026-05-18T06:52:17.458Z",
+    "savedAtLabel": "18 May 2026 07:52",
     "source": "github-sync"
   },
   "scorecards": [
@@ -49567,6 +49567,186 @@
           "d": "15 May 26",
           "eps": 25.3,
           "price": 126
+        }
+      ]
+    },
+    {
+      "id": "STAF_2026_05_18",
+      "ticker": "STAF",
+      "score": 65,
+      "company": "Staffline Group PLC",
+      "verdict": "Constructive",
+      "date": "2026-05-18",
+      "rnsType": "AGM Trading",
+      "mode": "pre-H1",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "GP BEAT",
+          "type": "green",
+          "textHTML": "Gross profit <span class=\"val-up\">+14.6% YoY</span> in first 4 months — GP growth ahead of revenue consensus rate; contract anniversary effect confirmed by Zeus.",
+          "textPlain": "Gross profit +14.6% YoY in first 4 months — GP growth ahead of revenue consensus rate; contract anniversary effect confirmed by Zeus."
+        },
+        {
+          "pill": "VOLUME",
+          "type": "green",
+          "textHTML": "Temp worker hours <span class=\"val-up\">+9.1% YoY</span> vs Hays <span class=\"val-dn\">‑9%</span> / SThree <span class=\"val-dn\">‑8%</span> / Page <span class=\"val-dn\">‑8.7%</span> — significant peer outperformance confirmed.",
+          "textPlain": "Temp worker hours +9.1% YoY vs Hays ‑9% / SThree ‑8% / Page ‑8.7% — significant peer outperformance confirmed."
+        },
+        {
+          "pill": "IN LINE",
+          "type": "green",
+          "textHTML": "FY26 confirmed <span class=\"val-up\">in line with management expectations</span>; Zeus upgrades FY26 EPS <span class=\"val-up\">+4.0%</span> (5.4p→5.6p), FY27 EPS <span class=\"val-up\">+7.6%</span> (5.5p→6.0p) on buyback accretion.",
+          "textPlain": "FY26 confirmed in line with management expectations; Zeus upgrades FY26 EPS +4.0% (5.4p→5.6p), FY27 EPS +7.6% (5.5p→6.0p) on buyback accretion."
+        },
+        {
+          "pill": "BUYBACK",
+          "type": "green",
+          "textHTML": "7.01m shares at avg <span class=\"val-up\">45.4p</span>, total £3.18m from operating cash flows — programme completed; no future repurchase assumed (further upside).",
+          "textPlain": "7.01m shares at avg 45.4p, total £3.18m from operating cash flows — programme completed; no future repurchase assumed (further upside)."
+        },
+        {
+          "pill": "NI RISK",
+          "type": "red",
+          "textHTML": "H2 comparator toughens: FY25 contracts implemented post-Aug 25 now lapped in H2; NI pass-through <span class=\"val-dn\">unconfirmed</span>; Zeus leaves rev/PBT unchanged.",
+          "textPlain": "H2 comparator toughens: FY25 contracts implemented post-Aug 25 now lapped in H2; NI pass-through unconfirmed; Zeus leaves rev/PBT unchanged."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY1 EPS",
+          "val": "5.6p",
+          "sub": "Zeus upgrade +4.0% (buyback)",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY2 EPS",
+          "val": "6.0p",
+          "sub": "Zeus upgrade +7.6% (buyback)",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY1 REV",
+          "val": "£1,170m",
+          "sub": "Zeus: held flat at £1,170m",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY2 REV",
+          "val": "£1,199m",
+          "sub": "Zeus: held flat at £1,199m",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "3.2p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "5.6p",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+2.4p",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FLAT",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+15.1%",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "60p unch",
+          "style": "color:var(--text-secondary)"
+        }
+      ],
+      "sparkLabel": "EPS Consensus Trend · 12M",
+      "sparkSVG": "\n      <svg id=\"spark-STAF\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,18.952380952380953 L63,6 L122,6 L181,6 L240,6 L299,6 L358,6 L417,6 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,18.952380952380953 L63,6 L122,6 L181,6 L240,6 L299,6 L358,6 L417,6 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L63,34.333333333333336 L122,34.333333333333336 L181,34.333333333333336 L240,25.83333333333333 L299,25.83333333333333 L358,8.833333333333321 L417,6 L476,6 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L63,34.333333333333336 L122,34.333333333333336 L181,34.333333333333336 L240,25.83333333333333 L299,25.83333333333333 L358,8.833333333333321 L417,6 L476,6 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"63\" cy=\"34.333333333333336\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"25.83333333333333\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"358\" cy=\"8.833333333333321\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"417\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  3.2p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">15 May 26  5.6p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-STAF\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-05-18T06:52:12.068Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 3.2,
+          "price": 52
+        },
+        {
+          "d": "24 May 25",
+          "eps": 3.6,
+          "price": 60
+        },
+        {
+          "d": "04 Oct 25",
+          "eps": 3.6,
+          "price": 60
+        },
+        {
+          "d": "03 Jan 26",
+          "eps": 3.6,
+          "price": 60
+        },
+        {
+          "d": "26 Jan 26",
+          "eps": 4.2,
+          "price": 60
+        },
+        {
+          "d": "07 Mar 26",
+          "eps": 4.2,
+          "price": 60
+        },
+        {
+          "d": "28 Mar 26",
+          "eps": 5.4,
+          "price": 60
+        },
+        {
+          "d": "04 Apr 26",
+          "eps": 5.6,
+          "price": 60
+        },
+        {
+          "d": "15 May 26",
+          "eps": 5.6,
+          "price": 39
         }
       ]
     }
