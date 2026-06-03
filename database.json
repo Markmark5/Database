@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-06-02T06:32:20.318Z",
-    "savedAtLabel": "02 Jun 2026 07:32",
+    "savedAt": "2026-06-03T06:32:43.580Z",
+    "savedAtLabel": "03 Jun 2026 07:32",
     "source": "github-sync"
   },
   "scorecards": [
@@ -62266,6 +62266,996 @@
         }
       ],
       "entryPrice": 246
+    },
+    {
+      "id": "RFX_2026_06_03",
+      "ticker": "RFX",
+      "score": 88,
+      "company": "Ramsdens Holdings PLC",
+      "verdict": "Strongly positive",
+      "date": "2026-06-03",
+      "rnsType": "H1 Results",
+      "mode": "Pre-H1",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "H1 EPS",
+          "type": "green",
+          "textHTML": "<span class=\"val-up\">37.9p</span> H1 basic EPS vs <span class=\"val-fl\">16.6p</span> seasonal baseline — STRONG BUY deviation <span class=\"val-up\">+33.8pp</span>; H1 PBT <span class=\"val-up\">£16.7m</span> exceeds FY25 full year.",
+          "textPlain": "37.9p H1 basic EPS vs 16.6p seasonal baseline — STRONG BUY deviation +33.8pp; H1 PBT £16.7m exceeds FY25 full year."
+        },
+        {
+          "pill": "PBT UPGRDE",
+          "type": "green",
+          "textHTML": "FY26 PBT guidance <span class=\"val-up\">£30–33m</span> vs prior consensus <span class=\"val-fl\">£28.6m</span> — explicit <span class=\"val-up\">+10–15%</span> upgrade; EPS implied <span class=\"val-up\">~68–76p</span> vs 63.2p.",
+          "textPlain": "FY26 PBT guidance £30–33m vs prior consensus £28.6m — explicit +10–15% upgrade; EPS implied ~68–76p vs 63.2p."
+        },
+        {
+          "pill": "H1 REV",
+          "type": "green",
+          "textHTML": "H1 revenue <span class=\"val-up\">£83.7m</span> (+62% YoY) vs <span class=\"val-fl\">£71.2m</span> baseline — STRONG BUY <span class=\"val-up\">+8.0pp</span>; precious metals GP <span class=\"val-up\">+130%</span> to £17.5m.",
+          "textPlain": "H1 revenue £83.7m (+62% YoY) vs £71.2m baseline — STRONG BUY +8.0pp; precious metals GP +130% to £17.5m."
+        },
+        {
+          "pill": "DIVIDEND",
+          "type": "green",
+          "textHTML": "Total interim <span class=\"val-up\">9.0p</span> (ordinary <span class=\"val-up\">6.0p +33%</span> + special <span class=\"val-up\">3.0p</span>); pawnbroking loan book <span class=\"val-up\">£14.5m</span> post-period at record levels.",
+          "textPlain": "Total interim 9.0p (ordinary 6.0p +33% + special 3.0p); pawnbroking loan book £14.5m post-period at record levels."
+        },
+        {
+          "pill": "GOLD RISK",
+          "type": "amber",
+          "textHTML": "Gold at <span class=\"val-fl\">44%</span> of gross profit (HY26 vs 28% HY25); Board flagged price <span class=\"val-fl\">volatility</span> and FX summer headwind from possible flight disruptions.",
+          "textPlain": "Gold at 44% of gross profit (HY26 vs 28% HY25); Board flagged price volatility and FX summer headwind from possible flight disruptions."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26e EPS",
+          "val": "↑ ~68–76p",
+          "sub": "vs 63.2p consensus (+12–20%)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e EPS",
+          "val": "→ 44–50p",
+          "sub": "gold normalisation priced in",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "↑ ~£160–168m",
+          "sub": "vs £156.1m consensus",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e Rev",
+          "val": "→ £135–145m",
+          "sub": "stale £139m — modest move",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "29.7p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "63.2p",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+33.5p",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "FLAT→FIRING",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+50.4%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "↑ 650–700p",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "EPS consensus · 12mo",
+      "sparkSVG": "\n      <svg id=\"spark-RFX\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L43.33333333333333,33.80566801619433 L82.66666666666666,33.80566801619433 L122,33.80566801619433 L161.33333333333331,33.80566801619433 L200.66666666666669,24.858299595141702 L240,24.858299595141702 L279.33333333333337,20.728744939271255 L318.66666666666663,19.352226720647774 L358,11.093117408906881 L397.33333333333337,11.093117408906881 L436.66666666666663,11.093117408906881 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L43.33333333333333,33.80566801619433 L82.66666666666666,33.80566801619433 L122,33.80566801619433 L161.33333333333331,33.80566801619433 L200.66666666666669,24.858299595141702 L240,24.858299595141702 L279.33333333333337,20.728744939271255 L318.66666666666663,19.352226720647774 L358,11.093117408906881 L397.33333333333337,11.093117408906881 L436.66666666666663,11.093117408906881 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L43.33333333333333,35.33134328358209 L82.66666666666666,35.33134328358209 L122,35.33134328358209 L161.33333333333331,35.33134328358209 L200.66666666666669,34.51940298507463 L240,34.51940298507463 L279.33333333333337,34.01194029850746 L318.66666666666663,28.429850746268656 L358,22.847761194029847 L397.33333333333337,16.14925373134328 L436.66666666666663,16.14925373134328 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L43.33333333333333,35.33134328358209 L82.66666666666666,35.33134328358209 L122,35.33134328358209 L161.33333333333331,35.33134328358209 L200.66666666666669,34.51940298507463 L240,34.51940298507463 L279.33333333333337,34.01194029850746 L318.66666666666663,28.429850746268656 L358,22.847761194029847 L397.33333333333337,16.14925373134328 L436.66666666666663,16.14925373134328 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"43.33333333333333\" cy=\"35.33134328358209\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"200.66666666666669\" cy=\"34.51940298507463\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"279.33333333333337\" cy=\"34.01194029850746\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"28.429850746268656\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"358\" cy=\"22.847761194029847\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"16.14925373134328\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-25  29.7p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-26  63.2p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-RFX\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+8.0pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+33.8pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-06-03T06:31:35.462Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "May-25",
+          "eps": 29.7,
+          "price": 340
+        },
+        {
+          "d": "Jun-25",
+          "eps": 34.3,
+          "price": 385
+        },
+        {
+          "d": "Jul-25",
+          "eps": 34.3,
+          "price": 385
+        },
+        {
+          "d": "Aug-25",
+          "eps": 34.3,
+          "price": 385
+        },
+        {
+          "d": "Sep-25",
+          "eps": 34.3,
+          "price": 385
+        },
+        {
+          "d": "Oct-25",
+          "eps": 35.1,
+          "price": 450
+        },
+        {
+          "d": "Nov-25",
+          "eps": 35.1,
+          "price": 450
+        },
+        {
+          "d": "Dec-25",
+          "eps": 35.6,
+          "price": 480
+        },
+        {
+          "d": "Jan-26",
+          "eps": 41.1,
+          "price": 490
+        },
+        {
+          "d": "Feb-26",
+          "eps": 46.6,
+          "price": 550
+        },
+        {
+          "d": "Mar-26",
+          "eps": 53.2,
+          "price": 550
+        },
+        {
+          "d": "Apr-26",
+          "eps": 53.2,
+          "price": 550
+        },
+        {
+          "d": "May-26",
+          "eps": 63.2,
+          "price": 587
+        }
+      ]
+    },
+    {
+      "id": "VLG_2026_06_03",
+      "ticker": "VLG",
+      "score": 62,
+      "company": "Venture Life Group PLC",
+      "verdict": "Constructive",
+      "date": "2026-06-03",
+      "rnsType": "Acquisition",
+      "mode": "Pre-H1",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "ACQUISITION",
+          "type": "green",
+          "textHTML": "FemiClear/CUROXEN acquired for up to <span class=\"val-up\">$28m</span> (1.9x FY26 rev); LTM net rev <span class=\"val-up\">$12.1m</span> (+29.1% YoY), Q4 exit rate <span class=\"val-up\">+39.7%</span>.",
+          "textPlain": "FemiClear/CUROXEN acquired for up to $28m (1.9x FY26 rev); LTM net rev $12.1m (+29.1% YoY), Q4 exit rate +39.7%."
+        },
+        {
+          "pill": "LISTINGS",
+          "type": "green",
+          "textHTML": "Confirmed new retail distribution (Target launch + range expansions) through Q2–Q4 2026 — <span class=\"val-up\">$14.7m</span> implied FY26 revenue from brands.",
+          "textPlain": "Confirmed new retail distribution (Target launch + range expansions) through Q2–Q4 2026 — $14.7m implied FY26 revenue from brands."
+        },
+        {
+          "pill": "EPS UPGRDE",
+          "type": "green",
+          "textHTML": "FY26e EPS upgrade implied <span class=\"val-up\">4.6–4.8p</span> vs 4.1p consensus (<span class=\"val-up\">+12–17%</span>); FY27e to <span class=\"val-up\">6.0–7.0p</span> vs stale 5.3p after full-year brand contribution.",
+          "textPlain": "FY26e EPS upgrade implied 4.6–4.8p vs 4.1p consensus (+12–17%); FY27e to 6.0–7.0p vs stale 5.3p after full-year brand contribution."
+        },
+        {
+          "pill": "BALANCE SHT",
+          "type": "green",
+          "textHTML": "~<span class=\"val-up\">£37m</span> net cash post-completion; GP margin on brands <span class=\"val-up\">62%</span>; strategic adjacency to Balance Activ in women's intimate health.",
+          "textPlain": "~£37m net cash post-completion; GP margin on brands 62%; strategic adjacency to Balance Activ in women's intimate health."
+        },
+        {
+          "pill": "INTEGRATION",
+          "type": "amber",
+          "textHTML": "18-month manufacturing TSA transition; USD revenue exposure introduced (~<span class=\"val-fl\">$14.7m</span> FY26); working capital absorption ~<span class=\"val-fl\">$1.9m</span>; H1 untrackable.",
+          "textPlain": "18-month manufacturing TSA transition; USD revenue exposure introduced (~$14.7m FY26); working capital absorption ~$1.9m; H1 untrackable."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26e EPS",
+          "val": "↑ 4.6–4.8p",
+          "sub": "vs 4.1p (+12–17%)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e EPS",
+          "val": "↑ 6.0–7.0p",
+          "sub": "vs 5.3p (full year brands)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "↑ £55–60m",
+          "sub": "vs £50.4m (H2 brand contribn)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e Rev",
+          "val": "↑ £65–75m",
+          "sub": "vs stale £42.6m — model rebuild",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "4.4p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "4.1p",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−6.8%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "STALLING",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−2.7%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "↑ 110–130p",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "EPS consensus · 12mo",
+      "sparkSVG": "\n      <svg id=\"spark-VLG\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L43.33333333333333,40 L82.66666666666666,40 L122,40 L161.33333333333331,40 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L43.33333333333333,40 L82.66666666666666,40 L122,40 L161.33333333333331,40 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L43.33333333333333,6 L82.66666666666666,34.333333333333336 L122,34.333333333333336 L161.33333333333331,34.333333333333336 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,23.000000000000025 L476,23.000000000000025 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L43.33333333333333,6 L82.66666666666666,34.333333333333336 L122,34.333333333333336 L161.33333333333331,34.333333333333336 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,23.000000000000025 L476,23.000000000000025 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"34.333333333333336\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"200.66666666666669\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"436.66666666666663\" cy=\"23.000000000000025\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"23.000000000000025\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-25  4.4p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-26  4.1p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-VLG\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-06-03T06:31:35.462Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "May-25",
+          "eps": 4.4,
+          "price": 100
+        },
+        {
+          "d": "Jun-25",
+          "eps": 4.4,
+          "price": 100
+        },
+        {
+          "d": "Jul-25",
+          "eps": 3.9,
+          "price": 100
+        },
+        {
+          "d": "Aug-25",
+          "eps": 3.9,
+          "price": 100
+        },
+        {
+          "d": "Sep-25",
+          "eps": 3.9,
+          "price": 100
+        },
+        {
+          "d": "Oct-25",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Nov-25",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Dec-25",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Jan-26",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Feb-26",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Mar-26",
+          "eps": 3.8,
+          "price": 100
+        },
+        {
+          "d": "Apr-26",
+          "eps": 4.1,
+          "price": 100
+        },
+        {
+          "d": "May-26",
+          "eps": 4.1,
+          "price": 100
+        }
+      ]
+    },
+    {
+      "id": "DEBS_2026_06_03",
+      "ticker": "DEBS",
+      "score": 54,
+      "company": "Boohoo Group PLC (Debenhams Group)",
+      "verdict": "Constructive",
+      "date": "2026-06-03",
+      "rnsType": "Pre-FY Update",
+      "mode": "Pre-FY",
+      "index": "AIM 100",
+      "signals": [
+        {
+          "pill": "GMV INFLCTN",
+          "type": "green",
+          "textHTML": "Group GMV <span class=\"val-up\">+0.5%</span> Q1 FY27 — first positive growth quarter; May <span class=\"val-up\">~+8%</span> YoY. All brands contributing. Inflection point management has been targeting.",
+          "textPlain": "Group GMV +0.5% Q1 FY27 — first positive growth quarter; May ~+8% YoY. All brands contributing. Inflection point management has been targeting."
+        },
+        {
+          "pill": "MARGIN EXPN",
+          "type": "green",
+          "textHTML": "Gross margin <span class=\"val-up\">53.5%</span> Q1 FY27 vs 52.1% prior year (<span class=\"val-up\">+140bps</span>); returns rate <span class=\"val-up\">−5%</span>; adj. EBITDA \"substantial increase\" YoY.",
+          "textPlain": "Gross margin 53.5% Q1 FY27 vs 52.1% prior year (+140bps); returns rate −5%; adj. EBITDA \"substantial increase\" YoY."
+        },
+        {
+          "pill": "FY27 EBITDA",
+          "type": "green",
+          "textHTML": "Board confident in <span class=\"val-up\">double-digit % EBITDA growth</span> in FY27 from £53m FY26 base; FCF generation and <span class=\"val-up\">&lt;1x ND/EBITDA</span> target both on track.",
+          "textPlain": "Board confident in double-digit % EBITDA growth in FY27 from £53m FY26 base; FCF generation and <1x ND/EBITDA target both on track."
+        },
+        {
+          "pill": "NO FY26 ACT",
+          "type": "amber",
+          "textHTML": "FY26 full year results due <span class=\"val-fl\">~17 Jun 26</span>; no FY26 actuals in this RNS — all upgrades gated on imminent results confirmation. FY27 guidance unanchored.",
+          "textPlain": "FY26 full year results due ~17 Jun 26; no FY26 actuals in this RNS — all upgrades gated on imminent results confirmation. FY27 guidance unanchored."
+        },
+        {
+          "pill": "LEVERAGE",
+          "type": "red",
+          "textHTML": "ND/EBITDA <span class=\"val-dn\">3.40x</span> FY1fc; consensus TP = current price (<span class=\"val-fl\">29p</span>) — zero upside cushion; debt reduction via Burnley + US warehouse disposals is execution-dependent.",
+          "textPlain": "ND/EBITDA 3.40x FY1fc; consensus TP = current price (29p) — zero upside cushion; debt reduction via Burnley + US warehouse disposals is execution-dependent."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26e EPS",
+          "val": "→ −0.9p",
+          "sub": "await FY26 actuals (~17 Jun)",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27e EPS",
+          "val": "↑ 0.6–0.8p",
+          "sub": "vs +0.5p (+5–15% upgrade)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "→ £831.1m",
+          "sub": "await FY26 actuals",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27e Rev",
+          "val": "→ £781.8m",
+          "sub": "marketplace model transition",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "−3.2p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "−0.9p",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+71.9%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "STALLING",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−32.2%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "TP",
+          "val": "29p (=px)",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "EPS consensus · 12mo",
+      "sparkSVG": "\n      <svg id=\"spark-DEBS\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,18.75 L46.909090909090914,18.75 L89.81818181818183,23 L132.72727272727272,35.75 L175.63636363636365,35.75 L218.54545454545453,40 L261.45454545454544,40 L304.3636363636364,23 L347.2727272727273,27.25 L390.1818181818182,27.25 L433.09090909090907,6 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,18.75 L46.909090909090914,18.75 L89.81818181818183,23 L132.72727272727272,35.75 L175.63636363636365,35.75 L218.54545454545453,40 L261.45454545454544,40 L304.3636363636364,23 L347.2727272727273,27.25 L390.1818181818182,27.25 L433.09090909090907,6 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L46.909090909090914,40 L89.81818181818183,40 L132.72727272727272,30.846153846153847 L175.63636363636365,28.230769230769226 L218.54545454545453,28.230769230769226 L261.45454545454544,6 L304.3636363636364,16.46153846153846 L347.2727272727273,9.92307692307692 L390.1818181818182,12.538461538461537 L433.09090909090907,9.92307692307692 L476,9.92307692307692 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L46.909090909090914,40 L89.81818181818183,40 L132.72727272727272,30.846153846153847 L175.63636363636365,28.230769230769226 L218.54545454545453,28.230769230769226 L261.45454545454544,6 L304.3636363636364,16.46153846153846 L347.2727272727273,9.92307692307692 L390.1818181818182,12.538461538461537 L433.09090909090907,9.92307692307692 L476,9.92307692307692 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"132.72727272727272\" cy=\"30.846153846153847\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"175.63636363636365\" cy=\"28.230769230769226\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"261.45454545454544\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"304.3636363636364\" cy=\"16.46153846153846\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"347.2727272727273\" cy=\"9.92307692307692\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"390.1818181818182\" cy=\"12.538461538461537\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"433.09090909090907\" cy=\"9.92307692307692\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"9.92307692307692\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jun-25  -3.2p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-26  -0.9p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-DEBS\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-06-03T06:31:35.463Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jun-25",
+          "eps": -3.2,
+          "price": 26
+        },
+        {
+          "d": "Jul-25",
+          "eps": -3.2,
+          "price": 26
+        },
+        {
+          "d": "Aug-25",
+          "eps": -3.2,
+          "price": 25
+        },
+        {
+          "d": "Sep-25",
+          "eps": -2.5,
+          "price": 22
+        },
+        {
+          "d": "Oct-25",
+          "eps": -2.3,
+          "price": 22
+        },
+        {
+          "d": "Nov-25",
+          "eps": -2.3,
+          "price": 21
+        },
+        {
+          "d": "Dec-25",
+          "eps": -0.6,
+          "price": 21
+        },
+        {
+          "d": "Jan-26",
+          "eps": -1.4,
+          "price": 25
+        },
+        {
+          "d": "Feb-26",
+          "eps": -0.9,
+          "price": 24
+        },
+        {
+          "d": "Mar-26",
+          "eps": -1.1,
+          "price": 24
+        },
+        {
+          "d": "Apr-26",
+          "eps": -0.9,
+          "price": 29
+        },
+        {
+          "d": "May-26",
+          "eps": -0.9,
+          "price": 29
+        }
+      ]
+    },
+    {
+      "id": "BME_2026_06_03",
+      "ticker": "BME",
+      "score": 43,
+      "company": "B&M European Value Retail PLC",
+      "verdict": "Cautious / cuts probable",
+      "date": "2026-06-03",
+      "rnsType": "FY Results",
+      "mode": "Pre-FY",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "EPS BEAT",
+          "type": "green",
+          "textHTML": "FY26 adj. diluted EPS <span class=\"val-up\">21.3p</span> vs consensus <span class=\"val-fl\">20.2p</span> (<span class=\"val-up\">+5.4%</span>); revenue <span class=\"val-up\">£5,775m</span> in line; FCF <span class=\"val-up\">£321m</span>; leverage <span class=\"val-up\">1.4x</span> back inside 1.0–1.5x target.",
+          "textPlain": "FY26 adj. diluted EPS 21.3p vs consensus 20.2p (+5.4%); revenue £5,775m in line; FCF £321m; leverage 1.4x back inside 1.0–1.5x target."
+        },
+        {
+          "pill": "FY27 INVEST",
+          "type": "red",
+          "textHTML": "\"<span class=\"val-dn\">FY27 remains a year of investment</span>\" — no numeric PBT guidance (switching to PBT metric); Middle East freight headwind; April garden season soft before May recovery.",
+          "textPlain": "\"FY27 remains a year of investment\" — no numeric PBT guidance (switching to PBT metric); Middle East freight headwind; April garden season soft before May recovery."
+        },
+        {
+          "pill": "EPS CUT",
+          "type": "red",
+          "textHTML": "FY27e consensus <span class=\"val-fl\">21.9p</span> now implies only <span class=\"val-dn\">+0.6p growth</span> on new 21.3p base; brokers likely to cut FY27e to <span class=\"val-dn\">~19–21p</span>. Guidance metric change creates model uncertainty.",
+          "textPlain": "FY27e consensus 21.9p now implies only +0.6p growth on new 21.3p base; brokers likely to cut FY27e to ~19–21p. Guidance metric change creates model uncertainty."
+        },
+        {
+          "pill": "HERON RISK",
+          "type": "red",
+          "textHTML": "Heron Foods goodwill impairment triggered by just <span class=\"val-dn\">+0.6% LFL</span> miss or <span class=\"val-dn\">−5bps margin</span>; EBITDA collapsed <span class=\"val-dn\">−47%</span> to £16m. Incremental P&amp;L write-down risk at H1 FY27.",
+          "textPlain": "Heron Foods goodwill impairment triggered by just +0.6% LFL miss or −5bps margin; EBITDA collapsed −47% to £16m. Incremental P&L write-down risk at H1 FY27."
+        },
+        {
+          "pill": "BEAT+CUT",
+          "type": "amber",
+          "textHTML": "Classic beat-and-warn pattern: FY26 EPS <span class=\"val-up\">+5.4%</span> beat but FY27 guidance cautious with no uplift. Dividend <span class=\"val-dn\">9.6p</span> (−36% vs FY25 15.0p); B&amp;M UK margin −<span class=\"val-dn\">360bps</span>.",
+          "textPlain": "Classic beat-and-warn pattern: FY26 EPS +5.4% beat but FY27 guidance cautious with no uplift. Dividend 9.6p (−36% vs FY25 15.0p); B&M UK margin −360bps."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26e EPS",
+          "val": "↑ 21.3p",
+          "sub": "actual: +5.4% vs 20.2p consensus",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e EPS",
+          "val": "↓ ~19–21p",
+          "sub": "vs 21.9p (investment year)",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "↑ £5,775m",
+          "sub": "actual: +0.1% vs £5,770.6m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27e Rev",
+          "val": "→ £5,990m",
+          "sub": "modest upside possible",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "33.8p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "20.2p",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−40.2%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "STALLING",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+2.9%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "↓ 185–200p",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "EPS consensus · 12mo",
+      "sparkSVG": "\n      <svg id=\"spark-BME\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L43.33333333333333,6.601769911504427 L82.66666666666666,10.061946902654867 L122,10.36283185840708 L161.33333333333331,10.814159292035399 L200.66666666666669,26.15929203539823 L240,30.221238938053098 L279.33333333333337,36.23893805309734 L318.66666666666663,39.39823008849557 L358,40 L397.33333333333337,38.79646017699115 L436.66666666666663,38.64601769911504 L476,39.69911504424779 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L43.33333333333333,6.601769911504427 L82.66666666666666,10.061946902654867 L122,10.36283185840708 L161.33333333333331,10.814159292035399 L200.66666666666669,26.15929203539823 L240,30.221238938053098 L279.33333333333337,36.23893805309734 L318.66666666666663,39.39823008849557 L358,40 L397.33333333333337,38.79646017699115 L436.66666666666663,38.64601769911504 L476,39.69911504424779 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L43.33333333333333,6.7445255474452495 L82.66666666666666,7.737226277372251 L122,8.481751824817518 L161.33333333333331,9.226277372262764 L200.66666666666669,27.591240875912405 L240,36.02919708029197 L279.33333333333337,35.284671532846716 L318.66666666666663,37.02189781021898 L358,39.751824817518255 L397.33333333333337,40 L436.66666666666663,39.751824817518255 L476,39.751824817518255 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L43.33333333333333,6.7445255474452495 L82.66666666666666,7.737226277372251 L122,8.481751824817518 L161.33333333333331,9.226277372262764 L200.66666666666669,27.591240875912405 L240,36.02919708029197 L279.33333333333337,35.284671532846716 L318.66666666666663,37.02189781021898 L358,39.751824817518255 L397.33333333333337,40 L436.66666666666663,39.751824817518255 L476,39.751824817518255 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"43.33333333333333\" cy=\"6.7445255474452495\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"82.66666666666666\" cy=\"7.737226277372251\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"122\" cy=\"8.481751824817518\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"9.226277372262764\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"200.66666666666669\" cy=\"27.591240875912405\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"36.02919708029197\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"279.33333333333337\" cy=\"35.284671532846716\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"37.02189781021898\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"358\" cy=\"39.751824817518255\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"436.66666666666663\" cy=\"39.751824817518255\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"39.751824817518255\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-25  33.8p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-26  20.2p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-BME\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-06-03T06:31:35.463Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "May-25",
+          "eps": 33.8,
+          "price": 433
+        },
+        {
+          "d": "Jun-25",
+          "eps": 33.5,
+          "price": 429
+        },
+        {
+          "d": "Jul-25",
+          "eps": 33.1,
+          "price": 406
+        },
+        {
+          "d": "Aug-25",
+          "eps": 32.8,
+          "price": 404
+        },
+        {
+          "d": "Sep-25",
+          "eps": 32.5,
+          "price": 401
+        },
+        {
+          "d": "Oct-25",
+          "eps": 25.1,
+          "price": 299
+        },
+        {
+          "d": "Nov-25",
+          "eps": 21.7,
+          "price": 272
+        },
+        {
+          "d": "Dec-25",
+          "eps": 22,
+          "price": 232
+        },
+        {
+          "d": "Jan-26",
+          "eps": 21.3,
+          "price": 211
+        },
+        {
+          "d": "Feb-26",
+          "eps": 20.2,
+          "price": 207
+        },
+        {
+          "d": "Mar-26",
+          "eps": 20.1,
+          "price": 215
+        },
+        {
+          "d": "Apr-26",
+          "eps": 20.2,
+          "price": 216
+        },
+        {
+          "d": "May-26",
+          "eps": 20.2,
+          "price": 209
+        }
+      ]
+    },
+    {
+      "id": "HUD_2026_06_03",
+      "ticker": "HUD",
+      "score": 32,
+      "company": "Huddled Group PLC",
+      "verdict": "Neutral — No consensus",
+      "date": "2026-06-03",
+      "rnsType": "Trading Update",
+      "mode": "Pre-FY",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "UNIT ECON",
+          "type": "green",
+          "textHTML": "Product margin per order <span class=\"val-up\">&gt;£17</span> on Peeko + Nutricircle; margin per item <span class=\"val-up\">doubled</span> Jan–May 2026 to ~£3. Unit economics improving structurally.",
+          "textPlain": "Product margin per order >£17 on Peeko + Nutricircle; margin per item doubled Jan–May 2026 to ~£3. Unit economics improving structurally."
+        },
+        {
+          "pill": "FULFILMENT",
+          "type": "green",
+          "textHTML": "THG Fulfil next-day delivery live across <span class=\"val-up\">400+</span> products; Beauty Box sold out in 2 days on TikTok; <span class=\"val-up\">10,000+</span> units now in production at ~£10/order margin.",
+          "textPlain": "THG Fulfil next-day delivery live across 400+ products; Beauty Box sold out in 2 days on TikTok; 10,000+ units now in production at ~£10/order margin."
+        },
+        {
+          "pill": "REV MISS",
+          "type": "amber",
+          "textHTML": "Q1 2026 revenue <span class=\"val-fl\">£4.2m</span> vs £4.4m Q1 2025 (<span class=\"val-dn\">−4.5%</span>) — deliberately moderated; structural rebuild vs growth at cost of unit profit. Return to volume growth now targeted.",
+          "textPlain": "Q1 2026 revenue £4.2m vs £4.4m Q1 2025 (−4.5%) — deliberately moderated; structural rebuild vs growth at cost of unit profit. Return to volume growth now targeted."
+        },
+        {
+          "pill": "NO CONSENSS",
+          "type": "red",
+          "textHTML": "⚠️ No FY1/FY2 EPS or Revenue consensus in Sharescope — broker coverage lapsed. Standard scorecard scoring not applicable. Score reflects qualitative operational signals only.",
+          "textPlain": "⚠️ No FY1/FY2 EPS or Revenue consensus in Sharescope — broker coverage lapsed. Standard scorecard scoring not applicable. Score reflects qualitative operational signals only."
+        },
+        {
+          "pill": "LOSS-MAKING",
+          "type": "red",
+          "textHTML": "Continuing losses (H1 FY26 EPS <span class=\"val-dn\">−0.6p</span>); no profitability timeline stated; FY25 results not yet published; cash runway not quantified for scaling ambition.",
+          "textPlain": "Continuing losses (H1 FY26 EPS −0.6p); no profitability timeline stated; FY25 results not yet published; cash runway not quantified for scaling ambition."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY25e EPS",
+          "val": "N/A",
+          "sub": "no consensus",
+          "color": ""
+        },
+        {
+          "lbl": "FY26e EPS",
+          "val": "N/A",
+          "sub": "no consensus",
+          "color": ""
+        },
+        {
+          "lbl": "FY25e Rev",
+          "val": "N/A",
+          "sub": "no consensus",
+          "color": ""
+        },
+        {
+          "lbl": "FY26e Rev",
+          "val": "N/A",
+          "sub": "no consensus",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "−0.4p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−100%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-Wk",
+          "val": "FLAT",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "—",
+          "style": "color:var(--text-dim)"
+        },
+        {
+          "lbl": "TP",
+          "val": "N/A",
+          "style": "color:var(--text-dim)"
+        }
+      ],
+      "sparkLabel": "EPS consensus · 12mo (lapsed)",
+      "sparkSVG": "\n      <svg id=\"spark-HUD\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L46.909090909090914,6 L89.81818181818183,6 L132.72727272727272,6 L175.63636363636365,6 L218.54545454545453,6 L261.45454545454544,6 L304.3636363636364,6 L347.2727272727273,6 L390.1818181818182,19.599999999999998 L433.09090909090907,33.199999999999996 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L46.909090909090914,6 L89.81818181818183,6 L132.72727272727272,6 L175.63636363636365,6 L218.54545454545453,6 L261.45454545454544,6 L304.3636363636364,6 L347.2727272727273,6 L390.1818181818182,19.599999999999998 L433.09090909090907,33.199999999999996 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L46.909090909090914,6 L89.81818181818183,6 L132.72727272727272,6 L175.63636363636365,40 L218.54545454545453,40 L261.45454545454544,40 L304.3636363636364,40 L347.2727272727273,40 L390.1818181818182,40 L433.09090909090907,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L46.909090909090914,6 L89.81818181818183,6 L132.72727272727272,6 L175.63636363636365,40 L218.54545454545453,40 L261.45454545454544,40 L304.3636363636364,40 L347.2727272727273,40 L390.1818181818182,40 L433.09090909090907,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"175.63636363636365\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jun-25  -0.4p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">May-26  -0.8p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-HUD\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-06-03T06:31:35.463Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jun-25",
+          "eps": -0.4,
+          "price": 1
+        },
+        {
+          "d": "Jul-25",
+          "eps": -0.4,
+          "price": 1
+        },
+        {
+          "d": "Aug-25",
+          "eps": -0.4,
+          "price": 1
+        },
+        {
+          "d": "Sep-25",
+          "eps": -0.4,
+          "price": 1
+        },
+        {
+          "d": "Oct-25",
+          "eps": -0.8,
+          "price": 1
+        },
+        {
+          "d": "Nov-25",
+          "eps": -0.8,
+          "price": 1
+        },
+        {
+          "d": "Dec-25",
+          "eps": -0.8,
+          "price": 1
+        },
+        {
+          "d": "Jan-26",
+          "eps": -0.8,
+          "price": 1
+        },
+        {
+          "d": "Feb-26",
+          "eps": -0.8,
+          "price": 1
+        },
+        {
+          "d": "Mar-26",
+          "eps": -0.8,
+          "price": 0.9
+        },
+        {
+          "d": "Apr-26",
+          "eps": -0.8,
+          "price": 0.8
+        },
+        {
+          "d": "May-26",
+          "eps": -0.8,
+          "price": 0.75
+        }
+      ]
     }
   ],
   "brokerChanges": [
@@ -70233,6 +71223,2319 @@
       "new": 275,
       "pct": 3.8,
       "date": "2026-05-12"
+    },
+    {
+      "company": "Wickes Group",
+      "tidm": "WIX",
+      "broker": "Jefferies",
+      "old": 278,
+      "new": 264,
+      "pct": -5,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Helios Towers",
+      "tidm": "HTWS",
+      "broker": "Peel Hunt",
+      "old": 0,
+      "new": 290,
+      "pct": 0,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "IMI",
+      "tidm": "IMI",
+      "broker": "Jefferies",
+      "old": 3085,
+      "new": 3295,
+      "pct": 6.8,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Lancashire Holdings",
+      "tidm": "LRE",
+      "broker": "Goldman Sachs",
+      "old": 623,
+      "new": 612,
+      "pct": -1.8,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Bytes Technology Group",
+      "tidm": "BYIT",
+      "broker": "Berenberg",
+      "old": 390,
+      "new": 360,
+      "pct": -7.7,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "On The Beach Group",
+      "tidm": "OTB",
+      "broker": "Deutsche Bank",
+      "old": 345,
+      "new": 314,
+      "pct": -9,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Griffin Mining",
+      "tidm": "GFM",
+      "broker": "Berenberg",
+      "old": 300,
+      "new": 340,
+      "pct": 13.3,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Sage Group",
+      "tidm": "SGE",
+      "broker": "Oddo BHF",
+      "old": 1600,
+      "new": 1250,
+      "pct": -21.9,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Flutter Entertainment",
+      "tidm": "FLTR",
+      "broker": "Goldman Sachs",
+      "old": 14700,
+      "new": 14150,
+      "pct": -3.7,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Burford Capital",
+      "tidm": "BUR",
+      "broker": "Deutsche Bank",
+      "old": 700,
+      "new": 500,
+      "pct": -28.6,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Burford Capital",
+      "tidm": "BUR",
+      "broker": "Berenberg",
+      "old": 500,
+      "new": 450,
+      "pct": -10,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "NatWest Group",
+      "tidm": "NWG",
+      "broker": "Exane BNP",
+      "old": 0,
+      "new": 680,
+      "pct": 0,
+      "date": "2026-05-12"
+    },
+    {
+      "company": "Cohort",
+      "tidm": "CHRT",
+      "broker": "Shore Capital",
+      "old": 0,
+      "new": 1350,
+      "pct": 0,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "Stifel",
+      "old": 580,
+      "new": 340,
+      "pct": -41.4,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "Vodafone",
+      "tidm": "VOD",
+      "broker": "DZ Bank",
+      "old": 130,
+      "new": 120,
+      "pct": -7.7,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "Volex",
+      "tidm": "VLX",
+      "broker": "Investec",
+      "old": 485,
+      "new": 670,
+      "pct": 38.1,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "Shell",
+      "tidm": "SHEL",
+      "broker": "LBBW",
+      "old": 2900,
+      "new": 3450,
+      "pct": 19,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "On The Beach Group",
+      "tidm": "OTB",
+      "broker": "Canaccord Genuity",
+      "old": 293,
+      "new": 240,
+      "pct": -18.1,
+      "date": "2026-05-13"
+    },
+    {
+      "company": "Flutter Entertainment",
+      "tidm": "FLTR",
+      "broker": "JP Morgan Cazenove",
+      "old": 12700,
+      "new": 11500,
+      "pct": -9.4,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Babcock International",
+      "tidm": "BAB",
+      "broker": "JP Morgan Cazenove",
+      "old": 1700,
+      "new": 1500,
+      "pct": -11.8,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "IntegraFin Holdings",
+      "tidm": "IHP",
+      "broker": "RBC",
+      "old": 440,
+      "new": 450,
+      "pct": 2.3,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "HSBC Holdings",
+      "tidm": "HSBA",
+      "broker": "RBC",
+      "old": 1200,
+      "new": 1275,
+      "pct": 6.2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Burberry Group",
+      "tidm": "BRBY",
+      "broker": "JP Morgan Cazenove",
+      "old": 950,
+      "new": 980,
+      "pct": 3.2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "RBC",
+      "old": 500,
+      "new": 510,
+      "pct": 2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Grainger",
+      "tidm": "GRI",
+      "broker": "Jefferies",
+      "old": 232,
+      "new": 210,
+      "pct": -9.5,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Premier Foods",
+      "tidm": "PFD",
+      "broker": "RBC",
+      "old": 210,
+      "new": 230,
+      "pct": 9.5,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "British American Tobacco",
+      "tidm": "BATS",
+      "broker": "BofA",
+      "old": 4700,
+      "new": 5300,
+      "pct": 12.8,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "British American Tobacco",
+      "tidm": "BATS",
+      "broker": "Citigroup",
+      "old": 4900,
+      "new": 5200,
+      "pct": 6.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Victrex",
+      "tidm": "VCT",
+      "broker": "Deutsche Bank",
+      "old": 780,
+      "new": 600,
+      "pct": -23.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "Deutsche Bank",
+      "old": 600,
+      "new": 370,
+      "pct": -38.3,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Watches of Switzerland",
+      "tidm": "WOSG",
+      "broker": "Barclays",
+      "old": 645,
+      "new": 725,
+      "pct": 12.4,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "BAE Systems",
+      "tidm": "BA.",
+      "broker": "Bernstein",
+      "old": 2200,
+      "new": 2050,
+      "pct": -6.8,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Weir Group",
+      "tidm": "WEIR",
+      "broker": "Goldman Sachs",
+      "old": 3050,
+      "new": 2840,
+      "pct": -6.9,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Workspace Group",
+      "tidm": "WKP",
+      "broker": "Peel Hunt",
+      "old": 500,
+      "new": 350,
+      "pct": -30,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "Berenberg",
+      "old": 500,
+      "new": 340,
+      "pct": -32,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Balfour Beatty",
+      "tidm": "BBY",
+      "broker": "Jefferies",
+      "old": 900,
+      "new": 985,
+      "pct": 9.4,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Microlise Group",
+      "tidm": "SAAS",
+      "broker": "Canaccord Genuity",
+      "old": 191,
+      "new": 166,
+      "pct": -13.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Tate & Lyle",
+      "tidm": "TATE",
+      "broker": "Deutsche Bank",
+      "old": 460,
+      "new": 595,
+      "pct": 29.3,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Standard Life",
+      "tidm": "SDLF",
+      "broker": "JP Morgan Cazenove",
+      "old": 620,
+      "new": 950,
+      "pct": 53.2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Conduit Holdings",
+      "tidm": "CRE",
+      "broker": "RBC",
+      "old": 390,
+      "new": 450,
+      "pct": 15.4,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Babcock International",
+      "tidm": "BAB",
+      "broker": "RBC",
+      "old": 1280,
+      "new": 1400,
+      "pct": 9.4,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Card Factory",
+      "tidm": "CARD",
+      "broker": "Berenberg",
+      "old": 110,
+      "new": 80,
+      "pct": -27.3,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Centrica",
+      "tidm": "CNA",
+      "broker": "JP Morgan Cazenove",
+      "old": 245,
+      "new": 235,
+      "pct": -4.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Aston Martin Lagonda",
+      "tidm": "AML",
+      "broker": "Citigroup",
+      "old": 45,
+      "new": 55,
+      "pct": 22.2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Grafton Group",
+      "tidm": "GFTU",
+      "broker": "Berenberg",
+      "old": 1100,
+      "new": 1000,
+      "pct": -9.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Oxford Instruments",
+      "tidm": "OXIG",
+      "broker": "Berenberg",
+      "old": 2700,
+      "new": 3000,
+      "pct": 11.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Centrica",
+      "tidm": "CNA",
+      "broker": "Berenberg",
+      "old": 190,
+      "new": 230,
+      "pct": 21.1,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "On The Beach Group",
+      "tidm": "OTB",
+      "broker": "Berenberg",
+      "old": 330,
+      "new": 280,
+      "pct": -15.2,
+      "date": "2026-05-14"
+    },
+    {
+      "company": "Aberdeen Group",
+      "tidm": "ABDN",
+      "broker": "Citigroup",
+      "old": 225,
+      "new": 265,
+      "pct": 17.8,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "Watches of Switzerland",
+      "tidm": "WOSG",
+      "broker": "Goldman Sachs",
+      "old": 600,
+      "new": 680,
+      "pct": 13.3,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "Imperial Brands",
+      "tidm": "IMB",
+      "broker": "Goldman Sachs",
+      "old": 3550,
+      "new": 3500,
+      "pct": -1.4,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "British American Tobacco",
+      "tidm": "BATS",
+      "broker": "Goldman Sachs",
+      "old": 4550,
+      "new": 5200,
+      "pct": 14.3,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "Aviva",
+      "tidm": "AV.",
+      "broker": "Goldman Sachs",
+      "old": 761,
+      "new": 756,
+      "pct": -0.7,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "National Grid",
+      "tidm": "NG.",
+      "broker": "Barclays",
+      "old": 1400,
+      "new": 1500,
+      "pct": 7.1,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "HSBC Holdings",
+      "tidm": "HSBA",
+      "broker": "Barclays",
+      "old": 1500,
+      "new": 1600,
+      "pct": 6.7,
+      "date": "2026-05-15"
+    },
+    {
+      "company": "Babcock International",
+      "tidm": "BAB",
+      "broker": "Jefferies",
+      "old": 1670,
+      "new": 1400,
+      "pct": -16.2,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Chemring Group",
+      "tidm": "CHG",
+      "broker": "Jefferies",
+      "old": 660,
+      "new": 655,
+      "pct": -0.8,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "QinetiQ Group",
+      "tidm": "QQ.",
+      "broker": "Jefferies",
+      "old": 575,
+      "new": 470,
+      "pct": -18.3,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Avon Technologies",
+      "tidm": "AVON",
+      "broker": "Jefferies",
+      "old": 2330,
+      "new": 2390,
+      "pct": 2.6,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Unilever",
+      "tidm": "ULVR",
+      "broker": "Jefferies",
+      "old": 4300,
+      "new": 3700,
+      "pct": -14,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Boku",
+      "tidm": "BOKU",
+      "broker": "Jefferies",
+      "old": 311,
+      "new": 286,
+      "pct": -8,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Cohort",
+      "tidm": "CHRT",
+      "broker": "Jefferies",
+      "old": 0,
+      "new": 1290,
+      "pct": 0,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Burberry Group",
+      "tidm": "BRBY",
+      "broker": "Morgan Stanley",
+      "old": 0,
+      "new": 1350,
+      "pct": 0,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Burberry Group",
+      "tidm": "BRBY",
+      "broker": "Barclays",
+      "old": 1450,
+      "new": 1410,
+      "pct": -2.8,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Derwent London",
+      "tidm": "DLN",
+      "broker": "Goldman Sachs",
+      "old": 2410,
+      "new": 2340,
+      "pct": -2.9,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "3i Group",
+      "tidm": "III",
+      "broker": "RBC",
+      "old": 2250,
+      "new": 2000,
+      "pct": -11.1,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Convatec Group",
+      "tidm": "CTEC",
+      "broker": "Citigroup",
+      "old": 250,
+      "new": 230,
+      "pct": -8,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Shell",
+      "tidm": "SHEL",
+      "broker": "HSBC",
+      "old": 0,
+      "new": 3700,
+      "pct": 0,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "Tate & Lyle",
+      "tidm": "TATE",
+      "broker": "Kepler Cheuvreux",
+      "old": 0,
+      "new": 547,
+      "pct": 0,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "PensionBee Group",
+      "tidm": "PBEE",
+      "broker": "RBC",
+      "old": 170,
+      "new": 175,
+      "pct": 2.9,
+      "date": "2026-05-18"
+    },
+    {
+      "company": "3i Group",
+      "tidm": "III",
+      "broker": "Deutsche Bank",
+      "old": 4300,
+      "new": 3527,
+      "pct": -18,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Taylor Wimpey",
+      "tidm": "TW.",
+      "broker": "Barclays",
+      "old": 111,
+      "new": 68,
+      "pct": -38.7,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "Barclays",
+      "old": 360,
+      "new": 185,
+      "pct": -48.6,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Persimmon",
+      "tidm": "PSN",
+      "broker": "Barclays",
+      "old": 1514,
+      "new": 1122,
+      "pct": -25.9,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Crest Nicholson",
+      "tidm": "CRST",
+      "broker": "Barclays",
+      "old": 140,
+      "new": 77,
+      "pct": -45,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Berkeley Group",
+      "tidm": "BKG",
+      "broker": "Barclays",
+      "old": 4280,
+      "new": 3996,
+      "pct": -6.6,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Bellway",
+      "tidm": "BWY",
+      "broker": "Barclays",
+      "old": 3390,
+      "new": 2020,
+      "pct": -40.4,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Barratt Redrow",
+      "tidm": "BTRW",
+      "broker": "Barclays",
+      "old": 482,
+      "new": 260,
+      "pct": -46.1,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Travis Perkins",
+      "tidm": "TPK",
+      "broker": "JP Morgan Cazenove",
+      "old": 680,
+      "new": 630,
+      "pct": -7.4,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "JP Morgan Cazenove",
+      "old": 530,
+      "new": 430,
+      "pct": -18.9,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "On The Beach Group",
+      "tidm": "OTB",
+      "broker": "RBC",
+      "old": 305,
+      "new": 290,
+      "pct": -4.9,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Diploma",
+      "tidm": "DPLM",
+      "broker": "RBC",
+      "old": 6600,
+      "new": 7300,
+      "pct": 10.6,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "IG Group Holdings",
+      "tidm": "IGG",
+      "broker": "RBC",
+      "old": 1600,
+      "new": 1850,
+      "pct": 15.6,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "IG Group Holdings",
+      "tidm": "IGG",
+      "broker": "Barclays",
+      "old": 1755,
+      "new": 2010,
+      "pct": 14.5,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Victorian Plumbing Group",
+      "tidm": "VIC",
+      "broker": "Barclays",
+      "old": 115,
+      "new": 120,
+      "pct": 4.3,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Dr. Martens",
+      "tidm": "DOCS",
+      "broker": "Goldman Sachs",
+      "old": 71,
+      "new": 70,
+      "pct": -1.4,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Anglo American",
+      "tidm": "AAL",
+      "broker": "Oddo BHF",
+      "old": 4250,
+      "new": 4350,
+      "pct": 2.4,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Airtel Africa",
+      "tidm": "AAF",
+      "broker": "Deutsche Bank",
+      "old": 430,
+      "new": 450,
+      "pct": 4.7,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Sainsbury",
+      "tidm": "SBRY",
+      "broker": "Morgan Stanley",
+      "old": 0,
+      "new": 345,
+      "pct": 0,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Watches of Switzerland",
+      "tidm": "WOSG",
+      "broker": "RBC",
+      "old": 560,
+      "new": 650,
+      "pct": 16.1,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Kainos Group",
+      "tidm": "KNOS",
+      "broker": "Canaccord Genuity",
+      "old": 1150,
+      "new": 1200,
+      "pct": 4.3,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Diploma",
+      "tidm": "DPLM",
+      "broker": "Berenberg",
+      "old": 7500,
+      "new": 9000,
+      "pct": 20,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Luceco",
+      "tidm": "LUCE",
+      "broker": "Berenberg",
+      "old": 200,
+      "new": 270,
+      "pct": 35,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Dr. Martens",
+      "tidm": "DOCS",
+      "broker": "Berenberg",
+      "old": 114,
+      "new": 110,
+      "pct": -3.5,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Forterra",
+      "tidm": "FORT",
+      "broker": "RBC",
+      "old": 220,
+      "new": 195,
+      "pct": -11.4,
+      "date": "2026-05-19"
+    },
+    {
+      "company": "Smiths Group",
+      "tidm": "SMIN",
+      "broker": "Jefferies",
+      "old": 2900,
+      "new": 2750,
+      "pct": -5.2,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Moonpig Group",
+      "tidm": "MOON",
+      "broker": "UBS",
+      "old": 320,
+      "new": 290,
+      "pct": -9.4,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "3i Group",
+      "tidm": "III",
+      "broker": "UBS",
+      "old": 3600,
+      "new": 2700,
+      "pct": -25,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Shawbrook Group",
+      "tidm": "SHAW",
+      "broker": "Goldman Sachs",
+      "old": 500,
+      "new": 455,
+      "pct": -9,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "Goldman Sachs",
+      "old": 690,
+      "new": 730,
+      "pct": 5.8,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Airtel Africa",
+      "tidm": "AAF",
+      "broker": "Goldman Sachs",
+      "old": 341,
+      "new": 339,
+      "pct": -0.6,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "M&G",
+      "tidm": "MNG",
+      "broker": "Barclays",
+      "old": 310,
+      "new": 340,
+      "pct": 9.7,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "C&C Group",
+      "tidm": "CCR",
+      "broker": "Barclays",
+      "old": 160,
+      "new": 150,
+      "pct": -6.2,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Grainger",
+      "tidm": "GRI",
+      "broker": "Barclays",
+      "old": 210,
+      "new": 175,
+      "pct": -16.7,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Aston Martin Lagonda",
+      "tidm": "AML",
+      "broker": "Jefferies",
+      "old": 60,
+      "new": 50,
+      "pct": -16.7,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Babcock International",
+      "tidm": "BAB",
+      "broker": "Peel Hunt",
+      "old": 1582,
+      "new": 1409,
+      "pct": -10.9,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Diploma",
+      "tidm": "DPLM",
+      "broker": "Deutsche Bank",
+      "old": 6400,
+      "new": 7200,
+      "pct": 12.5,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "DCC",
+      "tidm": "DCC",
+      "broker": "Deutsche Bank",
+      "old": 5500,
+      "new": 6000,
+      "pct": 9.1,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Big Yellow Group",
+      "tidm": "BYG",
+      "broker": "Deutsche Bank",
+      "old": 1200,
+      "new": 1100,
+      "pct": -8.3,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "IG Group Holdings",
+      "tidm": "IGG",
+      "broker": "Deutsche Bank",
+      "old": 1650,
+      "new": 1750,
+      "pct": 6.1,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Luceco",
+      "tidm": "LUCE",
+      "broker": "Deutsche Bank",
+      "old": 225,
+      "new": 260,
+      "pct": 15.6,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Forterra",
+      "tidm": "FORT",
+      "broker": "Berenberg",
+      "old": 220,
+      "new": 170,
+      "pct": -22.7,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "RS Group",
+      "tidm": "RS1",
+      "broker": "RBC",
+      "old": 770,
+      "new": 780,
+      "pct": 1.3,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "JD Sports Fashion",
+      "tidm": "JD.",
+      "broker": "Citigroup",
+      "old": 86,
+      "new": 83,
+      "pct": -3.5,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Forterra",
+      "tidm": "FORT",
+      "broker": "Deutsche Bank",
+      "old": 320,
+      "new": 250,
+      "pct": -21.9,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Keller Group",
+      "tidm": "KLR",
+      "broker": "Berenberg",
+      "old": 2350,
+      "new": 2550,
+      "pct": 8.5,
+      "date": "2026-05-20"
+    },
+    {
+      "company": "Softcat",
+      "tidm": "SCT",
+      "broker": "Berenberg",
+      "old": 1900,
+      "new": 1950,
+      "pct": 2.6,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Auto Trader Group",
+      "tidm": "AUTO",
+      "broker": "Berenberg",
+      "old": 580,
+      "new": 510,
+      "pct": -12.1,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Smurfit Westrock",
+      "tidm": "SWR",
+      "broker": "Barclays",
+      "old": 4100,
+      "new": 3900,
+      "pct": -4.9,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Great Portland Estates",
+      "tidm": "GPE",
+      "broker": "Jefferies",
+      "old": 323,
+      "new": 334,
+      "pct": 3.4,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "IG Group Holdings",
+      "tidm": "IGG",
+      "broker": "UBS",
+      "old": 1680,
+      "new": 2200,
+      "pct": 31,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Big Yellow Group",
+      "tidm": "BYG",
+      "broker": "Goldman Sachs",
+      "old": 860,
+      "new": 800,
+      "pct": -7,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Marks & Spencer",
+      "tidm": "MKS",
+      "broker": "Goldman Sachs",
+      "old": 480,
+      "new": 440,
+      "pct": -8.3,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Experian",
+      "tidm": "EXPN",
+      "broker": "Goldman Sachs",
+      "old": 4060,
+      "new": 4020,
+      "pct": -1,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Marks & Spencer",
+      "tidm": "MKS",
+      "broker": "Barclays",
+      "old": 400,
+      "new": 410,
+      "pct": 2.5,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Shell",
+      "tidm": "SHEL",
+      "broker": "Jefferies",
+      "old": 4400,
+      "new": 4500,
+      "pct": 2.3,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Experian",
+      "tidm": "EXPN",
+      "broker": "Deutsche Bank",
+      "old": 4550,
+      "new": 4000,
+      "pct": -12.1,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Playtech",
+      "tidm": "PTEC",
+      "broker": "Deutsche Bank",
+      "old": 443,
+      "new": 460,
+      "pct": 3.8,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "RBC",
+      "old": 510,
+      "new": 550,
+      "pct": 7.8,
+      "date": "2026-05-21"
+    },
+    {
+      "company": "Ibstock",
+      "tidm": "IBST",
+      "broker": "Jefferies",
+      "old": 127,
+      "new": 115,
+      "pct": -9.4,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Forterra",
+      "tidm": "FORT",
+      "broker": "Jefferies",
+      "old": 204,
+      "new": 177,
+      "pct": -13.2,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Greencore Group",
+      "tidm": "GNC",
+      "broker": "Peel Hunt",
+      "old": 0,
+      "new": 300,
+      "pct": 0,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "Goldman Sachs",
+      "old": 555,
+      "new": 565,
+      "pct": 1.8,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Convatec Group",
+      "tidm": "CTEC",
+      "broker": "Barclays",
+      "old": 320,
+      "new": 300,
+      "pct": -6.2,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Airtel Africa",
+      "tidm": "AAF",
+      "broker": "Barclays",
+      "old": 375,
+      "new": 370,
+      "pct": -1.3,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Auto Trader Group",
+      "tidm": "AUTO",
+      "broker": "UBS",
+      "old": 470,
+      "new": 410,
+      "pct": -12.8,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Ceres Power",
+      "tidm": "CWR",
+      "broker": "UBS",
+      "old": 570,
+      "new": 970,
+      "pct": 70.2,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Experian",
+      "tidm": "EXPN",
+      "broker": "UBS",
+      "old": 3700,
+      "new": 3870,
+      "pct": 4.6,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Marks & Spencer",
+      "tidm": "MKS",
+      "broker": "Citigroup",
+      "old": 410,
+      "new": 390,
+      "pct": -4.9,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Ibstock",
+      "tidm": "IBST",
+      "broker": "Deutsche Bank",
+      "old": 110,
+      "new": 100,
+      "pct": -9.1,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Auto Trader Group",
+      "tidm": "AUTO",
+      "broker": "Deutsche Bank",
+      "old": 816,
+      "new": 794,
+      "pct": -2.7,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Hill & Smith",
+      "tidm": "HILS",
+      "broker": "Deutsche Bank",
+      "old": 2930,
+      "new": 2975,
+      "pct": 1.5,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Weir Group",
+      "tidm": "WEIR",
+      "broker": "Deutsche Bank",
+      "old": 3723,
+      "new": 3230,
+      "pct": -13.2,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "Deutsche Bank",
+      "old": 585,
+      "new": 600,
+      "pct": 2.6,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "QinetiQ Group",
+      "tidm": "QQ.",
+      "broker": "Deutsche Bank",
+      "old": 635,
+      "new": 600,
+      "pct": -5.5,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Convatec Group",
+      "tidm": "CTEC",
+      "broker": "JP Morgan Cazenove",
+      "old": 307,
+      "new": 294,
+      "pct": -4.2,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Auto Trader Group",
+      "tidm": "AUTO",
+      "broker": "JP Morgan Cazenove",
+      "old": 515,
+      "new": 445,
+      "pct": -13.6,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Mitchells & Butlers",
+      "tidm": "MAB",
+      "broker": "JP Morgan Cazenove",
+      "old": 340,
+      "new": 320,
+      "pct": -5.9,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "easyJet",
+      "tidm": "EZJ",
+      "broker": "Bernstein",
+      "old": 425,
+      "new": 350,
+      "pct": -17.6,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "easyJet",
+      "tidm": "EZJ",
+      "broker": "BofA",
+      "old": 460,
+      "new": 430,
+      "pct": -6.5,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "easyJet",
+      "tidm": "EZJ",
+      "broker": "RBC",
+      "old": 415,
+      "new": 405,
+      "pct": -2.4,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Topps Tiles",
+      "tidm": "TPT",
+      "broker": "Canaccord Genuity",
+      "old": 46,
+      "new": 33,
+      "pct": -28.3,
+      "date": "2026-05-22"
+    },
+    {
+      "company": "Whitbread",
+      "tidm": "WTB",
+      "broker": "Goldman Sachs",
+      "old": 3000,
+      "new": 2600,
+      "pct": -13.3,
+      "date": "2026-05-25"
+    },
+    {
+      "company": "Smith & Nephew",
+      "tidm": "SN.",
+      "broker": "Goldman Sachs",
+      "old": 1700,
+      "new": 1550,
+      "pct": -8.8,
+      "date": "2026-05-25"
+    },
+    {
+      "company": "Young & Co's Brewery",
+      "tidm": "YNGA",
+      "broker": "JP Morgan Cazenove",
+      "old": 1190,
+      "new": 1255,
+      "pct": 5.5,
+      "date": "2026-05-25"
+    },
+    {
+      "company": "Hill & Smith",
+      "tidm": "HILS",
+      "broker": "Jefferies",
+      "old": 2760,
+      "new": 3250,
+      "pct": 17.8,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "JP Morgan Cazenove",
+      "old": 7200,
+      "new": 8280,
+      "pct": 15,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Glencore",
+      "tidm": "GLEN",
+      "broker": "JP Morgan Cazenove",
+      "old": 500,
+      "new": 560,
+      "pct": 12,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Anglo American",
+      "tidm": "AAL",
+      "broker": "JP Morgan Cazenove",
+      "old": 2780,
+      "new": 3160,
+      "pct": 13.7,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Antofagasta",
+      "tidm": "ANTO",
+      "broker": "JP Morgan Cazenove",
+      "old": 3200,
+      "new": 3400,
+      "pct": 6.2,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "Barclays",
+      "old": 0,
+      "new": 465,
+      "pct": 0,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "Barclays",
+      "old": 770,
+      "new": 780,
+      "pct": 1.3,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Hiscox",
+      "tidm": "HSX",
+      "broker": "Barclays",
+      "old": 1730,
+      "new": 1820,
+      "pct": 5.2,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Lancashire Holdings",
+      "tidm": "LRE",
+      "broker": "Barclays",
+      "old": 570,
+      "new": 610,
+      "pct": 7,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "British American Tobacco",
+      "tidm": "BATS",
+      "broker": "Barclays",
+      "old": 4900,
+      "new": 5400,
+      "pct": 10.2,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Conduit Holdings",
+      "tidm": "CRE",
+      "broker": "Barclays",
+      "old": 350,
+      "new": 410,
+      "pct": 17.1,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Tate & Lyle",
+      "tidm": "TATE",
+      "broker": "Barclays",
+      "old": 395,
+      "new": 525,
+      "pct": 32.9,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Vistry Group",
+      "tidm": "VTY",
+      "broker": "Goldman Sachs",
+      "old": 625,
+      "new": 365,
+      "pct": -41.6,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Persimmon",
+      "tidm": "PSN",
+      "broker": "Goldman Sachs",
+      "old": 1490,
+      "new": 1540,
+      "pct": 3.4,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Berkeley Group",
+      "tidm": "BKG",
+      "broker": "Goldman Sachs",
+      "old": 2965,
+      "new": 3170,
+      "pct": 6.9,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Bellway",
+      "tidm": "BWY",
+      "broker": "Goldman Sachs",
+      "old": 2425,
+      "new": 2220,
+      "pct": -8.5,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Barratt Redrow",
+      "tidm": "BTRW",
+      "broker": "Goldman Sachs",
+      "old": 400,
+      "new": 355,
+      "pct": -11.2,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Taylor Wimpey",
+      "tidm": "TW.",
+      "broker": "Goldman Sachs",
+      "old": 95,
+      "new": 75,
+      "pct": -21.1,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "Citigroup",
+      "old": 7200,
+      "new": 7600,
+      "pct": 5.6,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Genuit Group",
+      "tidm": "GEN",
+      "broker": "Jefferies",
+      "old": 388,
+      "new": 332,
+      "pct": -14.4,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Genuit Group",
+      "tidm": "GEN",
+      "broker": "Deutsche Bank",
+      "old": 545,
+      "new": 440,
+      "pct": -19.3,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Genuit Group",
+      "tidm": "GEN",
+      "broker": "Berenberg",
+      "old": 500,
+      "new": 440,
+      "pct": -12,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Sage Group",
+      "tidm": "SGE",
+      "broker": "Deutsche Bank",
+      "old": 1000,
+      "new": 900,
+      "pct": -10,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Associated British Foods",
+      "tidm": "ABF",
+      "broker": "Deutsche Bank",
+      "old": 1925,
+      "new": 1850,
+      "pct": -3.9,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Softcat",
+      "tidm": "SCT",
+      "broker": "Deutsche Bank",
+      "old": 1700,
+      "new": 1800,
+      "pct": 5.9,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Vodafone",
+      "tidm": "VOD",
+      "broker": "BofA",
+      "old": 115,
+      "new": 98,
+      "pct": -14.8,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Aberdeen Group",
+      "tidm": "ABDN",
+      "broker": "JP Morgan Cazenove",
+      "old": 240,
+      "new": 241,
+      "pct": 0.4,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Softcat",
+      "tidm": "SCT",
+      "broker": "Jefferies",
+      "old": 1210,
+      "new": 1700,
+      "pct": 40.5,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Auto Trader Group",
+      "tidm": "AUTO",
+      "broker": "Bernstein",
+      "old": 595,
+      "new": 545,
+      "pct": -8.4,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "BofA",
+      "old": 0,
+      "new": 9300,
+      "pct": 0,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "easyJet",
+      "tidm": "EZJ",
+      "broker": "UBS",
+      "old": 635,
+      "new": 555,
+      "pct": -12.6,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "BHP Group",
+      "tidm": "BHP",
+      "broker": "JP Morgan Cazenove",
+      "old": 2600,
+      "new": 3400,
+      "pct": 30.8,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "South32",
+      "tidm": "S32",
+      "broker": "Barclays",
+      "old": 265,
+      "new": 240,
+      "pct": -9.4,
+      "date": "2026-05-26"
+    },
+    {
+      "company": "Cranswick",
+      "tidm": "CWK",
+      "broker": "RBC",
+      "old": 5500,
+      "new": 6100,
+      "pct": 10.9,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Intermediate Capital Group",
+      "tidm": "ICG",
+      "broker": "Goldman Sachs",
+      "old": 2860,
+      "new": 2910,
+      "pct": 1.7,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "National Grid",
+      "tidm": "NG.",
+      "broker": "Goldman Sachs",
+      "old": 1386,
+      "new": 1377,
+      "pct": -0.6,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "UBS",
+      "old": 705,
+      "new": 715,
+      "pct": 1.4,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Victrex",
+      "tidm": "VCT",
+      "broker": "Barclays",
+      "old": 660,
+      "new": 610,
+      "pct": -7.6,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "IQE",
+      "tidm": "IQE",
+      "broker": "Deutsche Bank",
+      "old": 0,
+      "new": 60,
+      "pct": 0,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "HICL Infrastructure",
+      "tidm": "HICL",
+      "broker": "RBC",
+      "old": 160,
+      "new": 165,
+      "pct": 3.1,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Quilter",
+      "tidm": "QLT",
+      "broker": "RBC",
+      "old": 220,
+      "new": 225,
+      "pct": 2.3,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Intertek Group",
+      "tidm": "ITRK",
+      "broker": "Oddo BHF",
+      "old": 5000,
+      "new": 6000,
+      "pct": 20,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Tate & Lyle",
+      "tidm": "TATE",
+      "broker": "Berenberg",
+      "old": 464,
+      "new": 554,
+      "pct": 19.4,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Grainger",
+      "tidm": "GRI",
+      "broker": "Berenberg",
+      "old": 285,
+      "new": 227,
+      "pct": -20.4,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Hollywood Bowl Group",
+      "tidm": "BOWL",
+      "broker": "Berenberg",
+      "old": 440,
+      "new": 450,
+      "pct": 2.3,
+      "date": "2026-05-27"
+    },
+    {
+      "company": "Metro Bank Holdings",
+      "tidm": "MTRO",
+      "broker": "RBC",
+      "old": 170,
+      "new": 195,
+      "pct": 14.7,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Convatec Group",
+      "tidm": "CTEC",
+      "broker": "Goldman Sachs",
+      "old": 310,
+      "new": 290,
+      "pct": -6.5,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Bodycote",
+      "tidm": "BOY",
+      "broker": "Deutsche Bank",
+      "old": 835,
+      "new": 960,
+      "pct": 15,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Shawbrook Group",
+      "tidm": "SHAW",
+      "broker": "UBS",
+      "old": 550,
+      "new": 545,
+      "pct": -0.9,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "BAE Systems",
+      "tidm": "BA.",
+      "broker": "Mediobanca",
+      "old": 0,
+      "new": 2600,
+      "pct": 0,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Aviva",
+      "tidm": "AV.",
+      "broker": "Berenberg",
+      "old": 0,
+      "new": 800,
+      "pct": 0,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Hiscox",
+      "tidm": "HSX",
+      "broker": "Peel Hunt",
+      "old": 0,
+      "new": 1960,
+      "pct": 0,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Helios Towers",
+      "tidm": "HTWS",
+      "broker": "BofA",
+      "old": 232,
+      "new": 267,
+      "pct": 15.1,
+      "date": "2026-05-28"
+    },
+    {
+      "company": "Ceres Power",
+      "tidm": "CWR",
+      "broker": "Berenberg",
+      "old": 530,
+      "new": 980,
+      "pct": 84.9,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "BT Group",
+      "tidm": "BT.A",
+      "broker": "Berenberg",
+      "old": 250,
+      "new": 300,
+      "pct": 20,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Aviva",
+      "tidm": "AV.",
+      "broker": "JP Morgan Cazenove",
+      "old": 725,
+      "new": 715,
+      "pct": -1.4,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Computacenter",
+      "tidm": "CCC",
+      "broker": "JP Morgan Cazenove",
+      "old": 4000,
+      "new": 4500,
+      "pct": 12.5,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "SSP Group",
+      "tidm": "SSPG",
+      "broker": "Goldman Sachs",
+      "old": 170,
+      "new": 165,
+      "pct": -2.9,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "easyJet",
+      "tidm": "EZJ",
+      "broker": "Goldman Sachs",
+      "old": 565,
+      "new": 450,
+      "pct": -20.4,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Whitbread",
+      "tidm": "WTB",
+      "broker": "Barclays",
+      "old": 2500,
+      "new": 2100,
+      "pct": -16,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Johnson Matthey",
+      "tidm": "JMAT",
+      "broker": "Deutsche Bank",
+      "old": 2120,
+      "new": 2400,
+      "pct": 13.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Bloomsbury Publishing",
+      "tidm": "BMY",
+      "broker": "Deutsche Bank",
+      "old": 700,
+      "new": 760,
+      "pct": 8.6,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Victorian Plumbing Group",
+      "tidm": "VIC",
+      "broker": "Deutsche Bank",
+      "old": 80,
+      "new": 85,
+      "pct": 6.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Wickes Group",
+      "tidm": "WIX",
+      "broker": "Deutsche Bank",
+      "old": 235,
+      "new": 165,
+      "pct": -29.8,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Dunelm Group",
+      "tidm": "DNLM",
+      "broker": "Deutsche Bank",
+      "old": 1200,
+      "new": 850,
+      "pct": -29.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Currys",
+      "tidm": "CURY",
+      "broker": "Deutsche Bank",
+      "old": 155,
+      "new": 150,
+      "pct": -3.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "B&M European Value Retail",
+      "tidm": "BME",
+      "broker": "Deutsche Bank",
+      "old": 175,
+      "new": 155,
+      "pct": -11.4,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Sainsbury",
+      "tidm": "SBRY",
+      "broker": "Deutsche Bank",
+      "old": 365,
+      "new": 360,
+      "pct": -1.4,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Rolls-Royce",
+      "tidm": "RR.",
+      "broker": "Exane BNP",
+      "old": 0,
+      "new": 1500,
+      "pct": 0,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Softcat",
+      "tidm": "SCT",
+      "broker": "UBS",
+      "old": 1350,
+      "new": 1700,
+      "pct": 25.9,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Unite Group",
+      "tidm": "UTG",
+      "broker": "UBS",
+      "old": 0,
+      "new": 585,
+      "pct": 0,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "Shore Capital",
+      "old": 535,
+      "new": 700,
+      "pct": 30.8,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "SSE",
+      "tidm": "SSE",
+      "broker": "RBC",
+      "old": 3025,
+      "new": 2925,
+      "pct": -3.3,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "National Grid",
+      "tidm": "NG.",
+      "broker": "RBC",
+      "old": 1400,
+      "new": 1375,
+      "pct": -1.8,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Severn Trent",
+      "tidm": "SVT",
+      "broker": "RBC",
+      "old": 3400,
+      "new": 3450,
+      "pct": 1.5,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Breedon Group",
+      "tidm": "BREE",
+      "broker": "RBC",
+      "old": 500,
+      "new": 425,
+      "pct": -15,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Hollywood Bowl Group",
+      "tidm": "BOWL",
+      "broker": "RBC",
+      "old": 420,
+      "new": 415,
+      "pct": -1.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Vodafone",
+      "tidm": "VOD",
+      "broker": "Citigroup",
+      "old": 115,
+      "new": 110,
+      "pct": -4.3,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Bellway",
+      "tidm": "BWY",
+      "broker": "BofA",
+      "old": 2200,
+      "new": 2060,
+      "pct": -6.4,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Gresham House Energy Storage Fund",
+      "tidm": "GRID",
+      "broker": "RBC",
+      "old": 80,
+      "new": 85,
+      "pct": 6.2,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "DZ Bank",
+      "old": 7500,
+      "new": 9000,
+      "pct": 20,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Burberry Group",
+      "tidm": "BRBY",
+      "broker": "Citigroup",
+      "old": 1590,
+      "new": 1560,
+      "pct": -1.9,
+      "date": "2026-05-29"
+    },
+    {
+      "company": "Seplat Energy",
+      "tidm": "SEPL",
+      "broker": "Citigroup",
+      "old": 655,
+      "new": 665,
+      "pct": 1.5,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "SEGRO",
+      "tidm": "SGRO",
+      "broker": "Goldman Sachs",
+      "old": 800,
+      "new": 900,
+      "pct": 12.5,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Unite Group",
+      "tidm": "UTG",
+      "broker": "Goldman Sachs",
+      "old": 560,
+      "new": 630,
+      "pct": 12.5,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Tritax Big Box REIT",
+      "tidm": "BBOX",
+      "broker": "Goldman Sachs",
+      "old": 180,
+      "new": 190,
+      "pct": 5.6,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "Goldman Sachs",
+      "old": 730,
+      "new": 790,
+      "pct": 8.2,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Hammerson",
+      "tidm": "HMSO",
+      "broker": "Goldman Sachs",
+      "old": 338,
+      "new": 351,
+      "pct": 3.8,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Halma",
+      "tidm": "HLMA",
+      "broker": "Goldman Sachs",
+      "old": 4290,
+      "new": 5060,
+      "pct": 17.9,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Great Portland Estates",
+      "tidm": "GPE",
+      "broker": "Goldman Sachs",
+      "old": 340,
+      "new": 370,
+      "pct": 8.8,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Derwent London",
+      "tidm": "DLN",
+      "broker": "Goldman Sachs",
+      "old": 2340,
+      "new": 2370,
+      "pct": 1.3,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "Goldman Sachs",
+      "old": 500,
+      "new": 510,
+      "pct": 2,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Big Yellow Group",
+      "tidm": "BYG",
+      "broker": "Goldman Sachs",
+      "old": 800,
+      "new": 830,
+      "pct": 3.8,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Tritax Big Box REIT",
+      "tidm": "BBOX",
+      "broker": "Barclays",
+      "old": 165,
+      "new": 170,
+      "pct": 3,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Pets at Home",
+      "tidm": "PETS",
+      "broker": "RBC",
+      "old": 170,
+      "new": 175,
+      "pct": 2.9,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Polar Capital Holdings",
+      "tidm": "POLR",
+      "broker": "Deutsche Bank",
+      "old": 1050,
+      "new": 1250,
+      "pct": 19,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Man Group",
+      "tidm": "EMG",
+      "broker": "Deutsche Bank",
+      "old": 280,
+      "new": 295,
+      "pct": 5.4,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Rosebank Industries",
+      "tidm": "ROSE",
+      "broker": "Jefferies",
+      "old": 0,
+      "new": 470,
+      "pct": 0,
+      "date": "2026-06-01"
+    },
+    {
+      "company": "Applied Nutrition",
+      "tidm": "APN",
+      "broker": "Deutsche Bank",
+      "old": 306,
+      "new": 335,
+      "pct": 9.5,
+      "date": "2026-06-02"
+    },
+    {
+      "company": "Jupiter Fund Management",
+      "tidm": "JUP",
+      "broker": "Deutsche Bank",
+      "old": 180,
+      "new": 190,
+      "pct": 5.6,
+      "date": "2026-06-02"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "Deutsche Bank",
+      "old": 6900,
+      "new": 7400,
+      "pct": 7.2,
+      "date": "2026-06-02"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "Berenberg",
+      "old": 531,
+      "new": 534,
+      "pct": 0.6,
+      "date": "2026-06-02"
     }
   ],
   "uploadZone": {
