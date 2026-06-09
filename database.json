@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-06-09T06:38:25.964Z",
-    "savedAtLabel": "09 Jun 2026 07:38",
+    "savedAt": "2026-06-09T09:49:14.681Z",
+    "savedAtLabel": "09 Jun 2026 10:49",
     "source": "github-sync"
   },
   "scorecards": [
@@ -66718,6 +66718,176 @@
           "price": 115
         }
       ]
+    },
+    {
+      "id": "SSIT_2026_06_09",
+      "ticker": "SSIT",
+      "score": 82,
+      "company": "Seraphim Space Investment Trust PLC",
+      "verdict": "Strongly Positive",
+      "date": "2026-06-09",
+      "rnsType": "Portfolio Update",
+      "mode": "Pre-FY",
+      "index": "LSE MAIN · INV TRUST",
+      "signals": [
+        {
+          "pill": "NAV CATALYST",
+          "type": "green",
+          "textHTML": "ICEYE €10bn Series F — largest holding revalued +102%; <span class=\"val-up\">£202m uplift / +73p NAV ps</span> expected in FY26 results Oct 2026.",
+          "textPlain": "ICEYE €10bn Series F — largest holding revalued +102%; £202m uplift / +73p NAV ps expected in FY26 results Oct 2026."
+        },
+        {
+          "pill": "Q3 RECORD",
+          "type": "green",
+          "textHTML": "Q3 FY26 NAV ps <span class=\"val-up\">177.63p</span> (+24.8% qtr); portfolio fair value <span class=\"val-up\">£433m</span> at 257.8% of cost; broadest quarterly gain since IPO.",
+          "textPlain": "Q3 FY26 NAV ps 177.63p (+24.8% qtr); portfolio fair value £433m at 257.8% of cost; broadest quarterly gain since IPO."
+        },
+        {
+          "pill": "NAV BRIDGE",
+          "type": "green",
+          "textHTML": "Implied FY26 NAV ps <span class=\"val-up\">~228p</span> (Q3 177.6p + ICEYE +73p + HawkEye +6p − perf. fee ~26p − costs ~2p); +92% vs FY25 118.5p.",
+          "textPlain": "Implied FY26 NAV ps ~228p (Q3 177.6p + ICEYE +73p + HawkEye +6p − perf. fee ~26p − costs ~2p); +92% vs FY25 118.5p."
+        },
+        {
+          "pill": "REALISATION",
+          "type": "green",
+          "textHTML": "HawkEye 360 NYSE IPO $3bn; ALL.SPACE trade sale signed; portfolio entering <span class=\"val-up\">realisation cycle</span>; £155m C-share raise deployed.",
+          "textPlain": "HawkEye 360 NYSE IPO $3bn; ALL.SPACE trade sale signed; portfolio entering realisation cycle; £155m C-share raise deployed."
+        },
+        {
+          "pill": "KEY GATE",
+          "type": "amber",
+          "textHTML": "Series F closes <span class=\"val-fl\">Q3 2026</span> subject to regulatory approvals; delay past 30 Jun defers £202m uplift to FY27 — sole material risk.",
+          "textPlain": "Series F closes Q3 2026 subject to regulatory approvals; delay past 30 Jun defers £202m uplift to FY27 — sole material risk."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 NAV ps (implied)",
+          "val": "~228p",
+          "sub": "vs FY25 actual 118.5p (+92%)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 EPS (derived)",
+          "val": "~109p",
+          "sub": "NAV accretion FY26 (net perf. fee)",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "No broker consensus",
+          "val": "N/A",
+          "sub": "No Sharescope fc data available",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "Perf. fee provision",
+          "val": "~£63m",
+          "sub": "Q3 £32.3m + ICEYE uplift ~£30m",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "NAV Start",
+          "val": "100p",
+          "style": "color:var(--text-secondary)"
+        },
+        {
+          "lbl": "NAV Q3",
+          "val": "177.6p",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "ICEYE +",
+          "val": "+73p",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "Impl. FY26",
+          "val": "~228p",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "P.Fee",
+          "val": "−26p",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "Disc.",
+          "val": "−16%",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "NAV per share trajectory (Jun22→FY26e)",
+      "sparkSVG": "\n      <svg id=\"spark-SSIT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,30.248466257668714 L82.66666666666666,39.374233128834355 L161.33333333333331,40 L240,35.7760736196319 L318.66666666666663,22.947852760736197 L397.33333333333337,15.125766871165645 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,30.248466257668714 L82.66666666666666,39.374233128834355 L161.33333333333331,40 L240,35.7760736196319 L318.66666666666663,22.947852760736197 L397.33333333333337,15.125766871165645 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,38.21317542561066 L82.66666666666666,40 L161.33333333333331,39.169504071058476 L240,33.28053293856403 L318.66666666666663,27.567727609178384 L397.33333333333337,18.6839378238342 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,38.21317542561066 L82.66666666666666,40 L161.33333333333331,39.169504071058476 L240,33.28053293856403 L318.66666666666663,27.567727609178384 L397.33333333333337,18.6839378238342 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"39.169504071058476\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"33.28053293856403\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"27.567727609178384\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"18.6839378238342\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jun-22  100p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jun-25e  228p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-SSIT\" style=\"display: none; left: 80.6px;\"><strong>Jun-24</strong><br>NAV ps: 96.2p · Price: 54.6p ▲ uplift</div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "NAV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-06-09T09:48:29.131Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jun-22",
+          "eps": 100,
+          "price": 92
+        },
+        {
+          "d": "Jun-23",
+          "eps": 92.9,
+          "price": 57
+        },
+        {
+          "d": "Jun-24",
+          "eps": 96.2,
+          "price": 54.6
+        },
+        {
+          "d": "Sep-24",
+          "eps": 119.6,
+          "price": 70.8
+        },
+        {
+          "d": "Dec-24",
+          "eps": 142.3,
+          "price": 120
+        },
+        {
+          "d": "Mar-25",
+          "eps": 177.6,
+          "price": 150
+        },
+        {
+          "d": "Jun-25e",
+          "eps": 228,
+          "price": 185
+        }
+      ]
     }
   ],
   "brokerChanges": [
@@ -77529,6 +77699,708 @@
       "new": 155,
       "pct": -11.4,
       "date": "2026-06-01"
+    },
+    {
+      "company": "Bodycote",
+      "tidm": "BOY",
+      "broker": "Barclays",
+      "old": 0,
+      "new": 820,
+      "pct": 0,
+      "date": "2026-06-04"
+    },
+    {
+      "company": "Ceres Power Holdings",
+      "tidm": "CWR",
+      "broker": "Panmure Liberum",
+      "old": 475,
+      "new": 590,
+      "pct": 24.2,
+      "date": "2026-06-04"
+    },
+    {
+      "company": "Harbour Energy",
+      "tidm": "HBR",
+      "broker": "Jefferies",
+      "old": 295,
+      "new": 320,
+      "pct": 8.5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Ithaca Energy",
+      "tidm": "ITH",
+      "broker": "Jefferies",
+      "old": 210,
+      "new": 350,
+      "pct": 66.7,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "EnQuest",
+      "tidm": "ENQ",
+      "broker": "Jefferies",
+      "old": 15,
+      "new": 25,
+      "pct": 66.7,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Paragon Banking Group",
+      "tidm": "PAG",
+      "broker": "UBS",
+      "old": 1035,
+      "new": 1010,
+      "pct": -2.4,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Drax Group",
+      "tidm": "DRX",
+      "broker": "Citigroup",
+      "old": 923,
+      "new": 816,
+      "pct": -11.6,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Mitie Group",
+      "tidm": "MTO",
+      "broker": "Berenberg",
+      "old": 210,
+      "new": 215,
+      "pct": 2.4,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Discoverie Group",
+      "tidm": "DSCV",
+      "broker": "Berenberg",
+      "old": 950,
+      "new": 1050,
+      "pct": 10.5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Severn Trent",
+      "tidm": "SVT",
+      "broker": "Goldman",
+      "old": 2931,
+      "new": 2972,
+      "pct": 1.4,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "Goldman",
+      "old": 7600,
+      "new": 7700,
+      "pct": 1.3,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Anglo American",
+      "tidm": "AAL",
+      "broker": "Berenberg",
+      "old": 4000,
+      "new": 4200,
+      "pct": 5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "ITM Power",
+      "tidm": "ITM",
+      "broker": "Goldman",
+      "old": 55,
+      "new": 63,
+      "pct": 14.5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Glencore",
+      "tidm": "GLEN",
+      "broker": "Goldman",
+      "old": 600,
+      "new": 660,
+      "pct": 10,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Antofagasta",
+      "tidm": "ANTO",
+      "broker": "Goldman",
+      "old": 3900,
+      "new": 4600,
+      "pct": 17.9,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Watches of Switzerland",
+      "tidm": "WOSG",
+      "broker": "Barclays",
+      "old": 725,
+      "new": 825,
+      "pct": 13.8,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "SSE",
+      "tidm": "SSE",
+      "broker": "Barclays",
+      "old": 2800,
+      "new": 2860,
+      "pct": 2.1,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "CMC Markets",
+      "tidm": "CMCX",
+      "broker": "Jefferies",
+      "old": 275,
+      "new": 500,
+      "pct": 81.8,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Big Yellow Group",
+      "tidm": "BYG",
+      "broker": "Kepler Cheuvreux",
+      "old": 1045,
+      "new": 905,
+      "pct": -13.4,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "Kepler Cheuvreux",
+      "old": 425,
+      "new": 405,
+      "pct": -4.7,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "BT Group",
+      "tidm": "BT.A",
+      "broker": "Morgan Stanley",
+      "old": 260,
+      "new": 255,
+      "pct": -1.9,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Derwent London",
+      "tidm": "DLN",
+      "broker": "Kepler Cheuvreux",
+      "old": 1900,
+      "new": 1820,
+      "pct": -4.2,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Grainger",
+      "tidm": "GRI",
+      "broker": "Peel Hunt",
+      "old": 200,
+      "new": 175,
+      "pct": -12.5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "Kepler Cheuvreux",
+      "old": 710,
+      "new": 685,
+      "pct": -3.5,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Legal & General",
+      "tidm": "LGEN",
+      "broker": "Morgan Stanley",
+      "old": 250,
+      "new": 240,
+      "pct": -4,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "LondonMetric Property",
+      "tidm": "LMP",
+      "broker": "Kepler Cheuvreux",
+      "old": 255,
+      "new": 245,
+      "pct": -3.9,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Safestore Holdings",
+      "tidm": "SAFE",
+      "broker": "Kepler Cheuvreux",
+      "old": 720,
+      "new": 625,
+      "pct": -13.2,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "SEGRO",
+      "tidm": "SGRO",
+      "broker": "Kepler Cheuvreux",
+      "old": 850,
+      "new": 780,
+      "pct": -8.2,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Tritax Big Box REIT",
+      "tidm": "BBOX",
+      "broker": "Kepler Cheuvreux",
+      "old": 190,
+      "new": 175,
+      "pct": -7.9,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Vodafone",
+      "tidm": "VOD",
+      "broker": "Kepler Cheuvreux",
+      "old": 96,
+      "new": 116,
+      "pct": 20.8,
+      "date": "2026-06-05"
+    },
+    {
+      "company": "Diageo",
+      "tidm": "DGE",
+      "broker": "Jefferies",
+      "old": 1900,
+      "new": 2000,
+      "pct": 5.3,
+      "date": "2026-06-07"
+    },
+    {
+      "company": "TP ICAP",
+      "tidm": "TCAP",
+      "broker": "Deutsche",
+      "old": 0,
+      "new": 415,
+      "pct": 0,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "SSE",
+      "tidm": "SSE",
+      "broker": "Deutsche",
+      "old": 2900,
+      "new": 2650,
+      "pct": -8.6,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "National Grid",
+      "tidm": "NG.",
+      "broker": "Deutsche",
+      "old": 1370,
+      "new": 1250,
+      "pct": -8.8,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Pennon Group",
+      "tidm": "PNN",
+      "broker": "Deutsche",
+      "old": 650,
+      "new": 620,
+      "pct": -4.6,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Severn Trent",
+      "tidm": "SVT",
+      "broker": "Deutsche",
+      "old": 3300,
+      "new": 3150,
+      "pct": -4.5,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "United Utilities",
+      "tidm": "UU.",
+      "broker": "Deutsche",
+      "old": 1550,
+      "new": 1450,
+      "pct": -6.5,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "B&M European Value Retail",
+      "tidm": "BME",
+      "broker": "RBC",
+      "old": 195,
+      "new": 240,
+      "pct": 23.1,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "South32",
+      "tidm": "S32",
+      "broker": "Citigroup",
+      "old": 300,
+      "new": 320,
+      "pct": 6.7,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "Citigroup",
+      "old": 7600,
+      "new": 8100,
+      "pct": 6.6,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Croda International",
+      "tidm": "CRDA",
+      "broker": "Goldman",
+      "old": 3200,
+      "new": 3500,
+      "pct": 9.4,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Diploma",
+      "tidm": "DPLM",
+      "broker": "Barclays",
+      "old": 7400,
+      "new": 8300,
+      "pct": 12.2,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Convatec Group",
+      "tidm": "CTEC",
+      "broker": "Jefferies",
+      "old": 325,
+      "new": 300,
+      "pct": -7.7,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Anglo American",
+      "tidm": "AAL",
+      "broker": "Jefferies",
+      "old": 4200,
+      "new": 5000,
+      "pct": 19,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Glencore",
+      "tidm": "GLEN",
+      "broker": "Jefferies",
+      "old": 650,
+      "new": 720,
+      "pct": 10.8,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "Peel Hunt",
+      "old": 750,
+      "new": 785,
+      "pct": 4.7,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "Peel Hunt",
+      "old": 490,
+      "new": 495,
+      "pct": 1,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Diploma",
+      "tidm": "DPLM",
+      "broker": "Peel Hunt",
+      "old": 7300,
+      "new": 8800,
+      "pct": 20.5,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Mpac Group",
+      "tidm": "MPAC",
+      "broker": "Panmure Liberum",
+      "old": 550,
+      "new": 350,
+      "pct": -36.4,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Rio Tinto",
+      "tidm": "RIO",
+      "broker": "Jefferies",
+      "old": 7700,
+      "new": 8500,
+      "pct": 10.4,
+      "date": "2026-06-08"
+    },
+    {
+      "company": "Oxford Instruments",
+      "tidm": "OXIG",
+      "broker": "Shore Capital",
+      "old": 2600,
+      "new": 3300,
+      "pct": 26.9,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Bunzl",
+      "tidm": "BNZL",
+      "broker": "Exane BNP",
+      "old": 2450,
+      "new": 3000,
+      "pct": 22.4,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "NextEnergy Solar Fund",
+      "tidm": "NESF",
+      "broker": "RBC",
+      "old": 6500,
+      "new": 5700,
+      "pct": -12.3,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Applied Nutrition",
+      "tidm": "APN",
+      "broker": "Berenberg",
+      "old": 290,
+      "new": 340,
+      "pct": 17.2,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "AJ Bell",
+      "tidm": "AJB",
+      "broker": "Deutsche",
+      "old": 600,
+      "new": 675,
+      "pct": 12.5,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Aberdeen Group",
+      "tidm": "ABDN",
+      "broker": "Deutsche",
+      "old": 235,
+      "new": 265,
+      "pct": 12.8,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Croda International",
+      "tidm": "CRDA",
+      "broker": "Deutsche",
+      "old": 3000,
+      "new": 3200,
+      "pct": 6.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "On The Beach Group",
+      "tidm": "OTB",
+      "broker": "Shore Capital",
+      "old": 230,
+      "new": 210,
+      "pct": -8.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Diageo",
+      "tidm": "DGE",
+      "broker": "Morgan Stanley",
+      "old": 1505,
+      "new": 1410,
+      "pct": -6.3,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Victrex",
+      "tidm": "VCT",
+      "broker": "Berenberg",
+      "old": 695,
+      "new": 600,
+      "pct": -13.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "WPP",
+      "tidm": "WPP",
+      "broker": "Berenberg",
+      "old": 0,
+      "new": 405,
+      "pct": 0,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "M&G",
+      "tidm": "MNG",
+      "broker": "Citigroup",
+      "old": 288,
+      "new": 295,
+      "pct": 2.4,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Legal & General",
+      "tidm": "LGEN",
+      "broker": "Citigroup",
+      "old": 249,
+      "new": 251,
+      "pct": 0.8,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Sainsbury (J)",
+      "tidm": "SBRY",
+      "broker": "Citigroup",
+      "old": 335,
+      "new": 330,
+      "pct": -1.5,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "M&C Saatchi",
+      "tidm": "SAA",
+      "broker": "Berenberg",
+      "old": 170,
+      "new": 195,
+      "pct": 14.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "GlobalData",
+      "tidm": "DATA",
+      "broker": "JPMorgan",
+      "old": 0,
+      "new": 135,
+      "pct": 0,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "BT Group",
+      "tidm": "BT.A",
+      "broker": "Barclays",
+      "old": 150,
+      "new": 160,
+      "pct": 6.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Big Yellow Group",
+      "tidm": "BYG",
+      "broker": "JPMorgan",
+      "old": 1250,
+      "new": 1190,
+      "pct": -4.8,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "British Land",
+      "tidm": "BLND",
+      "broker": "JPMorgan",
+      "old": 440,
+      "new": 430,
+      "pct": -2.3,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Chemring Group",
+      "tidm": "CHG",
+      "broker": "Peel Hunt",
+      "old": 600,
+      "new": 595,
+      "pct": -0.8,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Hays",
+      "tidm": "HAS",
+      "broker": "Morgan Stanley",
+      "old": 44,
+      "new": 35,
+      "pct": -20.5,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Land Securities",
+      "tidm": "LAND",
+      "broker": "JPMorgan",
+      "old": 710,
+      "new": 705,
+      "pct": -0.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "LBG Media",
+      "tidm": "LBG",
+      "broker": "Peel Hunt",
+      "old": 142,
+      "new": 45,
+      "pct": -68.3,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Liontrust Asset Management",
+      "tidm": "LIO",
+      "broker": "Peel Hunt",
+      "old": 400,
+      "new": 450,
+      "pct": 12.5,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Oxford Instruments",
+      "tidm": "OXIG",
+      "broker": "JPMorgan",
+      "old": 3000,
+      "new": 3200,
+      "pct": 6.7,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "S4 Capital",
+      "tidm": "SFOR",
+      "broker": "Morgan Stanley",
+      "old": 38,
+      "new": 35,
+      "pct": -7.9,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "SSP Group",
+      "tidm": "SSPG",
+      "broker": "Citigroup",
+      "old": 360,
+      "new": 320,
+      "pct": -11.1,
+      "date": "2026-06-09"
+    },
+    {
+      "company": "Workspace Group",
+      "tidm": "WKP",
+      "broker": "JPMorgan",
+      "old": 500,
+      "new": 410,
+      "pct": -18,
+      "date": "2026-06-09"
     }
   ],
   "uploadZone": {
