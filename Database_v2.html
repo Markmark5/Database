@@ -5300,7 +5300,7 @@ function fcDetectTicker(txt){var m=txt.match(/SHARESCOPE DATA BLOCK\s*[—\-]+\s
 function fcParseTxt(txt){
   var rows=[];
   var bm=txt.match(/WEEKLY SNAPSHOT[\s\S]*?-{10,}\n([\s\S]*?)\n-{10,}/i);
-  if(bm){bm[1].split('\n').forEach(function(line){var m=line.match(/(\d{1,2}\s+\w+\s+\d{2})\s+([\d.]+)\s+([\d.,]+)\s+£?([\d.]+)/);if(m)rows.push({date:m[1].trim(),eps:parseFloat(m[2]),rev:parseFloat(m[3].replace(/,/g,'')),tp:parseFloat(m[4])});});}
+  if(bm){bm[1].split('\n').forEach(function(line){var m=line.match(/(\d{1,2}\s+\w+\s+\d{2})\s+([-\d.]+)\s+([-\d.,]+)\s+£?([-\d.]+)/);if(m)rows.push({date:m[1].trim(),eps:parseFloat(m[2]),rev:parseFloat(m[3].replace(/,/g,'')),tp:parseFloat(m[4])});});}
   else{var lines=txt.split('\n'),hdr=lines[0].split(',').map(function(h){return h.trim().toLowerCase();});lines.slice(1).forEach(function(line){if(!line.trim())return;var cols=line.split(',').map(function(c){return c.trim().replace(/£/g,'');}),obj={};hdr.forEach(function(h,i){obj[h]=cols[i]||'';});var date=obj.date,eps=parseFloat(obj.eps_fy1||obj.eps||0),rev=parseFloat(obj.revenue_fy1||obj.rev||obj.revenue||0),tp=parseFloat(obj.tp||obj.targetprice||0);if(date&&eps)rows.push({date:date,eps:eps,rev:rev,tp:tp});});}
   return rows;
 }
