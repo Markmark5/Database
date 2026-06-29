@@ -6728,14 +6728,15 @@ function dbBackupOpen() {
     var rows2 = exState && exState.rows2 ? exState.rows2.length : 0;
     var rows3 = exState && exState.rows3 ? exState.rows3.length : 0;
     var rows4 = exState && exState.rows4 ? exState.rows4.length : 0;
+    var rows5 = exState && exState.rows5 ? exState.rows5.length : 0;
     var slotMeta = [];
-    for (var i=1;i<=4;i++){
+    for (var i=1;i<=5;i++){
       var n=localStorage.getItem('db_slot'+i+'_name');
       var d=localStorage.getItem('db_slot'+i+'_date');
       if(n) slotMeta.push('File '+i+': '+n+(d?' ('+new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+')':''));
     }
     meta.innerHTML = scoreCount+' scorecards · '+bkCount+' broker changes · '
-      + (rows1+rows2+rows3+rows4)+' upload zone rows'
+      + (rows1+rows2+rows3+rows4+rows5)+' upload zone rows'
       + (slotMeta.length ? '<br><span style="color:var(--text-dim);">'+slotMeta.join(' · ')+'</span>' : '');
   }
   var overlay = document.getElementById('db-backup-overlay');
@@ -6761,14 +6762,17 @@ function dbBackupSave() {
       rows2: exState && exState.rows2 ? exState.rows2 : null,
       rows3: exState && exState.rows3 ? exState.rows3 : null,
       rows4: exState && exState.rows4 ? exState.rows4 : null,
+      rows5: exState && exState.rows5 ? exState.rows5 : null,
       slot1Name: localStorage.getItem('db_slot1_name'),
       slot2Name: localStorage.getItem('db_slot2_name'),
       slot3Name: localStorage.getItem('db_slot3_name'),
       slot4Name: localStorage.getItem('db_slot4_name'),
+      slot5Name: localStorage.getItem('db_slot5_name'),
       slot1Date: localStorage.getItem('db_slot1_date'),
       slot2Date: localStorage.getItem('db_slot2_date'),
       slot3Date: localStorage.getItem('db_slot3_date'),
-      slot4Date: localStorage.getItem('db_slot4_date')
+      slot4Date: localStorage.getItem('db_slot4_date'),
+      slot5Date: localStorage.getItem('db_slot5_date')
     },
     // localStorage items
     heatmapCsv: (function(){ try{ return localStorage.getItem('hm_csv_data'); }catch(e){ return null; } })(),
@@ -6847,6 +6851,20 @@ function dbRestoreApply(backup) {
       if (uz.rows2) { exState.rows2 = uz.rows2; slotState[2] = uz.rows2; }
       if (uz.rows3) { exState.rows3 = uz.rows3; slotState[3] = uz.rows3; }
       if (uz.rows4) { exState.rows4 = uz.rows4; slotState[4] = uz.rows4; }
+      if (uz.rows5) { exState.rows5 = uz.rows5; }
+      if (uz.rows5) {
+        try{ if(uz.slot5Name) localStorage.setItem('db_slot5_name', uz.slot5Name); }catch(ex){}
+        try{ if(uz.slot5Date) localStorage.setItem('db_slot5_date', uz.slot5Date); }catch(ex){}
+        var nm5 = document.getElementById('slot5-name');
+        if (nm5 && uz.slot5Name) nm5.textContent = uz.slot5Name;
+        var sl5 = document.getElementById('slot5');
+        if (sl5) sl5.classList.add('loaded');
+        var dt5 = document.getElementById('slot5-date');
+        if (dt5) {
+          var lbl5 = uz.slot5Date ? new Date(uz.slot5Date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '';
+          dt5.textContent = 'Loaded '+lbl5+' · '+uz.rows5.length+' rows';
+        }
+      }
       for (var i=1;i<=4;i++) {
         var name = uz['slot'+i+'Name'];
         var date = uz['slot'+i+'Date'];
