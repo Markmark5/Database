@@ -7047,7 +7047,7 @@ function ghBuildPayload() {
   if (typeof bkData !== 'undefined' && Array.isArray(bkData)) backup.brokerChanges = bkData.slice();
   // Upload zone
   var uz = {};
-  for (var i=1;i<=4;i++) {
+  for (var i=1;i<=5;i++) {
     try{ uz['slot'+i+'Name'] = localStorage.getItem('db_slot'+i+'_name') || ''; }catch(e){}
     try{ uz['slot'+i+'Date'] = localStorage.getItem('db_slot'+i+'_date') || ''; }catch(e){}
     if (typeof slotState !== 'undefined' && slotState[i]) uz['rows'+i] = slotState[i];
