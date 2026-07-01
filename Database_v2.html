@@ -3201,7 +3201,8 @@ async function csManualFinish(){
 }
 var csManualPending=false;
 
-
+/* ── TOAST ── */
+function toast(msg,type,ms){
   type=type||'ok'; ms=ms||3200;
   const w=document.getElementById('toast-wrap');
   const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;
