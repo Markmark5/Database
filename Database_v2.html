@@ -1247,7 +1247,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
           RNS Scorecards
           <span id="rns-db-status" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Connecting…</span>
           <span id="close-snap-chip" title="Daily previous-close snapshot (captured 07:00–07:30)" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:10px;display:inline-flex;align-items:center;gap:5px;"><span id="close-snap-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text-dim);display:inline-block;"></span><span id="close-snap-txt">Close snapshot: —</span></span>
-          <button id="cs-manual-btn" onclick="csManualCapture()" title="Fetch live prices now, capture today's close snapshot, and stamp today's scorecards" style="font-family:var(--mono);font-size:9px;padding:2px 8px;margin-left:8px;border-radius:3px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);cursor:pointer;">⚡ Get Prices</button>
+          <button id="cs-manual-btn" onclick="csManualCapture()" title="Fetch live prices now, capture today's close snapshot, and stamp today's scorecards" style="display:none;font-family:var(--mono);font-size:9px;padding:2px 8px;margin-left:8px;border-radius:3px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);cursor:pointer;">⚡ Get Prices</button>
         </div>
         <div style="display:flex;gap:6px;align-items:center;">
           <button class="xbtn xbtn-ghost" onclick="openSync()" style="font-size:9px;padding:3px 9px;">⇄ Sync</button>
@@ -2982,6 +2982,11 @@ function csTodayStr(){
 function csLoadSnap(){
   try{var s=JSON.parse(localStorage.getItem(CLOSE_SNAP_KEY)||'null');return(s&&s.date&&s.prices)?s:null;}catch(e){return null;}
 }
+/* Only the token-holding browser (owner) runs price capture. Viewers with
+   no GitHub PAT never auto-capture and don't see the manual button. */
+function csIsOwner(){
+  try{ return !!(localStorage.getItem('gh_pat')||'').trim(); }catch(e){ return false; }
+}
 function csSaveSnap(snap){
   try{localStorage.setItem(CLOSE_SNAP_KEY,JSON.stringify(snap));}catch(e){}
 }
@@ -3022,6 +3027,7 @@ function csInWindow(){
    snapshot yet, capture from loaded live data or trigger a fetch and retry
    on the next tick until a snapshot locks. */
 function csSchedulerTick(){
+  if(!csIsOwner()){ csRenderChip(); return; } // viewers never auto-capture
   var today=csTodayStr();
   var snap=csLoadSnap();
   if(snap&&snap.date===today){csRenderChip();return;} // captured today — done
@@ -3045,6 +3051,12 @@ function csRenderChip(){
   var dot=document.getElementById('close-snap-dot');
   var txt=document.getElementById('close-snap-txt');
   if(!dot||!txt)return;
+  var owner=csIsOwner();
+  var mbtn=document.getElementById('cs-manual-btn');
+  if(mbtn) mbtn.style.display = owner ? 'inline-block' : 'none';
+  var chip=document.getElementById('close-snap-chip');
+  if(chip) chip.style.display = owner ? 'inline-flex' : 'none';
+  if(!owner) return; // viewers: no price UI at all
   var today=csTodayStr();
   var snap=csLoadSnap();
   if(snap&&snap.date===today){
@@ -3140,6 +3152,7 @@ async function csStampExistingToday(){
 var csManualBusy=false;
 function csManualCapture(){
   if(csManualBusy)return;
+  if(!csIsOwner()){ toast('⚠ Read-only — no GitHub token on this browser','err',4000); return; }
   if(typeof liveGetUrls!=='function'||!liveGetUrls().length){
     toast('⚠ No Live Sector URLs configured — click ⚙ URLs to add them','err',5000);
     return;
@@ -7111,6 +7124,7 @@ function ghSaveToken() {
     inp.value = val.slice(0,8) + '••••••••••••••••';
     ghSetStatus('✓ Token saved to browser storage', 'green');
     toast('✓ GitHub token saved', 'ok', 2500);
+    try{ if(typeof csRenderChip==='function') csRenderChip(); }catch(e){}
   } catch(e) {
     ghSetStatus('⚠ Could not save token: ' + e.message, 'red');
   }
@@ -7122,6 +7136,7 @@ function ghClearToken() {
   if (inp) inp.value = '';
   ghSetStatus('Token cleared — enter a new token to reconnect', 'dim');
   toast('GitHub token cleared', 'ok', 2000);
+  try{ if(typeof csRenderChip==='function') csRenderChip(); }catch(e){}
 }
 
 // ── BUILD JSON payload (same structure as dbBackupSave) ──
