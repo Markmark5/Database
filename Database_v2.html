@@ -1246,7 +1246,8 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
           <span class="dot dot-green"></span>
           RNS Scorecards
           <span id="rns-db-status" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Connecting…</span>
-          <span id="close-snap-chip" title="Daily previous-close snapshot (captured 07:10–07:20)" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:10px;display:inline-flex;align-items:center;gap:5px;"><span id="close-snap-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text-dim);display:inline-block;"></span><span id="close-snap-txt">Close snapshot: —</span></span>
+          <span id="close-snap-chip" title="Daily previous-close snapshot (captured 07:00–07:30)" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:10px;display:inline-flex;align-items:center;gap:5px;"><span id="close-snap-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text-dim);display:inline-block;"></span><span id="close-snap-txt">Close snapshot: —</span></span>
+          <button id="cs-manual-btn" onclick="csManualCapture()" title="Fetch live prices now, capture today's close snapshot, and stamp today's scorecards" style="font-family:var(--mono);font-size:9px;padding:2px 8px;margin-left:8px;border-radius:3px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);cursor:pointer;">⚡ Get Prices</button>
         </div>
         <div style="display:flex;gap:6px;align-items:center;">
           <button class="xbtn xbtn-ghost" onclick="openSync()" style="font-size:9px;padding:3px 9px;">⇄ Sync</button>
@@ -2048,7 +2049,7 @@ function updateClock(){
     ' · '+n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 }
 updateClock(); setInterval(updateClock,30000);
-try{ csRenderChip(); csSchedulerTick(); setInterval(csSchedulerTick,30000); }catch(e){}
+try{ csRenderChip(); csSchedulerTick(); setInterval(csSchedulerTick,90000); }catch(e){}
 
 /* ── RNS SIDEBAR TOGGLE ── */
 function toggleRnsSidebar(){
@@ -2971,8 +2972,8 @@ function bkImportJSON(evt){
      today via the Import button. Never touches stored cards.
 ══════════════════════════════════════════════════ */
 var CLOSE_SNAP_KEY = 'rns_close_snapshot';
-var CLOSE_WIN_START = 7*60+10;  // 07:10 in minutes
-var CLOSE_WIN_END   = 7*60+20;  // 07:20 in minutes
+var CLOSE_WIN_START = 7*60+0;   // 07:00 in minutes
+var CLOSE_WIN_END   = 7*60+30;  // 07:30 in minutes
 
 function csTodayStr(){
   var d=new Date();
@@ -2995,10 +2996,10 @@ function csBuildPriceMap(){
 }
 /* Capture today's snapshot from whatever liveData is loaded NOW.
    Only called inside the capture window after a fresh fetch. */
-function csCaptureFromLive(){
+function csCaptureFromLive(force){
   var today=csTodayStr();
   var existing=csLoadSnap();
-  if(existing&&existing.date===today)return false; // already locked today
+  if(!force && existing&&existing.date===today)return false; // already locked today
   var b=csBuildPriceMap();
   if(!b.count)return false;
   var now=new Date();
@@ -3017,27 +3018,28 @@ function csInWindow(){
   var mins=d.getHours()*60+d.getMinutes();
   return mins>=CLOSE_WIN_START&&mins<=CLOSE_WIN_END;
 }
-/* Scheduler tick — runs every 30s. Inside window with no snapshot
-   for today, trigger a live fetch; capture happens when it lands. */
-var csFetchTriggeredToday=false;
+/* Scheduler tick — runs every 90s. Inside the 07:00–07:30 window with no
+   snapshot yet, capture from loaded live data or trigger a fetch and retry
+   on the next tick until a snapshot locks. */
 function csSchedulerTick(){
   var today=csTodayStr();
   var snap=csLoadSnap();
-  if(snap&&snap.date===today){csRenderChip();return;} // done for today
+  if(snap&&snap.date===today){csRenderChip();return;} // captured today — done
   if(csInWindow()){
-    if(!csFetchTriggeredToday){
-      csFetchTriggeredToday=true;
-      if(typeof liveRefresh==='function'&&liveGetUrls&&liveGetUrls().length){
-        liveRefresh(); // capture fires from liveOnAllFetched hook
-      }
+    // Retry every tick until a snapshot is captured. If live data is already
+    // loaded, capture immediately; otherwise trigger a fetch (capture then
+    // fires from the liveOnAllFetched hook or the next tick).
+    var pm=(typeof csBuildPriceMap==='function')?csBuildPriceMap():{count:0};
+    if(pm.count>0){
+      csCaptureFromLive(false);
+    } else if(typeof liveRefresh==='function' && liveGetUrls && liveGetUrls().length){
+      csWindowFetchActive=true;
+      liveRefresh();
     }
-  } else {
-    // reset trigger flag once we're past the window so next day re-arms
-    var mins=new Date().getHours()*60+new Date().getMinutes();
-    if(mins>CLOSE_WIN_END)csFetchTriggeredToday=false;
   }
   csRenderChip();
 }
+var csWindowFetchActive=false;
 /* Status chip in RNS header */
 function csRenderChip(){
   var dot=document.getElementById('close-snap-dot');
@@ -3059,12 +3061,12 @@ function csRenderChip(){
     } else {
       dot.style.background='var(--text-dim)';
       txt.style.color='var(--text-dim)';
-      txt.textContent='Close snapshot: awaiting 07:10–07:20';
+      txt.textContent='Close snapshot: awaiting 07:00–07:30';
     }
   } else {
     dot.style.background='var(--text-dim)';
     txt.style.color='var(--text-dim)';
-    txt.textContent='Close snapshot: awaiting 07:10–07:20';
+    txt.textContent='Close snapshot: awaiting 07:00–07:30';
   }
 }
 function csFmtSnapDate(iso){
@@ -3104,8 +3106,89 @@ function csReportStamp(res){
   }
 }
 
-/* ── TOAST ── */
-function toast(msg,type,ms){
+/* Stamp existing (already-imported) today-dated cards in ALL from the
+   snapshot. Persists via dbPut, re-renders. Same safety rules as import:
+   today-dated only, never overwrite, snapshot must be today. */
+async function csStampExistingToday(){
+  var res={stamped:[],missing:[]};
+  if(typeof ALL==='undefined'||!Array.isArray(ALL))return res;
+  var today=csTodayStr();
+  var snap=csLoadSnap();
+  var haveToday=!!(snap&&snap.date===today);
+  if(!haveToday)return res;
+  var toSave=[];
+  ALL.forEach(function(rec){
+    if(!rec||rec.date!==today)return;      // today-dated only
+    if(rec.entryPrice)return;              // never overwrite
+    var p=snap.prices[(rec.ticker||'').toUpperCase()];
+    if(typeof p==='number'&&isFinite(p)&&p>0){
+      rec.entryPrice=p;res.stamped.push(rec.ticker);toSave.push(rec);
+    } else {
+      res.missing.push(rec.ticker);
+    }
+  });
+  for(const r of toSave){try{await dbPut(r);}catch(e){}}
+  if(toSave.length){
+    try{applyFilters();}catch(e){}
+    try{updateSidebar();}catch(e){}
+    try{renderBestWorst();}catch(e){}
+  }
+  return res;
+}
+/* MANUAL capture button: fetch live data, then force-capture snapshot
+   and stamp today's existing cards. Clear feedback on failure. */
+var csManualBusy=false;
+function csManualCapture(){
+  if(csManualBusy)return;
+  if(typeof liveGetUrls!=='function'||!liveGetUrls().length){
+    toast('⚠ No Live Sector URLs configured — click ⚙ URLs to add them','err',5000);
+    return;
+  }
+  csManualBusy=true;
+  var btn=document.getElementById('cs-manual-btn');
+  if(btn){btn.textContent='⏳ Capturing…';btn.disabled=true;}
+  toast('⚡ Fetching live prices…','inf',3000);
+  // trigger fetch, then poll for completion
+  csManualPending=true;
+  liveRefresh();
+  var waited=0;
+  var iv=setInterval(function(){
+    waited+=400;
+    // liveRefresh clears liveData then repopulates; consider done when the
+    // refresh button re-enables (liveOnAllFetched resets it) or timeout
+    var lb=document.getElementById('live-refresh-btn');
+    var done=lb && !lb.disabled;
+    if(done || waited>=12000){
+      clearInterval(iv);
+      csManualPending=false;
+      csManualFinish();
+    }
+  },400);
+}
+async function csManualFinish(){
+  var btn=document.getElementById('cs-manual-btn');
+  var pm=csBuildPriceMap();
+  if(!pm.count){
+    if(btn){btn.textContent='⚡ Get Prices';btn.disabled=false;}
+    csManualBusy=false;
+    toast('⚠ No live prices loaded — fetch failed or blocked. Snapshot NOT captured.','err',6000);
+    return;
+  }
+  // force capture (overrides a stale/today snapshot)
+  csCaptureFromLive(true);
+  // stamp existing today-dated cards
+  var res=await csStampExistingToday();
+  if(res.stamped.length)toast('✓ '+res.stamped.length+' existing card(s) stamped for today','ok',4000);
+  if(res.missing.length){
+    var names=res.missing.slice(0,4).join(', ')+(res.missing.length>4?'…':'');
+    toast('⚠ '+res.missing.length+' today-card(s) not in prices ('+names+')','err',5000);
+  }
+  if(btn){btn.textContent='⚡ Get Prices';btn.disabled=false;}
+  csManualBusy=false;
+}
+var csManualPending=false;
+
+
   type=type||'ok'; ms=ms||3200;
   const w=document.getElementById('toast-wrap');
   const t=document.createElement('div');t.className='toast '+type;t.textContent=msg;
@@ -6454,8 +6537,19 @@ function liveOnAllFetched(errors, total) {
   try{localStorage.setItem(LIVE_CACHE_KEY,JSON.stringify(liveData));localStorage.setItem(LIVE_TS_KEY,tsStr);}catch(e){}
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
-  // Daily close snapshot: if this fetch landed inside the 07:10–07:20 window, lock it
-  try{ if(typeof csInWindow==='function' && csInWindow() && count>0) csCaptureFromLive(); }catch(e){}
+  // Daily close snapshot: capture if we're in the 07:00–07:30 window, or if
+  // this fetch was triggered by the scheduler in-window but returned late.
+  try{
+    if(typeof csCaptureFromLive==='function' && count>0){
+      var snapNow=(typeof csLoadSnap==='function')?csLoadSnap():null;
+      var todayNow=(typeof csTodayStr==='function')?csTodayStr():'';
+      var haveTodaySnap=!!(snapNow&&snapNow.date===todayNow);
+      if(!haveTodaySnap && (csInWindow() || csWindowFetchActive)){
+        csCaptureFromLive(false);
+      }
+    }
+    csWindowFetchActive=false;
+  }catch(e){}
   toast(count>0?'⚡ Live data updated · '+count+' tickers':'⚠ Could not load live sheets — check URLs', count>0?'ok':'err');
 }
 
