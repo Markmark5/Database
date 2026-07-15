@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-07-15T07:18:18.920Z",
-    "savedAtLabel": "15 Jul 2026 08:18",
+    "savedAt": "2026-07-15T08:35:16.523Z",
+    "savedAtLabel": "15 Jul 2026 09:35",
     "source": "github-sync"
   },
   "scorecards": [
@@ -94414,257 +94414,6 @@
       "entryPrice": 410.5
     },
     {
-      "id": "BOOM_2026_07_15",
-      "ticker": "BOOM",
-      "score": 86,
-      "company": "AudioBoom Group PLC",
-      "verdict": "Strongly Positive",
-      "date": "2026-07-15",
-      "rnsType": "Half Year Results",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "signals": [
-        {
-          "pill": "BEAT",
-          "type": "green",
-          "textHTML": "H1 adjusted EBITDA <span class=\"val-up\">+80%</span> to $3.2m on revenue <span class=\"val-up\">+30%</span> to $45.7m — clear, quantified operating leverage as opex growth trails revenue growth well behind it all",
-          "textPlain": "H1 adjusted EBITDA +80% to $3.2m on revenue +30% to $45.7m — clear, quantified operating leverage as opex growth trails revenue growth well behind it all"
-        },
-        {
-          "pill": "FY26",
-          "type": "green",
-          "textHTML": "More than $81.0m of FY26 revenue already booked, exceeding all of FY25 ($80.4m), with the company's own seasonally strongest trading period still ahead in H2",
-          "textPlain": "More than $81.0m of FY26 revenue already booked, exceeding all of FY25 ($80.4m), with the company's own seasonally strongest trading period still ahead in H2"
-        },
-        {
-          "pill": "EPS",
-          "type": "green",
-          "textHTML": "Basic EPS <span class=\"val-up\">+125%</span> YoY to 17.3c (H1 2025: 7.7c); opex up only 18% vs revenue +30% confirms genuinely sustainable margin expansion carrying into H2 and beyond",
-          "textPlain": "Basic EPS +125% YoY to 17.3c (H1 2025: 7.7c); opex up only 18% vs revenue +30% confirms genuinely sustainable margin expansion carrying into H2 and beyond"
-        },
-        {
-          "pill": "M&A",
-          "type": "grey",
-          "textHTML": "Strategic Review formally concluded — three non-binding proposals rejected by the Board as undervaluing the Company given accelerating H1 2026 trading performance",
-          "textPlain": "Strategic Review formally concluded — three non-binding proposals rejected by the Board as undervaluing the Company given accelerating H1 2026 trading performance"
-        },
-        {
-          "pill": "STRUCTURAL",
-          "type": "grey",
-          "textHTML": "Both onerous podcast partner contracts that dragged H2 2025 into an EPS loss have now concluded, removing a recurring negative earnings drag going into H2 2026",
-          "textPlain": "Both onerous podcast partner contracts that dragged H2 2025 into an EPS loss have now concluded, removing a recurring negative earnings drag going into H2 2026"
-        }
-      ],
-      "revisions": [
-        {
-          "lbl": "FY26 EPS",
-          "val": "+8-15%",
-          "sub": "31.2c cons->+8-15%",
-          "color": "var(--green)"
-        },
-        {
-          "lbl": "FY27 EPS",
-          "val": "n/a",
-          "sub": "n/a - no FY27 fc",
-          "color": ""
-        },
-        {
-          "lbl": "FY26 Revenue",
-          "val": "+3-6%",
-          "sub": "$94.8m cons->+3-6%",
-          "color": "var(--green)"
-        },
-        {
-          "lbl": "FY27 Revenue",
-          "val": "n/a",
-          "sub": "n/a - no FY27 fc",
-          "color": ""
-        }
-      ],
-      "sparkStats": [
-        {
-          "lbl": "EPS Start",
-          "val": "21.1c",
-          "style": ""
-        },
-        {
-          "lbl": "EPS Now",
-          "val": "31.2c",
-          "style": ""
-        },
-        {
-          "lbl": "Net Δ",
-          "val": "+47.9%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "4-wk",
-          "val": "RISING",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "Rev Δ",
-          "val": "+13.8%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "TP Δ",
-          "val": "0.0%",
-          "style": "color:var(--text-dim)"
-        }
-      ],
-      "sparkLabel": "EPS & Price Trend",
-      "sparkSVG": "\n        <svg id=\"spark-BOOM\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,31.064102564102573 L25.454545454545457,28.230769230769244 L46.909090909090914,26.487179487179475 L68.36363636363636,25.179487179487182 L89.81818181818183,40 L111.27272727272727,30.62820512820513 L132.72727272727272,29.320512820512835 L154.1818181818182,28.44871794871795 L175.63636363636365,30.84615384615384 L197.0909090909091,32.15384615384616 L218.54545454545453,33.8974358974359 L240,36.07692307692308 L261.45454545454544,33.8974358974359 L282.90909090909093,33.025641025641015 L304.3636363636364,33.025641025641015 L325.8181818181818,31.282051282051277 L347.2727272727273,31.500000000000014 L368.7272727272727,32.589743589743605 L390.1818181818182,34.115384615384606 L411.6363636363636,6.435897435897445 L433.09090909090907,6 L454.54545454545456,9.487179487179475 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,31.064102564102573 L25.454545454545457,28.230769230769244 L46.909090909090914,26.487179487179475 L68.36363636363636,25.179487179487182 L89.81818181818183,40 L111.27272727272727,30.62820512820513 L132.72727272727272,29.320512820512835 L154.1818181818182,28.44871794871795 L175.63636363636365,30.84615384615384 L197.0909090909091,32.15384615384616 L218.54545454545453,33.8974358974359 L240,36.07692307692308 L261.45454545454544,33.8974358974359 L282.90909090909093,33.025641025641015 L304.3636363636364,33.025641025641015 L325.8181818181818,31.282051282051277 L347.2727272727273,31.500000000000014 L368.7272727272727,32.589743589743605 L390.1818181818182,34.115384615384606 L411.6363636363636,6.435897435897445 L433.09090909090907,6 L454.54545454545456,9.487179487179475 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,36.93693693693694 L25.454545454545457,35.711711711711715 L46.909090909090914,35.09909909909911 L68.36363636363636,34.792792792792795 L89.81818181818183,40 L111.27272727272727,35.09909909909911 L132.72727272727272,34.48648648648649 L154.1818181818182,34.18018018018018 L175.63636363636365,35.09909909909911 L197.0909090909091,35.711711711711715 L218.54545454545453,36.32432432432432 L240,36.93693693693694 L261.45454545454544,36.32432432432432 L282.90909090909093,36.018018018018026 L304.3636363636364,36.018018018018026 L325.8181818181818,35.09909909909911 L347.2727272727273,35.4054054054054 L368.7272727272727,35.711711711711715 L390.1818181818182,36.32432432432432 L411.6363636363636,6.306306306306297 L433.09090909090907,6 L454.54545454545456,7.531531531531527 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,36.93693693693694 L25.454545454545457,35.711711711711715 L46.909090909090914,35.09909909909911 L68.36363636363636,34.792792792792795 L89.81818181818183,40 L111.27272727272727,35.09909909909911 L132.72727272727272,34.48648648648649 L154.1818181818182,34.18018018018018 L175.63636363636365,35.09909909909911 L197.0909090909091,35.711711711711715 L218.54545454545453,36.32432432432432 L240,36.93693693693694 L261.45454545454544,36.32432432432432 L282.90909090909093,36.018018018018026 L304.3636363636364,36.018018018018026 L325.8181818181818,35.09909909909911 L347.2727272727273,35.4054054054054 L368.7272727272727,35.711711711711715 L390.1818181818182,36.32432432432432 L411.6363636363636,6.306306306306297 L433.09090909090907,6 L454.54545454545456,7.531531531531527 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"25.454545454545457\" cy=\"35.711711711711715\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"46.909090909090914\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"68.36363636363636\" cy=\"34.792792792792795\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"89.81818181818183\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"111.27272727272727\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"132.72727272727272\" cy=\"34.48648648648649\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"154.1818181818182\" cy=\"34.18018018018018\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"175.63636363636365\" cy=\"35.09909909909911\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"197.0909090909091\" cy=\"35.711711711711715\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"218.54545454545453\" cy=\"36.32432432432432\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"36.93693693693694\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"261.45454545454544\" cy=\"36.32432432432432\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"282.90909090909093\" cy=\"36.018018018018026\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"325.8181818181818\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"347.2727272727273\" cy=\"35.4054054054054\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"368.7272727272727\" cy=\"35.711711711711715\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"390.1818181818182\" cy=\"36.32432432432432\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"411.6363636363636\" cy=\"6.306306306306297\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"433.09090909090907\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"454.54545454545456\" cy=\"7.531531531531527\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  21.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">10 Jul 26  31.2p</text></svg>\n        <div class=\"spark-tt\" id=\"tt-BOOM\" style=\"display: none; left: 55.5985px;\"><strong>26 Jun 26</strong><br>EPS: 30.7p · Price: 93.2p ▼ cut</div>\n      ",
-      "h1Inds": [
-        {
-          "lbl": "REV",
-          "mark": "✕",
-          "dev": "-1.8pp",
-          "state": "neg"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "accelInds": [
-        {
-          "lbl": "REV",
-          "mark": "✓",
-          "dev": "",
-          "state": "pos"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "✓",
-          "dev": "",
-          "state": "pos"
-        }
-      ],
-      "importedAt": "2026-07-15T06:47:23.731Z",
-      "source": "html-dom",
-      "sparkData": [
-        {
-          "d": "18 May 25",
-          "eps": 21.1,
-          "price": 83.3
-        },
-        {
-          "d": "31 May 25",
-          "eps": 21.5,
-          "price": 84.6
-        },
-        {
-          "d": "14 Jun 25",
-          "eps": 21.7,
-          "price": 85.4
-        },
-        {
-          "d": "28 Jun 25",
-          "eps": 21.8,
-          "price": 86
-        },
-        {
-          "d": "12 Jul 25",
-          "eps": 20.1,
-          "price": 79.2
-        },
-        {
-          "d": "26 Jul 25",
-          "eps": 21.7,
-          "price": 83.5
-        },
-        {
-          "d": "09 Aug 25",
-          "eps": 21.9,
-          "price": 84.1
-        },
-        {
-          "d": "30 Aug 25",
-          "eps": 22,
-          "price": 84.5
-        },
-        {
-          "d": "13 Sept 25",
-          "eps": 21.7,
-          "price": 83.4
-        },
-        {
-          "d": "04 Oct 25",
-          "eps": 21.5,
-          "price": 82.8
-        },
-        {
-          "d": "25 Oct 25",
-          "eps": 21.3,
-          "price": 82
-        },
-        {
-          "d": "15 Nov 25",
-          "eps": 21.1,
-          "price": 81
-        },
-        {
-          "d": "06 Dec 25",
-          "eps": 21.3,
-          "price": 82
-        },
-        {
-          "d": "27 Dec 25",
-          "eps": 21.4,
-          "price": 82.4
-        },
-        {
-          "d": "17 Jan 26",
-          "eps": 21.4,
-          "price": 82.4
-        },
-        {
-          "d": "07 Feb 26",
-          "eps": 21.7,
-          "price": 83.2
-        },
-        {
-          "d": "28 Feb 26",
-          "eps": 21.6,
-          "price": 83.1
-        },
-        {
-          "d": "20 Mar 26",
-          "eps": 21.5,
-          "price": 82.6
-        },
-        {
-          "d": "04 Apr 26",
-          "eps": 21.3,
-          "price": 81.9
-        },
-        {
-          "d": "18 Apr 26",
-          "eps": 31.1,
-          "price": 94.6
-        },
-        {
-          "d": "12 Jun 26",
-          "eps": 31.2,
-          "price": 94.8
-        },
-        {
-          "d": "26 Jun 26",
-          "eps": 30.7,
-          "price": 93.2
-        },
-        {
-          "d": "10 Jul 26",
-          "eps": 31.2,
-          "price": 94.8
-        }
-      ],
-      "entryPrice": 475
-    },
-    {
       "id": "HTG_2026_07_15",
       "ticker": "HTG",
       "score": 67,
@@ -95105,6 +94854,257 @@
         }
       ],
       "entryPrice": 215
+    },
+    {
+      "id": "BOOM_2026_07_15",
+      "ticker": "BOOM",
+      "score": 92,
+      "company": "AudioBoom Group PLC",
+      "verdict": "Strongly Positive",
+      "date": "2026-07-15",
+      "rnsType": "Half Year Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "H1 adjusted EBITDA <span class=\"val-up\">+80%</span> to $3.2m on revenue <span class=\"val-up\">+30%</span> to $45.7m — clear, quantified operating leverage as opex growth trails revenue growth well behind it all",
+          "textPlain": "H1 adjusted EBITDA +80% to $3.2m on revenue +30% to $45.7m — clear, quantified operating leverage as opex growth trails revenue growth well behind it all"
+        },
+        {
+          "pill": "FY26",
+          "type": "green",
+          "textHTML": "More than $81.0m of FY26 revenue already booked, exceeding all of FY25 ($80.4m), with the company's own seasonally strongest trading period still ahead in H2",
+          "textPlain": "More than $81.0m of FY26 revenue already booked, exceeding all of FY25 ($80.4m), with the company's own seasonally strongest trading period still ahead in H2"
+        },
+        {
+          "pill": "EPS",
+          "type": "green",
+          "textHTML": "Basic EPS <span class=\"val-up\">+125%</span> YoY to 17.3c (H1 2025: 7.7c); opex up only 18% vs revenue +30% confirms genuinely sustainable margin expansion carrying into H2 and beyond",
+          "textPlain": "Basic EPS +125% YoY to 17.3c (H1 2025: 7.7c); opex up only 18% vs revenue +30% confirms genuinely sustainable margin expansion carrying into H2 and beyond"
+        },
+        {
+          "pill": "H1 TRK",
+          "type": "green",
+          "textHTML": "H1 revenue tracked at <span class=\"val-up\">48.2%</span> of consensus, +1.9pp ahead of the corrected 3yr baseline, reversing three straight years of declining H1 mix (49% to 46% to 44%)",
+          "textPlain": "H1 revenue tracked at 48.2% of consensus, +1.9pp ahead of the corrected 3yr baseline, reversing three straight years of declining H1 mix (49% to 46% to 44%)"
+        },
+        {
+          "pill": "STRUCTURAL",
+          "type": "grey",
+          "textHTML": "Both onerous podcast partner contracts that dragged H2 2025 into an EPS loss have now concluded, removing a recurring negative earnings drag going into H2 2026",
+          "textPlain": "Both onerous podcast partner contracts that dragged H2 2025 into an EPS loss have now concluded, removing a recurring negative earnings drag going into H2 2026"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+8-15%",
+          "sub": "31.2c cons->+8-15%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "n/a",
+          "sub": "n/a - no FY27 fc",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+3-6%",
+          "sub": "$94.8m cons->+3-6%",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "n/a",
+          "sub": "n/a - no FY27 fc",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "21.1c",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "31.2c",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+47.9%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "RISING",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+13.8%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "0.0%",
+          "style": "color:var(--text-dim)"
+        }
+      ],
+      "sparkLabel": "EPS & Price Trend",
+      "sparkSVG": "\n        <svg id=\"spark-BOOM\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,31.064102564102573 L25.454545454545457,28.230769230769244 L46.909090909090914,26.487179487179475 L68.36363636363636,25.179487179487182 L89.81818181818183,40 L111.27272727272727,30.62820512820513 L132.72727272727272,29.320512820512835 L154.1818181818182,28.44871794871795 L175.63636363636365,30.84615384615384 L197.0909090909091,32.15384615384616 L218.54545454545453,33.8974358974359 L240,36.07692307692308 L261.45454545454544,33.8974358974359 L282.90909090909093,33.025641025641015 L304.3636363636364,33.025641025641015 L325.8181818181818,31.282051282051277 L347.2727272727273,31.500000000000014 L368.7272727272727,32.589743589743605 L390.1818181818182,34.115384615384606 L411.6363636363636,6.435897435897445 L433.09090909090907,6 L454.54545454545456,9.487179487179475 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,31.064102564102573 L25.454545454545457,28.230769230769244 L46.909090909090914,26.487179487179475 L68.36363636363636,25.179487179487182 L89.81818181818183,40 L111.27272727272727,30.62820512820513 L132.72727272727272,29.320512820512835 L154.1818181818182,28.44871794871795 L175.63636363636365,30.84615384615384 L197.0909090909091,32.15384615384616 L218.54545454545453,33.8974358974359 L240,36.07692307692308 L261.45454545454544,33.8974358974359 L282.90909090909093,33.025641025641015 L304.3636363636364,33.025641025641015 L325.8181818181818,31.282051282051277 L347.2727272727273,31.500000000000014 L368.7272727272727,32.589743589743605 L390.1818181818182,34.115384615384606 L411.6363636363636,6.435897435897445 L433.09090909090907,6 L454.54545454545456,9.487179487179475 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,36.93693693693694 L25.454545454545457,35.711711711711715 L46.909090909090914,35.09909909909911 L68.36363636363636,34.792792792792795 L89.81818181818183,40 L111.27272727272727,35.09909909909911 L132.72727272727272,34.48648648648649 L154.1818181818182,34.18018018018018 L175.63636363636365,35.09909909909911 L197.0909090909091,35.711711711711715 L218.54545454545453,36.32432432432432 L240,36.93693693693694 L261.45454545454544,36.32432432432432 L282.90909090909093,36.018018018018026 L304.3636363636364,36.018018018018026 L325.8181818181818,35.09909909909911 L347.2727272727273,35.4054054054054 L368.7272727272727,35.711711711711715 L390.1818181818182,36.32432432432432 L411.6363636363636,6.306306306306297 L433.09090909090907,6 L454.54545454545456,7.531531531531527 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,36.93693693693694 L25.454545454545457,35.711711711711715 L46.909090909090914,35.09909909909911 L68.36363636363636,34.792792792792795 L89.81818181818183,40 L111.27272727272727,35.09909909909911 L132.72727272727272,34.48648648648649 L154.1818181818182,34.18018018018018 L175.63636363636365,35.09909909909911 L197.0909090909091,35.711711711711715 L218.54545454545453,36.32432432432432 L240,36.93693693693694 L261.45454545454544,36.32432432432432 L282.90909090909093,36.018018018018026 L304.3636363636364,36.018018018018026 L325.8181818181818,35.09909909909911 L347.2727272727273,35.4054054054054 L368.7272727272727,35.711711711711715 L390.1818181818182,36.32432432432432 L411.6363636363636,6.306306306306297 L433.09090909090907,6 L454.54545454545456,7.531531531531527 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"25.454545454545457\" cy=\"35.711711711711715\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"46.909090909090914\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"68.36363636363636\" cy=\"34.792792792792795\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"89.81818181818183\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"111.27272727272727\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"132.72727272727272\" cy=\"34.48648648648649\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"154.1818181818182\" cy=\"34.18018018018018\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"175.63636363636365\" cy=\"35.09909909909911\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"197.0909090909091\" cy=\"35.711711711711715\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"218.54545454545453\" cy=\"36.32432432432432\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"36.93693693693694\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"261.45454545454544\" cy=\"36.32432432432432\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"282.90909090909093\" cy=\"36.018018018018026\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"325.8181818181818\" cy=\"35.09909909909911\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"347.2727272727273\" cy=\"35.4054054054054\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"368.7272727272727\" cy=\"35.711711711711715\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"390.1818181818182\" cy=\"36.32432432432432\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"411.6363636363636\" cy=\"6.306306306306297\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"433.09090909090907\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"454.54545454545456\" cy=\"7.531531531531527\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  21.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">10 Jul 26  31.2p</text></svg>\n        <div class=\"spark-tt\" id=\"tt-BOOM\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+1.9pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-07-15T08:35:05.432Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 21.1,
+          "price": 83.3
+        },
+        {
+          "d": "31 May 25",
+          "eps": 21.5,
+          "price": 84.6
+        },
+        {
+          "d": "14 Jun 25",
+          "eps": 21.7,
+          "price": 85.4
+        },
+        {
+          "d": "28 Jun 25",
+          "eps": 21.8,
+          "price": 86
+        },
+        {
+          "d": "12 Jul 25",
+          "eps": 20.1,
+          "price": 79.2
+        },
+        {
+          "d": "26 Jul 25",
+          "eps": 21.7,
+          "price": 83.5
+        },
+        {
+          "d": "09 Aug 25",
+          "eps": 21.9,
+          "price": 84.1
+        },
+        {
+          "d": "30 Aug 25",
+          "eps": 22,
+          "price": 84.5
+        },
+        {
+          "d": "13 Sept 25",
+          "eps": 21.7,
+          "price": 83.4
+        },
+        {
+          "d": "04 Oct 25",
+          "eps": 21.5,
+          "price": 82.8
+        },
+        {
+          "d": "25 Oct 25",
+          "eps": 21.3,
+          "price": 82
+        },
+        {
+          "d": "15 Nov 25",
+          "eps": 21.1,
+          "price": 81
+        },
+        {
+          "d": "06 Dec 25",
+          "eps": 21.3,
+          "price": 82
+        },
+        {
+          "d": "27 Dec 25",
+          "eps": 21.4,
+          "price": 82.4
+        },
+        {
+          "d": "17 Jan 26",
+          "eps": 21.4,
+          "price": 82.4
+        },
+        {
+          "d": "07 Feb 26",
+          "eps": 21.7,
+          "price": 83.2
+        },
+        {
+          "d": "28 Feb 26",
+          "eps": 21.6,
+          "price": 83.1
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 21.5,
+          "price": 82.6
+        },
+        {
+          "d": "04 Apr 26",
+          "eps": 21.3,
+          "price": 81.9
+        },
+        {
+          "d": "18 Apr 26",
+          "eps": 31.1,
+          "price": 94.6
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 31.2,
+          "price": 94.8
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 30.7,
+          "price": 93.2
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 31.2,
+          "price": 94.8
+        }
+      ],
+      "entryPrice": 475
     }
   ],
   "brokerChanges": [
