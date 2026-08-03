@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-08-03T06:50:22.966Z",
-    "savedAtLabel": "03 Aug 2026 07:50",
+    "savedAt": "2026-08-03T09:53:11.401Z",
+    "savedAtLabel": "03 Aug 2026 10:53",
     "source": "github-sync"
   },
   "scorecards": [
@@ -116604,6 +116604,237 @@
       "importedAt": "2026-08-03T06:50:17.851Z",
       "source": "html-dom",
       "entryPrice": 2.95
+    },
+    {
+      "id": "CKN_2026_08_03",
+      "ticker": "CKN",
+      "score": 90,
+      "company": "Clarkson PLC",
+      "verdict": "STRONGLY POSITIVE",
+      "date": "2026-08-03",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250 · Industrial Transport",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "H1 revenue <span class=\"val-up\">+38.9% YoY</span> to <span class=\"val-up\">£413.5m</span>; underlying EPS <span class=\"val-up\">+49.7%</span> to <span class=\"val-up\">147.6p</span> — record H1, Broking and Financial divisions both driving the beat sharply.",
+          "textPlain": "H1 revenue +38.9% YoY to £413.5m; underlying EPS +49.7% to 147.6p — record H1, Broking and Financial divisions both driving the beat sharply."
+        },
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "FY26 guided <span class=\"val-up\">\"materially ahead\"</span>; bridge built off H1 divisional actuals implies <span class=\"val-up\">294p</span> underlying EPS, a <span class=\"val-up\">+15%</span> revision vs 255.4p consensus.",
+          "textPlain": "FY26 guided \"materially ahead\"; bridge built off H1 divisional actuals implies 294p underlying EPS, a +15% revision vs 255.4p consensus."
+        },
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "H1 tracking <span class=\"val-up\">+12.8pp Rev</span> / <span class=\"val-up\">+13.4pp EPS</span> vs 3yr seasonal baseline — both metrics STRONG BUY, both buy triggers cleared comfortably with margin to spare.",
+          "textPlain": "H1 tracking +12.8pp Rev / +13.4pp EPS vs 3yr seasonal baseline — both metrics STRONG BUY, both buy triggers cleared comfortably with margin to spare."
+        },
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "Broking op margin <span class=\"val-up\">20.9%</span> vs <span class=\"val-fl\">18.8%</span> PY, despite a disclosed <span class=\"val-dn\">~3pp NIC/investment drag</span> — genuine operating leverage, not just a rate-driven margin illusion.",
+          "textPlain": "Broking op margin 20.9% vs 18.8% PY, despite a disclosed ~3pp NIC/investment drag — genuine operating leverage, not just a rate-driven margin illusion."
+        },
+        {
+          "pill": "RISK",
+          "type": "amber",
+          "textHTML": "Watch: <span class=\"val-dn\">Strait of Hormuz</span> drove much of the beat, and the \"not H2-weighted\" line removes the seasonal fade but <span class=\"val-fl\">does not imply H2 growth</span> over H1.",
+          "textPlain": "Watch: Strait of Hormuz drove much of the beat, and the \"not H2-weighted\" line removes the seasonal fade but does not imply H2 growth over H1."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+15%",
+          "sub": "255.4p -> 294p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+3–7%",
+          "sub": "281.3p -> 290-301p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+8–14%",
+          "sub": "689.8m -> 745-786m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+3–7%",
+          "sub": "729.8m -> 752-781m",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "217.1p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "255.4p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+17.6%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FALLING",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+15.6%",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "+51.02",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / Price Momentum (20mo)",
+      "sparkSVG": "\n      <svg id=\"spark-CKN\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L30.22222222222222,40 L56.44444444444444,39.050096339113686 L82.66666666666666,38.13294797687861 L108.88888888888889,38.13294797687861 L135.11111111111111,38.13294797687861 L161.33333333333331,38.13294797687861 L187.55555555555557,32.040462427745666 L213.77777777777777,30.369942196531802 L240,29.682080924855498 L266.22222222222223,13.075144508670533 L292.44444444444446,12.25626204238922 L318.66666666666663,11.175337186897899 L344.88888888888886,11.175337186897899 L371.11111111111114,6 L397.33333333333337,6 L423.55555555555554,6 L449.77777777777777,6 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L30.22222222222222,40 L56.44444444444444,39.050096339113686 L82.66666666666666,38.13294797687861 L108.88888888888889,38.13294797687861 L135.11111111111111,38.13294797687861 L161.33333333333331,38.13294797687861 L187.55555555555557,32.040462427745666 L213.77777777777777,30.369942196531802 L240,29.682080924855498 L266.22222222222223,13.075144508670533 L292.44444444444446,12.25626204238922 L318.66666666666663,11.175337186897899 L344.88888888888886,11.175337186897899 L371.11111111111114,6 L397.33333333333337,6 L423.55555555555554,6 L449.77777777777777,6 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,37.92974238875878 L30.22222222222222,37.77049180327868 L56.44444444444444,40 L82.66666666666666,40 L108.88888888888889,40 L135.11111111111111,38.40749414519906 L161.33333333333331,38.40749414519906 L187.55555555555557,36.0983606557377 L213.77777777777777,33.94847775175644 L240,34.58548009367681 L266.22222222222223,35.54098360655738 L292.44444444444446,9.344262295081961 L318.66666666666663,8.149882903981254 L344.88888888888886,8.149882903981254 L371.11111111111114,6.637002341920386 L397.33333333333337,6.637002341920386 L423.55555555555554,6 L449.77777777777777,6.796252927400467 L476,7.433255269320831 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,37.92974238875878 L30.22222222222222,37.77049180327868 L56.44444444444444,40 L82.66666666666666,40 L108.88888888888889,40 L135.11111111111111,38.40749414519906 L161.33333333333331,38.40749414519906 L187.55555555555557,36.0983606557377 L213.77777777777777,33.94847775175644 L240,34.58548009367681 L266.22222222222223,35.54098360655738 L292.44444444444446,9.344262295081961 L318.66666666666663,8.149882903981254 L344.88888888888886,8.149882903981254 L371.11111111111114,6.637002341920386 L397.33333333333337,6.637002341920386 L423.55555555555554,6 L449.77777777777777,6.796252927400467 L476,7.433255269320831 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"30.22222222222222\" cy=\"37.77049180327868\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"56.44444444444444\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"135.11111111111111\" cy=\"38.40749414519906\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"187.55555555555557\" cy=\"36.0983606557377\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"213.77777777777777\" cy=\"33.94847775175644\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"34.58548009367681\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"266.22222222222223\" cy=\"35.54098360655738\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"292.44444444444446\" cy=\"9.344262295081961\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"8.149882903981254\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"371.11111111111114\" cy=\"6.637002341920386\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"423.55555555555554\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"449.77777777777777\" cy=\"6.796252927400467\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"7.433255269320831\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"7.433255269320831\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  217.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">31 Jul 26  255.4p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-CKN\" style=\"display: none; left: 41.9525px;\"><strong>10 Jul 26</strong><br>EPS: 257.2p · Price: 51.02p ▲ upgrade</div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+12.8pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+13.4pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-03T09:53:04.926Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 217.1,
+          "price": 40.64
+        },
+        {
+          "d": "05 Aug 25",
+          "eps": 217.3,
+          "price": 40.64
+        },
+        {
+          "d": "09 Aug 25",
+          "eps": 214.5,
+          "price": 40.93
+        },
+        {
+          "d": "04 Oct 25",
+          "eps": 214.5,
+          "price": 41.21
+        },
+        {
+          "d": "01 Nov 25",
+          "eps": 214.5,
+          "price": 41.21
+        },
+        {
+          "d": "22 Nov 25",
+          "eps": 216.5,
+          "price": 41.21
+        },
+        {
+          "d": "03 Jan 26",
+          "eps": 216.5,
+          "price": 41.21
+        },
+        {
+          "d": "17 Jan 26",
+          "eps": 219.4,
+          "price": 43.07
+        },
+        {
+          "d": "31 Jan 26",
+          "eps": 222.1,
+          "price": 43.58
+        },
+        {
+          "d": "07 Feb 26",
+          "eps": 221.3,
+          "price": 43.79
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 220.1,
+          "price": 48.86
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 253,
+          "price": 49.11
+        },
+        {
+          "d": "11 Apr 26",
+          "eps": 254.5,
+          "price": 49.44
+        },
+        {
+          "d": "01 May 26",
+          "eps": 254.5,
+          "price": 49.44
+        },
+        {
+          "d": "15 May 26",
+          "eps": 256.4,
+          "price": 51.02
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 256.4,
+          "price": 51.02
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 257.2,
+          "price": 51.02
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 256.2,
+          "price": 51.02
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 255.4,
+          "price": 51.02
+        }
+      ],
+      "entryPrice": 45.73
     }
   ],
   "brokerChanges": [
