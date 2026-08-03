@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-07-31T16:21:12.170Z",
-    "savedAtLabel": "31 Jul 2026 17:21",
+    "savedAt": "2026-08-03T06:50:22.966Z",
+    "savedAtLabel": "03 Aug 2026 07:50",
     "source": "github-sync"
   },
   "scorecards": [
@@ -115934,6 +115934,676 @@
         }
       ],
       "entryPrice": 450.5
+    },
+    {
+      "id": "ELIX_2026_08_03",
+      "ticker": "ELIX",
+      "score": 78,
+      "company": "Elixirr International PLC",
+      "verdict": "Upgrade cycle — AI demand",
+      "date": "2026-08-03",
+      "rnsType": "Pre-H1 Update",
+      "mode": "Q4",
+      "index": "AIM · FY26 Dec",
+      "signals": [
+        {
+          "pill": "REVENUE",
+          "type": "green",
+          "textHTML": "Record H1 revenue <span class=\"val-up\">£89.0m</span> (+25% YoY) despite 4% USD/GBP headwind; EBITDA <span class=\"val-up\">£27.6m</span> (+29%), margin <span class=\"val-up\">+100bps to 31.0%</span> — both running ahead of full-year consensus.",
+          "textPlain": "Record H1 revenue £89.0m (+25% YoY) despite 4% USD/GBP headwind; EBITDA £27.6m (+29%), margin +100bps to 31.0% — both running ahead of full-year consensus."
+        },
+        {
+          "pill": "EBITDA",
+          "type": "green",
+          "textHTML": "FY26 EBITDA implies ~<span class=\"val-up\">£57.8m</span> vs consensus <span class=\"val-up\">£56.0m</span>; EPS bridge to <span class=\"val-up\">70–73p</span> vs 66.5p consensus — upgrade cycle confirmed; Canaccord appointed as joint broker.",
+          "textPlain": "FY26 EBITDA implies ~£57.8m vs consensus £56.0m; EPS bridge to 70–73p vs 66.5p consensus — upgrade cycle confirmed; Canaccord appointed as joint broker."
+        },
+        {
+          "pill": "PIPELINE",
+          "type": "green",
+          "textHTML": "Q1 and Q2 both record quarterly revenues; CEO: <span class=\"val-up\">“demand accelerating”</span> and Elixirr <span class=\"val-up\">“perfectly positioned”</span> to capture AI market — strongest upgrade language in this batch.",
+          "textPlain": "Q1 and Q2 both record quarterly revenues; CEO: “demand accelerating” and Elixirr “perfectly positioned” to capture AI market — strongest upgrade language in this batch."
+        },
+        {
+          "pill": "FY2 EPS",
+          "type": "green",
+          "textHTML": "FY2 EPS upwardly pressured to <span class=\"val-up\">74–77p</span> (+3–7%); FY27 consensus deceleration assumption of +7.8% likely too conservative given structural AI consulting demand acceleration.",
+          "textPlain": "FY2 EPS upwardly pressured to 74–77p (+3–7%); FY27 consensus deceleration assumption of +7.8% likely too conservative given structural AI consulting demand acceleration."
+        },
+        {
+          "pill": "FX RISK",
+          "type": "red",
+          "textHTML": "<span class=\"val-dn\">FX Rule 1 (−4pts)</span>: USD exposure &gt;30%, GBP 4% headwind absorbed but persistent; H1 interim results 21 Sep 2026 will confirm EPS — any <span class=\"val-up\">≥68p</span> seals upgrade cycle.",
+          "textPlain": "FX Rule 1 (−4pts): USD exposure >30%, GBP 4% headwind absorbed but persistent; H1 interim results 21 Sep 2026 will confirm EPS — any ≥68p seals upgrade cycle."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+5–10%",
+          "sub": "66.5p→70–73p upgr",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+3–7%",
+          "sub": "71.7p→74–77p upgr",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "£186.5m hold ~flat",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£200.9m hold ~flat",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "48.5p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "66.5p",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+37.1%",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+34%",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "+8%",
+          "style": "color:#00d97e"
+        }
+      ],
+      "sparkLabel": "EPS Consensus · 12m",
+      "sparkSVG": "<svg id=\"spark-ELIX\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L43.33333333333333,36.357142857142854 L82.66666666666666,30.285714285714285 L122,23 L161.33333333333331,20.571428571428573 L200.66666666666669,14.5 L240,10.857142857142858 L279.33333333333337,8.914285714285715 L318.66666666666663,8.428571428571427 L358,7.214285714285715 L397.33333333333337,6.48571428571428 L436.66666666666663,6 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L43.33333333333333,36.357142857142854 L82.66666666666666,30.285714285714285 L122,23 L161.33333333333331,20.571428571428573 L200.66666666666669,14.5 L240,10.857142857142858 L279.33333333333337,8.914285714285715 L318.66666666666663,8.428571428571427 L358,7.214285714285715 L397.33333333333337,6.48571428571428 L436.66666666666663,6 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L43.33333333333333,36.788888888888884 L82.66666666666666,33.199999999999996 L122,27.911111111111115 L161.33333333333331,25.833333333333332 L200.66666666666669,22.055555555555554 L240,14.5 L279.33333333333337,10.722222222222221 L318.66666666666663,9.777777777777779 L358,6 L397.33333333333337,6 L436.66666666666663,6 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L43.33333333333333,36.788888888888884 L82.66666666666666,33.199999999999996 L122,27.911111111111115 L161.33333333333331,25.833333333333332 L200.66666666666669,22.055555555555554 L240,14.5 L279.33333333333337,10.722222222222221 L318.66666666666663,9.777777777777779 L358,6 L397.33333333333337,6 L436.66666666666663,6 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"43.33333333333333\" cy=\"36.788888888888884\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"82.66666666666666\" cy=\"33.199999999999996\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"122\" cy=\"27.911111111111115\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"25.833333333333332\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"200.66666666666669\" cy=\"22.055555555555554\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"14.5\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"279.33333333333337\" cy=\"10.722222222222221\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"9.777777777777779\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"358\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-25  48.5p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-26  66.5p</text></svg><div class=\"spark-tt\" id=\"tt-ELIX\" style=\"display: none; left: -40.3669px;\"><strong>Jan-26</strong><br>EPS: 62p · Price: 610p ▲ upgrade</div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-03T06:50:17.849Z",
+      "source": "html-dom",
+      "entryPrice": 677
+    },
+    {
+      "id": "SAAS_2026_08_03",
+      "ticker": "SAAS",
+      "score": 54,
+      "company": "Microlise Group PLC",
+      "verdict": "Neutral — H2 execution test",
+      "date": "2026-08-03",
+      "rnsType": "Pre-H1 Update",
+      "mode": "Q4",
+      "index": "AIM · FY26 Dec",
+      "signals": [
+        {
+          "pill": "REVENUE",
+          "type": "red",
+          "textHTML": "H1 revenue <span class=\"val-dn\">£39.5m</span> (−10% YoY); seasonal deviation <span class=\"val-dn\">−1.5pp</span> (CAUTION); FY26 EBITDA consensus <span class=\"val-fl\">£10.0–11.1m</span> explicitly endorsed by the Board against rebased consensus.",
+          "textPlain": "H1 revenue £39.5m (−10% YoY); seasonal deviation −1.5pp (CAUTION); FY26 EBITDA consensus £10.0–11.1m explicitly endorsed by the Board against rebased consensus."
+        },
+        {
+          "pill": "ARR",
+          "type": "green",
+          "textHTML": "Direct Customer ARR <span class=\"val-up\">£47.1m</span> (+12% YoY); EBITDA margin recovery <span class=\"val-up\">13.2%</span> vs <span class=\"val-dn\">5.2%</span> H2 2025 — restructuring delivering; net cash <span class=\"val-up\">£13.8m</span> vs consensus £10.5–11.1m ahead.",
+          "textPlain": "Direct Customer ARR £47.1m (+12% YoY); EBITDA margin recovery 13.2% vs 5.2% H2 2025 — restructuring delivering; net cash £13.8m vs consensus £10.5–11.1m ahead."
+        },
+        {
+          "pill": "⚠ H2 RISK",
+          "type": "red",
+          "textHTML": "<span class=\"val-dn\">⚠ H2 implied revenue +10.9% YoY</span> required — exceeds highest observed H2 YoY (+6.9%); ⚠⚠ profit warning gate fires; OEM component risk in Q4 is named and unresolved.",
+          "textPlain": "⚠ H2 implied revenue +10.9% YoY required — exceeds highest observed H2 YoY (+6.9%); ⚠⚠ profit warning gate fires; OEM component risk in Q4 is named and unresolved."
+        },
+        {
+          "pill": "OEM DRAG",
+          "type": "amber",
+          "textHTML": "OEM ARR declining: <span class=\"val-dn\">£13.7m</span> (−18% YoY); Direct NRR <span class=\"val-fl\">106%</span> vs 114% prior year; EPS consensus cut <span class=\"val-dn\">−61%</span> from peak; FY26 estimates: hold ~flat; FY27 hold ~flat.",
+          "textPlain": "OEM ARR declining: £13.7m (−18% YoY); Direct NRR 106% vs 114% prior year; EPS consensus cut −61% from peak; FY26 estimates: hold ~flat; FY27 hold ~flat."
+        },
+        {
+          "pill": "OUTLOOK",
+          "type": "grey",
+          "textHTML": "Broker tone neutral; interim results <span class=\"val-fl\">late Sep 2026</span>; key test: Q4 OEM delivery and H2 EBITDA reaching <span class=\"val-fl\">≥£4.8m</span> to clear endorsed range — market in wait-and-see mode.",
+          "textPlain": "Broker tone neutral; interim results late Sep 2026; key test: Q4 OEM delivery and H2 EBITDA reaching ≥£4.8m to clear endorsed range — market in wait-and-see mode."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "2.1p hold ~flat",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "2.8p hold ~flat",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "−1–3%",
+          "sub": "£84.3m cut −1–3%",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£90.2m hold ~flat",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "5.4p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "2.1p",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−61%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−7.4%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "−40%",
+          "style": "color:#ff4757"
+        }
+      ],
+      "sparkLabel": "EPS Consensus · 12m",
+      "sparkSVG": "<svg id=\"spark-SAAS\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L43.33333333333333,13.47252747252747 L82.66666666666666,19.076923076923077 L122,22.813186813186814 L161.33333333333331,32.15384615384615 L200.66666666666669,34.02197802197802 L240,35.142857142857146 L279.33333333333337,38.13186813186813 L318.66666666666663,38.879120879120876 L358,39.62637362637363 L397.33333333333337,39.62637362637363 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L43.33333333333333,13.47252747252747 L82.66666666666666,19.076923076923077 L122,22.813186813186814 L161.33333333333331,32.15384615384615 L200.66666666666669,34.02197802197802 L240,35.142857142857146 L279.33333333333337,38.13186813186813 L318.66666666666663,38.879120879120876 L358,39.62637362637363 L397.33333333333337,39.62637362637363 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L43.33333333333333,6 L82.66666666666666,6 L122,6 L161.33333333333331,33 L200.66666666666669,33 L240,29 L279.33333333333337,40 L318.66666666666663,40 L358,39 L397.33333333333337,39 L436.66666666666663,39 L476,39 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L43.33333333333333,6 L82.66666666666666,6 L122,6 L161.33333333333331,33 L200.66666666666669,33 L240,29 L279.33333333333337,40 L318.66666666666663,40 L358,39 L397.33333333333337,39 L436.66666666666663,39 L476,39 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"161.33333333333331\" cy=\"33\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"29\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"279.33333333333337\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"358\" cy=\"39\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"39\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-25  5.4p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-26  2.1p</text></svg><div class=\"spark-tt\" id=\"tt-SAAS\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✕",
+          "dev": "−1.5pp",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-03T06:50:17.850Z",
+      "source": "html-dom",
+      "entryPrice": 39
+    },
+    {
+      "id": "TIDE_2026_08_03",
+      "ticker": "TIDE",
+      "score": 40,
+      "company": "Crimson Tide PLC",
+      "verdict": "Cautious — FY27 headwind real",
+      "date": "2026-08-03",
+      "rnsType": "Full Year Results",
+      "mode": "Q2",
+      "index": "AIM · FY26 Apr",
+      "signals": [
+        {
+          "pill": "EBITDA",
+          "type": "green",
+          "textHTML": "Return to full profitability: PBT <span class=\"val-up\">£185k</span> (FY25 pro forma loss <span class=\"val-dn\">−£500k</span>); adj EBITDA <span class=\"val-up\">£1.27m</span> (+81% on 12m basis); first positive EPS in recent years: <span class=\"val-up\">4.21p</span>.",
+          "textPlain": "Return to full profitability: PBT £185k (FY25 pro forma loss −£500k); adj EBITDA £1.27m (+81% on 12m basis); first positive EPS in recent years: 4.21p."
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "Cash <span class=\"val-up\">£2.1m</span> (+64%, zero debt); largest contract in history (£3.9m TCV) signed; post-period MRR recovery to <span class=\"val-up\">£410k</span> (+£13k since year-end) confirms early momentum underway.",
+          "textPlain": "Cash £2.1m (+64%, zero debt); largest contract in history (£3.9m TCV) signed; post-period MRR recovery to £410k (+£13k since year-end) confirms early momentum underway."
+        },
+        {
+          "pill": "FY27 RISK",
+          "type": "red",
+          "textHTML": "FY27 headwind: retail contract loss <span class=\"val-dn\">£61k MRR</span> (~<span class=\"val-dn\">£0.73m</span> pa); MRR exit rate <span class=\"val-dn\">£397k</span> (£4.76m ARR run-rate) vs £5.87m FY26 revenue — starting base well below reported.",
+          "textPlain": "FY27 headwind: retail contract loss £61k MRR (~£0.73m pa); MRR exit rate £397k (£4.76m ARR run-rate) vs £5.87m FY26 revenue — starting base well below reported."
+        },
+        {
+          "pill": "CHURN",
+          "type": "red",
+          "textHTML": "Gross churn <span class=\"val-dn\">28%</span> (FY25: 18%); MRR opened <span class=\"val-dn\">£468k → closed £397k</span>; FY27 annual revenue est. <span class=\"val-dn\">£5.0–5.5m</span> — needs at least <span class=\"val-fl\">£0.73m</span> of new business wins to hold flat.",
+          "textPlain": "Gross churn 28% (FY25: 18%); MRR opened £468k → closed £397k; FY27 annual revenue est. £5.0–5.5m — needs at least £0.73m of new business wins to hold flat."
+        },
+        {
+          "pill": "COVERAGE",
+          "type": "grey",
+          "textHTML": "No broker consensus — Allenby (NOMAD) will re-base; FY27 EPS cut <span class=\"val-dn\">−20–40%</span>; FY27 Rev cut <span class=\"val-dn\">−5–10%</span>; MRR trajectory over the next 3–6 months is the key watch-point.",
+          "textPlain": "No broker consensus — Allenby (NOMAD) will re-base; FY27 EPS cut −20–40%; FY27 Rev cut −5–10%; MRR trajectory over the next 3–6 months is the key watch-point."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "na",
+          "sub": "na (reported)",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−20–40%",
+          "sub": "cut −20–40%",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "na",
+          "sub": "na (reported)",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "−5–10%",
+          "sub": "cut −5–10%",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "n/a",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "n/a",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "—",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "—",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "—",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "—",
+          "style": "color:#7a7a95"
+        }
+      ],
+      "sparkLabel": "EPS Consensus · 12m",
+      "sparkSVG": "<svg id=\"spark-TIDE\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L43.33333333333333,13.391304347826086 L82.66666666666666,20.782608695652176 L122,25.217391304347828 L161.33333333333331,32.608695652173914 L200.66666666666669,35.565217391304344 L240,38.52173913043478 L279.33333333333337,38.52173913043478 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L43.33333333333333,13.391304347826086 L82.66666666666666,20.782608695652176 L122,25.217391304347828 L161.33333333333331,32.608695652173914 L200.66666666666669,35.565217391304344 L240,38.52173913043478 L279.33333333333337,38.52173913043478 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L43.33333333333333,40 L82.66666666666666,40 L122,40 L161.33333333333331,40 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L43.33333333333333,40 L82.66666666666666,40 L122,40 L161.33333333333331,40 L200.66666666666669,40 L240,40 L279.33333333333337,40 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-25  0p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-26  0p</text></svg><div class=\"spark-tt\" id=\"tt-TIDE\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-03T06:50:17.850Z",
+      "source": "html-dom",
+      "entryPrice": 90
+    },
+    {
+      "id": "FDM_2026_08_03",
+      "ticker": "FDM",
+      "score": 32,
+      "company": "FDM Group (Holdings) PLC",
+      "verdict": "Cautious — EPS cut cycle likely",
+      "date": "2026-08-03",
+      "rnsType": "Half Year Results",
+      "mode": "Q4",
+      "index": "Main · FY26 Dec",
+      "signals": [
+        {
+          "pill": "H1 MISS",
+          "type": "red",
+          "textHTML": "H1 revenue <span class=\"val-dn\">£78.6m</span> (−19% YoY, cc); seasonal deviation <span class=\"val-dn\">−3.5pp</span> SELL SIGNAL; adj EPS <span class=\"val-dn\">3.8p</span> vs 4.6p baseline — deviation <span class=\"val-dn\">−8.4pp</span> extreme SELL SIGNAL.",
+          "textPlain": "H1 revenue £78.6m (−19% YoY, cc); seasonal deviation −3.5pp SELL SIGNAL; adj EPS 3.8p vs 4.6p baseline — deviation −8.4pp extreme SELL SIGNAL."
+        },
+        {
+          "pill": "⚠ WARN",
+          "type": "red",
+          "textHTML": "⚠⚠ Profit warning gate fires (3/4): H2 revenue reversal needed; Record-H2 hurdle; incremental costs; “Board's expectations” — FY26 consensus not endorsed.",
+          "textPlain": "⚠⚠ Profit warning gate fires (3/4): H2 revenue reversal needed; Record-H2 hurdle; incremental costs; “Board's expectations” — FY26 consensus not endorsed."
+        },
+        {
+          "pill": "LEAD IND",
+          "type": "green",
+          "textHTML": "First sequential Consultant increase since 2023: <span class=\"val-up\">2,042</span> (+2% vs year-end); N. America Consultants <span class=\"val-up\">+33% YoY</span>, coaching completions <span class=\"val-up\">+148%</span> — genuine cycle-turn signal.",
+          "textPlain": "First sequential Consultant increase since 2023: 2,042 (+2% vs year-end); N. America Consultants +33% YoY, coaching completions +148% — genuine cycle-turn signal."
+        },
+        {
+          "pill": "DIVIDEND",
+          "type": "red",
+          "textHTML": "Interim dividend cut <span class=\"val-dn\">−50%</span> to 3.0p (2025: 6.0p); FY26 EPS cut <span class=\"val-dn\">−8–15%</span> to 7.5–8.0p; Rev cut <span class=\"val-dn\">−3–6%</span>; TP cut toward 155–175p; EMEA <span class=\"val-dn\">−60%</span> YoY structural drag.",
+          "textPlain": "Interim dividend cut −50% to 3.0p (2025: 6.0p); FY26 EPS cut −8–15% to 7.5–8.0p; Rev cut −3–6%; TP cut toward 155–175p; EMEA −60% YoY structural drag."
+        },
+        {
+          "pill": "OUTLOOK",
+          "type": "grey",
+          "textHTML": "AI disruption flagged as elevated principal risk by Board; FY27 EPS <span class=\"val-fl\">~flat</span> at 12.0p; H2 watch-point: N. America consultant ramp translating to billable revenue Q3/Q4.",
+          "textPlain": "AI disruption flagged as elevated principal risk by Board; FY27 EPS ~flat at 12.0p; H2 watch-point: N. America consultant ramp translating to billable revenue Q3/Q4."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−8–15%",
+          "sub": "9.2p cut −8–15%",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "12.0p hold ~flat",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "−3–6%",
+          "sub": "£163.7m cut −3–6%",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£180.8m hold ~flat",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "16.0p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "9.2p",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−42.5%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−21%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "−56%",
+          "style": "color:#ff4757"
+        }
+      ],
+      "sparkLabel": "EPS Consensus · 12m",
+      "sparkSVG": "<svg id=\"spark-FDM\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L43.33333333333333,18.934782608695652 L82.66666666666666,28.17391304347826 L122,31.869565217391305 L161.33333333333331,33.71739130434783 L200.66666666666669,35.565217391304344 L240,36.30434782608695 L279.33333333333337,37.41304347826087 L318.66666666666663,38.52173913043478 L358,39.26086956521739 L397.33333333333337,39.630434782608695 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L43.33333333333333,18.934782608695652 L82.66666666666666,28.17391304347826 L122,31.869565217391305 L161.33333333333331,33.71739130434783 L200.66666666666669,35.565217391304344 L240,36.30434782608695 L279.33333333333337,37.41304347826087 L318.66666666666663,38.52173913043478 L358,39.26086956521739 L397.33333333333337,39.630434782608695 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L43.33333333333333,23 L82.66666666666666,37.5 L122,37.5 L161.33333333333331,37.5 L200.66666666666669,37.5 L240,37.5 L279.33333333333337,37.5 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L43.33333333333333,23 L82.66666666666666,37.5 L122,37.5 L161.33333333333331,37.5 L200.66666666666669,37.5 L240,37.5 L279.33333333333337,37.5 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"43.33333333333333\" cy=\"23\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"82.66666666666666\" cy=\"37.5\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-25  16p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-26  9.2p</text></svg><div class=\"spark-tt\" id=\"tt-FDM\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✕",
+          "dev": "−3.5pp",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "−8.4pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-03T06:50:17.850Z",
+      "source": "html-dom",
+      "entryPrice": 111.9
+    },
+    {
+      "id": "EAAS_2026_08_03",
+      "ticker": "EAAS",
+      "score": 18,
+      "company": "eEnergy Group PLC",
+      "verdict": "Negative — solvency & gov risk",
+      "date": "2026-08-03",
+      "rnsType": "Half Year Results",
+      "mode": "Q4",
+      "index": "AIM · FY26 Dec",
+      "signals": [
+        {
+          "pill": "⚠ PROFIT WARN",
+          "type": "red",
+          "textHTML": "⚠ PROFIT WARN: FY26 guidance cut to <span class=\"val-dn\">£32.0m</span> vs Sharescope consensus <span class=\"val-dn\">£37.7m</span> (<span class=\"val-dn\">−15%</span>); H2 contracted revenues only <span class=\"val-dn\">£5.5m</span> of <span class=\"val-dn\">£10.2m</span> H2 target — 54% covered.",
+          "textPlain": "⚠ PROFIT WARN: FY26 guidance cut to £32.0m vs Sharescope consensus £37.7m (−15%); H2 contracted revenues only £5.5m of £10.2m H2 target — 54% covered."
+        },
+        {
+          "pill": "CASH RISK",
+          "type": "red",
+          "textHTML": "Cash <span class=\"val-dn\">£0.4m</span> (Dec-25: £0.9m); <span class=\"val-dn\">£2.1m</span> Harwood loans due Nov-26; <span class=\"val-dn\">£4.8m</span> Mace receivable uncollected — solvency bridge entirely dependent on Mace collection timing.",
+          "textPlain": "Cash £0.4m (Dec-25: £0.9m); £2.1m Harwood loans due Nov-26; £4.8m Mace receivable uncollected — solvency bridge entirely dependent on Mace collection timing."
+        },
+        {
+          "pill": "GOVERNANCE",
+          "type": "red",
+          "textHTML": "CEO resigned May 2026; Chairman and two NEDs also left; Board now 3 members; Interim CEO (ex-CFO) executing restructure — governance risk material to H2 delivery.",
+          "textPlain": "CEO resigned May 2026; Chairman and two NEDs also left; Board now 3 members; Interim CEO (ex-CFO) executing restructure — governance risk material to H2 delivery."
+        },
+        {
+          "pill": "MARGIN",
+          "type": "red",
+          "textHTML": "H1 gross margin <span class=\"val-dn\">17.0%</span> (H1-25: 30.6%) — Mace cost overruns £0.5m + write-off £0.6m = <span class=\"val-dn\">−5pp</span>; FY26 EPS cut to <span class=\"val-dn\">loss</span> (0.4p→−0.1–0.0p); FY27 EPS cut <span class=\"val-dn\">−30–50%</span>.",
+          "textPlain": "H1 gross margin 17.0% (H1-25: 30.6%) — Mace cost overruns £0.5m + write-off £0.6m = −5pp; FY26 EPS cut to loss (0.4p→−0.1–0.0p); FY27 EPS cut −30–50%."
+        },
+        {
+          "pill": "OUTLOOK",
+          "type": "grey",
+          "textHTML": "£2.0m annualised cost saves and £66m pipeline are recovery levers; “aspires” to H2 in-line — investor presentation 6 Aug 2026 is the next near-term catalyst.",
+          "textPlain": "£2.0m annualised cost saves and £66m pipeline are recovery levers; “aspires” to H2 in-line — investor presentation 6 Aug 2026 is the next near-term catalyst."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−100–125%",
+          "sub": "0.4p→loss cut",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−30–50%",
+          "sub": "0.8p cut −30–50%",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "−10–20%",
+          "sub": "£37.7m→£32m −15%",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "−8–15%",
+          "sub": "£38.2m cut −8–15%",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "0.8p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "0.4p",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−50%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "n/a",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "n/a",
+          "style": "color:#7a7a95"
+        }
+      ],
+      "sparkLabel": "EPS Consensus · 12m",
+      "sparkSVG": "<svg id=\"spark-EAAS\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L43.33333333333333,10.25 L82.66666666666666,14.5 L122,18.75 L161.33333333333331,23 L200.66666666666669,27.25 L240,27.25 L279.33333333333337,31.5 L318.66666666666663,35.75 L358,35.75 L397.33333333333337,37.875 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L43.33333333333333,10.25 L82.66666666666666,14.5 L122,18.75 L161.33333333333331,23 L200.66666666666669,27.25 L240,27.25 L279.33333333333337,31.5 L318.66666666666663,35.75 L358,35.75 L397.33333333333337,37.875 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L43.33333333333333,6 L82.66666666666666,6 L122,6 L161.33333333333331,23.000000000000004 L200.66666666666669,23.000000000000004 L240,31.5 L279.33333333333337,31.5 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L43.33333333333333,6 L82.66666666666666,6 L122,6 L161.33333333333331,23.000000000000004 L200.66666666666669,23.000000000000004 L240,31.5 L279.33333333333337,31.5 L318.66666666666663,40 L358,40 L397.33333333333337,40 L436.66666666666663,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"161.33333333333331\" cy=\"23.000000000000004\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"31.5\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-25  0.8p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul-26  0.4p</text></svg><div class=\"spark-tt\" id=\"tt-EAAS\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "loss",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-03T06:50:17.851Z",
+      "source": "html-dom",
+      "entryPrice": 2.95
     }
   ],
   "brokerChanges": [
