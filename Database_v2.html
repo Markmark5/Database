@@ -4283,8 +4283,14 @@ function exExtractWeekly(rows4, ticker) {
   return entries;
 }
 
-function exCalcH1Split(h1_3y, h2_3y, h1_2y, h2_2y, h1_1y, h2_1y) {
-  const years = [[h1_3y,h2_3y],[h1_2y,h2_2y],[h1_1y,h2_1y]];
+function exCalcH1Split(h1_3y, h2_3y, h1_2y, h2_2y, h1_1y, h2_1y, h1_cur, h2_cur) {
+  // If current year has both H1 and H2 valid, use current+1y+2y; otherwise fall back to 1y+2y+3y
+  const curA = parseFloat(String(h1_cur || '').trim());
+  const curB = parseFloat(String(h2_cur || '').trim());
+  const curValid = !isNaN(curA) && !isNaN(curB) && curA >= 0 && curB >= 0 && Math.abs(curA + curB) >= 0.0001;
+  const years = curValid
+    ? [[h1_cur,h2_cur],[h1_1y,h2_1y],[h1_2y,h2_2y]]
+    : [[h1_3y,h2_3y],[h1_2y,h2_2y],[h1_1y,h2_1y]];
   const pcts = [];
   for (let i = 0; i < years.length; i++) {
     const a = parseFloat(String(years[i][0] || '').trim());
@@ -4347,7 +4353,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r1['H1 EPS']) + ' / ' + exFmt(r1['H2 EPS']) + (isQ4 ? '  → FY: ' + exFmt(r1['FY EPS']) + exFyFlag(r1['H1 EPS'],r1['H2 EPS'],r1['FY EPS']) : ''));
   lines.push('FY1 fc EPS         : ' + exFmt(r1['fc EPS']));
   lines.push('FY2 fc EPS         : ' + exFmt(r1['2y fc EPS']));
-  lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 EPS'],r1['3y ago H2 EPS'],r1['2y ago H1 EPS'],r1['2y ago H2 EPS'],r1['1y ago H1 EPS'],r1['1y ago H2 EPS']) + '  ← EPS H1 as % of full yr');
+  lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 EPS'],r1['3y ago H2 EPS'],r1['2y ago H1 EPS'],r1['2y ago H2 EPS'],r1['1y ago H1 EPS'],r1['1y ago H2 EPS'],r1['H1 EPS'],r1['H2 EPS']) + '  ← EPS H1 as % of full yr');
   lines.push('');
 
   lines.push('── REVENUE (m) ─────────────────────────────────────');
@@ -4357,7 +4363,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r1['H1 Turnover (m)'],1) + ' / ' + exFmt(r1['H2 Turnover (m)'],1) + (isQ4 ? '  → FY: ' + exFmt(r1['FY Turnover (m)'],1) : ''));
   lines.push('FY1 fc Revenue     : ' + exFmt(r1['fc Turnover (m)'],1));
   lines.push('FY2 fc Revenue     : ' + exFmt(r1['2y fc Turnover (m)'],1));
-  lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 Turnover (m)'],r1['3y ago H2 Turnover (m)'],r1['2y ago H1 Turnover (m)'],r1['2y ago H2 Turnover (m)'],r1['1y ago H1 Turnover (m)'],r1['1y ago H2 Turnover (m)']) + '  ← Rev H1 as % of full yr');
+  lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 Turnover (m)'],r1['3y ago H2 Turnover (m)'],r1['2y ago H1 Turnover (m)'],r1['2y ago H2 Turnover (m)'],r1['1y ago H1 Turnover (m)'],r1['1y ago H2 Turnover (m)'],r1['H1 Turnover (m)'],r1['H2 Turnover (m)']) + '  ← Rev H1 as % of full yr');
   lines.push('');
 
   lines.push('── EBITDA (m) ──────────────────────────────────────');
@@ -4367,6 +4373,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r2['H1 EBITDA (m)'],1) + ' / ' + exFmt(r2['H2 EBITDA (m)'],1));
   lines.push('FY1 fc EBITDA      : ' + exFmt(r2['fc EBITDA (m)'],1));
   lines.push('FY2 fc EBITDA      : ' + exFmt(r2['2y fc EBITDA (m)'],1));
+  lines.push('H1 avg split       : ' + exCalcH1Split(r2['3y ago H1 EBITDA (m)'],r2['3y ago H2 EBITDA (m)'],r2['2y ago H1 EBITDA (m)'],r2['2y ago H2 EBITDA (m)'],r2['1y ago H1 EBITDA (m)'],r2['1y ago H2 EBITDA (m)'],r2['H1 EBITDA (m)'],r2['H2 EBITDA (m)']) + '  ← EBITDA H1 as % of full yr');
   lines.push('');
 
   lines.push('── PRE-TAX PROFIT (m) ──────────────────────────────');
@@ -4376,7 +4383,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r2['H1 Pre-tax profit (m)'],1) + ' / ' + exFmt(r2['H2 Pre-tax profit (m)'],1));
   lines.push('FY1 fc PBT         : ' + exFmt(r2['fc Pre-tax profit (m)'],1));
   lines.push('FY2 fc PBT         : ' + exFmt(r2['2y fc Pre-tax profit (m)'],1));
-  lines.push('H1 avg split       : ' + exCalcH1Split(r2['3y ago H1 Pre-tax profit (m)'],r2['3y ago H2 Pre-tax profit (m)'],r2['2y ago H1 Pre-tax profit (m)'],r2['2y ago H2 Pre-tax profit (m)'],r2['1y ago H1 Pre-tax profit (m)'],r2['1y ago H2 Pre-tax profit (m)']) + '  ← PBT H1 as % of full yr');
+  lines.push('H1 avg split       : ' + exCalcH1Split(r2['3y ago H1 Pre-tax profit (m)'],r2['3y ago H2 Pre-tax profit (m)'],r2['2y ago H1 Pre-tax profit (m)'],r2['2y ago H2 Pre-tax profit (m)'],r2['1y ago H1 Pre-tax profit (m)'],r2['1y ago H2 Pre-tax profit (m)'],r2['H1 Pre-tax profit (m)'],r2['H2 Pre-tax profit (m)']) + '  ← PBT H1 as % of full yr');
   lines.push('');
 
   lines.push('── EPS BRIDGE INPUTS ───────────────────────────────');
@@ -5644,7 +5651,7 @@ function fcDetectTicker(txt){var m=txt.match(/SHARESCOPE DATA BLOCK\s*[—\-]+\s
 function fcParseTxt(txt){
   var rows=[];
   var bm=txt.match(/WEEKLY SNAPSHOT[\s\S]*?-{10,}\n([\s\S]*?)\n-{10,}/i);
-  if(bm){bm[1].split('\n').forEach(function(line){var m=line.match(/(\d{1,2}\s+\w+\s+\d{2})\s+([\d.]+)\s+([\d.,]+)\s+£?([\d.]+)/);if(m)rows.push({date:m[1].trim(),eps:parseFloat(m[2]),rev:parseFloat(m[3].replace(/,/g,'')),tp:parseFloat(m[4])});});}
+  if(bm){bm[1].split('\n').forEach(function(line){var m=line.match(/(\d{1,2}\s+\w+\s+\d{2,4})\s+(-?[\d.]+)\s+([\d.,]+)(?:\s+£?(-?[\d.]+))?/);if(m)rows.push({date:m[1].trim(),eps:parseFloat(m[2]),rev:parseFloat(m[3].replace(/,/g,'')),tp:m[4]?parseFloat(m[4]):0});});}
   else{var lines=txt.split('\n'),hdr=lines[0].split(',').map(function(h){return h.trim().toLowerCase();});lines.slice(1).forEach(function(line){if(!line.trim())return;var cols=line.split(',').map(function(c){return c.trim().replace(/£/g,'');}),obj={};hdr.forEach(function(h,i){obj[h]=cols[i]||'';});var date=obj.date,eps=parseFloat(obj.eps_fy1||obj.eps||0),rev=parseFloat(obj.revenue_fy1||obj.rev||obj.revenue||0),tp=parseFloat(obj.tp||obj.targetprice||0);if(date&&eps)rows.push({date:date,eps:eps,rev:rev,tp:tp});});}
   return rows;
 }
@@ -5673,10 +5680,10 @@ function fcSwitchTab(t,el){fcTab=t;document.querySelectorAll('.fc-tab').forEach(
 function fcDestroyCharts(){Object.values(fcChartObjs).forEach(function(c){try{c.destroy();}catch(e){}});fcChartObjs={};}
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
 function fcBuildChart(id,labels,data,lineColor,fillColor,unit,dotArr,small){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d'),ts=small?8:9;fcChartObjs[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:unit,data:data,borderColor:lineColor,backgroundColor:fillColor,borderWidth:2,tension:0.1,fill:true,pointRadius:dotArr.map(function(d){return d.radius;}),pointBackgroundColor:dotArr.map(function(d){return d.color;}),pointBorderColor:dotArr.map(function(d){return d.radius>3?d.color:'transparent';}),pointBorderWidth:dotArr.map(function(d){return d.radius>3?2:0;}),pointHoverRadius:dotArr.map(function(d){return d.radius>3?7:5;}),yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:ts},bodyFont:{family:'Inter',size:ts},callbacks:{label:function(ctx){var v=ctx.parsed.y;return unit==='£'?' TP: £'+v.toFixed(2):unit==='£m'?' Rev: £'+v.toFixed(0)+'m':' EPS: '+v.toFixed(1)+'p';}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:small?7:10,font:{family:'Inter',size:ts},color:'#6a6a85',maxRotation:30}},y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:ts},color:lineColor,callback:function(v){return unit==='£'?'£'+v.toFixed(2):unit==='£m'?'£'+v.toFixed(0)+'m':v.toFixed(1)+'p';}}}}}}); }
-function fcStatsFor(rows){var f=rows[0],l=rows[rows.length-1];return{first:f,last:l,epsChg:(((l.eps-f.eps)/f.eps)*100).toFixed(1),revChg:(((l.rev-f.rev)/f.rev)*100).toFixed(1),tpChg:(((l.tp-f.tp)/f.tp)*100).toFixed(1)};}
+function fcStatsFor(rows){var f=rows[0],l=rows[rows.length-1];function pc(a,b){return(b&&isFinite((a-b)/b))?(((a-b)/b)*100).toFixed(1):'—';}return{first:f,last:l,epsChg:pc(l.eps,f.eps),revChg:pc(l.rev,f.rev),tpChg:pc(l.tp,f.tp)};}
 function fcNetDirection(rows){var dn=0,up=0;for(var i=1;i<rows.length;i++){var d=rows[i].eps-rows[i-1].eps;if(d<-0.049)dn++;else if(d>0.049)up++;}if(dn===up)return{label:'— Neutral',cls:'',sub:'over full period'};return dn>up?{label:'▼ Bearish',cls:'neg',sub:'over full period'}:{label:'▲ Bullish',cls:'pos',sub:'over full period'};}
 function fcDots(rows,field){return rows.map(function(r,i){if(i===0)return{color:'rgba(0,0,0,0)',radius:3};var d=rows[i][field]-rows[i-1][field];if(Math.abs(d)<0.05)return{color:'rgba(255,255,255,0.15)',radius:3};return d<0?{color:'#e02525',radius:5}:{color:'#00c814',radius:5};});}
-function fcFmtChg(v){return(parseFloat(v)>0?'+':'')+v+'%';}
+function fcFmtChg(v){return(v==='—'||isNaN(parseFloat(v)))?'—':(parseFloat(v)>0?'+':'')+v+'%';}
 function fcChgColor(v){return parseFloat(v)<0?'color:var(--red)':parseFloat(v)>0?'color:var(--green)':'color:var(--text-secondary)';}
 function fcStatBar(stats){return '<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px">'+stats.map(function(s){var vs='font-size:22px;font-weight:600;line-height:1;';if(s.cls==='neg')vs+='color:var(--red)';else if(s.cls==='pos')vs+='color:var(--green)';else if(s.chg!=null)vs+=(parseFloat(s.chg)<0?'color:var(--red)':parseFloat(s.chg)>0?'color:var(--green)':'color:var(--text-secondary)');else vs+='color:var(--text-primary)';return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:11px 14px"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.11em;color:var(--text-dim);margin-bottom:4px">'+s.lbl+'</div><div style="'+vs+'">'+s.val+'</div><div style="font-size:10px;color:var(--text-dim);margin-top:3px">'+s.sub+'</div></div>';}).join('')+'</div>';}
 function fcEventLog(rows,field){var evts=[];for(var i=1;i<rows.length;i++){var p=rows[i-1],c=rows[i],diff=c[field]-p[field];if(Math.abs(diff)<0.05)continue;var pct=(diff/p[field]*100).toFixed(1),dn=diff<0,col=dn?'var(--red)':'var(--green)';var val='',desc='';if(field==='eps'){val=p.eps.toFixed(1)+'p → '+c.eps.toFixed(1)+'p';desc=dn?'EPS cut':'EPS raised';}else if(field==='rev'){val='£'+p.rev.toFixed(0)+'m → £'+c.rev.toFixed(0)+'m';desc=dn?'Revenue cut':'Revenue raised';}else{val='£'+p.tp.toFixed(2)+' → £'+c.tp.toFixed(2);desc=dn?'TP cut':'TP raised';}evts.push('<div style="display:grid;grid-template-columns:100px 1fr 130px 90px;border-bottom:1px solid var(--border);align-items:center;"><div style="padding:9px 14px;font-size:11px;color:var(--text-dim);display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span>'+c.date+'</div><div style="padding:9px 14px;font-size:12px;color:var(--text-primary)">'+desc+'</div><div style="padding:9px 14px;text-align:right;color:var(--text-secondary);font-size:11px">'+val+'</div><div style="padding:9px 14px;text-align:right;font-weight:600;'+fcChgColor(pct)+';font-size:11px;">'+(dn?'':'+')+''+pct+'%</div></div>');}if(!evts.length)return '<div style="padding:14px;color:var(--text-dim);font-size:11px">No significant moves detected</div>';return '<div style="display:grid;grid-template-columns:100px 1fr 130px 90px;background:var(--surface2);border-bottom:1px solid var(--border);"><span style="padding:6px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim)">Date</span><span style="padding:6px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim)">Event</span><span style="padding:6px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);text-align:right">Value</span><span style="padding:6px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);text-align:right">Change</span></div>'+evts.join('');}
