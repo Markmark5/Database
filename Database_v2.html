@@ -515,7 +515,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 /* ═══════════════════════════════════
    EXTRACTOR STYLES (dark)
 ═══════════════════════════════════ */
-.ex-wrap{display:flex;height:100%;min-height:500px;}
+.ex-wrap{display:flex;align-items:stretch;min-height:500px;}
 .ex-panel{
   width:260px;flex-shrink:0;border-right:1px solid var(--border);
   padding:18px 16px;display:flex;flex-direction:column;gap:18px;
@@ -559,7 +559,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .ex-stat-lbl{font-family:var(--mono);font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;}
 .ex-stat-val{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text-primary);}
 .ex-stat-val.green{color:var(--green);}
-.ex-output{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.ex-output{display:flex;flex-direction:column;flex:1;min-width:0;}
 .ex-output-toolbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;}
 .ex-output-title{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text-secondary);letter-spacing:.06em;text-transform:uppercase;}
 .ex-copy-btn{font-family:var(--mono);font-size:10px;padding:4px 10px;border:1px solid var(--border);border-radius:3px;background:transparent;color:var(--text-secondary);cursor:pointer;transition:all .15s;}
@@ -1651,12 +1651,50 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
           </div>
         </div>
         <div class="ex-output">
-          <div id="ex-outputWrap" style="flex:1;display:flex;overflow:hidden;height:100%">
+          <div id="ex-outputWrap" style="display:flex;overflow:hidden;height:460px;flex-shrink:0;">
             <div class="ex-placeholder" id="ex-placeholder">
               <div class="ex-placeholder-icon">📊</div>
               <span style="font-family:var(--mono);font-size:11px;">Load files then enter a ticker</span>
             </div>
             <textarea class="ex-output-text" id="ex-outputText" style="display:none;" readonly></textarea>
+          </div>
+          <!-- ── H1 TRACKING % CALCULATOR ── -->
+          <div id="h1calc-wrap" style="flex-shrink:0;border-top:1px solid var(--border);background:var(--surface2);padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>
+              <span style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-primary);">H1 Tracking % Calculator</span>
+              <span id="h1calc-src" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;">enter a ticker &amp; extract first</span>
+            </div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);margin-bottom:10px;">Read the RNS → type the reported figure → Calculate. FY forecast pulled from data block; type FY to override.</div>
+            <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;font-family:var(--mono);font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;">
+              <div>Metric</div><div>Reported H1</div><div>Reported FY (opt)</div><div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;margin-bottom:6px;">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-primary);font-weight:600;">Revenue</div>
+              <input id="h1calc-rev-h1" type="text" inputmode="decimal" placeholder="H1 m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border-bright);border-radius:3px;background:var(--surface);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;">
+              <input id="h1calc-rev-fy" type="text" inputmode="decimal" placeholder="FY m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text-secondary);outline:none;width:100%;box-sizing:border-box;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-align:center;">m</span>
+            </div>
+            <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;margin-bottom:6px;">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-primary);font-weight:600;">EPS</div>
+              <input id="h1calc-eps-h1" type="text" inputmode="decimal" placeholder="H1 p" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border-bright);border-radius:3px;background:var(--surface);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;">
+              <input id="h1calc-eps-fy" type="text" inputmode="decimal" placeholder="FY p" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text-secondary);outline:none;width:100%;box-sizing:border-box;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-align:center;">p</span>
+            </div>
+            <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;margin-bottom:10px;">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-primary);font-weight:600;">EBITDA</div>
+              <input id="h1calc-ebitda-h1" type="text" inputmode="decimal" placeholder="H1 m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border-bright);border-radius:3px;background:var(--surface);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;">
+              <input id="h1calc-ebitda-fy" type="text" inputmode="decimal" placeholder="FY m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text-secondary);outline:none;width:100%;box-sizing:border-box;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-align:center;">m</span>
+            </div>
+            <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;margin-bottom:10px;">
+              <div style="font-family:var(--mono);font-size:11px;color:var(--text-primary);font-weight:600;">PBT</div>
+              <input id="h1calc-pbt-h1" type="text" inputmode="decimal" placeholder="H1 m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border-bright);border-radius:3px;background:var(--surface);color:var(--text-primary);outline:none;width:100%;box-sizing:border-box;">
+              <input id="h1calc-pbt-fy" type="text" inputmode="decimal" placeholder="FY m" style="font-family:var(--mono);font-size:11px;text-align:right;padding:5px 7px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text-secondary);outline:none;width:100%;box-sizing:border-box;">
+              <span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);text-align:center;">m</span>
+            </div>
+            <button onclick="h1calcRun()" style="width:100%;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:7px;border:1px solid var(--green);border-radius:3px;background:var(--green-dim);color:var(--green);cursor:pointer;margin-bottom:10px;">Calculate</button>
+            <div id="h1calc-results"></div>
           </div>
         </div>
       </div>
@@ -4305,6 +4343,112 @@ function exCalcH1Split(h1_3y, h2_3y, h1_2y, h2_2y, h1_1y, h2_1y, h1_cur, h2_cur)
   const avg = pcts.reduce(function(s,v){return s+v;}, 0) / pcts.length;
   const label = pcts.length < 3 ? pcts.length + 'yr avg' : '3yr avg';
   return avg.toFixed(1) + '%  (' + label + ')';
+}
+
+/* ── H1 TRACKING % CALCULATOR ──────────────────────────────
+   Reads the single ticker typed in the extractor input, pulls the
+   3yr-avg H1 split + FY forecast straight from exState (not the
+   printed text, so it can't drift), and compares a manually-typed
+   reported H1 figure against that average as a pp difference. */
+
+/* Return just the numeric 3yr-avg H1 % (or null) — reuses exCalcH1Split. */
+function h1calcAvgPct(h1_3y,h2_3y,h1_2y,h2_2y,h1_1y,h2_1y,h1_cur,h2_cur){
+  var s = exCalcH1Split(h1_3y,h2_3y,h1_2y,h2_2y,h1_1y,h2_1y,h1_cur,h2_cur);
+  if(!s || s==='n/a') return null;
+  var m = s.match(/^([\d.]+)%/);
+  return m ? parseFloat(m[1]) : null;
+}
+
+function h1calcNum(id){
+  var el = document.getElementById(id);
+  if(!el) return NaN;
+  var v = String(el.value||'').trim().replace(/[£,\s]/g,'');
+  if(!v) return NaN;
+  return parseFloat(v);
+}
+
+function h1calcRun(){
+  var out = document.getElementById('h1calc-results');
+  var srcEl = document.getElementById('h1calc-src');
+  // Ticker = the single ticker typed in the extractor input box
+  var raw = (document.getElementById('ex-tickerInput').value||'').toUpperCase();
+  var tickers = raw.split(/[\s,\n]+/).map(function(t){return t.trim();}).filter(Boolean);
+  if(!exState.rows1){ out.innerHTML = h1calcMsg('Load the 4 CSV files first.'); return; }
+  if(!tickers.length){ out.innerHTML = h1calcMsg('Enter a ticker in the extractor box above.'); return; }
+  var ticker = tickers[0];
+  var found1 = exFindRow(exState.rows1, ticker);
+  if(!found1){ out.innerHTML = h1calcMsg("Ticker '"+ticker+"' not found in File 1."); return; }
+  var r1 = found1.row;
+  var idx = found1.idx;
+  var r2 = (exState.rows2 && idx < exState.rows2.length) ? exState.rows2[idx] : {};
+  if(srcEl) srcEl.textContent = ticker + ' · using ' + (tickers.length>1 ? 'first ticker' : 'extracted data');
+
+  // Metric definitions: 3yr-avg split inputs + FY forecast field
+  var isQ4 = ((r1['Latest quarterly report']||'').trim() === 'Q4');
+  var metrics = [
+    { key:'rev', label:'Revenue', unit:'m', dec:1,
+      avg: h1calcAvgPct(r1['3y ago H1 Turnover (m)'],r1['3y ago H2 Turnover (m)'],r1['2y ago H1 Turnover (m)'],r1['2y ago H2 Turnover (m)'],r1['1y ago H1 Turnover (m)'],r1['1y ago H2 Turnover (m)'],r1['H1 Turnover (m)'],r1['H2 Turnover (m)']),
+      fyfc: parseFloat(String(r1['fc Turnover (m)']||'').trim()) },
+    { key:'eps', label:'EPS', unit:'p', dec:2,
+      avg: h1calcAvgPct(r1['3y ago H1 EPS'],r1['3y ago H2 EPS'],r1['2y ago H1 EPS'],r1['2y ago H2 EPS'],r1['1y ago H1 EPS'],r1['1y ago H2 EPS'],r1['H1 EPS'],r1['H2 EPS']),
+      fyfc: parseFloat(String(r1['fc EPS']||'').trim()) },
+    { key:'ebitda', label:'EBITDA', unit:'m', dec:1,
+      avg: h1calcAvgPct(r2['3y ago H1 EBITDA (m)'],r2['3y ago H2 EBITDA (m)'],r2['2y ago H1 EBITDA (m)'],r2['2y ago H2 EBITDA (m)'],r2['1y ago H1 EBITDA (m)'],r2['1y ago H2 EBITDA (m)'],r2['H1 EBITDA (m)'],r2['H2 EBITDA (m)']),
+      fyfc: parseFloat(String(r2['fc EBITDA (m)']||'').trim()) },
+    { key:'pbt', label:'PBT', unit:'m', dec:1,
+      avg: h1calcAvgPct(r2['3y ago H1 Pre-tax profit (m)'],r2['3y ago H2 Pre-tax profit (m)'],r2['2y ago H1 Pre-tax profit (m)'],r2['2y ago H2 Pre-tax profit (m)'],r2['1y ago H1 Pre-tax profit (m)'],r2['1y ago H2 Pre-tax profit (m)'],r2['H1 Pre-tax profit (m)'],r2['H2 Pre-tax profit (m)']),
+      fyfc: parseFloat(String(r2['fc Pre-tax profit (m)']||'').trim()) }
+  ];
+
+  var cards = [];
+  metrics.forEach(function(m){
+    var repH1 = h1calcNum('h1calc-'+m.key+'-h1');
+    if(isNaN(repH1)) return; // only show metrics the user filled in
+    var typedFY = h1calcNum('h1calc-'+m.key+'-fy');
+    var fy = !isNaN(typedFY) ? typedFY : m.fyfc;
+    var fySource = !isNaN(typedFY) ? 'your FY' : 'FY forecast';
+    cards.push(h1calcCard(m, repH1, fy, fySource));
+  });
+
+  if(!cards.length){ out.innerHTML = h1calcMsg('Type a reported H1 figure into at least one metric box.'); return; }
+  out.innerHTML = cards.join('');
+}
+
+function h1calcMsg(txt){
+  return '<div style="font-family:var(--mono);font-size:10px;color:var(--text-dim);padding:8px 4px;">'+txt+'</div>';
+}
+
+function h1calcCard(m, repH1, fy, fySource){
+  var g = 'var(--green)', a = 'var(--amber)', r = 'var(--red)';
+  // Guard: need a valid FY denominator and a valid 3yr avg
+  if(isNaN(fy) || Math.abs(fy) < 0.0001 || m.avg===null){
+    var why = (m.avg===null) ? 'no 3yr-avg split available' : 'no FY figure (type one or check forecast)';
+    return '<div style="border:1px solid var(--border);border-radius:4px;padding:9px 11px;margin-bottom:7px;background:var(--surface);">'
+      + '<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-primary);">'+m.label+'</span>'
+      + '<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">— '+why+'</span></div>';
+  }
+  var repPct = (repH1 / fy) * 100;
+  var pp = repPct - m.avg;
+  var ppR = Math.round(pp*10)/10;
+  // Colour: green ahead of norm, amber in line (±2pp), red behind
+  var col, bg, verdict;
+  if(Math.abs(ppR) <= 2){ col=a; bg='var(--amber-dim)'; verdict='In line with trend'; }
+  else if(ppR > 2){ col=g; bg='var(--green-dim)'; verdict='H1 ahead of trend'; }
+  else { col=r; bg='var(--red-dim)'; verdict='H1 behind trend'; }
+  var ppTxt = (ppR>=0?'+':'') + ppR.toFixed(1) + 'pp';
+  var repPctR = repPct.toFixed(1);
+  var avgR = m.avg.toFixed(1);
+  var fyR = fy.toLocaleString('en-GB',{minimumFractionDigits:m.dec,maximumFractionDigits:m.dec});
+
+  return '<div style="border:1px solid '+col+';border-radius:4px;background:'+bg+';padding:10px 12px;margin-bottom:7px;">'
+    + '<div style="display:flex;align-items:center;gap:12px;">'
+      + '<div style="font-family:var(--mono);font-size:22px;font-weight:700;color:'+col+';min-width:78px;">'+ppTxt+'</div>'
+      + '<div style="flex:1;">'
+        + '<div style="font-family:var(--mono);font-size:10px;font-weight:600;color:'+col+';text-transform:uppercase;letter-spacing:.04em;">'+m.label+' — '+verdict+'</div>'
+        + '<div style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);margin-top:3px;">Reported H1 = '+repPctR+'% of FY&nbsp; vs&nbsp; 3yr avg '+avgR+'%</div>'
+        + '<div style="font-family:var(--mono);font-size:8px;color:var(--text-dim);margin-top:2px;">FY denominator: '+fyR+' '+m.unit+' ('+fySource+')</div>'
+      + '</div>'
+    + '</div></div>';
 }
 
 function exFyFlag(h1Raw, h2Raw, fyRaw) {
