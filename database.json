@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-08-05T06:45:41.271Z",
-    "savedAtLabel": "05 Aug 2026 07:45",
+    "savedAt": "2026-08-06T10:53:31.867Z",
+    "savedAtLabel": "06 Aug 2026 11:53",
     "source": "github-sync"
   },
   "scorecards": [
@@ -119393,6 +119393,1339 @@
         }
       ],
       "entryPrice": 12.87
+    },
+    {
+      "id": "CNS_2026_08_06",
+      "ticker": "CNS",
+      "score": 82,
+      "company": "Corero Network Security plc",
+      "verdict": "STRONGLY POSITIVE",
+      "date": "2026-08-06",
+      "rnsType": "PRE-H1 UPDATE",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "REV BEAT",
+          "type": "green",
+          "textHTML": "Revenue <span class=\"val-up\">+42% to $15.5m</span>, exceeding the whole of H2 25; H1 is <span class=\"val-up\">53.1%</span> of FY consensus vs a <span class=\"val-fl\">46.5%</span> norm, a <span class=\"val-up\">+6.6pp</span> deviation on 8 broker consensus data.",
+          "textPlain": "Revenue +42% to $15.5m, exceeding the whole of H2 25; H1 is 53.1% of FY consensus vs a 46.5% norm, a +6.6pp deviation on 8 broker consensus data."
+        },
+        {
+          "pill": "EBITDA",
+          "type": "green",
+          "textHTML": "H1 EBITDA swings to <span class=\"val-up\">$2.6m</span> from a <span class=\"val-dn\">$1.4m</span> loss; one half delivers <span class=\"val-up\">81%</span> of the full-year <span class=\"val-fl\">$3.2m</span> consensus, leaving only <span class=\"val-dn\">$0.6m</span> for H2 vs H1 25 loss reported.",
+          "textPlain": "H1 EBITDA swings to $2.6m from a $1.4m loss; one half delivers 81% of the full-year $3.2m consensus, leaving only $0.6m for H2 vs H1 25 loss reported."
+        },
+        {
+          "pill": "ARR",
+          "type": "green",
+          "textHTML": "Annualised recurring revenue <span class=\"val-up\">$24.1m, +12%</span>, covering <span class=\"val-up\">82.5%</span> of FY26 revenue consensus; renewal rate <span class=\"val-up\">96%</span>, gross margin <span class=\"val-up\">93%</span> (H1 25: 91%) with 3yr H1 avg used.",
+          "textPlain": "Annualised recurring revenue $24.1m, +12%, covering 82.5% of FY26 revenue consensus; renewal rate 96%, gross margin 93% (H1 25: 91%) with 3yr H1 avg used."
+        },
+        {
+          "pill": "CASH",
+          "type": "red",
+          "textHTML": "Cash balance <span class=\"val-dn\">$2.1m</span>, down from <span class=\"val-fl\">$4.0m</span> at Dec 2025 despite <span class=\"val-up\">$2.6m</span> of H1 EBITDA; a new <span class=\"val-dn\">$2.0m</span> overdraft facility remains unused unaudited management estimate.",
+          "textPlain": "Cash balance $2.1m, down from $4.0m at Dec 2025 despite $2.6m of H1 EBITDA; a new $2.0m overdraft facility remains unused unaudited management estimate."
+        },
+        {
+          "pill": "ORDERS",
+          "type": "red",
+          "textHTML": "Order intake <span class=\"val-fl\">+14%</span> and ARR <span class=\"val-fl\">+12%</span> against reported revenue growth of <span class=\"val-up\">+42%</span> — this half harvests 2025 backlog; FY27 growth slope is the real watch point",
+          "textPlain": "Order intake +14% and ARR +12% against reported revenue growth of +42% — this half harvests 2025 backlog; FY27 growth slope is the real watch point"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+40–80%",
+          "sub": "+42% vs 46.5% norm",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+25–50%",
+          "sub": "H2 needed −6% only",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+5–9%",
+          "sub": "82.5% FY rev cover",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+4–8%",
+          "sub": "96% renewal rate",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "-0.7",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "0.1",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+114.3%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "20",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-CNS\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,11.666666666666664 L82.66666666666666,11.666666666666664 L161.33333333333331,6 L240,40 L318.66666666666663,6 L397.33333333333337,6 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,11.666666666666664 L82.66666666666666,11.666666666666664 L161.33333333333331,6 L240,40 L318.66666666666663,6 L397.33333333333337,6 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L82.66666666666666,40 L161.33333333333331,31.5 L240,31.5 L318.66666666666663,6 L397.33333333333337,6 L476,6 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L82.66666666666666,40 L161.33333333333331,31.5 L240,31.5 L318.66666666666663,6 L397.33333333333337,6 L476,6 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"161.33333333333331\" cy=\"31.5\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  -0.7p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  0.1p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-CNS\" style=\"display: none; left: 65.4724px;\"><strong>Jul26</strong><br>EPS: 0.1p · Price: 20p</div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+6.6pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.196Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": -0.7,
+          "price": 19
+        },
+        {
+          "d": "Sep25",
+          "eps": -0.7,
+          "price": 19
+        },
+        {
+          "d": "Nov25",
+          "eps": -0.5,
+          "price": 20
+        },
+        {
+          "d": "Jan26",
+          "eps": -0.5,
+          "price": 14
+        },
+        {
+          "d": "Mar26",
+          "eps": 0.1,
+          "price": 20
+        },
+        {
+          "d": "May26",
+          "eps": 0.1,
+          "price": 20
+        },
+        {
+          "d": "Jul26",
+          "eps": 0.1,
+          "price": 20
+        }
+      ],
+      "entryPrice": 9.25
+    },
+    {
+      "id": "SRP_2026_08_06",
+      "ticker": "SRP",
+      "score": 67,
+      "company": "Serco Group plc",
+      "verdict": "CONSTRUCTIVE",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "FY26 underlying operating profit guidance held at <span class=\"val-up\">~£300m</span>, +10% on FY25; consensus EBIT <span class=\"val-fl\">£296.1m</span> sits below it, bridge implies <span class=\"val-up\">18.84p</span> vs 18.6p",
+          "textPlain": "FY26 underlying operating profit guidance held at ~£300m, +10% on FY25; consensus EBIT £296.1m sits below it, bridge implies 18.84p vs 18.6p"
+        },
+        {
+          "pill": "BUYBACK",
+          "type": "green",
+          "textHTML": "Share buyback doubled from <span class=\"val-up\">£75m to £150m</span> for the year, £75m completed in July; diluted share guidance reset to <span class=\"val-up\">995m</span> — not yet in the 18.6p EPS consensus",
+          "textPlain": "Share buyback doubled from £75m to £150m for the year, £75m completed in July; diluted share guidance reset to 995m — not yet in the 18.6p EPS consensus"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "red",
+          "textHTML": "Underlying margin <span class=\"val-up\">6.2%, +20bps</span>, achieved after absorbing higher UK NIC and the Australian immigration exit; Defence organic growth <span class=\"val-up\">+10%</span>, strongest in portfolio",
+          "textPlain": "Underlying margin 6.2%, +20bps, achieved after absorbing higher UK NIC and the Australian immigration exit; Defence organic growth +10%, strongest in portfolio"
+        },
+        {
+          "pill": "ORDERS",
+          "type": "red",
+          "textHTML": "Order intake fell to <span class=\"val-dn\">£2.5bn from £3.2bn</span>; book-to-bill down to <span class=\"val-dn\">100% from 134%</span>; new-business win rate <span class=\"val-dn\">29% vs a 32% 3yr average</span> win rate vs 3yr average.",
+          "textPlain": "Order intake fell to £2.5bn from £3.2bn; book-to-bill down to 100% from 134%; new-business win rate 29% vs a 32% 3yr average win rate vs 3yr average."
+        },
+        {
+          "pill": "CASH",
+          "type": "red",
+          "textHTML": "Free cash flow fell to <span class=\"val-dn\">£65m from £91m, a 29% drop</span>; FY26 is guided to <span class=\"val-dn\">~£160m against £219m</span> in FY25; H1 EPS tracking <span class=\"val-dn\">−1.6pp</span>, H2 now needs <span class=\"val-fl\">+15.5% growth</span>",
+          "textPlain": "Free cash flow fell to £65m from £91m, a 29% drop; FY26 is guided to ~£160m against £219m in FY25; H1 EPS tracking −1.6pp, H2 now needs +15.5% growth"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+1–3%",
+          "sub": "18.84p vs 18.6p cons",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+1–4%",
+          "sub": "995m dil, buyback x2",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "6.2% mgn, NIC absorbed",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "BTB 100% vs 134%",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "15.7",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "18.6",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+18.5%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "311",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-SRP\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L82.66666666666666,32.23913043478261 L161.33333333333331,29.282608695652172 L240,20.043478260869563 L318.66666666666663,8.217391304347824 L397.33333333333337,7.847826086956523 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L82.66666666666666,32.23913043478261 L161.33333333333331,29.282608695652172 L240,20.043478260869563 L318.66666666666663,8.217391304347824 L397.33333333333337,7.847826086956523 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L82.66666666666666,35.46666666666664 L161.33333333333331,36.599999999999994 L240,33.19999999999998 L318.66666666666663,6 L397.33333333333337,6 L476,7.1333333333333115 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L82.66666666666666,35.46666666666664 L161.33333333333331,36.599999999999994 L240,33.19999999999998 L318.66666666666663,6 L397.33333333333337,6 L476,7.1333333333333115 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"35.46666666666664\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"36.599999999999994\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"33.19999999999998\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"7.1333333333333115\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"7.1333333333333115\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  15.7p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  18.6p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-SRP\" style=\"display: none; left: 9.79389px;\"><strong>Jul25</strong><br>EPS: 15.7p · Price: 219p</div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "−1.6pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.197Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 15.7,
+          "price": 219
+        },
+        {
+          "d": "Sep25",
+          "eps": 16.1,
+          "price": 240
+        },
+        {
+          "d": "Nov25",
+          "eps": 16,
+          "price": 248
+        },
+        {
+          "d": "Jan26",
+          "eps": 16.3,
+          "price": 273
+        },
+        {
+          "d": "Mar26",
+          "eps": 18.7,
+          "price": 305
+        },
+        {
+          "d": "May26",
+          "eps": 18.7,
+          "price": 306
+        },
+        {
+          "d": "Jul26",
+          "eps": 18.6,
+          "price": 311
+        }
+      ],
+      "entryPrice": 228.2
+    },
+    {
+      "id": "HIK_2026_08_06",
+      "ticker": "HIK",
+      "score": 64,
+      "company": "Hikma Pharmaceuticals PLC",
+      "verdict": "CONSTRUCTIVE",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "Core operating profit guidance reiterated at <span class=\"val-up\">$720–770m</span>; consensus EBIT <span class=\"val-fl\">$718.2m</span> sits at or below the bottom, after core OP grew <span class=\"val-up\">+9%</span> in H1 2026",
+          "textPlain": "Core operating profit guidance reiterated at $720–770m; consensus EBIT $718.2m sits at or below the bottom, after core OP grew +9% in H1 2026"
+        },
+        {
+          "pill": "BRANDED",
+          "type": "green",
+          "textHTML": "Branded segment revenue guidance raised to the <span class=\"val-up\">top end</span> of 6–8%; Branded core OP <span class=\"val-up\">+23%</span> at <span class=\"val-up\">32.5%</span> margin; group core gross margin up <span class=\"val-up\">1.1pp</span> to 44.8%",
+          "textPlain": "Branded segment revenue guidance raised to the top end of 6–8%; Branded core OP +23% at 32.5% margin; group core gross margin up 1.1pp to 44.8%"
+        },
+        {
+          "pill": "BUYBACK",
+          "type": "green",
+          "textHTML": "The $250m buyback is c.90% complete at <span class=\"val-up\">$226m</span>; weighted average shares fall from <span class=\"val-up\">216.4m toward c.209m</span>; interim dividend <span class=\"val-up\">+6% to 38 cents</span> interim dividend up 6%.",
+          "textPlain": "The $250m buyback is c.90% complete at $226m; weighted average shares fall from 216.4m toward c.209m; interim dividend +6% to 38 cents interim dividend up 6%."
+        },
+        {
+          "pill": "INJECTABLES",
+          "type": "red",
+          "textHTML": "Injectables, <span class=\"val-fl\">40%</span> of group revenue, saw core operating profit fall <span class=\"val-dn\">−8% (−9% CC)</span>, with margin at <span class=\"val-dn\">27.6%</span>, the floor of its guided 27–28% band for FY26",
+          "textPlain": "Injectables, 40% of group revenue, saw core operating profit fall −8% (−9% CC), with margin at 27.6%, the floor of its guided 27–28% band for FY26"
+        },
+        {
+          "pill": "BELOW LINE",
+          "type": "amber",
+          "textHTML": "Core net finance expense guided up to <span class=\"val-dn\">$99–103m</span> and core tax to <span class=\"val-dn\">c.23%</span>; FY26 EPS consensus sits <span class=\"val-dn\">below</span> FY25 despite flat core OP rate up from 21.1% FY25.",
+          "textPlain": "Core net finance expense guided up to $99–103m and core tax to c.23%; FY26 EPS consensus sits below FY25 despite flat core OP rate up from 21.1% FY25."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+1–4%",
+          "sub": "$718.2m at range floor",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+1–3%",
+          "sub": "top-end 6–8% Branded",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "90% of $250m done",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "27.6% mgn, band floor",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "231.1",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "221.8",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "-4.0%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "18.4",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-HIK\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L82.66666666666666,8.328767123287669 L161.33333333333331,6.931506849315063 L240,22.76712328767122 L318.66666666666663,37.67123287671233 L397.33333333333337,38.13698630136985 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L82.66666666666666,8.328767123287669 L161.33333333333331,6.931506849315063 L240,22.76712328767122 L318.66666666666663,37.67123287671233 L397.33333333333337,38.13698630136985 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L82.66666666666666,21.210526315789448 L161.33333333333331,19.42105263157894 L240,40 L318.66666666666663,25.38596491228069 L397.33333333333337,23.894736842105253 L476,33.736842105263094 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L82.66666666666666,21.210526315789448 L161.33333333333331,19.42105263157894 L240,40 L318.66666666666663,25.38596491228069 L397.33333333333337,23.894736842105253 L476,33.736842105263094 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"21.210526315789448\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"19.42105263157894\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"25.38596491228069\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"23.894736842105253\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"33.736842105263094\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"33.736842105263094\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  231.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  221.8p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-HIK\" style=\"display: none; left: -40.3669px;\"><strong>Jan26</strong><br>EPS: 219.7p · Price: 22.1p ▼ cut</div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+2.2pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.198Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 231.1,
+          "price": 25.7
+        },
+        {
+          "d": "Sep25",
+          "eps": 226,
+          "price": 25.2
+        },
+        {
+          "d": "Nov25",
+          "eps": 226.6,
+          "price": 25.5
+        },
+        {
+          "d": "Jan26",
+          "eps": 219.7,
+          "price": 22.1
+        },
+        {
+          "d": "Mar26",
+          "eps": 224.6,
+          "price": 18.9
+        },
+        {
+          "d": "May26",
+          "eps": 225.1,
+          "price": 18.8
+        },
+        {
+          "d": "Jul26",
+          "eps": 221.8,
+          "price": 18.4
+        }
+      ],
+      "entryPrice": 15.41
+    },
+    {
+      "id": "MER_2026_08_06",
+      "ticker": "MER",
+      "score": 61,
+      "company": "Mears Group PLC",
+      "verdict": "NEUTRAL",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FTSE Small Cap",
+      "signals": [
+        {
+          "pill": "ORDER BOOK",
+          "type": "green",
+          "textHTML": "Order book reaches an all-time high of <span class=\"val-up\">£4.2bn, +27%</span>; Birmingham City (<span class=\"val-up\">£450m/10yr</span>) and Rooftop (<span class=\"val-up\">£150m/10yr</span>) won, plus <span class=\"val-up\">£1bn+</span> retained this half",
+          "textPlain": "Order book reaches an all-time high of £4.2bn, +27%; Birmingham City (£450m/10yr) and Rooftop (£150m/10yr) won, plus £1bn+ retained this half"
+        },
+        {
+          "pill": "REBIDS",
+          "type": "green",
+          "textHTML": "The 24-month contract rebid cycle has <span class=\"val-up\">largely concluded</span>, over half the maintenance base retained; Maintenance-led revenue grew <span class=\"val-up\">+7%</span> in H1 2026",
+          "textPlain": "The 24-month contract rebid cycle has largely concluded, over half the maintenance base retained; Maintenance-led revenue grew +7% in H1 2026"
+        },
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "Full-year guidance confirmed at the named consensus figures: revenue <span class=\"val-fl\">£1,038m</span>, adjusted PBT <span class=\"val-fl\">£50.7m</span> — no gap to close, no FY26 revision is warranted here",
+          "textPlain": "Full-year guidance confirmed at the named consensus figures: revenue £1,038m, adjusted PBT £50.7m — no gap to close, no FY26 revision is warranted here"
+        },
+        {
+          "pill": "PROFIT",
+          "type": "red",
+          "textHTML": "Adjusted profit before tax fell <span class=\"val-dn\">−10% to £28.9m</span>, adjusted diluted EPS <span class=\"val-dn\">−9% to 25.26p</span>, and the margin dropped <span class=\"val-dn\">40bps to 5.2%</span> on mobilisation costs",
+          "textPlain": "Adjusted profit before tax fell −10% to £28.9m, adjusted diluted EPS −9% to 25.26p, and the margin dropped 40bps to 5.2% on mobilisation costs"
+        },
+        {
+          "pill": "H2 GAP",
+          "type": "red",
+          "textHTML": "Meeting guidance needs H2 revenue <span class=\"val-dn\">−17.1%</span> and H2 EPS <span class=\"val-dn\">−24.7%</span>, implying a <span class=\"val-dn\">c.40%</span> Management-led revenue decline that the RNS never quantifies at all",
+          "textPlain": "Meeting guidance needs H2 revenue −17.1% and H2 EPS −24.7%, implying a c.40% Management-led revenue decline that the RNS never quantifies at all"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "£4.2bn book, +27%",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+2–5%",
+          "sub": "rebids concluded",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "£1,038m named cons",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "−9% adj EPS to 25.26p",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "46.8",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "45.0",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "-3.8%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "502",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-MER\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,26.09090909090909 L82.66666666666666,40 L161.33333333333331,21.454545454545457 L240,12.18181818181818 L318.66666666666663,12.18181818181818 L397.33333333333337,12.18181818181818 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,26.09090909090909 L82.66666666666666,40 L161.33333333333331,21.454545454545457 L240,12.18181818181818 L318.66666666666663,12.18181818181818 L397.33333333333337,12.18181818181818 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,33.34782608695654 L82.66666666666666,22.630434782608692 L161.33333333333331,22.630434782608692 L240,6 L318.66666666666663,40 L397.33333333333337,40 L476,40 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,33.34782608695654 L82.66666666666666,22.630434782608692 L161.33333333333331,22.630434782608692 L240,6 L318.66666666666663,40 L397.33333333333337,40 L476,40 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"22.630434782608692\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  46.8p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  45p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-MER\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+4.4pp⚠",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+8.7pp⚠",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.198Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 46.8,
+          "price": 489
+        },
+        {
+          "d": "Sep25",
+          "eps": 49.7,
+          "price": 480
+        },
+        {
+          "d": "Nov25",
+          "eps": 49.7,
+          "price": 492
+        },
+        {
+          "d": "Jan26",
+          "eps": 54.2,
+          "price": 498
+        },
+        {
+          "d": "Mar26",
+          "eps": 45,
+          "price": 498
+        },
+        {
+          "d": "May26",
+          "eps": 45,
+          "price": 498
+        },
+        {
+          "d": "Jul26",
+          "eps": 45,
+          "price": 502
+        }
+      ],
+      "entryPrice": 431
+    },
+    {
+      "id": "PSN_2026_08_06",
+      "ticker": "PSN",
+      "score": 48,
+      "company": "Persimmon PLC",
+      "verdict": "CAUTIOUS",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FTSE 100",
+      "signals": [
+        {
+          "pill": "VOLUMES",
+          "type": "green",
+          "textHTML": "New home completions rose <span class=\"val-up\">+13% to 5,189</span>, total group revenue <span class=\"val-up\">+15% to £1.73bn</span>; H1 tracks at <span class=\"val-up\">45.0%</span> of the FY consensus vs a <span class=\"val-fl\">41.3% seasonal norm</span>",
+          "textPlain": "New home completions rose +13% to 5,189, total group revenue +15% to £1.73bn; H1 tracks at 45.0% of the FY consensus vs a 41.3% seasonal norm"
+        },
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "Full-year completions guided to <span class=\"val-up\">around 12,500</span>, the upper end and <span class=\"val-up\">+2.1%</span> above the 12,242 company consensus; forward order book <span class=\"val-up\">£1.31bn, +5%</span> year on year",
+          "textPlain": "Full-year completions guided to around 12,500, the upper end and +2.1% above the 12,242 company consensus; forward order book £1.31bn, +5% year on year"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "red",
+          "textHTML": "Underlying housing gross margin fell <span class=\"val-dn\">210bps to 18.0%</span>; revenue grew <span class=\"val-up\">15%</span> but gross profit rose only <span class=\"val-dn\">1.8%</span> — almost no leverage revenue growth without margin.",
+          "textPlain": "Underlying housing gross margin fell 210bps to 18.0%; revenue grew 15% but gross profit rose only 1.8% — almost no leverage revenue growth without margin."
+        },
+        {
+          "pill": "FY27 COSTS",
+          "type": "red",
+          "textHTML": "Management quantifies build cost inflation of <span class=\"val-dn\">£40–50m</span> over 18 months, only <span class=\"val-fl\">half</span> currently mitigated; may not fully offset the 2027 impact",
+          "textPlain": "Management quantifies build cost inflation of £40–50m over 18 months, only half currently mitigated; may not fully offset the 2027 impact"
+        },
+        {
+          "pill": "TRADING",
+          "type": "amber",
+          "textHTML": "Headline net private sales rate rose <span class=\"val-up\">+6% to 0.72</span>, but is bulk-driven; excluding bulk it fell to <span class=\"val-dn\">0.59 from 0.61</span>, July enquiries softened vs 0.61 prior year rate.",
+          "textPlain": "Headline net private sales rate rose +6% to 0.72, but is bulk-driven; excluding bulk it fell to 0.59 from 0.61, July enquiries softened vs 0.61 prior year rate."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "+3.7pp H1 rev dev",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−4–9%",
+          "sub": "12,500 vs 12,242 cons",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+1–3%",
+          "sub": "18.0% gross mgn, −210bp",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£40–50m FY27 cost",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "95.1",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "100.2",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+5.4%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "1324",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-PSN\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,15.901754385964914 L82.66666666666666,19.957894736842107 L161.33333333333331,21.150877192982456 L240,13.277192982456139 L318.66666666666663,6 L397.33333333333337,16.975438596491227 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,15.901754385964914 L82.66666666666666,19.957894736842107 L161.33333333333331,21.150877192982456 L240,13.277192982456139 L318.66666666666663,6 L397.33333333333337,16.975438596491227 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,39.595238095238116 L82.66666666666666,39.19047619047618 L161.33333333333331,38.7857142857143 L240,40 L318.66666666666663,6 L397.33333333333337,13.285714285714327 L476,18.952380952380956 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,39.595238095238116 L82.66666666666666,39.19047619047618 L161.33333333333331,38.7857142857143 L240,40 L318.66666666666663,6 L397.33333333333337,13.285714285714327 L476,18.952380952380956 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"39.19047619047618\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"38.7857142857143\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"13.285714285714327\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"18.952380952380956\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"18.952380952380956\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  95.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  100.2p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-PSN\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+3.7pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "−1.9pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.198Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 95.1,
+          "price": 1526
+        },
+        {
+          "d": "Sep25",
+          "eps": 95.2,
+          "price": 1492
+        },
+        {
+          "d": "Nov25",
+          "eps": 95.3,
+          "price": 1482
+        },
+        {
+          "d": "Jan26",
+          "eps": 95,
+          "price": 1548
+        },
+        {
+          "d": "Mar26",
+          "eps": 103.4,
+          "price": 1609
+        },
+        {
+          "d": "May26",
+          "eps": 101.6,
+          "price": 1517
+        },
+        {
+          "d": "Jul26",
+          "eps": 100.2,
+          "price": 1324
+        }
+      ],
+      "entryPrice": 10.52
+    },
+    {
+      "id": "WPP_2026_08_06",
+      "ticker": "WPP",
+      "score": 42,
+      "company": "WPP plc",
+      "verdict": "CAUTIOUS",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 250",
+      "signals": [
+        {
+          "pill": "EPS",
+          "type": "red",
+          "textHTML": "Headline diluted EPS fell <span class=\"val-dn\">−24.5% to 15.1p</span> in H1; H1 tracks at only <span class=\"val-dn\">29.0%</span> of the FY consensus vs a <span class=\"val-fl\">34.0% seasonal norm</span>, a clear SELL SIGNAL deviation",
+          "textPlain": "Headline diluted EPS fell −24.5% to 15.1p in H1; H1 tracks at only 29.0% of the FY consensus vs a 34.0% seasonal norm, a clear SELL SIGNAL deviation"
+        },
+        {
+          "pill": "PROFIT WARN",
+          "type": "red",
+          "textHTML": "The feasibility gate fired on <span class=\"val-dn\">3 of 4</span> conditions: H2 must carry <span class=\"val-dn\">71%</span> of FY EPS while margins are guided <span class=\"val-dn\">down up to 200bps</span> plus ND/FCF at 19.7x.",
+          "textPlain": "The feasibility gate fired on 3 of 4 conditions: H2 must carry 71% of FY EPS while margins are guided down up to 200bps plus ND/FCF at 19.7x."
+        },
+        {
+          "pill": "Q2 INFLECTION",
+          "type": "green",
+          "textHTML": "Q2 net revenue improved to <span class=\"val-up\">−2.8% LFL</span> from an H1 rate of <span class=\"val-dn\">−4.7%</span>; top-25 client revenue improved to <span class=\"val-up\">−3.2%</span> from −6.3% Automotive and Healthcare also improved.",
+          "textPlain": "Q2 net revenue improved to −2.8% LFL from an H1 rate of −4.7%; top-25 client revenue improved to −3.2% from −6.3% Automotive and Healthcare also improved."
+        },
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "Full-year headline margin guidance held at <span class=\"val-fl\">12–13%</span>; consensus EBIT of <span class=\"val-fl\">£1,191.1m</span> implies 12.4%, inside the range but sitting at the low end of it",
+          "textPlain": "Full-year headline margin guidance held at 12–13%; consensus EBIT of £1,191.1m implies 12.4%, inside the range but sitting at the low end of it"
+        },
+        {
+          "pill": "REVENUE",
+          "type": "red",
+          "textHTML": "Net revenue fell <span class=\"val-dn\">−4.7% LFL to £4,745m</span>; WPP Media down <span class=\"val-dn\">5.4%</span>, North America down <span class=\"val-dn\">6.0%</span>; legacy account losses still weigh top 25 clients tough comparator.",
+          "textPlain": "Net revenue fell −4.7% LFL to £4,745m; WPP Media down 5.4%, North America down 6.0%; legacy account losses still weigh top 25 clients tough comparator."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "−5.0pp H1 EPS dev",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−2–6%",
+          "sub": "gate 3 of 4 fired",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "Q2 LFL −2.8% vs −4.7%",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "12–13% mgn, low end",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "69.7",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "52.1",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "-25.3%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "310",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-WPP\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L82.66666666666666,11.477777777777778 L161.33333333333331,15.255555555555556 L240,26.022222222222222 L318.66666666666663,38.48888888888889 L397.33333333333337,40 L476,37.544444444444444 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L82.66666666666666,11.477777777777778 L161.33333333333331,15.255555555555556 L240,26.022222222222222 L318.66666666666663,38.48888888888889 L397.33333333333337,40 L476,37.544444444444444 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L82.66666666666666,9.549450549450558 L161.33333333333331,10.670329670329668 L240,21.6923076923077 L318.66666666666663,38.879120879120876 L397.33333333333337,40 L476,38.879120879120876 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L82.66666666666666,9.549450549450558 L161.33333333333331,10.670329670329668 L240,21.6923076923077 L318.66666666666663,38.879120879120876 L397.33333333333337,40 L476,38.879120879120876 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"9.549450549450558\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"10.670329670329668\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"21.6923076923077\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"38.879120879120876\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"38.879120879120876\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"38.879120879120876\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  69.7p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  52.1p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-WPP\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "−5.0pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.200Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 69.7,
+          "price": 477
+        },
+        {
+          "d": "Sep25",
+          "eps": 67.8,
+          "price": 448
+        },
+        {
+          "d": "Nov25",
+          "eps": 67.2,
+          "price": 428
+        },
+        {
+          "d": "Jan26",
+          "eps": 61.3,
+          "price": 371
+        },
+        {
+          "d": "Mar26",
+          "eps": 52.1,
+          "price": 305
+        },
+        {
+          "d": "May26",
+          "eps": 51.5,
+          "price": 297
+        },
+        {
+          "d": "Jul26",
+          "eps": 52.1,
+          "price": 310
+        }
+      ],
+      "entryPrice": 270.5
+    },
+    {
+      "id": "PAGE_2026_08_06",
+      "ticker": "PAGE",
+      "score": 25,
+      "company": "Michael Page plc",
+      "verdict": "NEGATIVE",
+      "date": "2026-08-06",
+      "rnsType": "HALF YEAR RESULTS",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "TAX RESET",
+          "type": "red",
+          "textHTML": "FY26 tax rate guided to <span class=\"val-dn\">41.2%</span>, above the consensus assumption of <span class=\"val-fl\">c.34%</span>; combined with net interest of <span class=\"val-dn\">£6.4m</span>, EPS falls to c.4.05p vs consensus 34% assumption.",
+          "textPlain": "FY26 tax rate guided to 41.2%, above the consensus assumption of c.34%; combined with net interest of £6.4m, EPS falls to c.4.05p vs consensus 34% assumption."
+        },
+        {
+          "pill": "EPS TRACK",
+          "type": "red",
+          "textHTML": "H1 EPS of 1.2p is only <span class=\"val-dn\">23.5%</span> of FY consensus vs a <span class=\"val-fl\">38.3%</span> norm; profit warning feasibility gate fired on <span class=\"val-dn\">2 of 4</span> conditions gate fired on 2 conditions.",
+          "textPlain": "H1 EPS of 1.2p is only 23.5% of FY consensus vs a 38.3% norm; profit warning feasibility gate fired on 2 of 4 conditions gate fired on 2 conditions."
+        },
+        {
+          "pill": "DIVIDEND",
+          "type": "red",
+          "textHTML": "The interim dividend was cut <span class=\"val-dn\">72.8% to 1.46p</span> from 5.36p on trading caution; the FY26 consensus dividend of <span class=\"val-fl\">8.40p</span> now looks structurally unreachable",
+          "textPlain": "The interim dividend was cut 72.8% to 1.46p from 5.36p on trading caution; the FY26 consensus dividend of 8.40p now looks structurally unreachable"
+        },
+        {
+          "pill": "REVENUE",
+          "type": "red",
+          "textHTML": "Revenue rose <span class=\"val-up\">+0.1% to £799.5m</span>, against a consensus needing H2 to fall <span class=\"val-dn\">−10.8%</span>; H1 tracking of <span class=\"val-up\">+1.9pp</span> suggests revenue too low implied H2 needed −10.8%.",
+          "textPlain": "Revenue rose +0.1% to £799.5m, against a consensus needing H2 to fall −10.8%; H1 tracking of +1.9pp suggests revenue too low implied H2 needed −10.8%."
+        },
+        {
+          "pill": "QUALITY",
+          "type": "amber",
+          "textHTML": "H1 profit after tax of <span class=\"val-fl\">£3.8m</span> rests entirely on a <span class=\"val-fl\">£7.5m</span> deferred tax credit; the full-year increase is guided lower, so H2 carries a tax drag",
+          "textPlain": "H1 profit after tax of £3.8m rests entirely on a £7.5m deferred tax credit; the full-year increase is guided lower, so H2 carries a tax drag"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−15–22%",
+          "sub": "41.2% ETR vs 34% cons",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−10–18%",
+          "sub": "−14.8pp H1 EPS dev",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+4–6%",
+          "sub": "DPS −72.8% to 1.46p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+3–5%",
+          "sub": "+0.1% rev, H1 ahead",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "5.1",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "5.1",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+0.0%",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "flat",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "158",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS / PRICE TREND",
+      "sparkSVG": "\n      <svg id=\"spark-PAGE\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L82.66666666666666,6.9659090909090935 L161.33333333333331,10.05681818181818 L240,13.920454545454543 L318.66666666666663,22.227272727272727 L397.33333333333337,36.71590909090909 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L82.66666666666666,6.9659090909090935 L161.33333333333331,10.05681818181818 L240,13.920454545454543 L318.66666666666663,22.227272727272727 L397.33333333333337,36.71590909090909 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,25.125000000000007 L82.66666666666666,34.6875 L161.33333333333331,40 L240,40 L318.66666666666663,6 L397.33333333333337,23.000000000000004 L476,25.125000000000007 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,25.125000000000007 L82.66666666666666,34.6875 L161.33333333333331,40 L240,40 L318.66666666666663,6 L397.33333333333337,23.000000000000004 L476,25.125000000000007 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"34.6875\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"23.000000000000004\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"25.125000000000007\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"25.125000000000007\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  5.1p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  5.1p</text></svg>\n      <div class=\"spark-tt\" id=\"tt-PAGE\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+1.9pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "−14.8pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-06T08:00:22.201Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 5.1,
+          "price": 334
+        },
+        {
+          "d": "Sep25",
+          "eps": 4.2,
+          "price": 329
+        },
+        {
+          "d": "Nov25",
+          "eps": 3.7,
+          "price": 313
+        },
+        {
+          "d": "Jan26",
+          "eps": 3.7,
+          "price": 293
+        },
+        {
+          "d": "Mar26",
+          "eps": 6.9,
+          "price": 250
+        },
+        {
+          "d": "May26",
+          "eps": 5.3,
+          "price": 175
+        },
+        {
+          "d": "Jul26",
+          "eps": 5.1,
+          "price": 158
+        }
+      ],
+      "entryPrice": 149.05
+    },
+    {
+      "id": "DGE_2026_08_06",
+      "ticker": "DGE",
+      "score": 78,
+      "company": "Diageo plc",
+      "verdict": "CONSTRUCTIVE",
+      "date": "2026-08-06",
+      "rnsType": "FULL YEAR RESULTS",
+      "mode": "Q2",
+      "index": "FT 30, FTSE 100",
+      "signals": [
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "Capital Markets Day guides FY27 organic operating profit <span class=\"val-up\">up low-to-mid single digit</span>, with <span class=\"val-up\">c.$377m</span> of the $1bn savings programme landing in the year",
+          "textPlain": "Capital Markets Day guides FY27 organic operating profit up low-to-mid single digit, with c.$377m of the $1bn savings programme landing in the year"
+        },
+        {
+          "pill": "EPS BEAT",
+          "type": "green",
+          "textHTML": "Adjusted EPS of <span class=\"val-up\">165.3c, up 0.7%</span>, ends three consecutive years of decline and beats the <span class=\"val-fl\">160.7c</span> consensus by <span class=\"val-up\">2.9%</span>; the second half alone grew <span class=\"val-up\">5.4%</span>",
+          "textPlain": "Adjusted EPS of 165.3c, up 0.7%, ends three consecutive years of decline and beats the 160.7c consensus by 2.9%; the second half alone grew 5.4%"
+        },
+        {
+          "pill": "TAX",
+          "type": "green",
+          "textHTML": "The adjusted effective tax rate fell to <span class=\"val-up\">c.24.2%</span> from 26.1%, and the reported rate to <span class=\"val-up\">23.6% from 28.2%</span> — a genuine tailwind into FY27 rather than a risk",
+          "textPlain": "The adjusted effective tax rate fell to c.24.2% from 26.1%, and the reported rate to 23.6% from 28.2% — a genuine tailwind into FY27 rather than a risk"
+        },
+        {
+          "pill": "MARGIN QUALITY",
+          "type": "red",
+          "textHTML": "The <span class=\"val-fl\">+116bps</span> organic operating margin gain came entirely from cutting marketing <span class=\"val-dn\">13.1%, or $479m</span>, while gross margin fell <span class=\"val-dn\">90bps</span> to 59.6%",
+          "textPlain": "The +116bps organic operating margin gain came entirely from cutting marketing 13.1%, or $479m, while gross margin fell 90bps to 59.6%"
+        },
+        {
+          "pill": "NORTH AMERICA",
+          "type": "red",
+          "textHTML": "At <span class=\"val-fl\">37%</span> of net sales and <span class=\"val-fl\">43%</span> of group operating profit, organic net sales fell <span class=\"val-dn\">8.4%</span> and operating profit <span class=\"val-dn\">10.0%</span>; guided down again in FY27",
+          "textPlain": "At 37% of net sales and 43% of group operating profit, organic net sales fell 8.4% and operating profit 10.0%; guided down again in FY27"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+2–4%",
+          "sub": "+2–4% vs 160.7c cons",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+5–10%",
+          "sub": "+5–10% vs 159.0c",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "organic ~flat guided",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "c.$18.8–19.3bn rptd",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "Start",
+          "val": "160.4c",
+          "style": ""
+        },
+        {
+          "lbl": "Now",
+          "val": "160.7c",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+0.2%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "falling",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "Actual",
+          "val": "165.3c",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "−20.8%",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "EPS CONSENSUS / TARGET PRICE",
+      "sparkSVG": "\n      <svg id=\"spark-DGE\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L82.66666666666666,10.689655172413794 L161.33333333333331,11.517241379310345 L240,27.724137931034484 L318.66666666666663,35.6551724137931 L397.33333333333337,39.03448275862069 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L82.66666666666666,10.689655172413794 L161.33333333333331,11.517241379310345 L240,27.724137931034484 L318.66666666666663,35.6551724137931 L397.33333333333337,39.03448275862069 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,40 L82.66666666666666,6 L161.33333333333331,10.857142857142868 L240,29.244897959183703 L318.66666666666663,38.612244897959165 L397.33333333333337,37.57142857142861 L476,37.57142857142861 L476,40Z\" fill=\"#00d97e\" fill-opacity=\"0.18\"></path><path d=\"M4,40 L82.66666666666666,6 L161.33333333333331,10.857142857142868 L240,29.244897959183703 L318.66666666666663,38.612244897959165 L397.33333333333337,37.57142857142861 L476,37.57142857142861 \" fill=\"none\" stroke=\"#00d97e\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"82.66666666666666\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"10.857142857142868\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"240\" cy=\"29.244897959183703\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"38.612244897959165\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"397.33333333333337\" cy=\"37.57142857142861\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"37.57142857142861\" r=\"3.5\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul25  160c</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">Jul26  160.7c</text></svg>\n      <div class=\"spark-tt\" id=\"tt-DGE\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-06T10:51:41.973Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "Jul25",
+          "eps": 160,
+          "price": 2413
+        },
+        {
+          "d": "Sep25",
+          "eps": 169.8,
+          "price": 2345
+        },
+        {
+          "d": "Nov25",
+          "eps": 168.4,
+          "price": 2333
+        },
+        {
+          "d": "Jan26",
+          "eps": 163.1,
+          "price": 2098
+        },
+        {
+          "d": "Mar26",
+          "eps": 160.4,
+          "price": 1983
+        },
+        {
+          "d": "May26",
+          "eps": 160.7,
+          "price": 1934
+        },
+        {
+          "d": "Jul26",
+          "eps": 160.7,
+          "price": 1920
+        }
+      ],
+      "entryPrice": 15.2
     }
   ],
   "brokerChanges": [
