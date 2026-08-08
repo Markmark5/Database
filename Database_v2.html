@@ -1148,6 +1148,34 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#8a8a9e;white-space:nowrap}
 .drift-strip .dgo{color:#4a9eff;font-size:10px;white-space:nowrap;margin-left:4px}
 </style>
+<style>
+#h1calc-float{position:fixed;top:90px;left:60px;z-index:900;width:430px;max-width:calc(100vw - 24px);
+  max-height:calc(100vh - 120px);display:none;flex-direction:column;
+  background:var(--surface);border:1px solid var(--border-bright);border-radius:6px;
+  box-shadow:0 10px 44px #000000cc;overflow:hidden}
+#h1calc-float.on{display:flex}
+#h1calc-floathdr{display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:move;user-select:none;
+  background:var(--surface2);border-bottom:1px solid var(--border);flex:none}
+#h1calc-floathdr .ttl{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--text-primary)}
+#h1calc-floathdr .x{margin-left:auto;cursor:pointer;color:var(--text-dim);font-size:14px;line-height:1;padding:0 3px}
+#h1calc-floathdr .x:hover{color:var(--text-primary)}
+#h1calc-floatbody{overflow:auto;flex:1}
+#h1calc-tickrow{display:none;gap:6px;align-items:center;padding:9px 14px;
+  border-bottom:1px solid var(--border);background:var(--surface2)}
+#h1calc-float #h1calc-tickrow{display:flex}
+#h1calc-tickrow input{font-family:var(--mono);font-size:11px;text-transform:uppercase;width:120px;
+  padding:5px 9px;border-radius:3px;background:var(--surface);color:var(--text-primary);
+  border:1px solid var(--border);outline:none}
+#h1calc-tickrow button{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:6px 12px;border-radius:3px;cursor:pointer;
+  background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid)}
+#h1calc-tickrow .hint{font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto}
+#h1calc-popbtn{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;padding:3px 9px;border-radius:3px;cursor:pointer;
+  background:#ffffff08;color:var(--text-secondary);border:1px solid var(--border)}
+#h1calc-popbtn:hover{color:var(--text-primary);border-color:var(--border-bright)}
+</style>
 </head>
 <body>
 
@@ -1699,6 +1727,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
               <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>
               <span style="font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-primary);">H1 Tracking % Calculator</span>
               <span id="h1calc-src" style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;">enter a ticker &amp; extract first</span>
+              <button id="h1calc-popbtn" onclick="h1calcPop()" title="Float this panel">&#8599; Pop out</button>
             </div>
             <div style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);margin-bottom:10px;">Read the RNS → type the reported figure → Calculate. FY forecast pulled from data block; type FY to override.</div>
             <div style="display:grid;grid-template-columns:70px 1fr 1fr 26px;gap:6px;align-items:center;font-family:var(--mono);font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;">
@@ -7617,6 +7646,65 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         .observe(document.body,{childList:true,subtree:true});
     })
     .catch(function(){});
+})();
+</script>
+<div id="h1calc-float">
+  <div id="h1calc-floathdr">
+    <span class="ttl">H1 Tracking % Calculator</span>
+    <span class="x" onclick="h1calcDock()" title="Close and return to Extractor">&#10005;</span>
+  </div>
+  <div id="h1calc-tickrow">
+    <input id="h1calc-ticker" type="text" placeholder="Ticker" maxlength="10"
+           onkeydown="if(event.key==='Enter')h1calcFloatRun()">
+    <button onclick="h1calcFloatRun()">Calculate</button>
+    <span class="hint">uses loaded CSVs</span>
+  </div>
+  <div id="h1calc-floatbody"></div>
+</div>
+<script>
+(function(){
+  var HOME=null,NEXT=null;
+  window.h1calcPop=function(){
+    var w=document.getElementById('h1calc-wrap'),f=document.getElementById('h1calc-float');
+    if(!w||!f||f.classList.contains('on'))return;
+    HOME=w.parentNode; NEXT=w.nextSibling;
+    w.style.border='none'; w.style.background='transparent';
+    document.getElementById('h1calc-floatbody').appendChild(w);
+    var t=document.getElementById('h1calc-ticker');
+    var cur=(document.getElementById('ex-tickerInput')||{}).value||'';
+    t.value=cur.split(/[\s,\n]+/)[0]||'';
+    f.classList.add('on'); t.focus();
+    var b=document.getElementById('h1calc-popbtn'); if(b)b.style.display='none';
+  };
+  window.h1calcDock=function(){
+    var w=document.getElementById('h1calc-wrap'),f=document.getElementById('h1calc-float');
+    if(!w||!f)return;
+    w.style.border=''; w.style.background='';
+    if(HOME){NEXT?HOME.insertBefore(w,NEXT):HOME.appendChild(w);}
+    f.classList.remove('on');
+    var b=document.getElementById('h1calc-popbtn'); if(b)b.style.display='';
+  };
+  window.h1calcFloatRun=function(){
+    var t=(document.getElementById('h1calc-ticker').value||'').trim().toUpperCase();
+    var ex=document.getElementById('ex-tickerInput');
+    if(t&&ex)ex.value=t;
+    if(typeof h1calcRun==='function')h1calcRun();
+  };
+  /* drag by the header */
+  var hdr=document.getElementById('h1calc-floathdr'),box=document.getElementById('h1calc-float');
+  var sx,sy,ox,oy,drag=false;
+  hdr.addEventListener('mousedown',function(e){
+    if(e.target.className==='x')return;
+    drag=true; sx=e.clientX; sy=e.clientY;
+    var r=box.getBoundingClientRect(); ox=r.left; oy=r.top;
+    box.style.right='auto'; box.style.bottom='auto'; e.preventDefault();
+  });
+  document.addEventListener('mousemove',function(e){
+    if(!drag)return;
+    box.style.left=Math.max(0,ox+e.clientX-sx)+'px';
+    box.style.top=Math.max(0,oy+e.clientY-sy)+'px';
+  });
+  document.addEventListener('mouseup',function(){drag=false;});
 })();
 </script>
 </body>
