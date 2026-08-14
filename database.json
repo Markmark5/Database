@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-08-13T13:26:34.042Z",
-    "savedAtLabel": "13 Aug 2026 14:26",
+    "savedAt": "2026-08-14T06:52:11.931Z",
+    "savedAtLabel": "14 Aug 2026 07:52",
     "source": "github-sync"
   },
   "scorecards": [
@@ -124660,6 +124660,172 @@
         }
       ],
       "entryPrice": 1.35
+    },
+    {
+      "id": "WKS_2026_08_14",
+      "ticker": "WKS",
+      "score": 16,
+      "company": "Winking Studios Ltd",
+      "verdict": "Downgrades",
+      "date": "2026-08-14",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM ALL-SHARE",
+      "signals": [
+        {
+          "pill": "⛔ Profit Warn",
+          "type": "red",
+          "textHTML": "Zeus cuts the FY26 Adj EBITDA estimate to a <span class=\"val-dn\">$0.6m loss</span> from <span class=\"val-fl\">$2.9m profit</span> and Adj PBT to <span class=\"val-dn\">−$3.6m</span> from −$0.2m — a house broker moving hard against its own incentive.",
+          "textPlain": "Zeus cuts the FY26 Adj EBITDA estimate to a $0.6m loss from $2.9m profit and Adj PBT to −$3.6m from −$0.2m — a house broker moving hard against its own incentive."
+        },
+        {
+          "pill": "Revenue",
+          "type": "green",
+          "textHTML": "Revenue <span class=\"val-up\">+21.1%</span> to $23.5m and Art Outsourcing <span class=\"val-up\">+25.4%</span> to $19.9m, but organic growth was only <span class=\"val-fl\">+8.9%</span> — the balance came from Mineloader and Vertic annualising in.",
+          "textPlain": "Revenue +21.1% to $23.5m and Art Outsourcing +25.4% to $19.9m, but organic growth was only +8.9% — the balance came from Mineloader and Vertic annualising in."
+        },
+        {
+          "pill": "Rev Cut",
+          "type": "red",
+          "textHTML": "FY26 revenue cut <span class=\"val-dn\">14.2%</span> to $48.0m from $56.0m, and the implied H2 of $24.5m now sits <span class=\"val-dn\">6.1%</span> below 2H25, after H1 tracked <span class=\"val-dn\">−4.2pp</span> under the 3yr seasonal norm.",
+          "textPlain": "FY26 revenue cut 14.2% to $48.0m from $56.0m, and the implied H2 of $24.5m now sits 6.1% below 2H25, after H1 tracked −4.2pp under the 3yr seasonal norm."
+        },
+        {
+          "pill": "FY27 Risk",
+          "type": "red",
+          "textHTML": "FY27 and FY28 estimates left untouched, so the implied FY27 revenue hurdle jumps from <span class=\"val-fl\">+14.3%</span> to <span class=\"val-dn\">+33.4%</span> off the cut base, with Ampera contract awards still unwon.",
+          "textPlain": "FY27 and FY28 estimates left untouched, so the implied FY27 revenue hurdle jumps from +14.3% to +33.4% off the cut base, with Ampera contract awards still unwon."
+        },
+        {
+          "pill": "Cash",
+          "type": "amber",
+          "textHTML": "Net cash estimates cut <span class=\"val-dn\">29%</span> to $19.2m for FY26 and by <span class=\"val-dn\">~26%</span> across FY27–28; a $4.9m operating cash outflow is now guided, and no interim dividend was declared.",
+          "textPlain": "Net cash estimates cut 29% to $19.2m for FY26 and by ~26% across FY27–28; a $4.9m operating cash outflow is now guided, and no interim dividend was declared."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "Cut",
+          "sub": "0c→-0.7c adj",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "Hold",
+          "sub": "held 0.3c adj",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "Cut",
+          "sub": "$56m→$48m",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "Hold",
+          "sub": "held $64m",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "FY23A",
+          "val": "0.8c",
+          "style": "color:var(--text-secondary);"
+        },
+        {
+          "lbl": "FY25A",
+          "val": "0.7c",
+          "style": "color:var(--text-secondary);"
+        },
+        {
+          "lbl": "FY26E",
+          "val": "−0.7c",
+          "style": "color:var(--red);"
+        },
+        {
+          "lbl": "FY27E",
+          "val": "0.3c",
+          "style": "color:var(--amber);"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−14%",
+          "style": "color:var(--red);"
+        },
+        {
+          "lbl": "Zeus",
+          "val": "Corp.",
+          "style": "color:var(--text-dim);"
+        }
+      ],
+      "sparkLabel": "EPS FY Trend (Zeus adj.)",
+      "sparkSVG": "\n      <svg id=\"spark-WKS\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" xmlns=\"http://www.w3.org/2000/svg\"></svg>\n      <div class=\"spark-tt\" id=\"tt-WKS\"></div>\n    ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✕",
+          "dev": "−4.2pp",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-14T06:51:54.848Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "FY23A",
+          "eps": 0.8,
+          "price": 14
+        },
+        {
+          "d": "FY24A",
+          "eps": 0.7,
+          "price": 14
+        },
+        {
+          "d": "FY25A",
+          "eps": 0.7,
+          "price": 15
+        },
+        {
+          "d": "FY26E",
+          "eps": -0.7,
+          "price": 14
+        },
+        {
+          "d": "FY27E",
+          "eps": 0.3,
+          "price": 14
+        },
+        {
+          "d": "FY28E",
+          "eps": 0.9,
+          "price": 14
+        }
+      ],
+      "entryPrice": 14
     }
   ],
   "brokerChanges": [
