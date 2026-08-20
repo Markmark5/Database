@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-08-19T06:46:34.699Z",
-    "savedAtLabel": "19 Aug 2026 07:46",
+    "savedAt": "2026-08-20T09:56:04.041Z",
+    "savedAtLabel": "20 Aug 2026 10:56",
     "source": "github-sync"
   },
   "scorecards": [
@@ -127071,6 +127071,863 @@
         }
       ],
       "entryPrice": 45.5
+    },
+    {
+      "id": "HAS_2026_08_20",
+      "ticker": "HAS",
+      "score": 71,
+      "company": "Hays PLC",
+      "verdict": "Constructive · modest upgrades",
+      "date": "2026-08-20",
+      "rnsType": "Full Year Results",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "FY26 pre-exc EPS <span class=\"val-up\">1.21p</span> beat 1.1p cons <span class=\"val-up\">+10.0%</span>; PBT <span class=\"val-up\">GBP35.1m</span> vs 32.6m, op profit <span class=\"val-up\">GBP48.6m</span> +7% and ahead of its own Q4 guide - first beat after 15 straight cuts",
+          "textPlain": "FY26 pre-exc EPS 1.21p beat 1.1p cons +10.0%; PBT GBP35.1m vs 32.6m, op profit GBP48.6m +7% and ahead of its own Q4 guide - first beat after 15 straight cuts"
+        },
+        {
+          "pill": "H2 INFLECT",
+          "type": "green",
+          "textHTML": "H2 EPS <span class=\"val-up\">+42.0%</span> YoY (0.71p vs 0.50p) and H2 PBT <span class=\"val-up\">+27.6%</span> - first positive half since FY23; conversion rate <span class=\"val-up\">5.4%</span> vs 4.7%, 11th straight quarter of productivity growth",
+          "textPlain": "H2 EPS +42.0% YoY (0.71p vs 0.50p) and H2 PBT +27.6% - first positive half since FY23; conversion rate 5.4% vs 4.7%, 11th straight quarter of productivity growth"
+        },
+        {
+          "pill": "COST OUT",
+          "type": "green",
+          "textHTML": "Targets a further <span class=\"val-up\">c.GBP50m</span> of FY27 structural savings on top of c.GBP50m banked <span class=\"val-up\">3yrs early</span>; FY24 and FY25 targets both beaten ahead of plan, but savings part-reinvested",
+          "textPlain": "Targets a further c.GBP50m of FY27 structural savings on top of c.GBP50m banked 3yrs early; FY24 and FY25 targets both beaten ahead of plan, but savings part-reinvested"
+        },
+        {
+          "pill": "TP GAP",
+          "type": "amber",
+          "textHTML": "Consensus TP of <span class=\"val-dn\">48p</span> sits <span class=\"val-fl\">37% below</span> the 65.6p close and has already run <span class=\"val-up\">+17%</span> in eight weeks - TP upgrades of <span class=\"val-up\">15-45%</span> now unavoidable and rating upgrades are live",
+          "textPlain": "Consensus TP of 48p sits 37% below the 65.6p close and has already run +17% in eight weeks - TP upgrades of 15-45% now unavoidable and rating upgrades are live"
+        },
+        {
+          "pill": "TOP LINE",
+          "type": "red",
+          "textHTML": "Net fees <span class=\"val-dn\">-8%</span> LFL and Permanent <span class=\"val-dn\">-12%</span>; ETR of <span class=\"val-dn\">45.0%</span> vs 35.1% cost about 0.22p of EPS; FY27 capex steps up to <span class=\"val-fl\">GBP30-35m</span> with further exceptionals to come",
+          "textPlain": "Net fees -8% LFL and Permanent -12%; ETR of 45.0% vs 35.1% cost about 0.22p of EPS; FY27 capex steps up to GBP30-35m with further exceptionals to come"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+9-10%",
+          "sub": "1.1p->1.21p actual",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+3-7%",
+          "sub": "1.9p->1.96-2.03p",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+5-6%",
+          "sub": "GBP6.06bn->GBP6.42bn",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+1-4%",
+          "sub": "5.89bn->5.95-6.1bn",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "1.9p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "1.1p",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "Net D",
+          "val": "-42.1%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FLAT",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev D",
+          "val": "-4.1%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "TP D",
+          "val": "-47.3%",
+          "style": "color:#ff4757"
+        }
+      ],
+      "sparkLabel": "EPS fc / TP · 15mth",
+      "sparkSVG": "<svg id=\"spark-HAS\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L27.6,8.719999999999999 L51.2,11.440000000000001 L74.8,11.440000000000001 L98.4,12.120000000000001 L122,14.16 L145.6,14.16 L169.2,16.88 L192.8,16.88 L216.4,18.92 L240,18.92 L263.6,23.68 L287.2,24.36 L310.8,27.08 L334.4,31.16 L358,35.92 L381.6,39.32 L405.2,40 L428.8,37.96 L452.4,35.24 L476,35.24 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L27.6,8.719999999999999 L51.2,11.440000000000001 L74.8,11.440000000000001 L98.4,12.120000000000001 L122,14.16 L145.6,14.16 L169.2,16.88 L192.8,16.88 L216.4,18.92 L240,18.92 L263.6,23.68 L287.2,24.36 L310.8,27.08 L334.4,31.16 L358,35.92 L381.6,39.32 L405.2,40 L428.8,37.96 L452.4,35.24 L476,35.24 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,6 L27.6,14.5 L51.2,18.749999999999996 L74.8,23 L98.4,27.250000000000007 L122,18.749999999999996 L145.6,23 L169.2,23 L192.8,27.250000000000007 L216.4,27.250000000000007 L240,27.250000000000007 L263.6,31.5 L287.2,35.75000000000001 L310.8,35.75000000000001 L334.4,40 L358,40 L381.6,40 L405.2,40 L428.8,40 L452.4,40 L476,40 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,6 L27.6,14.5 L51.2,18.749999999999996 L74.8,23 L98.4,27.250000000000007 L122,18.749999999999996 L145.6,23 L169.2,23 L192.8,27.250000000000007 L216.4,27.250000000000007 L240,27.250000000000007 L263.6,31.5 L287.2,35.75000000000001 L310.8,35.75000000000001 L334.4,40 L358,40 L381.6,40 L405.2,40 L428.8,40 L452.4,40 L476,40 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"27.6\" cy=\"14.5\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"51.2\" cy=\"18.749999999999996\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"74.8\" cy=\"23\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"98.4\" cy=\"27.250000000000007\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"122\" cy=\"18.749999999999996\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"145.6\" cy=\"23\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"192.8\" cy=\"27.250000000000007\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"263.6\" cy=\"31.5\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"287.2\" cy=\"35.75000000000001\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"334.4\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  1.9p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">14 Aug 26  1.1p</text></svg><div class=\"spark-tt\" id=\"tt-HAS\" style=\"display: none; left: 30.9617px;\"><strong>05 Jul 25</strong><br>EPS: 1.6p · Price: 83p ▼ cut</div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-20T07:00:20.885Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 1.9,
+          "price": 91
+        },
+        {
+          "d": "22 Jun 25",
+          "eps": 1.7,
+          "price": 87
+        },
+        {
+          "d": "05 Jul 25",
+          "eps": 1.6,
+          "price": 83
+        },
+        {
+          "d": "12 Jul 25",
+          "eps": 1.5,
+          "price": 83
+        },
+        {
+          "d": "05 Aug 25",
+          "eps": 1.4,
+          "price": 82
+        },
+        {
+          "d": "30 Aug 25",
+          "eps": 1.6,
+          "price": 79
+        },
+        {
+          "d": "13 Sep 25",
+          "eps": 1.5,
+          "price": 79
+        },
+        {
+          "d": "18 Oct 25",
+          "eps": 1.5,
+          "price": 75
+        },
+        {
+          "d": "15 Nov 25",
+          "eps": 1.4,
+          "price": 75
+        },
+        {
+          "d": "13 Dec 25",
+          "eps": 1.4,
+          "price": 72
+        },
+        {
+          "d": "10 Jan 26",
+          "eps": 1.4,
+          "price": 72
+        },
+        {
+          "d": "17 Jan 26",
+          "eps": 1.3,
+          "price": 65
+        },
+        {
+          "d": "07 Mar 26",
+          "eps": 1.2,
+          "price": 64
+        },
+        {
+          "d": "04 Apr 26",
+          "eps": 1.2,
+          "price": 60
+        },
+        {
+          "d": "18 Apr 26",
+          "eps": 1.1,
+          "price": 54
+        },
+        {
+          "d": "08 May 26",
+          "eps": 1.1,
+          "price": 47
+        },
+        {
+          "d": "23 May 26",
+          "eps": 1.1,
+          "price": 42
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 1.1,
+          "price": 41
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 1.1,
+          "price": 44
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 1.1,
+          "price": 48
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 1.1,
+          "price": 48
+        }
+      ],
+      "entryPrice": 35.82
+    },
+    {
+      "id": "CAPD_2026_08_20",
+      "ticker": "CAPD",
+      "score": 52,
+      "company": "Capital Ltd",
+      "verdict": "Cautious · EPS cut on tax",
+      "date": "2026-08-20",
+      "rnsType": "Half Year Results",
+      "mode": "Q4",
+      "index": "FTSE Small Cap",
+      "signals": [
+        {
+          "pill": "EPS CUT",
+          "type": "red",
+          "textHTML": "House broker has cut FY26 adj FD EPS <span class=\"val-dn\">-8.2%</span> (15.3c to 14.1c) and DPS <span class=\"val-dn\">-8.2%</span> on tax alone; PBT was held flat at $57.5m as the H1 effective tax rate hit <span class=\"val-dn\">42.8%</span>",
+          "textPlain": "House broker has cut FY26 adj FD EPS -8.2% (15.3c to 14.1c) and DPS -8.2% on tax alone; PBT was held flat at $57.5m as the H1 effective tax rate hit 42.8%"
+        },
+        {
+          "pill": "LBG SPLIT",
+          "type": "red",
+          "textHTML": "LBG divergence: revenue guidance <span class=\"val-up\">raised</span> to $430-450m yet earnings <span class=\"val-dn\">cut</span> - the raise converted to zero incremental profit, so Phase 2B is rebased to <span class=\"val-fl\">Cautious</span>",
+          "textPlain": "LBG divergence: revenue guidance raised to $430-450m yet earnings cut - the raise converted to zero incremental profit, so Phase 2B is rebased to Cautious"
+        },
+        {
+          "pill": "AFRICA",
+          "type": "red",
+          "textHTML": "Africa segment profit <span class=\"val-fl\">flat at $37.8m</span> on revenue <span class=\"val-up\">+13.0%</span>; divisional margin compressed <span class=\"val-dn\">32.7% to 28.9%</span> - the largest segment grew revenue for no extra profit",
+          "textPlain": "Africa segment profit flat at $37.8m on revenue +13.0%; divisional margin compressed 32.7% to 28.9% - the largest segment grew revenue for no extra profit"
+        },
+        {
+          "pill": "MARGIN",
+          "type": "green",
+          "textHTML": "H1 revenue <span class=\"val-up\">+37.6%</span> and adj EBITDA <span class=\"val-up\">+70.4%</span> with margin at <span class=\"val-up\">25.0%</span> vs 20.2%; the MSALABS division margin hit <span class=\"val-up\">16.6%</span> vs 4.8% as lab utilisation moved 45% to 54%",
+          "textPlain": "H1 revenue +37.6% and adj EBITDA +70.4% with margin at 25.0% vs 20.2%; the MSALABS division margin hit 16.6% vs 4.8% as lab utilisation moved 45% to 54%"
+        },
+        {
+          "pill": "H2 RISK",
+          "type": "amber",
+          "textHTML": "H2 revenue implies just <span class=\"val-fl\">+1% sequential</span> growth with Maaden mobilisation drag; FY26 FCFe yield <span class=\"val-dn\">-4.4%</span>; Reko Diq review runs to mid-2027 on 15-16% of FY27 sales",
+          "textPlain": "H2 revenue implies just +1% sequential growth with Maaden mobilisation drag; FY26 FCFe yield -4.4%; Reko Diq review runs to mid-2027 on 15-16% of FY27 sales"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "14.2c->14.1c hse",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "18.7c->19.6c PLe",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+2-4%",
+          "sub": "$430m->$438-447m",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+5-8%",
+          "sub": "$457m->$480-493m",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "10.8c",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "14.2c",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "Net D",
+          "val": "+31.5%",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FLAT",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev D",
+          "val": "+0.2%",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "TP D",
+          "val": "+89.8%",
+          "style": "color:#00d97e"
+        }
+      ],
+      "sparkLabel": "EPS fc / TP · 15mth",
+      "sparkSVG": "<svg id=\"spark-CAPD\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,38.9375 L27.6,40 L51.2,35.395833333333336 L74.8,33.270833333333336 L98.4,29.375 L122,29.375 L145.6,22.645833333333336 L169.2,16.979166666666664 L192.8,12.375 L216.4,11.666666666666664 L240,12.020833333333336 L263.6,9.541666666666664 L287.2,9.1875 L310.8,7.770833333333336 L334.4,7.0625 L358,8.125 L381.6,8.125 L405.2,7.0625 L428.8,6 L452.4,7.416666666666664 L476,7.770833333333336 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,38.9375 L27.6,40 L51.2,35.395833333333336 L74.8,33.270833333333336 L98.4,29.375 L122,29.375 L145.6,22.645833333333336 L169.2,16.979166666666664 L192.8,12.375 L216.4,11.666666666666664 L240,12.020833333333336 L263.6,9.541666666666664 L287.2,9.1875 L310.8,7.770833333333336 L334.4,7.0625 L358,8.125 L381.6,8.125 L405.2,7.0625 L428.8,6 L452.4,7.416666666666664 L476,7.770833333333336 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,18.04166666666666 L27.6,18.04166666666666 L51.2,18.04166666666666 L74.8,33.625 L98.4,36.458333333333336 L122,36.458333333333336 L145.6,40 L169.2,36.8125 L192.8,36.104166666666664 L216.4,37.875 L240,37.875 L263.6,36.458333333333336 L287.2,36.458333333333336 L310.8,36.458333333333336 L334.4,6.354166666666664 L358,6.354166666666664 L381.6,6 L405.2,6 L428.8,6 L452.4,6 L476,6 L476,40Z\" fill=\"#ffb347\" fill-opacity=\"0.18\"></path><path d=\"M4,18.04166666666666 L27.6,18.04166666666666 L51.2,18.04166666666666 L74.8,33.625 L98.4,36.458333333333336 L122,36.458333333333336 L145.6,40 L169.2,36.8125 L192.8,36.104166666666664 L216.4,37.875 L240,37.875 L263.6,36.458333333333336 L287.2,36.458333333333336 L310.8,36.458333333333336 L334.4,6.354166666666664 L358,6.354166666666664 L381.6,6 L405.2,6 L428.8,6 L452.4,6 L476,6 \" fill=\"none\" stroke=\"#ffb347\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"74.8\" cy=\"33.625\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"98.4\" cy=\"36.458333333333336\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"145.6\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"169.2\" cy=\"36.8125\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"192.8\" cy=\"36.104166666666664\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"216.4\" cy=\"37.875\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"263.6\" cy=\"36.458333333333336\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"334.4\" cy=\"6.354166666666664\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"381.6\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"6\" r=\"3.5\" fill=\"#ffb347\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  10.8p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">14 Aug 26  14.2p</text></svg><div class=\"spark-tt\" id=\"tt-CAPD\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+3.3pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-08-20T07:00:20.888Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 10.8,
+          "price": 98
+        },
+        {
+          "d": "28 Jun 25",
+          "eps": 10.8,
+          "price": 95
+        },
+        {
+          "d": "05 Jul 25",
+          "eps": 10.8,
+          "price": 108
+        },
+        {
+          "d": "19 Jul 25",
+          "eps": 6.4,
+          "price": 114
+        },
+        {
+          "d": "09 Aug 25",
+          "eps": 5.6,
+          "price": 125
+        },
+        {
+          "d": "06 Sep 25",
+          "eps": 5.6,
+          "price": 125
+        },
+        {
+          "d": "04 Oct 25",
+          "eps": 4.6,
+          "price": 144
+        },
+        {
+          "d": "18 Oct 25",
+          "eps": 5.5,
+          "price": 160
+        },
+        {
+          "d": "25 Oct 25",
+          "eps": 5.7,
+          "price": 173
+        },
+        {
+          "d": "29 Nov 25",
+          "eps": 5.2,
+          "price": 175
+        },
+        {
+          "d": "20 Dec 25",
+          "eps": 5.2,
+          "price": 174
+        },
+        {
+          "d": "17 Jan 26",
+          "eps": 5.6,
+          "price": 181
+        },
+        {
+          "d": "07 Feb 26",
+          "eps": 5.6,
+          "price": 182
+        },
+        {
+          "d": "07 Mar 26",
+          "eps": 5.6,
+          "price": 186
+        },
+        {
+          "d": "28 Mar 26",
+          "eps": 14.1,
+          "price": 188
+        },
+        {
+          "d": "18 Apr 26",
+          "eps": 14.1,
+          "price": 185
+        },
+        {
+          "d": "01 May 26",
+          "eps": 14.2,
+          "price": 185
+        },
+        {
+          "d": "15 May 26",
+          "eps": 14.2,
+          "price": 188
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 14.2,
+          "price": 191
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 14.2,
+          "price": 187
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 14.2,
+          "price": 186
+        }
+      ],
+      "entryPrice": 121.5
+    },
+    {
+      "id": "AT__2026_08_20",
+      "ticker": "AT.",
+      "score": 20,
+      "company": "Ashtead Technology Holdings",
+      "verdict": "Negative · material downgrades",
+      "date": "2026-08-20",
+      "rnsType": "Pre-H1 Trading Update",
+      "mode": "Q4",
+      "index": "FTSE Small Cap",
+      "signals": [
+        {
+          "pill": "⛔ PROFIT WARN",
+          "type": "red",
+          "textHTML": "Adj EBITA guided <span class=\"val-dn\">~15% below</span> the compiled consensus of GBP59.2m and revenue <span class=\"val-dn\">~5% below</span> GBP214.2m - the derived FY26 EPS of <span class=\"val-dn\">~38p</span> vs 46.7p is a cut of roughly 18%",
+          "textPlain": "Adj EBITA guided ~15% below the compiled consensus of GBP59.2m and revenue ~5% below GBP214.2m - the derived FY26 EPS of ~38p vs 46.7p is a cut of roughly 18%"
+        },
+        {
+          "pill": "LEVERAGE",
+          "type": "red",
+          "textHTML": "Rental revenue deferral plus operating leverage means EBITA falls <span class=\"val-dn\">3x</span> the revenue fall; FY26 revenue growth collapses from <span class=\"val-dn\">+21% to ~0%</span> against the FY25 outturn",
+          "textPlain": "Rental revenue deferral plus operating leverage means EBITA falls 3x the revenue fall; FY26 revenue growth collapses from +21% to ~0% against the FY25 outturn"
+        },
+        {
+          "pill": "2ND CUT",
+          "type": "red",
+          "textHTML": "Second negative update in <span class=\"val-dn\">5 weeks</span> - both 15 Jul conditions failed, and Europe plus Americas scheduling delays have now been added; no floor language anywhere in the text",
+          "textPlain": "Second negative update in 5 weeks - both 15 Jul conditions failed, and Europe plus Americas scheduling delays have now been added; no floor language anywhere in the text"
+        },
+        {
+          "pill": "NO FLOOR",
+          "type": "red",
+          "textHTML": "Middle East driver <span class=\"val-dn\">explicitly unresolved</span> with no easing since July and projects pushed into 2027 - a <span class=\"val-dn\">third cut</span> at the H1 results is a live risk, not a tail risk",
+          "textPlain": "Middle East driver explicitly unresolved with no easing since July and projects pushed into 2027 - a third cut at the H1 results is a live risk, not a tail risk"
+        },
+        {
+          "pill": "DEFERRAL",
+          "type": "amber",
+          "textHTML": "Deferred rather than lost: the work is <span class=\"val-up\">postponed to 2027</span>; leverage guided <span class=\"val-fl\">~1.3x</span> vs the 1.10x forecast, with interest cover still <span class=\"val-up\">~5.3x</span> on the cut numbers",
+          "textPlain": "Deferred rather than lost: the work is postponed to 2027; leverage guided ~1.3x vs the 1.10x forecast, with interest cover still ~5.3x on the cut numbers"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "-16-20%",
+          "sub": "46.7p->37-39p",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "-8-13%",
+          "sub": "52.6p->46-48p",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "-4-6%",
+          "sub": "214m->202-206m",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "-2-5%",
+          "sub": "229m->218-225m",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "45.4p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "46.7p",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Net D",
+          "val": "+2.9%",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FLAT",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev D",
+          "val": "-6.1%",
+          "style": "color:#ff4757"
+        },
+        {
+          "lbl": "TP D",
+          "val": "-22.5%",
+          "style": "color:#ff4757"
+        }
+      ],
+      "sparkLabel": "EPS fc / TP · 15mth",
+      "sparkSVG": "<svg id=\"spark-AT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,6 L26.476190476190474,11.454545454545453 L48.95238095238095,11.454545454545453 L71.42857142857143,18.72727272727273 L93.9047619047619,32.18181818181818 L116.38095238095238,37.27272727272727 L138.85714285714286,37.27272727272727 L161.33333333333331,37.27272727272727 L183.8095238095238,37.27272727272727 L206.28571428571428,37.27272727272727 L228.76190476190476,37.27272727272727 L251.23809523809524,37.27272727272727 L273.7142857142857,37.27272727272727 L296.1904761904762,38.36363636363637 L318.66666666666663,39.45454545454545 L341.14285714285717,39.45454545454545 L363.6190476190476,39.45454545454545 L386.0952380952381,39.45454545454545 L408.57142857142856,39.45454545454545 L431.04761904761904,39.45454545454545 L453.5238095238095,40 L476,40 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,6 L26.476190476190474,11.454545454545453 L48.95238095238095,11.454545454545453 L71.42857142857143,18.72727272727273 L93.9047619047619,32.18181818181818 L116.38095238095238,37.27272727272727 L138.85714285714286,37.27272727272727 L161.33333333333331,37.27272727272727 L183.8095238095238,37.27272727272727 L206.28571428571428,37.27272727272727 L228.76190476190476,37.27272727272727 L251.23809523809524,37.27272727272727 L273.7142857142857,37.27272727272727 L296.1904761904762,38.36363636363637 L318.66666666666663,39.45454545454545 L341.14285714285717,39.45454545454545 L363.6190476190476,39.45454545454545 L386.0952380952381,39.45454545454545 L408.57142857142856,39.45454545454545 L431.04761904761904,39.45454545454545 L453.5238095238095,40 L476,40 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,22.190476190476208 L26.476190476190474,22.190476190476208 L48.95238095238095,22.190476190476208 L71.42857142857143,23.00000000000003 L93.9047619047619,40 L116.38095238095238,40 L138.85714285714286,29.47619047619049 L161.33333333333331,31.904761904761898 L183.8095238095238,31.904761904761898 L206.28571428571428,31.904761904761898 L228.76190476190476,31.904761904761898 L251.23809523809524,31.904761904761898 L273.7142857142857,27.857142857142847 L296.1904761904762,27.857142857142847 L318.66666666666663,31.904761904761898 L341.14285714285717,6 L363.6190476190476,6 L386.0952380952381,6 L408.57142857142856,7.619047619047585 L431.04761904761904,11.66666666666664 L453.5238095238095,11.66666666666664 L476,11.66666666666664 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,22.190476190476208 L26.476190476190474,22.190476190476208 L48.95238095238095,22.190476190476208 L71.42857142857143,23.00000000000003 L93.9047619047619,40 L116.38095238095238,40 L138.85714285714286,29.47619047619049 L161.33333333333331,31.904761904761898 L183.8095238095238,31.904761904761898 L206.28571428571428,31.904761904761898 L228.76190476190476,31.904761904761898 L251.23809523809524,31.904761904761898 L273.7142857142857,27.857142857142847 L296.1904761904762,27.857142857142847 L318.66666666666663,31.904761904761898 L341.14285714285717,6 L363.6190476190476,6 L386.0952380952381,6 L408.57142857142856,7.619047619047585 L431.04761904761904,11.66666666666664 L453.5238095238095,11.66666666666664 L476,11.66666666666664 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"71.42857142857143\" cy=\"23.00000000000003\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"93.9047619047619\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"138.85714285714286\" cy=\"29.47619047619049\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"161.33333333333331\" cy=\"31.904761904761898\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"273.7142857142857\" cy=\"27.857142857142847\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"318.66666666666663\" cy=\"31.904761904761898\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"341.14285714285717\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"408.57142857142856\" cy=\"7.619047619047585\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"431.04761904761904\" cy=\"11.66666666666664\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"11.66666666666664\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  45.4p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">14 Aug 26  46.7p</text></svg><div class=\"spark-tt\" id=\"tt-AT\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-20T07:00:20.888Z",
+      "source": "html-dom",
+      "entryPrice": 502.2
+    },
+    {
+      "id": "RBN_2026_08_20",
+      "ticker": "RBN",
+      "score": 16,
+      "company": "Robinson PLC",
+      "verdict": "Negative · material downgrades",
+      "date": "2026-08-20",
+      "rnsType": "Half Year Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "⛔ PROFIT WARN",
+          "type": "red",
+          "textHTML": "FY26 underlying operating profit guided to <span class=\"val-dn\">GBP2.2-2.6m</span> vs GBP3.4m consensus EBIT; the derived underlying EPS of <span class=\"val-dn\">6.9-8.7p</span> against 12.3p is a cut near 37%",
+          "textPlain": "FY26 underlying operating profit guided to GBP2.2-2.6m vs GBP3.4m consensus EBIT; the derived underlying EPS of 6.9-8.7p against 12.3p is a cut near 37%"
+        },
+        {
+          "pill": "SELL SIGNAL",
+          "type": "red",
+          "textHTML": "H1 underlying EPS of <span class=\"val-dn\">2.3p</span> vs 7.6p leaves tracking <span class=\"val-dn\">-24.4pp</span> below baseline; H2 must now find <span class=\"val-dn\">10.0p</span> against a 6.9p all-time record half - profit warn gate fires",
+          "textPlain": "H1 underlying EPS of 2.3p vs 7.6p leaves tracking -24.4pp below baseline; H2 must now find 10.0p against a 6.9p all-time record half - profit warn gate fires"
+        },
+        {
+          "pill": "REV GAP",
+          "type": "red",
+          "textHTML": "Consensus revenue of <span class=\"val-dn\">GBP63.9m</span> is simply unreachable - it requires H2 at <span class=\"val-dn\">+22.4%</span> when H1 delivered just +4.7% and Polish volumes fell <span class=\"val-dn\">-15%</span> across the half",
+          "textPlain": "Consensus revenue of GBP63.9m is simply unreachable - it requires H2 at +22.4% when H1 delivered just +4.7% and Polish volumes fell -15% across the half"
+        },
+        {
+          "pill": "COST BASE",
+          "type": "red",
+          "textHTML": "Gross margin <span class=\"val-dn\">20%</span> vs 22% and underlying opex <span class=\"val-dn\">+18%</span> to GBP4.9m; Paperbox contract lost, format change at a customer, property rental income permanently shrinking",
+          "textPlain": "Gross margin 20% vs 22% and underlying opex +18% to GBP4.9m; Paperbox contract lost, format change at a customer, property rental income permanently shrinking"
+        },
+        {
+          "pill": "PROPERTY",
+          "type": "amber",
+          "textHTML": "Property sales of <span class=\"val-up\">GBP1.5m</span> completed, <span class=\"val-up\">GBP2.2m</span> contracted and <span class=\"val-up\">GBP2.85m</span> optioned - but the <span class=\"val-fl\">6.0p</span> DPS held flat leaves cover at just 1.3x with FCF negative",
+          "textPlain": "Property sales of GBP1.5m completed, GBP2.2m contracted and GBP2.85m optioned - but the 6.0p DPS held flat leaves cover at just 1.3x with FCF negative"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "-30-40%",
+          "sub": "12.3p->6.9-8.7p",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "-20-30%",
+          "sub": "15.2p->10.6-12.2p",
+          "color": ""
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "-7-9%",
+          "sub": "63.9m->58-59m",
+          "color": ""
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "-6-9%",
+          "sub": "67.3m->61-63m",
+          "color": ""
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "12.5p",
+          "style": "color:#7a7a95"
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "12.3p",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Net D",
+          "val": "-1.6%",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FLAT",
+          "style": "color:#ffb347"
+        },
+        {
+          "lbl": "Rev D",
+          "val": "+7.4%",
+          "style": "color:#00d97e"
+        },
+        {
+          "lbl": "TP D",
+          "val": "+9.7%",
+          "style": "color:#00d97e"
+        }
+      ],
+      "sparkLabel": "EPS fc / TP · 15mth",
+      "sparkSVG": "<svg id=\"spark-RBN\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\"><line x1=\"4\" x2=\"476\" y1=\"6\" y2=\"6\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"23\" y2=\"23\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><line x1=\"4\" x2=\"476\" y1=\"40\" y2=\"40\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><path d=\"M4,40 L4,40 L27.6,40 L51.2,40 L74.8,40 L98.4,40 L122,40 L145.6,40 L169.2,40 L192.8,40 L216.4,6 L240,6 L263.6,6 L287.2,6 L310.8,6 L334.4,6 L358,6 L381.6,6 L405.2,6 L428.8,6 L452.4,6 L476,6 L476,40Z\" fill=\"#4d9eff\" fill-opacity=\"0.05\"></path><path d=\"M4,40 L27.6,40 L51.2,40 L74.8,40 L98.4,40 L122,40 L145.6,40 L169.2,40 L192.8,40 L216.4,6 L240,6 L263.6,6 L287.2,6 L310.8,6 L334.4,6 L358,6 L381.6,6 L405.2,6 L428.8,6 L452.4,6 L476,6 \" fill=\"none\" stroke=\"#3a3a55\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></path><path d=\"M4,40 L4,28.6666666666667 L27.6,28.6666666666667 L51.2,28.6666666666667 L74.8,28.6666666666667 L98.4,28.6666666666667 L122,28.6666666666667 L145.6,28.6666666666667 L169.2,28.6666666666667 L192.8,28.6666666666667 L216.4,6 L240,6 L263.6,6 L287.2,40 L310.8,40 L334.4,40 L358,40 L381.6,40 L405.2,40 L428.8,40 L452.4,40 L476,40 L476,40Z\" fill=\"#ff4757\" fill-opacity=\"0.18\"></path><path d=\"M4,28.6666666666667 L27.6,28.6666666666667 L51.2,28.6666666666667 L74.8,28.6666666666667 L98.4,28.6666666666667 L122,28.6666666666667 L145.6,28.6666666666667 L169.2,28.6666666666667 L192.8,28.6666666666667 L216.4,6 L240,6 L263.6,6 L287.2,40 L310.8,40 L334.4,40 L358,40 L381.6,40 L405.2,40 L428.8,40 L452.4,40 L476,40 \" fill=\"none\" stroke=\"#ff4757\" stroke-width=\"2\" stroke-linejoin=\"round\"></path><circle cx=\"216.4\" cy=\"6\" r=\"4\" fill=\"#00d97e\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"287.2\" cy=\"40\" r=\"4\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><circle cx=\"476\" cy=\"40\" r=\"3.5\" fill=\"#ff4757\" stroke=\"#0a0a0f\" stroke-width=\"1.5\"></circle><text x=\"4\" y=\"55\" text-anchor=\"start\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">18 May 25  12.5p</text><text x=\"476\" y=\"55\" text-anchor=\"end\" font-size=\"7.5\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">14 Aug 26  12.3p</text></svg><div class=\"spark-tt\" id=\"tt-RBN\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✕",
+          "dev": "-3.5pp",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✕",
+          "dev": "-24.4pp",
+          "state": "neg"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-08-20T07:00:20.889Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "28 Jun 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "19 Jul 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "23 Aug 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "20 Sep 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "18 Oct 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "15 Nov 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "13 Dec 25",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "03 Jan 26",
+          "eps": 12.5,
+          "price": 155
+        },
+        {
+          "d": "10 Jan 26",
+          "eps": 12.9,
+          "price": 170
+        },
+        {
+          "d": "07 Feb 26",
+          "eps": 12.9,
+          "price": 170
+        },
+        {
+          "d": "07 Mar 26",
+          "eps": 12.9,
+          "price": 170
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "11 Apr 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "01 May 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "23 May 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 12.3,
+          "price": 170
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 12.3,
+          "price": 170
+        }
+      ],
+      "entryPrice": 120
     }
   ],
   "brokerChanges": [
