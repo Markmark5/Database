@@ -2233,16 +2233,21 @@ function expandSection(id){
       function bwFsRow(e) {
         const r=e.r, b=band(r.score);
         const scoreCol=b==='green'?'var(--green)':b==='amber'?'var(--amber)':'var(--red)';
+        var nowPx = (liveData[r.ticker] && liveData[r.ticker].price) ? liveData[r.ticker].price : null;
+        var priceHtml = (r.entryPrice && nowPx)
+          ? '<span style="font-family:var(--mono);font-size:10px;color:var(--text-secondary);white-space:nowrap;">'+Math.round(r.entryPrice)+'p <span style="color:var(--text-dim);">&#8594;</span> '+Math.round(nowPx)+'p</span>'
+          : '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">&#8212;</span>';
         var pctHtml = e.pct !== null
-          ? '<span style="font-family:var(--mono);font-size:11px;font-weight:600;color:'+(e.pct>=0?'var(--green)':'var(--red)')+';margin:0 10px;">'+(e.pct>=0?'+':'')+e.pct.toFixed(1)+'%</span>'
-          : '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);margin:0 10px;">—</span>';
-        return '<div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);">'
+          ? '<span style="font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;color:'+(e.pct>=0?'var(--green)':'var(--red)')+';">'+(e.pct>=0?'+':'')+e.pct.toFixed(1)+'%</span>'
+          : '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">&#8212;</span>';
+        return '<div class="bwfs-row" style="display:grid;grid-template-columns:1fr 110px 78px 46px;column-gap:18px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border);">'
           +'<div style="min-width:0;">'
             +'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">'+(r.company||r.ticker)+'</span>'
-            +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">'+r.ticker+' · '+fmtDate(r.date)+'</span>'
+            +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">'+r.ticker+' &#183; '+fmtDate(r.date)+'</span>'
           +'</div>'
-          +pctHtml
-          +'<span style="font-family:var(--mono);font-size:20px;font-weight:700;color:'+scoreCol+';min-width:40px;text-align:right;">'+r.score+'</span>'
+          +'<div style="text-align:right;">'+priceHtml+'</div>'
+          +'<div style="text-align:right;">'+pctHtml+'</div>'
+          +'<span style="font-family:var(--mono);font-size:20px;font-weight:700;color:'+scoreCol+';text-align:right;">'+r.score+'</span>'
           +'</div>';
       }
 
@@ -2274,14 +2279,26 @@ function expandSection(id){
       }
 
       var s = window.bwFsSort;
+      var liveStamp = '';
+      try{ liveStamp = localStorage.getItem(LIVE_TS_KEY)||''; }catch(err){}
+      var stampHtml = liveStamp
+        ? '<span style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);margin-left:auto;white-space:nowrap;">&#9889; Prices: '+liveStamp+'</span>'
+        : '<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;white-space:nowrap;">&#9889; Prices not loaded</span>';
       c.innerHTML =
-        '<div style="display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;">'
+        '<style>'
+        +'.bwfs-row{transition:background .12s;}'
+        +'.bwfs-row:hover{background:#ffffff0d;}'
+        +'.bwfs-btn{font-family:var(--mono);font-size:9px;font-weight:600;padding:6px 13px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;}'
+        +'.bwfs-btn:hover{background:#ffffff16 !important;color:var(--text-primary) !important;border-color:var(--border-bright) !important;}'
+        +'</style>'
+        +'<div style="display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;">'
           +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:.07em;text-transform:uppercase;margin-right:4px;">Sort:</span>'
-          +'<button onclick="window.bwFsSort=\'score\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='score'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Score</button>'
-          +'<button onclick="window.bwFsSort=\'pct\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='pct'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">⚡ Since RNS</button>'
-          +'<button onclick="window.bwFsSort=\'az\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='az'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">A–Z</button>'
-          +'<button onclick="window.bwFsSort=\'date\';window.bwFsRender();" style="font-family:var(--mono);font-size:9px;font-weight:600;padding:4px 10px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;'+(s==='date'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Date</button>'
-          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">All time · '+ALL.length+' records</span>'
+          +'<button onclick="window.bwFsSort=\'score\';window.bwFsRender();" class="bwfs-btn" style="'+(s==='score'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Score</button>'
+          +'<button onclick="window.bwFsSort=\'pct\';window.bwFsRender();" class="bwfs-btn" style="'+(s==='pct'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">⚡ Since RNS</button>'
+          +'<button onclick="window.bwFsSort=\'az\';window.bwFsRender();" class="bwfs-btn" style="'+(s==='az'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">A–Z</button>'
+          +'<button onclick="window.bwFsSort=\'date\';window.bwFsRender();" class="bwfs-btn" style="'+(s==='date'?'background:var(--blue-dim);color:var(--blue);border-color:var(--blue-mid);':'background:#ffffff08;color:var(--text-secondary);border-color:var(--border);')+'">Date</button>'
+          +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:8px;">All time &#183; '+ALL.length+' records</span>'
+          +stampHtml
         +'</div>'
         +'<div style="flex:1;overflow:hidden;">' + mainHtml + '</div>';
     };
@@ -3824,13 +3841,13 @@ function renderBestWorst(){
   if (titleEl) titleEl.innerHTML = 'Best &amp; Worst · ' + bwDays + ' days';
   const bestTitle = document.getElementById('bw-best-title');
   const worstTitle = document.getElementById('bw-worst-title');
-  if (bestTitle) bestTitle.textContent = '↑ Best 5';
-  if (worstTitle) worstTitle.textContent = '↓ Worst 5';
+  if (bestTitle) bestTitle.textContent = '↑ Best 15';
+  if (worstTitle) worstTitle.textContent = '↓ Worst 15';
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-bwDays);
   const cutStr=cutoff.toISOString().split('T')[0];
   const recent=ALL.filter(function(r){return r.date>=cutStr;});
-  const best=[...recent].sort(function(a,b){return b.score-a.score;}).slice(0,12);
-  const worst=[...recent].sort(function(a,b){return a.score-b.score;}).slice(0,12);
+  const best=[...recent].sort(function(a,b){return b.score-a.score;}).slice(0,15);
+  const worst=[...recent].sort(function(a,b){return a.score-b.score;}).slice(0,15);
   function renderList(items,elId){
     const el=document.getElementById(elId);if(!el)return;
     if(!items.length){el.innerHTML='<div class="bw-empty">No data in last '+bwDays+' days</div>';return;}
@@ -3890,8 +3907,8 @@ function renderBestWorstLive(){
   }
 
   entries.sort(function(a,b){ return b.pct - a.pct; });
-  var best = entries.slice(0, 10);
-  var worst = entries.slice(-10).reverse();
+  var best = entries.slice(0, 15);
+  var worst = entries.slice(-15).reverse();
 
   function renderLiveList(items, elId) {
     var el = document.getElementById(elId);
