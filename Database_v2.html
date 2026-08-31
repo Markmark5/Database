@@ -6740,6 +6740,15 @@ function liveParseNum(v) {
   var s=String(v).replace(/[£$€¥₹,]/g,'').trim().replace(/p$/i,'');
   return parseFloat(s);
 }
+/* Prices only: ShareScope switches to pounds above £10, so a "£" in the
+   cell means the value is in pounds and must be converted back to pence. */
+function liveParsePrice(v) {
+  if (v===undefined||v===null||v==='') return NaN;
+  var isPounds=/£/.test(String(v));
+  var n=liveParseNum(v);
+  if (!isFinite(n)) return NaN;
+  return isPounds ? n*100 : n;
+}
 
 /* ── Ingest rows ── */
 function liveIngestRows(rows) {
@@ -6752,14 +6761,14 @@ function liveIngestRows(rows) {
     if (!sector) return;
     liveData[tidm]={
       name:(r['Name']||r['name']||tidm).trim(),
-      price:liveParseNum(priceRaw),
+      price:liveParsePrice(priceRaw),
       pct:liveParseNum(r['% from Close']||r['%fromClose']||r['% From Close']||''),
       eps1:liveParseNum(r['fc EPS']||r['FC EPS']||''),
       eps2:liveParseNum(r['2y fc EPS']||r['2Y fc EPS']||''),
       sector:sector,
       mktcap:liveParseNum(r['Market Cap. (m) (£)']||r['Market Cap']||''),
-      lo52:liveParseNum(r['12 m low']||''),
-      hi52:liveParseNum(r['12 m high']||''),
+      lo52:liveParsePrice(r['12 m low']||''),
+      hi52:liveParsePrice(r['12 m high']||''),
       turn1y:liveParseNum(r['1y ago Turnover (m)']||''),
       turn2y:liveParseNum(r['2y fc Turnover (m)']||'')
     };
