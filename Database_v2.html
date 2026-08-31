@@ -1334,7 +1334,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
         <div class="rns-sidebar" id="rns-sidebar">
           <div class="sb-sec">
             <div class="sb-lbl">Search</div>
-            <input class="sb-search" id="search-inp" placeholder="Ticker or company… (⌘K)" oninput="applyFilters()">
+            <input class="sb-search" id="search-inp" placeholder="Ticker or company… (⌘K)" oninput="window.EXACT_TICKER=null;applyFilters()">
           </div>
           <div class="sb-sec">
             <div class="sb-lbl">Score Band</div>
@@ -2240,7 +2240,7 @@ function expandSection(id){
         var pctHtml = e.pct !== null
           ? '<span style="font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;color:'+(e.pct>=0?'var(--green)':'var(--red)')+';">'+(e.pct>=0?'+':'')+e.pct.toFixed(1)+'%</span>'
           : '<span style="font-family:var(--mono);font-size:10px;color:var(--text-dim);">&#8212;</span>';
-        return '<div class="bwfs-row" style="display:grid;grid-template-columns:1fr 110px 78px 46px;column-gap:18px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border);">'
+        return '<div class="bwfs-row" onclick="bwGoToTicker(\''+r.ticker+'\')" title="Show all '+r.ticker+' scorecards" style="cursor:pointer;display:grid;grid-template-columns:1fr 110px 78px 46px;column-gap:18px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border);">'
           +'<div style="min-width:0;">'
             +'<span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;">'+(r.company||r.ticker)+'</span>'
             +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">'+r.ticker+' &#183; '+fmtDate(r.date)+'</span>'
@@ -2281,15 +2281,21 @@ function expandSection(id){
       var s = window.bwFsSort;
       var liveStamp = '';
       try{ liveStamp = localStorage.getItem(LIVE_TS_KEY)||''; }catch(err){}
-      var stampHtml = liveStamp
-        ? '<span style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);margin-left:auto;white-space:nowrap;">&#9889; Prices: '+liveStamp+'</span>'
-        : '<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;white-space:nowrap;">&#9889; Prices not loaded</span>';
+      var stampHtml = '<span style="margin-left:auto;display:flex;align-items:center;gap:10px;">'
+        + (liveStamp
+            ? '<span style="font-family:var(--mono);font-size:9px;color:var(--text-secondary);white-space:nowrap;">&#9889; Prices: '+liveStamp+'</span>'
+            : '<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);white-space:nowrap;">&#9889; Prices not loaded</span>')
+        + '<button id="bwfs-live-btn" class="bwfs-live-btn" onclick="bwFsRefreshPrices(this)">&#9889; Get Prices</button>'
+        + '</span>';
       c.innerHTML =
         '<style>'
         +'.bwfs-row{transition:background .12s;}'
         +'.bwfs-row:hover{background:#ffffff0d;}'
         +'.bwfs-btn{font-family:var(--mono);font-size:9px;font-weight:600;padding:6px 13px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid;transition:all .15s;}'
         +'.bwfs-btn:hover{background:#ffffff16 !important;color:var(--text-primary) !important;border-color:var(--border-bright) !important;}'
+        +'.bwfs-live-btn{font-family:var(--mono);font-size:9px;font-weight:700;padding:6px 13px;border-radius:3px;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--green);background:var(--green-dim,#00c81422);color:var(--green);transition:all .15s;}'
+        +'.bwfs-live-btn:hover:not(:disabled){background:#00c81438;}'
+        +'.bwfs-live-btn:disabled{opacity:.55;cursor:default;}'
         +'</style>'
         +'<div style="display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0;flex-wrap:wrap;">'
           +'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);letter-spacing:.07em;text-transform:uppercase;margin-right:4px;">Sort:</span>'
@@ -2508,6 +2514,22 @@ function expandSection(id){
   }
 }
 function closeFullscreen(id){document.getElementById(id).classList.remove('open');}
+/* Click a Best&Worst row -> close popup and filter the RNS Scorecards list
+   to that ticker, exactly as if it had been typed into the search box. */
+function bwFsRefreshPrices(btn){
+  if(btn){btn.textContent='\u23F3 Loading\u2026';btn.disabled=true;}
+  try{ liveRefresh(); }
+  catch(e){ if(btn){btn.textContent='\u26A1 Get Prices';btn.disabled=false;} }
+}
+function bwGoToTicker(tk){
+  try{ closeFullscreen('bw-fs'); }catch(e){}
+  var inp=document.getElementById('search-inp');
+  if(inp){ inp.value=tk; }
+  window.EXACT_TICKER=tk;
+  try{ applyFilters(); }catch(e){}
+  var sec=document.getElementById('rns-section')||document.getElementById('search-inp');
+  if(sec&&sec.scrollIntoView)sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.querySelectorAll('.db-fullscreen-overlay.open').forEach(el=>el.classList.remove('open'));
 });
@@ -3731,7 +3753,8 @@ function applyFilters(){
   const fTo=document.getElementById('f-to').value;
   const sort=document.getElementById('sort-sel').value;
   FILTERED=ALL.filter(function(r){
-    if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
+    if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
+    else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
     const b=band(r.score);
     if(b==='green'&&!fG)return false;
     if(b==='amber'&&!fA)return false;
@@ -3853,7 +3876,7 @@ function renderBestWorst(){
     if(!items.length){el.innerHTML='<div class="bw-empty">No data in last '+bwDays+' days</div>';return;}
     el.innerHTML=items.map(function(r){
       const b=band(r.score);
-      return '<div class="bw-row">'
+      return '<div class="bw-row" onclick="bwGoToTicker(\''+r.ticker+'\')" title="Show all '+r.ticker+' scorecards" style="cursor:pointer;">'
         +'<div style="display:flex;align-items:center;min-width:0;overflow:hidden;">'
         +'<span class="bw-name">'+(r.company||r.ticker)+'</span>'
         +'<span class="bw-ticker"> '+r.ticker+'</span></div>'
@@ -3917,7 +3940,7 @@ function renderBestWorstLive(){
       var r = e.rec;
       var sign = e.pct >= 0 ? '+' : '';
       var col = e.pct >= 0 ? 'var(--green)' : 'var(--red)';
-      return '<div class="bw-row">'
+      return '<div class="bw-row" onclick="bwGoToTicker(\''+r.ticker+'\')" title="Show all '+r.ticker+' scorecards" style="cursor:pointer;">'
         + '<div style="display:flex;align-items:center;min-width:0;overflow:hidden;">'
         + '<span class="bw-name">' + (r.company||r.ticker) + '</span>'
         + '<span class="bw-ticker"> ' + r.ticker + '</span></div>'
@@ -6833,7 +6856,9 @@ function liveOnAllFetched(errors, total) {
   var count=Object.keys(liveData).length;
   var now=new Date();
   var timeStr=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
-  var tsStr=timeStr+' · '+count+' tickers'+(errors?' · '+errors+'/'+total+' errors':'');
+  var MON_ABBR=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dateStr=now.getDate()+' '+MON_ABBR[now.getMonth()];
+  var tsStr=dateStr+' · '+timeStr+' · '+count+' tickers'+(errors?' · '+errors+'/'+total+' errors':'');
   var dot=document.getElementById('live-dot');
   var ts=document.getElementById('live-ts');
   var btn=document.getElementById('live-refresh-btn');
@@ -6843,6 +6868,11 @@ function liveOnAllFetched(errors, total) {
   try{localStorage.setItem(LIVE_CACHE_KEY,JSON.stringify(liveData));localStorage.setItem(LIVE_TS_KEY,tsStr);}catch(e){}
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
+  try{
+    var bwOv=document.getElementById('bw-fs');
+    if(bwOv&&bwOv.classList.contains('open')&&typeof window.bwFsRender==='function')window.bwFsRender();
+    if(typeof renderBestWorst==='function')renderBestWorst();
+  }catch(e){}
   // Daily close snapshot: capture if we're in the 07:00–07:30 window, or if
   // this fetch was triggered by the scheduler in-window but returned late.
   try{
