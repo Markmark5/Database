@@ -3665,12 +3665,12 @@ function parseScorecard(html){
   /* sparkline arrays */
   doc.querySelectorAll('script').forEach(sc=>{
     const txt=sc.textContent;
-    const matches=[...txt.matchAll(/const\s+([A-Z]{2,8})Data\s*=\s*(\[)/g)];
+    const matches=[...txt.matchAll(/(?:const|let|var)\s+([A-Z]{2,8})Data\s*=\s*(\[)/g)];
     matches.forEach(m=>{
       const ticker=m[1];const arrStart=txt.indexOf(m[0])+m[0].length-1;
       let depth=0,i=arrStart;
       for(;i<txt.length;i++){const c=txt[i];if(c==='[')depth++;else if(c===']'){depth--;if(depth===0)break;}}
-      try{const data=new Function('return '+txt.slice(arrStart,i+1))();const rec=records.find(r=>r.ticker===ticker);if(rec)rec.sparkData=data;}catch(e){}
+      try{const data=new Function('return '+txt.slice(arrStart,i+1))();const key=ticker.replace(/[^A-Z0-9]/gi,'').toUpperCase();const rec=records.find(r=>r.ticker.replace(/[^A-Z0-9]/gi,'').toUpperCase()===key);if(rec)rec.sparkData=data;}catch(e){}
     });
   });
   return records;
