@@ -3744,7 +3744,7 @@ function buildRow(rec){
     +'</div></div></div>'
     +'<div class="cell"><div class="signals">'+(sigHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No signals captured</span>')+'</div></div>'
     +'<div class="cell"><div class="revisions">'+(revHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No data</span>')+'</div></div>'
-    +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>')+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
+    +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+((rec.sparkData&&rec.sparkData.length>1)?'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>':(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>'))+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
     +'<div class="h1-ind-cell">'+h1Html+'</div>'
     +'<div class="h1-ind-cell">'+accelHtml+'</div>'
     +'</div></div>';
