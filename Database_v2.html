@@ -203,6 +203,10 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .row-wrap{margin-bottom:4px;scroll-margin-top:130px;}
 .row{display:grid;grid-template-columns:220px minmax(0,1fr) 220px 240px 44px 44px;gap:0;border:1px solid var(--border);border-radius:4px;min-height:108px;background:var(--surface);position:relative;overflow:hidden;transition:border-color .15s;cursor:pointer;}
 .row-wrap.open .row{border-radius:4px 4px 0 0;border-bottom-color:transparent;}
+body.sig-wide .col-headers,body.sig-wide .row{grid-template-columns:220px minmax(0,1fr);}
+body.sig-wide .col-headers .col-hd:nth-child(n+3){display:none;}
+body.sig-wide .row>.cell:nth-child(3),body.sig-wide .row>.spark-cell,body.sig-wide .row>.h1-ind-cell{display:none;}
+body.sig-wide .row>.cell:nth-child(2){border-right:none;}
 .row.c-red:hover{border-color:var(--red-mid);}
 .row.c-green:hover{border-color:var(--green-mid);}
 .row.c-amber:hover{border-color:var(--amber-mid);}
@@ -1391,6 +1395,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
               <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>≤49</div>
             </div>
             <div style="display:flex;align-items:center;gap:5px;">
+              <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="var on=document.body.classList.toggle('sig-wide');this.textContent=on?'◀ NORMAL VIEW':'▶ FULL TEXT VIEW';try{localStorage.setItem('sigWide',on?'1':'0')}catch(e){}">▶ FULL TEXT VIEW</button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
                 <option value="date-desc">Date ↓</option>
@@ -1410,6 +1415,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
             <div class="col-hd" style="font-size:7px;padding:0 3px;">ACCEL</div>
           </div>
           <div id="rows-container"></div>
+          <script>try{if(localStorage.getItem('sigWide')==='1'){document.body.classList.add('sig-wide');var _sb=document.getElementById('sigwide-btn');if(_sb)_sb.textContent='◀ NORMAL VIEW';}}catch(e){}</script>
           <div class="pagination" id="pagination"></div>
           <div class="empty-state" id="empty-state" style="display:none;">
             <div class="es-i">⬡</div>
