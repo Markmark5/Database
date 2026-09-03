@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-09-03T09:12:03.927Z",
-    "savedAtLabel": "03 Sept 2026 10:12",
+    "savedAt": "2026-09-03T12:22:46.701Z",
+    "savedAtLabel": "03 Sept 2026 13:22",
     "source": "github-sync"
   },
   "scorecards": [
@@ -135730,6 +135730,428 @@
         }
       ],
       "entryPrice": 121
+    },
+    {
+      "id": "HFG_2026_09_03",
+      "ticker": "HFG",
+      "score": 76,
+      "company": "Hilton Food Group PLC",
+      "verdict": "Constructive · upgrades likely",
+      "date": "2026-09-03",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "Guide Raise",
+          "type": "green",
+          "textHTML": "FY26 adjusted PBT guided to <span class=\"val-up\">£66m–£71m</span>, up from £60m–£65m, against consensus of £63.8m — a <span class=\"val-up\">c.7%</span> uplift at the midpoint on Dalco removal and favourable FX.",
+          "textPlain": "FY26 adjusted PBT guided to £66m–£71m, up from £60m–£65m, against consensus of £63.8m — a c.7% uplift at the midpoint on Dalco removal and favourable FX."
+        },
+        {
+          "pill": "H1 Track",
+          "type": "green",
+          "textHTML": "H1 adjusted EPS of <span class=\"val-up\">23.4p</span> is 48.0% of FY consensus against a 43.5% three-year norm, a <span class=\"val-up\">+4.5pp</span> deviation that leaves the H2 hurdle below historic average.",
+          "textPlain": "H1 adjusted EPS of 23.4p is 48.0% of FY consensus against a 43.5% three-year norm, a +4.5pp deviation that leaves the H2 hurdle below historic average."
+        },
+        {
+          "pill": "Beat Qual",
+          "type": "amber",
+          "textHTML": "Raise is compositional: H1 adjusted PBT fell <span class=\"val-dn\">8.9%</span> and adjusted EPS <span class=\"val-dn\">12.7%</span> in constant currency, so the uplift comes from the Dalco exit and FX, not trading.",
+          "textPlain": "Raise is compositional: H1 adjusted PBT fell 8.9% and adjusted EPS 12.7% in constant currency, so the uplift comes from the Dalco exit and FX, not trading."
+        },
+        {
+          "pill": "Foppen",
+          "type": "red",
+          "textHTML": "Seafood remains the drag, with Greek export restrictions to the US unresolved and <span class=\"val-dn\">£21.0m</span> of exceptional charges, though Seachill self-help lands in H2.",
+          "textPlain": "Seafood remains the drag, with Greek export restrictions to the US unresolved and £21.0m of exceptional charges, though Seachill self-help lands in H2."
+        },
+        {
+          "pill": "Cash",
+          "type": "amber",
+          "textHTML": "Net bank debt of <span class=\"val-fl\">£194.4m</span> against £126.7m at year end, with £100m capex and an H2 frozen inventory build, but year-end leverage still guided within <span class=\"val-fl\">1–2x</span>.",
+          "textPlain": "Net bank debt of £194.4m against £126.7m at year end, with £100m capex and an H2 frozen inventory build, but year-end leverage still guided within 1–2x."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+5–8%",
+          "sub": "48.8p→51-53p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+2–5%",
+          "sub": "54.1p→55-57p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "4365m→reit",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "4552m→reit",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS St",
+          "val": "62.7p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "48.8p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−22.2%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "RISING",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+6.2%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "−37%",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "Consensus EPS / TP · 16m",
+      "sparkSVG": "\n        <svg id=\"spark-HFG\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-HFG\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+4.5pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-09-03T12:22:31.951Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 62.7,
+          "price": 1081
+        },
+        {
+          "d": "26 Jul 25",
+          "eps": 62.6,
+          "price": 1061
+        },
+        {
+          "d": "06 Sep 25",
+          "eps": 61.3,
+          "price": 1004
+        },
+        {
+          "d": "18 Oct 25",
+          "eps": 60.1,
+          "price": 999
+        },
+        {
+          "d": "15 Nov 25",
+          "eps": 57.6,
+          "price": 765
+        },
+        {
+          "d": "27 Dec 25",
+          "eps": 58,
+          "price": 765
+        },
+        {
+          "d": "31 Jan 26",
+          "eps": 57.6,
+          "price": 759
+        },
+        {
+          "d": "28 Feb 26",
+          "eps": 58,
+          "price": 731
+        },
+        {
+          "d": "28 Mar 26",
+          "eps": 57.3,
+          "price": 689
+        },
+        {
+          "d": "04 Apr 26",
+          "eps": 47.1,
+          "price": 689
+        },
+        {
+          "d": "11 Apr 26",
+          "eps": 47.8,
+          "price": 739
+        },
+        {
+          "d": "29 May 26",
+          "eps": 47.5,
+          "price": 689
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 47.4,
+          "price": 667
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 48.3,
+          "price": 667
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 48.8,
+          "price": 683
+        }
+      ],
+      "entryPrice": 636
+    },
+    {
+      "id": "CRST_2026_09_03",
+      "ticker": "CRST",
+      "score": 12,
+      "company": "Crest Nicholson Holdings Ltd",
+      "verdict": "Negative · material downgrades",
+      "date": "2026-09-03",
+      "rnsType": "Pre-FY Update",
+      "mode": "Q2",
+      "index": "FTSE SMALL CAP",
+      "signals": [
+        {
+          "pill": "⛔ Profit Warn",
+          "type": "red",
+          "textHTML": "FY26 EBIT now guided to a <span class=\"val-dn\">loss of around £10m</span>, down from prior guidance of £5m–£10m of profit — a <span class=\"val-dn\">c.£17m</span> swing and the second downgrade inside six months.",
+          "textPlain": "FY26 EBIT now guided to a loss of around £10m, down from prior guidance of £5m–£10m of profit — a c.£17m swing and the second downgrade inside six months."
+        },
+        {
+          "pill": "Sales Rate",
+          "type": "red",
+          "textHTML": "Net open market sales rate of just <span class=\"val-dn\">0.35</span> over the last six weeks, against 0.48 in the first half and <span class=\"val-dn\">0.55</span> in the same period last year — demand deteriorating.",
+          "textPlain": "Net open market sales rate of just 0.35 over the last six weeks, against 0.48 in the first half and 0.55 in the same period last year — demand deteriorating."
+        },
+        {
+          "pill": "⛔ Covenants",
+          "type": "red",
+          "textHTML": "Lender talks to amend covenants continue but the Group now flags <span class=\"val-dn\">slippage</span> in the current timetable, with a further market update only promised in due course.",
+          "textPlain": "Lender talks to amend covenants continue but the Group now flags slippage in the current timetable, with a further market update only promised in due course."
+        },
+        {
+          "pill": "Completions",
+          "type": "red",
+          "textHTML": "FY26 completions cut to <span class=\"val-dn\">1,350–1,400</span> from 1,400–1,500, with further NRV provisions taken on a small number of sites as bulk pricing stays under pressure.",
+          "textPlain": "FY26 completions cut to 1,350–1,400 from 1,400–1,500, with further NRV provisions taken on a small number of sites as bulk pricing stays under pressure."
+        },
+        {
+          "pill": "Net Debt",
+          "type": "green",
+          "textHTML": "Year-end net debt guided to <span class=\"val-up\">£70m–£90m</span> against £100m–£120m previously, a <span class=\"val-up\">c.£30m</span> improvement helped by a further material fire remediation recovery from a third party.",
+          "textPlain": "Year-end net debt guided to £70m–£90m against £100m–£120m previously, a c.£30m improvement helped by a further material fire remediation recovery from a third party."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−200%+",
+          "sub": "-2.4p→c.-9p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−50–90%",
+          "sub": "2.3p→0-1p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "−3–6%",
+          "sub": "500m→470-485m",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "−3–6%",
+          "sub": "538m→505-522m",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS St",
+          "val": "9.0p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "−2.4p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−126.7%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "FALLING",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "−19.2%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "−60%",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "Consensus EPS / TP · 16m",
+      "sparkSVG": "\n        <svg id=\"spark-CRST\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-CRST\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-09-03T12:22:31.951Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "18 May 25",
+          "eps": 9,
+          "price": 210
+        },
+        {
+          "d": "05 Jul 25",
+          "eps": 9,
+          "price": 212
+        },
+        {
+          "d": "30 Aug 25",
+          "eps": 9.1,
+          "price": 212
+        },
+        {
+          "d": "25 Oct 25",
+          "eps": 9.1,
+          "price": 212
+        },
+        {
+          "d": "22 Nov 25",
+          "eps": 8.1,
+          "price": 200
+        },
+        {
+          "d": "20 Dec 25",
+          "eps": 7.8,
+          "price": 189
+        },
+        {
+          "d": "31 Jan 26",
+          "eps": 7.9,
+          "price": 183
+        },
+        {
+          "d": "07 Feb 26",
+          "eps": 10.2,
+          "price": 188
+        },
+        {
+          "d": "28 Mar 26",
+          "eps": 9.8,
+          "price": 186
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 0.9,
+          "price": 117
+        },
+        {
+          "d": "23 May 26",
+          "eps": -1.4,
+          "price": 97
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": -1.4,
+          "price": 88
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": -1.6,
+          "price": 87
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": -2.4,
+          "price": 83
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": -2.4,
+          "price": 83
+        }
+      ],
+      "entryPrice": 64.1
     }
   ],
   "brokerChanges": [
