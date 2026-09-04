@@ -5459,7 +5459,11 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var el=document.getElementById(contentId);if(!el)return;
   Object.values(chartStore).forEach(function(c){try{c.destroy();}catch(e){}});for(var k in chartStore)delete chartStore[k];
   if(!active||!fcStockData[active]){el.innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">🔍</div><div class="fc-no-data-title">No data for '+(active||'ticker')+'</div><div class="fc-no-data-sub">Load or paste a ShareScope data block.</div></div>';return;}
-  var rows=fcStockData[active],f=rows[0],l=rows[rows.length-1];
+  var rows=fcStockData[active];
+  /* first/last VALID value per field (blank weeks skipped) */
+  function fcEnds(field){var a=null,b=null;for(var i=0;i<rows.length;i++){var v=rows[i][field];if(v!==null&&v!==undefined&&!isNaN(v)){if(a===null)a=v;b=v;}}return{a:a,b:b};}
+  var eR=fcEnds('rev'),eE=fcEnds('eps'),eT=fcEnds('tp');
+  var f={rev:eR.a,eps:eE.a,tp:eT.a,date:rows[0].date},l={rev:eR.b,eps:eE.b,tp:eT.b,date:rows[rows.length-1].date};
   rows._fcTicker=active;rows._fcRolls=fcComputeRollovers(rows,active);
   var nd=fcNetDirection(rows);
   function pc(a,b){return(a!==null&&b!==null&&a!==undefined&&b!==undefined&&b&&isFinite((a-b)/b))?(((a-b)/Math.abs(b))*100).toFixed(1):'—';}
@@ -5467,10 +5471,10 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var ndStyle='font-size:18px;font-weight:600;'+(nd.cls==='neg'?'color:var(--red)':nd.cls==='pos'?'color:var(--green)':'color:var(--text-secondary)');
   var fmtRev=function(v){return '£'+Number(v).toFixed(0)+'m';},fmtEps=function(v){return Number(v).toFixed(1)+'p';},fmtTp=function(v){return fcFmtPence(Number(v));};
   el.innerHTML=
-    fcStatBar([{lbl:'Rev now',val:fcVal(l.rev,0,'m','£'),sub:fcFmtChg(revChg)+' · '+f.date+' → '+l.date,chg:revChg},
-               {lbl:'EPS now',val:fcVal(l.eps,1,'p'),sub:fcFmtChg(epsChg)+' full period',chg:epsChg},
-               {lbl:'Target now',val:l.tp!==null&&l.tp!==undefined?fcFmtPence(l.tp):'—',sub:fcFmtChg(tpChg)+' full period',chg:tpChg},
-               {lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])
+    fcStatBar([{lbl:'Revenue',val:fcVal(f.rev,0,'m','£')+' → '+fcVal(l.rev,0,'m','£'),sub:fcFmtChg(revChg)+' · '+f.date+' → '+l.date,chg:revChg},
+               {lbl:'EPS',val:fcVal(f.eps,1,'p')+' → '+fcVal(l.eps,1,'p'),sub:fcFmtChg(epsChg)+' full period',chg:epsChg},
+               {lbl:'Target price',val:(f.tp!==null?fcFmtPence(f.tp):'—')+' → '+(l.tp!==null?fcFmtPence(l.tp):'—'),sub:fcFmtChg(tpChg)+' full period',chg:tpChg},
+               {lbl:'Net direction (EPS fc, ex-rollover)',val:nd.label,sub:nd.sub,cls:nd.cls}])
     +'<div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:10px;align-items:start;">'
       +'<div>'
         +'<div class="fc-chart-card"><div class="fc-chart-title">Revenue Forecast — fc vs 2yr fc — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'cr"></canvas></div></div>'
