@@ -5263,14 +5263,18 @@ function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);
 function fcBuildChart(id,labels,data,lineColor,fillColor,unit,dotArr,small){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d'),ts=small?8:9;fcChartObjs[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:unit,data:data,borderColor:lineColor,backgroundColor:fillColor,borderWidth:2,tension:0.1,fill:true,pointRadius:dotArr.map(function(d){return d.radius;}),pointBackgroundColor:dotArr.map(function(d){return d.color;}),pointBorderColor:dotArr.map(function(d){return d.radius>3?d.color:'transparent';}),pointBorderWidth:dotArr.map(function(d){return d.radius>3?2:0;}),pointHoverRadius:dotArr.map(function(d){return d.radius>3?7:5;}),yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:ts},bodyFont:{family:'Inter',size:ts},callbacks:{label:function(ctx){var v=ctx.parsed.y;return unit==='£'?' TP: £'+v.toFixed(2):unit==='£m'?' Rev: £'+v.toFixed(0)+'m':' EPS: '+v.toFixed(1)+'p';}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:small?7:10,font:{family:'Inter',size:ts},color:'#6a6a85',maxRotation:30}},y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:ts},color:lineColor,callback:function(v){return unit==='£'?'£'+v.toFixed(2):unit==='£m'?'£'+v.toFixed(0)+'m':v.toFixed(1)+'p';}}}}}}); }
 function fcStatsFor(rows){var f=rows[0],l=rows[rows.length-1];function pc(a,b){return(b&&isFinite((a-b)/b))?(((a-b)/b)*100).toFixed(1):'—';}return{first:f,last:l,epsChg:pc(l.eps,f.eps),revChg:pc(l.rev,f.rev),tpChg:pc(l.tp,f.tp)};}
 function fcNetDirection(rows){
-  /* Compound the weekly EPS fc changes, skipping blank weeks AND FY rollover jumps,
-     so a new financial year starting doesn't read as a broker upgrade. */
-  var prev=null,factor=1,any=false;var rolls=fcGetRollovers(rows,'eps');
+  /* Sum the weekly EPS fc changes (skipping blank weeks AND FY rollover jumps),
+     then scale against the EPS level. Additive deltas keep the direction correct
+     for loss-makers too: -1.1p improving to -1.0p is +0.1p of good news, and
+     crossing zero doesn't break anything (ratio-compounding fails on both). */
+  var prev=null,sum=0,any=false,first=null,last=null;var rolls=fcGetRollovers(rows,'eps');
   for(var i=0;i<rows.length;i++){var v=rows[i].eps;if(v===null||v===undefined||isNaN(v))continue;
-    if(prev!==null&&Math.abs(prev)>0.0001&&!rolls[i]){factor*=v/prev;any=true;}
+    if(first===null)first=v;last=v;
+    if(prev!==null&&!rolls[i]){sum+=v-prev;any=true;}
     prev=v;}
   if(!any)return{label:'— Neutral',cls:'',sub:'insufficient data'};
-  var pct=(factor-1)*100;
+  var denom=Math.max(Math.abs(first),Math.abs(last),0.1);
+  var pct=sum/denom*100;
   if(pct>1)return{label:'▲ Bullish',cls:'pos',sub:'EPS fc '+(pct>0?'+':'')+pct.toFixed(1)+'% over period'};
   if(pct<-1)return{label:'▼ Bearish',cls:'neg',sub:'EPS fc '+pct.toFixed(1)+'% over period'};
   return{label:'— Neutral',cls:'',sub:'EPS fc '+(pct>=0?'+':'')+pct.toFixed(1)+'% over period'};}
