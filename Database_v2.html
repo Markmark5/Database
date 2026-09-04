@@ -5324,18 +5324,20 @@ function fcYEMonth(tk){try{if(typeof lookupYE!=='function')return null;var ye=lo
 function fcRowDate(s){var m=String(s||'').match(/^(\d{1,2})\s+(\w+)\s+(\d{2,4})/);if(!m)return null;
   var mo={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}[m[2].slice(0,3).toLowerCase()];
   if(!mo)return null;var y=+m[3];if(y<100)y+=2000;return{d:+m[1],m:mo,y:y,dt:new Date(y,mo-1,+m[1])};}
-/* Prev prelim results date from File 5 (DD/M/YY) — the exact event that triggers the FY roll */
-function fcPrelimDate(tk){try{
+/* Event dates from File 5 (D/M/YY format), looked up by column name */
+function fcFile5Date(tk,col){try{
   if(typeof exState==='undefined'||!exState.rows5||!exState.rows5.length||!tk)return null;
   var t=String(tk).trim().toUpperCase();
   for(var i=0;i<exState.rows5.length;i++){var row=exState.rows5[i];
     var tid=(row.TIDM||row.Tidm||row.tidm||'').toString().trim().toUpperCase();
     if(tid!==t)continue;
-    var raw=(row['Prev prelim results announce']||'').toString().trim();
+    var raw=(row[col]||'').toString().trim();
     var m=raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
     if(!m)return null;var y=+m[3];if(y<100)y+=2000;
     return new Date(y,+m[2]-1,+m[1]);}
   return null;}catch(e){return null;}}
+/* Prev prelim results date — the exact event that triggers the FY roll */
+function fcPrelimDate(tk){return fcFile5Date(tk,'Prev prelim results announce');}
 function fcComputeRollovers(rows,ticker){
   var flags=rows.map(function(){return false;});
   var prelim=ticker?fcPrelimDate(ticker):null;
@@ -5415,19 +5417,28 @@ function fcEventLog2(rows,field){var evts=[];var prevVal=null,prevRow=null;
 /* Dashed vertical marker at the prelim/finals date, drawn between the two
    surrounding weekly points so it sits on the actual calendar day. */
 var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
-  var v=chart.options._fcVline;if(!v)return;
+  var evs=chart.options._fcEvents;if(!evs||!evs.length)return;
   var xs=chart.scales.x,ca=chart.chartArea;if(!xs||!ca)return;
   var n=chart.data.labels.length;if(n<2)return;
   var x0=xs.getPixelForValue(0),x1=xs.getPixelForValue(n-1);
-  var px=x0+(v.x/(n-1))*(x1-x0);
-  if(px<ca.left||px>ca.right)return;
   var ctx=chart.ctx;ctx.save();
-  ctx.strokeStyle='rgba(143,180,255,0.45)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
-  ctx.beginPath();ctx.moveTo(px,ca.top);ctx.lineTo(px,ca.bottom);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.font='700 8px Inter';ctx.fillStyle='rgba(143,180,255,0.75)';
-  ctx.textAlign=px>ca.left+((ca.right-ca.left)/2)?'right':'left';
-  ctx.fillText(v.label,px+(ctx.textAlign==='left'?4:-4),ca.top+9);
+  evs.forEach(function(v){
+    var px=x0+(v.x/(n-1))*(x1-x0);
+    if(px<ca.left||px>ca.right)return;
+    if(v.line){
+      ctx.strokeStyle='rgba(143,180,255,0.45)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(px,ca.top);ctx.lineTo(px,ca.bottom);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font='700 8px Inter';ctx.fillStyle='rgba(143,180,255,0.75)';
+      ctx.textAlign=px>ca.left+((ca.right-ca.left)/2)?'right':'left';
+      ctx.fillText(v.topLabel,px+(ctx.textAlign==='left'?4:-4),ca.top+9);
+    }
+    /* bottom label + exact-day tick */
+    ctx.strokeStyle=v.color;ctx.lineWidth=1;ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(px,ca.bottom);ctx.lineTo(px,ca.bottom-5);ctx.stroke();
+    ctx.font='700 9px Inter';ctx.fillStyle=v.color;ctx.textAlign='center';
+    ctx.fillText(v.label,px,ca.bottom-9);
+  });
   ctx.restore();}};
 function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
   var labels=rows.map(function(r){return r.date;});
@@ -5443,7 +5454,7 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   var scales={x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:10,font:{family:'Inter',size:9},color:'#6a6a85',maxRotation:30}},
     y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:9},color:cfg.c1,callback:cfg.fmt}}};
   if(!cfg.pxOnMain)scales.y2={position:'right',grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'rgba(200,210,235,0.55)',callback:function(v){return fcFmtPence(v);}},title:{display:true,text:'Share price',font:{family:'Inter',size:8},color:'rgba(200,210,235,0.45)'}};
-  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales,_fcVline:cfg.vline||null},plugins:[fcVLinePlugin]});}
+  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales,_fcEvents:cfg.events||null},plugins:[fcVLinePlugin]});}
 function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var el=document.getElementById(contentId);if(!el)return;
   Object.values(chartStore).forEach(function(c){try{c.destroy();}catch(e){}});for(var k in chartStore)delete chartStore[k];
@@ -5477,15 +5488,21 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
         +'<div id="'+chartPrefix+'logbody" style="flex:1;overflow-y:auto;">'+fcEventLog2(rows,fcLogField)+'</div>'
       +'</div>'
     +'</div>';
-  var vline=null;
-  (function(){var pd=fcPrelimDate(active);if(!pd)return;
-    var d0=fcRowDate(rows[0].date),dn=fcRowDate(rows[rows.length-1].date);
-    if(!d0||!dn||pd<d0.dt||pd>dn.dt)return;
+  var fcMonNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fcXFrac(pd){var d0=fcRowDate(rows[0].date),dn=fcRowDate(rows[rows.length-1].date);
+    if(!pd||!d0||!dn||pd<d0.dt||pd>dn.dt)return null;
     for(var i=1;i<rows.length;i++){var a=fcRowDate(rows[i-1].date),b=fcRowDate(rows[i].date);
-      if(a&&b&&pd>=a.dt&&pd<=b.dt){var span=b.dt-a.dt;var frac=span>0?(pd-a.dt)/span:0;
-        vline={x:i-1+frac,label:'FINALS '+pd.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][pd.getMonth()]};return;}}})();
-  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,vline:vline});
-  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,vline:vline});
+      if(a&&b&&pd>=a.dt&&pd<=b.dt){var span=b.dt-a.dt;return i-1+(span>0?(pd-a.dt)/span:0);}}
+    return null;}
+  var events=[];
+  [{col:'Prev prelim results announce',label:'FY',color:'#8fb4ff',line:true},
+   {col:'Prev interims announce',label:'H1',color:'#2dd4bf'},
+   {col:"Prev Company's AGM date",label:'AGM',color:'#ffb340'}].forEach(function(ev){
+    var pd=fcFile5Date(active,ev.col);var x=fcXFrac(pd);
+    if(x!==null)events.push({x:x,label:ev.label,color:ev.color,line:!!ev.line,
+      topLabel:'FINALS '+pd.getDate()+' '+fcMonNames[pd.getMonth()]});});
+  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events});
+  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events});
   fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
