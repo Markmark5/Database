@@ -5459,20 +5459,21 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
       ctx.fillText(v.topLabel,px+(ctx.textAlign==='left'?4:-4),ca.top+9);
     }
     if(v.kind==='score'){
-      /* RNS scorecard badge: score number in a coloured circle at the top */
-      var cy=ca.top+14;
+      /* RNS scorecard badge: vertical position graded by score —
+         100 touches the top of the plot, 0 touches the bottom, 50 sits centre */
+      var R=9,sc=Math.max(0,Math.min(100,+v.label||0));
+      var cy=ca.top+R+(1-sc/100)*(ca.bottom-ca.top-2*R);
       chart._fcScoreHits=chart._fcScoreHits||[];
-      chart._fcScoreHits.push({x:px,y:cy,r:11});
+      chart._fcScoreHits.push({x:px,y:cy,r:12});
       ctx.setLineDash([]);
-      ctx.fillStyle=v.color;ctx.strokeStyle='rgba(255,255,255,0.85)';ctx.lineWidth=1;
-      ctx.beginPath();ctx.arc(px,cy,9,0,Math.PI*2);ctx.fill();ctx.stroke();
+      /* full-height faint guide so the date and score height are both readable */
+      ctx.strokeStyle=v.colorFaint||'rgba(255,255,255,0.10)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(px,ca.top);ctx.lineTo(px,ca.bottom);ctx.stroke();
+      ctx.fillStyle=v.color;ctx.strokeStyle='rgba(255,255,255,0.85)';
+      ctx.beginPath();ctx.arc(px,cy,R,0,Math.PI*2);ctx.fill();ctx.stroke();
       ctx.font='700 8px Inter';ctx.fillStyle='#0d0d16';ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText(String(v.label),px,cy+0.5);
       ctx.textBaseline='alphabetic';
-      /* thin guide down to the axis so the date is readable */
-      ctx.strokeStyle=v.color.replace(')',',0.25)').replace('rgb','rgba');
-      ctx.strokeStyle=v.colorFaint||'rgba(255,255,255,0.10)';
-      ctx.beginPath();ctx.moveTo(px,cy+10);ctx.lineTo(px,ca.bottom);ctx.stroke();
       return;
     }
     /* bottom label + exact-day tick */
