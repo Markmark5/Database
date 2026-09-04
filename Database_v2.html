@@ -5265,10 +5265,10 @@ function fcStatsFor(rows){var f=rows[0],l=rows[rows.length-1];function pc(a,b){r
 function fcNetDirection(rows){
   /* Compound the weekly EPS fc changes, skipping blank weeks AND FY rollover jumps,
      so a new financial year starting doesn't read as a broker upgrade. */
-  var prev=null,prevRow=null,factor=1,any=false;
+  var prev=null,factor=1,any=false;var rolls=fcGetRollovers(rows,'eps');
   for(var i=0;i<rows.length;i++){var v=rows[i].eps;if(v===null||v===undefined||isNaN(v))continue;
-    if(prev!==null&&Math.abs(prev)>0.0001&&!fcIsRollover('eps',v,prevRow)){factor*=v/prev;any=true;}
-    prev=v;prevRow=rows[i];}
+    if(prev!==null&&Math.abs(prev)>0.0001&&!rolls[i]){factor*=v/prev;any=true;}
+    prev=v;}
   if(!any)return{label:'— Neutral',cls:'',sub:'insufficient data'};
   var pct=(factor-1)*100;
   if(pct>1)return{label:'▲ Bullish',cls:'pos',sub:'EPS fc '+(pct>0?'+':'')+pct.toFixed(1)+'% over period'};
@@ -5283,25 +5283,152 @@ function fcEventLogSm(rows,field){var evts=[];for(var i=1;i<rows.length;i++){var
 function fcDgTable(rows){var changes=[];for(var i=1;i<rows.length;i++){var p=rows[i-1],c=rows[i],eD=c.eps-p.eps,rD=c.rev-p.rev,tD=c.tp-p.tp;if(Math.abs(eD)<0.05&&Math.abs(rD)<0.5&&Math.abs(tD)<0.005)continue;var ep=parseFloat((eD/p.eps*100).toFixed(1)),rp=parseFloat((rD/p.rev*100).toFixed(1)),tpp=parseFloat((tD/p.tp*100).toFixed(1));var dir=eD<-0.049?'down':eD>0.049?'up':tD<0?'down':'up';changes.push({n:changes.length+1,date:c.date,dir:dir,eb:p.eps,ea:c.eps,ep:ep,rb:p.rev,ra:c.rev,rp:rp,tb:p.tp,ta:c.tp,tpp:tpp});}if(!changes.length)return '<div style="padding:20px;color:var(--text-dim);text-align:center;font-size:11px">No changes detected</div>';var th=function(label,r){return '<th style="padding:7px 10px;text-align:'+(r?'right':'left')+';font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">'+label+'</th>';};var sep='<th style="background:var(--border);width:1px;padding:0;border-bottom:1px solid var(--border)"></th>';return '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:var(--surface2);">'+th('#')+th('Date')+th('Dir')+sep+th('EPS before')+th('EPS after')+th('EPS △',1)+sep+th('Rev before')+th('Rev after')+th('Rev △',1)+sep+th('TP before')+th('TP after')+th('TP △',1)+'</tr></thead><tbody>'+changes.map(function(d){var dc=d.dir==='down'?'color:var(--red)':'color:var(--green)';var sd='<td style="background:var(--border);width:1px;padding:0"></td>';return '<tr><td style="padding:8px 10px;color:var(--text-dim)">'+d.n+'</td><td style="padding:8px 10px;">'+d.date+'</td><td style="padding:8px 10px;'+dc+';font-weight:600">'+(d.dir==='down'?'▼ DOWN':'▲ UP')+'</td>'+sd+'<td style="padding:8px 10px;">'+d.eb.toFixed(1)+'p</td><td style="padding:8px 10px;">'+d.ea.toFixed(1)+'p</td><td style="padding:8px 10px;text-align:right;'+(d.ep<0?'color:var(--red)':d.ep>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.ep>0?'+':'')+d.ep+'%</td>'+sd+'<td style="padding:8px 10px;">£'+d.rb.toFixed(0)+'m</td><td style="padding:8px 10px;">£'+d.ra.toFixed(0)+'m</td><td style="padding:8px 10px;text-align:right;'+(d.rp<0?'color:var(--red)':d.rp>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.rp>0?'+':'')+d.rp+'%</td>'+sd+'<td style="padding:8px 10px;">£'+d.tb.toFixed(2)+'</td><td style="padding:8px 10px;">£'+d.ta.toFixed(2)+'</td><td style="padding:8px 10px;text-align:right;'+(d.tpp<0?'color:var(--red)':d.tpp>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.tpp>0?'+':'')+d.tpp+'%</td></tr>';}).join('')+'</tbody></table></div>';}
 function fcOvStatRow(start,now,chg,startDate,label){var cs=parseFloat(chg)<0?'color:var(--red)':parseFloat(chg)>0?'color:var(--green)':'color:var(--text-secondary)';return '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' start</div><div style="font-size:15px;font-weight:600;line-height:1;color:var(--text-primary)">'+start+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">'+startDate+'</div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' now</div><div style="font-size:15px;font-weight:600;line-height:1;color:var(--text-primary)">'+now+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">FY1</div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' △</div><div style="font-size:15px;font-weight:600;line-height:1;'+cs+'">'+fcFmtChg(chg)+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">full period</div></div></div>';}
 var fcLogField='rev';
-function fcSetLog(f,prefix){fcLogField=f;['rev','eps','tp'].forEach(function(k){var btn=document.getElementById(prefix+'logbtn-'+k);if(btn)btn.className='fc-tab'+(k===f?' on':'');});var el=document.getElementById(prefix+'logbody');if(el)el.innerHTML=fcEventLog2(fcStockData[prefix==='fcfs-'?fcFsActive:fcActive]||[],f);}
+function fcSetLog(f,prefix){fcLogField=f;['rev','eps','tp'].forEach(function(k){var btn=document.getElementById(prefix+'logbtn-'+k);if(btn)btn.className='fc-tab'+(k===f?' on':'');});var hd=document.getElementById(prefix+'loghead');if(hd)hd.style.display=(f==='tp')?'none':'flex';var el=document.getElementById(prefix+'logbody');if(el)el.innerHTML=fcEventLog2(fcStockData[prefix==='fcfs-'?fcFsActive:fcActive]||[],f);}
 /* FY rollover detection: when ShareScope's FY1 rolls to the next year, the new fc value
    lands on (or very near) the previous week's 2yr fc. That is a calendar event, not a broker change. */
-function fcIsRollover(field,curVal,prevRow){
+/* One field's rollover test: a jump that lands (near-)exactly on last week's 2yr fc.
+   Tolerance is tight (~0.15% or one decimal step) because at a true rollover ShareScope
+   shifts the actual column — the numbers match to the decimal, unlike a big upgrade
+   that only lands nearby by coincidence. */
+function fcRollTest(field,curVal,prevRow){
   var comp=field==='eps'?'eps2':field==='rev'?'rev2':null;
   if(!comp||!prevRow)return false;
   var p2=prevRow[comp],p1=prevRow[field];
   if(p2===null||p2===undefined||isNaN(p2)||Math.abs(p2)<0.0001)return false;
   if(p1===null||p1===undefined||isNaN(p1)||Math.abs(p1)<0.0001)return false;
-  var jump=Math.abs((curVal-p1)/p1);          /* how big the move looks */
-  var match=Math.abs((curVal-p2)/p2);         /* how close it sits to last week's 2yr fc */
-  return jump>0.02&&match<0.015;
+  var jump=Math.abs((curVal-p1)/p1);
+  /* 1% tolerance: the rollover week often also carries a small broker nudge,
+     so the new fc lands NEAR last week's 2yr fc rather than exactly on it.
+     The same-week EPS+Rev cross-check is what rejects coincidences. */
+  var tol=Math.max(Math.abs(p2)*0.01,0.051);
+  return jump>0.02&&Math.abs(curVal-p2)<=tol;
+}
+/* Full rollover check: a real FY rollover moves EPS and Revenue in the SAME week,
+   so the companion field must also pass (unless its data is missing that week). */
+function fcIsRollover(field,curVal,prevRow,curRow){
+  if(!fcRollTest(field,curVal,prevRow))return false;
+  if(field!=='eps'&&field!=='rev')return false;
+  var other=field==='eps'?'rev':'eps';
+  if(!curRow)return true;
+  var ov=curRow[other];
+  if(ov===null||ov===undefined||isNaN(ov))return true;   /* no data to cross-check */
+  return fcRollTest(other,ov,prevRow);
+}
+/* ── FY ROLLOVER DETECTION ──
+   Primary rule: a rollover can only occur 1–6 months AFTER the company's year-end
+   (when results publish and ShareScope rolls the forecast year). Year-end comes from
+   File 1's "Next year end date" via lookupYE(). Within each year's window, the week
+   with the biggest synchronized EPS+Rev jump is the rollover. Outside the window,
+   nothing is ever flagged. If YE is unknown, fall back to the value-match test. */
+function fcYEMonth(tk){try{if(typeof lookupYE!=='function')return null;var ye=lookupYE(tk);var m=ye&&ye.match(/^(\d{2})\/(\d{2})/);return m?parseInt(m[2],10):null;}catch(e){return null;}}
+function fcRowDate(s){var m=String(s||'').match(/^(\d{1,2})\s+(\w+)\s+(\d{2,4})/);if(!m)return null;
+  var mo={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12}[m[2].slice(0,3).toLowerCase()];
+  if(!mo)return null;var y=+m[3];if(y<100)y+=2000;return{d:+m[1],m:mo,y:y,dt:new Date(y,mo-1,+m[1])};}
+/* Prev prelim results date from File 5 (DD/M/YY) — the exact event that triggers the FY roll */
+function fcPrelimDate(tk){try{
+  if(typeof exState==='undefined'||!exState.rows5||!exState.rows5.length||!tk)return null;
+  var t=String(tk).trim().toUpperCase();
+  for(var i=0;i<exState.rows5.length;i++){var row=exState.rows5[i];
+    var tid=(row.TIDM||row.Tidm||row.tidm||'').toString().trim().toUpperCase();
+    if(tid!==t)continue;
+    var raw=(row['Prev prelim results announce']||'').toString().trim();
+    var m=raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
+    if(!m)return null;var y=+m[3];if(y<100)y+=2000;
+    return new Date(y,+m[2]-1,+m[1]);}
+  return null;}catch(e){return null;}}
+function fcComputeRollovers(rows,ticker){
+  var flags=rows.map(function(){return false;});
+  var prelim=ticker?fcPrelimDate(ticker):null;
+  var yeM=(!prelim&&ticker)?fcYEMonth(ticker):null;
+  var prelimEnd=prelim?new Date(prelim.getTime()+70*86400000):null; /* prelim + 10 weeks */
+  var pe=null,pr=null,pe2=null,pr2=null,prevRow=null,lastRoll=-9999,cands=[],prelimDone=false;
+  for(var i=0;i<rows.length;i++){
+    var e=rows[i].eps,r=rows[i].rev;
+    var eOk=(e!==null&&e!==undefined&&!isNaN(e)),rOk=(r!==null&&r!==undefined&&!isNaN(r));
+    var je=(eOk&&pe!==null&&Math.abs(pe)>0.0001)?(e-pe)/Math.abs(pe):null;
+    var jr=(rOk&&pr!==null&&Math.abs(pr)>0.0001)?(r-pr)/Math.abs(pr):null;
+    /* Moves can go EITHER direction — loss-makers roll to a bigger/smaller loss.
+       Prelim tier: any significant move (>2% either field) counts, since the results
+       date itself pins the timing. YE tier (6-month window) stays stricter: both
+       fields must move >2% when both are present. */
+    var ae=je!==null?Math.abs(je):null,ar=jr!==null?Math.abs(jr):null;
+    var candLoose=(ae!==null&&ae>0.02)||(ar!==null&&ar>0.02);
+    var cand=(ae!==null&&ar!==null)?(ae>0.02&&ar>0.02):candLoose;
+    if(prelim){
+      /* Primary: the FIRST significant move on/after the prelim results date is THE rollover.
+         Within 4 weeks of results, any move qualifies (rolls normally show fast).
+         5–10 weeks out, the move must land within ~3% of the old 2yr figure —
+         otherwise it's a later broker change trying to steal the rollover label
+         (the true roll was too small to see). */
+      if(candLoose&&!prelimDone){var dd=fcRowDate(rows[i].date);
+        if(dd&&dd.dt>=prelim&&dd.dt<=prelimEnd){
+          var days=(dd.dt-prelim)/86400000,ok=days<=28;
+          if(!ok){
+            var mE=(e!==null&&e!==undefined&&!isNaN(e)&&pe2!==null&&Math.abs(pe2)>0.0001)?Math.abs((e-pe2)/pe2):null;
+            var mR=(r!==null&&r!==undefined&&!isNaN(r)&&pr2!==null&&Math.abs(pr2)>0.0001)?Math.abs((r-pr2)/pr2):null;
+            ok=(mE!==null&&mE<=0.03)||(mR!==null&&mR<=0.03);
+          }
+          if(ok){flags[i]=true;prelimDone=true;}}}
+    }else if(yeM){
+      if(cand){var d=fcRowDate(rows[i].date);
+        if(d){var after=(d.m-yeM+12)%12;
+          if(after>=1&&after<=6){var yeYear=(d.m-yeM>=1)?d.y:d.y-1;
+            cands.push({i:i,score:(ae||0)+(ar||0),key:yeYear});}}}
+    }else{
+      /* no YE known: old value-match + cross-check + 40-week spacing */
+      if(eOk&&prevRow&&i-lastRoll>=40&&fcIsRollover('eps',e,prevRow,rows[i])){flags[i]=true;lastRoll=i;}
+      else if(!eOk&&rOk&&prevRow&&i-lastRoll>=40&&fcIsRollover('rev',r,prevRow,rows[i])){flags[i]=true;lastRoll=i;}
+    }
+    if(eOk)pe=e;if(rOk)pr=r;
+    var e2=rows[i].eps2,r2=rows[i].rev2;
+    if(e2!==null&&e2!==undefined&&!isNaN(e2))pe2=e2;
+    if(r2!==null&&r2!==undefined&&!isNaN(r2))pr2=r2;
+    prevRow=rows[i];
+  }
+  if(yeM){var best={};cands.forEach(function(c){if(!best[c.key]||c.score>best[c.key].score)best[c.key]=c;});
+    Object.keys(best).forEach(function(k){flags[best[k].i]=true;});}
+  return flags;
+}
+function fcGetRollovers(rows,field){
+  if(field!=='eps'&&field!=='rev')return rows.map(function(){return false;});
+  if(!rows._fcRolls)rows._fcRolls=fcComputeRollovers(rows,rows._fcTicker||null);
+  return rows._fcRolls;
 }
 function fcVal(v,dp,suf,pre){return (v===null||v===undefined||isNaN(v))?'—':(pre||'')+v.toFixed(dp)+(suf||'');}
-function fcDots2(rows,field){var prev=null,prevRow=null;return rows.map(function(r){var b=r[field];if(b===null||b===undefined||isNaN(b))return{color:'rgba(0,0,0,0)',radius:1.5};if(prev===null){prev=b;prevRow=r;return{color:'rgba(0,0,0,0)',radius:1.5};}var d=b-prev;var roll=fcIsRollover(field,b,prevRow);prev=b;prevRow=r;if(roll)return{color:'#4a9eff',radius:6,style:'triangle'};if(Math.abs(d)<0.05)return{color:'rgba(255,255,255,0.12)',radius:1.5};return d<0?{color:'#e02525',radius:3}:{color:'#00c814',radius:3};});}
-function fcEventLog2(rows,field){var evts=[];var prevVal=null,prevRow=null;for(var i=0;i<rows.length;i++){var c=rows[i];var v=c[field];if(v===null||v===undefined||isNaN(v))continue;if(prevVal===null){prevVal=v;prevRow=c;continue;}var p={};p[field]=prevVal;p.eps=prevRow.eps;p.rev=prevRow.rev;p.tp=prevRow.tp;var diff=v-prevVal;var skip=Math.abs(diff)<0.05;var roll=fcIsRollover(field,v,prevRow);prevVal=v;prevRow=c;if(skip)continue;
-  if(roll){evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;background:rgba(74,158,255,0.05);"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:#4a9eff;display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:10px;color:#4a9eff">FY ROLLOVER</span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px;padding-left:12px;">fc now tracking the next financial year</div></div>');continue;}var pct=(diff/Math.abs(p[field])*100).toFixed(1),dn=diff<0,col=dn?'var(--red)':'var(--green)';var val='';if(field==='eps'){val=p.eps.toFixed(1)+'p → '+c.eps.toFixed(1)+'p';}else if(field==='rev'){val='£'+p.rev.toFixed(0)+'m → £'+c.rev.toFixed(0)+'m';}else{val=fcFmtPence(p.tp)+' → '+fcFmtPence(c.tp);}evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:11px;'+fcChgColor(pct)+'">'+(dn?'':'+')+pct+'%</span></div><div style="font-size:11px;color:var(--text-primary);margin-top:2px;padding-left:12px;">'+val+'</div></div>');}
+function fcDots2(rows,field){var prev=null;var rolls=fcGetRollovers(rows,field);return rows.map(function(r,i){var b=r[field];if(b===null||b===undefined||isNaN(b))return{color:'rgba(0,0,0,0)',radius:1.5};if(prev===null){prev=b;return{color:'rgba(0,0,0,0)',radius:1.5};}var d=b-prev;var roll=rolls[i];prev=b;if(roll)return{color:'#4a9eff',radius:6,style:'triangle'};if(Math.abs(d)<0.05)return{color:'rgba(255,255,255,0.12)',radius:1.5};return d<0?{color:'#e02525',radius:3}:{color:'#00c814',radius:3};});}
+function fcEventLog2(rows,field){var evts=[];var prevVal=null,prevRow=null;
+  var rolls=fcGetRollovers(rows,field);
+  var comp=field==='eps'?'eps2':field==='rev'?'rev2':null;var prevComp=null;
+  for(var i=0;i<rows.length;i++){var c=rows[i];var v=c[field];
+    var cv=comp?c[comp]:null;var compPct=null;
+    if(comp&&cv!==null&&cv!==undefined&&!isNaN(cv)){
+      if(prevComp!==null&&Math.abs(prevComp)>0.0001)compPct=(cv-prevComp)/Math.abs(prevComp)*100;
+      prevComp=cv;}
+    if(v===null||v===undefined||isNaN(v))continue;if(prevVal===null){prevVal=v;prevRow=c;continue;}var p={};p[field]=prevVal;p.eps=prevRow.eps;p.rev=prevRow.rev;p.tp=prevRow.tp;var diff=v-prevVal;var skip=Math.abs(diff)<0.05;var roll=rolls[i];prevVal=v;prevRow=c;if(skip)continue;
+  if(roll){evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;background:rgba(74,158,255,0.05);"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:#4a9eff;display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:10px;color:#4a9eff">FY ROLLOVER</span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px;padding-left:12px;">fc now tracking the next financial year</div></div>');continue;}var pct=(diff/Math.abs(p[field])*100).toFixed(1),dn=diff<0,col=dn?'var(--red)':'var(--green)';
+  var compHtml='';
+  if(comp){var cTxt='—',cCol='color:var(--text-dim)';
+    if(compPct!==null&&Math.abs(compPct)>=0.05){cTxt=(compPct>0?'+':'')+compPct.toFixed(1)+'%';cCol=compPct<0?'color:var(--red)':'color:var(--green)';}
+    compHtml='<span style="font-weight:600;font-size:10px;min-width:40px;text-align:right;'+cCol+'" title="2yr fc move">'+cTxt+'</span>';}var val='';if(field==='eps'){val=p.eps.toFixed(1)+'p → '+c.eps.toFixed(1)+'p';}else if(field==='rev'){val='£'+p.rev.toFixed(0)+'m → £'+c.rev.toFixed(0)+'m';}else{val=fcFmtPence(p.tp)+' → '+fcFmtPence(c.tp);}evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:11px;'+fcChgColor(pct)+'">'+(dn?'':'+')+pct+'%</span>'+compHtml+'</div><div style="font-size:11px;color:var(--text-primary);margin-top:2px;padding-left:12px;">'+val+'</div></div>');}
   if(!evts.length)return '<div style="padding:12px;color:var(--text-dim);font-size:11px">No significant moves detected</div>';
   return evts.reverse().join('');}
+/* Dashed vertical marker at the prelim/finals date, drawn between the two
+   surrounding weekly points so it sits on the actual calendar day. */
+var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
+  var v=chart.options._fcVline;if(!v)return;
+  var xs=chart.scales.x,ca=chart.chartArea;if(!xs||!ca)return;
+  var n=chart.data.labels.length;if(n<2)return;
+  var x0=xs.getPixelForValue(0),x1=xs.getPixelForValue(n-1);
+  var px=x0+(v.x/(n-1))*(x1-x0);
+  if(px<ca.left||px>ca.right)return;
+  var ctx=chart.ctx;ctx.save();
+  ctx.strokeStyle='rgba(143,180,255,0.45)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(px,ca.top);ctx.lineTo(px,ca.bottom);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font='700 8px Inter';ctx.fillStyle='rgba(143,180,255,0.75)';
+  ctx.textAlign=px>ca.left+((ca.right-ca.left)/2)?'right':'left';
+  ctx.fillText(v.label,px+(ctx.textAlign==='left'?4:-4),ca.top+9);
+  ctx.restore();}};
 function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
   var labels=rows.map(function(r){return r.date;});
   var datasets=[];
@@ -5316,12 +5443,14 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   var scales={x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:10,font:{family:'Inter',size:9},color:'#6a6a85',maxRotation:30}},
     y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:9},color:cfg.c1,callback:cfg.fmt}}};
   if(!cfg.pxOnMain)scales.y2={position:'right',grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'rgba(200,210,235,0.55)',callback:function(v){return fcFmtPence(v);}},title:{display:true,text:'Share price',font:{family:'Inter',size:8},color:'rgba(200,210,235,0.45)'}};
-  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales}});}
+  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales,_fcVline:cfg.vline||null},plugins:[fcVLinePlugin]});}
 function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var el=document.getElementById(contentId);if(!el)return;
   Object.values(chartStore).forEach(function(c){try{c.destroy();}catch(e){}});for(var k in chartStore)delete chartStore[k];
   if(!active||!fcStockData[active]){el.innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">🔍</div><div class="fc-no-data-title">No data for '+(active||'ticker')+'</div><div class="fc-no-data-sub">Load or paste a ShareScope data block.</div></div>';return;}
-  var rows=fcStockData[active],f=rows[0],l=rows[rows.length-1],nd=fcNetDirection(rows);
+  var rows=fcStockData[active],f=rows[0],l=rows[rows.length-1];
+  rows._fcTicker=active;rows._fcRolls=fcComputeRollovers(rows,active);
+  var nd=fcNetDirection(rows);
   function pc(a,b){return(a!==null&&b!==null&&a!==undefined&&b!==undefined&&b&&isFinite((a-b)/b))?(((a-b)/Math.abs(b))*100).toFixed(1):'—';}
   var revChg=pc(l.rev,f.rev),epsChg=pc(l.eps,f.eps),tpChg=pc(l.tp,f.tp);
   var ndStyle='font-size:18px;font-weight:600;'+(nd.cls==='neg'?'color:var(--red)':nd.cls==='pos'?'color:var(--green)':'color:var(--text-secondary)');
@@ -5331,7 +5460,7 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
                {lbl:'EPS now',val:fcVal(l.eps,1,'p'),sub:fcFmtChg(epsChg)+' full period',chg:epsChg},
                {lbl:'Target now',val:l.tp!==null&&l.tp!==undefined?fcFmtPence(l.tp):'—',sub:fcFmtChg(tpChg)+' full period',chg:tpChg},
                {lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])
-    +'<div style="display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:10px;align-items:start;">'
+    +'<div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:10px;align-items:start;">'
       +'<div>'
         +'<div class="fc-chart-card"><div class="fc-chart-title">Revenue Forecast — fc vs 2yr fc — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'cr"></canvas></div></div>'
         +'<div class="fc-chart-card" style="margin-top:10px"><div class="fc-chart-title">EPS Forecast — fc vs 2yr fc — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'ce"></canvas></div></div>'
@@ -5344,11 +5473,19 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
           +'<button id="'+chartPrefix+'logbtn-tp" class="fc-tab'+(fcLogField==='tp'?' on':'')+'" onclick="fcSetLog(\'tp\',\''+chartPrefix+'\')">Target</button>'
           +'<span style="margin-left:auto;padding:6px 10px;font-size:9px;text-transform:uppercase;color:var(--text-dim);align-self:center;">Event log</span>'
         +'</div>'
+        +'<div id="'+chartPrefix+'loghead" style="display:'+(fcLogField==='tp'?'none':'flex')+';justify-content:flex-end;gap:10px;padding:3px 10px;border-bottom:1px solid var(--border);font-size:8px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);flex-shrink:0;"><span>fc</span><span style="min-width:40px;text-align:right;">2yr fc</span></div>'
         +'<div id="'+chartPrefix+'logbody" style="flex:1;overflow-y:auto;">'+fcEventLog2(rows,fcLogField)+'</div>'
       +'</div>'
     +'</div>';
-  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev});
-  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps});
+  var vline=null;
+  (function(){var pd=fcPrelimDate(active);if(!pd)return;
+    var d0=fcRowDate(rows[0].date),dn=fcRowDate(rows[rows.length-1].date);
+    if(!d0||!dn||pd<d0.dt||pd>dn.dt)return;
+    for(var i=1;i<rows.length;i++){var a=fcRowDate(rows[i-1].date),b=fcRowDate(rows[i].date);
+      if(a&&b&&pd>=a.dt&&pd<=b.dt){var span=b.dt-a.dt;var frac=span>0?(pd-a.dt)/span:0;
+        vline={x:i-1+frac,label:'FINALS '+pd.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][pd.getMonth()]};return;}}})();
+  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,vline:vline});
+  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,vline:vline});
   fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
