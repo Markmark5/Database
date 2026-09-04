@@ -82,12 +82,12 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
   box-shadow:0 2px 8px rgba(0,0,0,0.4);
 }
 .db-section-title{
-  font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);
+  font-family:var(--mono);font-size:13px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text-primary);
   display:flex;align-items:center;gap:8px;
 }
 .db-section-title .dot{
-  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
 }
 .dot-green{background:var(--green);box-shadow:0 0 5px var(--green);}
 .dot-amber{background:var(--amber);box-shadow:0 0 5px var(--amber);}
@@ -336,11 +336,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .bw-empty{font-family:var(--mono);font-size:10px;color:var(--text-dim);text-align:center;padding:16px 0;}
 
 /* ── MID ROW: H1 TRACKING + BROKER CHANGES ── */
-.db-mid-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
-#broker-section{display:flex;flex-direction:column;max-height:calc(100vh - 80px);position:sticky;top:60px;}
-#broker-section .broker-wrap{flex:1;min-height:0;overflow-y:auto;background:var(--surface);color:var(--text-primary);padding:44px 14px 14px;}
-#bk-tbody tr:hover td,#bkfs-tbody tr:hover td{background:var(--surface2);}
-#bk-tbody tr.bk-sel td,#bkfs-tbody tr.bk-sel td{background:#e8e8e8 !important;}
+.db-mid-row{display:block;}
 
 /* ── UPLOAD ZONE ── */
 .upload-zone{padding:14px;}
@@ -1458,110 +1454,43 @@ body.sig-wide .cell-ticker{justify-content:center;}
   ══════════════════════════════════ -->
   <div class="db-mid-row">
 
-    <!-- H1 TRACKING -->
-    <div class="db-section" id="h1-section">
+    <!-- BROKER CHARTS (Forecasts) -->
+    <div class="db-section" id="fc-section" style="position:relative;">
       <div class="db-section-hdr">
-        <div class="db-section-title"><span class="dot dot-blue"></span>H1 Tracking
-          <span id="sc-file-chip" class="sc-chip" style="display:none;"></span>
-          <span id="sc-cache-chip" style="display:none;" class="sc-chip" style="color:var(--amber)"></span>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <button class="sc-plain-btn" id="sc-load-prev-btn" onclick="document.getElementById('sc-prev-file-inp').click()">Load prev week</button>
-          <button class="sc-plain-btn" onclick="document.getElementById('sc-file-inp').click()">Load file</button>
-          <button class="sc-plain-btn" onclick="scClearAll()" style="color:var(--red);border-color:var(--red-mid);">Clear all</button>
-          <button class="db-expand-btn" onclick="expandSection('h1-fs','H1 Tracking')">⤢</button>
+        <div class="db-section-title"><span class="dot dot-blue"></span>Broker Charts</div>
+        <div class="fc-ticker-row">
+          <div class="fc-status">
+            <span class="fc-status-dot" id="fc-statusDot"></span>
+            <span id="fc-statusTxt" style="font-family:var(--mono);font-size:9px;">No data loaded</span>
+          </div>
+          <input type="text" class="fc-ticker-input" id="fc-ti" placeholder="Ticker e.g. GRG" maxlength="10">
+          <button class="fc-btn primary" onclick="fcAddT()">Add</button>
+          <div class="fc-chips" id="fc-chips"></div>
+          <button class="db-expand-btn" onclick="expandSection('fc-fs','Broker Charts')">⤢</button>
         </div>
       </div>
-      <div class="sc-wrap">
-        <!-- Cache bar -->
-        <div id="sc-cache-bar" class="sc-cache-bar" style="display:none;">
-          <span style="color:var(--blue)">⏱</span>
-          <span style="color:var(--blue);font-weight:600;">Prev week cached:</span>
-          <span id="sc-cache-filename" style="color:var(--text-primary);"></span>
-          <span id="sc-cache-date" style="color:var(--text-dim);"></span>
-          <button class="sc-plain-btn-sm" onclick="scClearCache()" style="margin-left:auto;">Clear cache</button>
+      <!-- Paste overlay -->
+      <div class="fc-paste-overlay" id="fc-overlay" onclick="fcHandleOverlay(event)">
+        <div class="fc-modal">
+          <div class="fc-modal-title">Paste ShareScope data block</div>
+          <textarea id="fc-pasteArea" placeholder="Paste your SHARESCOPE DATA BLOCK — TICKER text here…"></textarea>
+          <div class="fc-modal-actions">
+            <button class="fc-btn" onclick="fcClosePaste()">Cancel</button>
+            <button class="fc-btn primary" onclick="fcSubmitPaste()">Load</button>
+          </div>
         </div>
-        <!-- Drop zone -->
-        <div id="sc-dropzone" class="sc-dropzone" onclick="document.getElementById('sc-file-inp').click()" ondragover="scDragOver(event)" ondragleave="scDragLeave(event)" ondrop="scFileDrop(event)">
-          <div class="sc-dropzone-icon">📂</div>
-          <p id="sc-drop-title">Drop your daily Screener CSV here</p>
-          <small>Daily .csv file · parsed locally, nothing uploaded</small>
-        </div>
-        <input id="sc-file-inp" type="file" accept=".txt,.csv" style="display:none;" onchange="scLoadFile(event)">
-        <input id="sc-prev-file-inp" type="file" accept=".txt,.csv" style="display:none;" onchange="scLoadPrev(event)">
-        <!-- Results -->
-        <div id="sc-results" style="display:none;">
-          <div class="sc-info-bar">
-            <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
-              <span id="sc-file-chip2" class="sc-chip"></span>
-              <span id="sc-vs-chip" class="sc-chip-blue" style="display:none;"></span>
-            </div>
+      </div>
+      <div class="fc-wrap">
+        <div id="fc-content">
+          <div class="fc-no-data">
+            <div class="fc-no-data-icon">📂</div>
+            <div class="fc-no-data-title">Load weekly snapshot data</div>
+            <div class="fc-no-data-sub">Click "Paste data" or "Load data", then add a ticker above.</div>
           </div>
-          <div id="sc-diff-bar" class="sc-diff-bar" style="display:none;"></div>
-          <div class="sc-stat-grid" id="sc-stat-grid"></div>
-          <div class="sc-lookup" id="sc-ticker-lookup">
-            <div style="display:flex;align-items:center;gap:7px;">
-              <input id="sc-ticker-inp" type="text" placeholder="Check ticker e.g. SCT" maxlength="10" style="font-family:var(--mono);font-size:12px;text-transform:uppercase;width:160px;padding:5px 10px;border:1px solid var(--border);border-radius:5px;background:var(--surface2);color:var(--text-primary);outline:none;" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scLookupTicker()">
-              <button class="sc-plain-btn" onclick="scLookupTicker()">Check</button>
-              <button class="sc-plain-btn-sm" id="sc-lookup-clear" onclick="scClearLookup()" style="display:none;">✕ Clear</button>
-            </div>
-            <div id="sc-lookup-result" style="margin-top:8px;display:none;"></div>
-          </div>
-          <div class="sc-controls">
-            <div class="sc-btn-group">
-              <button class="sc-btn active" id="sc-btn-q2" onclick="scSetMode('q2')">Q2 — H1 ahead</button>
-              <button class="sc-btn" id="sc-btn-q4" onclick="scSetMode('q4')">Q4 — H2 accel</button>
-            </div>
-            <div class="sc-btn-group">
-              <button class="sc-mbtn active" id="sc-mbtn-eps" onclick="scSetMetric('eps')">EPS</button>
-              <button class="sc-mbtn" id="sc-mbtn-rev" onclick="scSetMetric('rev')">Revenue</button>
-              <button class="sc-mbtn" id="sc-mbtn-both" onclick="scSetMetric('both')">Both</button>
-            </div>
-          </div>
-          <div class="sc-legend" id="sc-legend"></div>
-          <div class="sc-row-count" id="sc-row-count"></div>
-          <div class="sc-tbl-wrap"><table id="sc-main-table"><thead id="sc-tbl-head"></thead><tbody id="sc-tbl-body"></tbody></table></div>
         </div>
       </div>
     </div>
 
-    <!-- BROKER CHANGES -->
-    <div class="db-section" id="broker-section">
-      <div class="db-section-hdr">
-        <div class="db-section-title"><span class="dot dot-amber"></span>Broker Changes</div>
-        <div style="display:flex;gap:5px;align-items:center;">
-          <button class="db-expand-btn" style="font-size:11px;padding:3px 8px;background:var(--green);color:#fff;border:none;border-radius:4px;cursor:pointer;" onclick="bkExportJSON()">⬇ Export</button>
-          <button class="db-expand-btn" style="font-size:11px;padding:3px 8px;background:var(--amber);color:#fff;border:none;border-radius:4px;cursor:pointer;" onclick="document.getElementById('bk-import-inp').click()">⬆ Import</button>
-          <input type="file" id="bk-import-inp" accept=".json" style="display:none;" onchange="bkImportJSON(event)">
-          <button class="db-expand-btn" onclick="expandSection('broker-fs','Broker Changes')">⤢</button>
-        </div>
-      </div>
-      <div class="broker-wrap" id="broker-wrap" style="position:relative;">
-        <div id="bk-popup" style="display:none;position:sticky;top:8px;z-index:50;background:#fff;border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin:0 0 12px;box-shadow:0 4px 20px rgba(0,0,0,0.12);"></div>
-        <div class="bk-summary" id="bk-summary"></div>
-        <div class="bk-row" id="bk-month-row"><span class="bk-lbl">Month:</span></div>
-        <div class="bk-row" id="bk-week-row"><span class="bk-lbl">Week:</span></div>
-        <div class="bk-row" id="bk-day-row"><span class="bk-lbl">Day:</span></div>
-        <div class="bk-row">
-          <span class="bk-lbl">Direction:</span>
-          <button class="bk-btn active" onclick="bkSetDir('all',this)">All</button>
-          <button class="bk-btn" onclick="bkSetDir('up',this)">Raises</button>
-          <button class="bk-btn" onclick="bkSetDir('down',this)">Cuts</button>
-          <input type="text" id="bk-search" class="bk-search" placeholder="Search…" oninput="bkRender()">
-        </div>
-        <div class="bk-table-wrap">
-          <table class="bk-table"><thead><tr>
-            <th onclick="bkSort('company')">Company</th>
-            <th onclick="bkSort('tidm')">TIDM</th>
-            <th onclick="bkSort('broker')">Broker</th>
-            <th onclick="bkSort('old')">Old (p)</th>
-            <th onclick="bkSort('new')">New (p)</th>
-            <th onclick="bkSort('pct')">% Chg</th>
-            <th onclick="bkSort('date')">Date</th>
-          </tr></thead><tbody id="bk-tbody"></tbody></table>
-        </div>
-      </div>
-    </div>
 
   </div><!-- /db-mid-row -->
 
@@ -1628,49 +1557,69 @@ body.sig-wide .cell-ticker{justify-content:center;}
   ══════════════════════════════════ -->
   <div class="db-bot-row">
 
-    <!-- BROKER CHARTS (Forecasts) -->
-    <div class="db-section" id="fc-section" style="position:relative;">
+    <!-- H1 TRACKING -->
+    <div class="db-section" id="h1-section">
       <div class="db-section-hdr">
-        <div class="db-section-title"><span class="dot dot-blue"></span>Broker Charts</div>
-        <div class="fc-ticker-row">
-          <div class="fc-status">
-            <span class="fc-status-dot" id="fc-statusDot"></span>
-            <span id="fc-statusTxt" style="font-family:var(--mono);font-size:9px;">No data loaded</span>
-          </div>
-          <input type="text" class="fc-ticker-input" id="fc-ti" placeholder="Ticker e.g. GRG" maxlength="10">
-          <button class="fc-btn primary" onclick="fcAddT()">Add</button>
-          <div class="fc-chips" id="fc-chips"></div>
-          <button class="fc-btn" onclick="fcOpenPaste()">Paste data</button>
-          <label for="fc-fu" class="fc-btn">Load data</label>
-          <input type="file" id="fc-fu" accept=".txt,.csv" onchange="fcLoadFile(event)" style="display:none;">
-          <button class="db-expand-btn" onclick="expandSection('fc-fs','Broker Charts')">⤢</button>
+        <div class="db-section-title"><span class="dot dot-blue"></span>H1 Tracking
+          <span id="sc-file-chip" class="sc-chip" style="display:none;"></span>
+          <span id="sc-cache-chip" style="display:none;" class="sc-chip" style="color:var(--amber)"></span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="sc-plain-btn" id="sc-load-prev-btn" onclick="document.getElementById('sc-prev-file-inp').click()">Load prev week</button>
+          <button class="sc-plain-btn" onclick="document.getElementById('sc-file-inp').click()">Load file</button>
+          <button class="sc-plain-btn" onclick="scClearAll()" style="color:var(--red);border-color:var(--red-mid);">Clear all</button>
+          <button class="db-expand-btn" onclick="expandSection('h1-fs','H1 Tracking')">⤢</button>
         </div>
       </div>
-      <!-- Paste overlay -->
-      <div class="fc-paste-overlay" id="fc-overlay" onclick="fcHandleOverlay(event)">
-        <div class="fc-modal">
-          <div class="fc-modal-title">Paste ShareScope data block</div>
-          <textarea id="fc-pasteArea" placeholder="Paste your SHARESCOPE DATA BLOCK — TICKER text here…"></textarea>
-          <div class="fc-modal-actions">
-            <button class="fc-btn" onclick="fcClosePaste()">Cancel</button>
-            <button class="fc-btn primary" onclick="fcSubmitPaste()">Load</button>
-          </div>
+      <div class="sc-wrap">
+        <!-- Cache bar -->
+        <div id="sc-cache-bar" class="sc-cache-bar" style="display:none;">
+          <span style="color:var(--blue)">⏱</span>
+          <span style="color:var(--blue);font-weight:600;">Prev week cached:</span>
+          <span id="sc-cache-filename" style="color:var(--text-primary);"></span>
+          <span id="sc-cache-date" style="color:var(--text-dim);"></span>
+          <button class="sc-plain-btn-sm" onclick="scClearCache()" style="margin-left:auto;">Clear cache</button>
         </div>
-      </div>
-      <div class="fc-wrap">
-        <div class="fc-tab-bar">
-          <button class="fc-tab on" onclick="fcSwitchTab('overview',this)">Overview</button>
-          <button class="fc-tab" onclick="fcSwitchTab('eps',this)">EPS Forecast</button>
-          <button class="fc-tab" onclick="fcSwitchTab('rev',this)">Revenue Forecast</button>
-          <button class="fc-tab" onclick="fcSwitchTab('tp',this)">Target Price</button>
-          <button class="fc-tab" onclick="fcSwitchTab('dg',this)">Upgrades / Downgrades</button>
+        <!-- Drop zone -->
+        <div id="sc-dropzone" class="sc-dropzone" onclick="document.getElementById('sc-file-inp').click()" ondragover="scDragOver(event)" ondragleave="scDragLeave(event)" ondrop="scFileDrop(event)">
+          <div class="sc-dropzone-icon">📂</div>
+          <p id="sc-drop-title">Drop your daily Screener CSV here</p>
+          <small>Daily .csv file · parsed locally, nothing uploaded</small>
         </div>
-        <div id="fc-content">
-          <div class="fc-no-data">
-            <div class="fc-no-data-icon">📂</div>
-            <div class="fc-no-data-title">Load weekly snapshot data</div>
-            <div class="fc-no-data-sub">Click "Paste data" or "Load data", then add a ticker above.</div>
+        <input id="sc-file-inp" type="file" accept=".txt,.csv" style="display:none;" onchange="scLoadFile(event)">
+        <input id="sc-prev-file-inp" type="file" accept=".txt,.csv" style="display:none;" onchange="scLoadPrev(event)">
+        <!-- Results -->
+        <div id="sc-results" style="display:none;">
+          <div class="sc-info-bar">
+            <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+              <span id="sc-file-chip2" class="sc-chip"></span>
+              <span id="sc-vs-chip" class="sc-chip-blue" style="display:none;"></span>
+            </div>
           </div>
+          <div id="sc-diff-bar" class="sc-diff-bar" style="display:none;"></div>
+          <div class="sc-stat-grid" id="sc-stat-grid"></div>
+          <div class="sc-lookup" id="sc-ticker-lookup">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <input id="sc-ticker-inp" type="text" placeholder="Check ticker e.g. SCT" maxlength="10" style="font-family:var(--mono);font-size:12px;text-transform:uppercase;width:160px;padding:5px 10px;border:1px solid var(--border);border-radius:5px;background:var(--surface2);color:var(--text-primary);outline:none;" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')scLookupTicker()">
+              <button class="sc-plain-btn" onclick="scLookupTicker()">Check</button>
+              <button class="sc-plain-btn-sm" id="sc-lookup-clear" onclick="scClearLookup()" style="display:none;">✕ Clear</button>
+            </div>
+            <div id="sc-lookup-result" style="margin-top:8px;display:none;"></div>
+          </div>
+          <div class="sc-controls">
+            <div class="sc-btn-group">
+              <button class="sc-btn active" id="sc-btn-q2" onclick="scSetMode('q2')">Q2 — H1 ahead</button>
+              <button class="sc-btn" id="sc-btn-q4" onclick="scSetMode('q4')">Q4 — H2 accel</button>
+            </div>
+            <div class="sc-btn-group">
+              <button class="sc-mbtn active" id="sc-mbtn-eps" onclick="scSetMetric('eps')">EPS</button>
+              <button class="sc-mbtn" id="sc-mbtn-rev" onclick="scSetMetric('rev')">Revenue</button>
+              <button class="sc-mbtn" id="sc-mbtn-both" onclick="scSetMetric('both')">Both</button>
+            </div>
+          </div>
+          <div class="sc-legend" id="sc-legend"></div>
+          <div class="sc-row-count" id="sc-row-count"></div>
+          <div class="sc-tbl-wrap"><table id="sc-main-table"><thead id="sc-tbl-head"></thead><tbody id="sc-tbl-body"></tbody></table></div>
         </div>
       </div>
     </div>
@@ -1986,15 +1935,6 @@ body.sig-wide .cell-ticker{justify-content:center;}
       <button class="db-expand-btn" onclick="closeFullscreen('h1-fs')" style="font-size:12px;">✕ Close</button>
     </div>
     <div class="db-fullscreen-content" id="h1-fs-content"></div>
-  </div>
-</div>
-<div class="db-fullscreen-overlay" id="broker-fs">
-  <div class="db-fullscreen-inner" style="width:90vw;max-width:90vw;">
-    <div class="db-fullscreen-bar">
-      <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;">Broker Changes</span>
-      <button class="db-expand-btn" onclick="closeFullscreen('broker-fs')" style="font-size:12px;">✕ Close</button>
-    </div>
-    <div class="db-fullscreen-content" id="broker-fs-content" style="height:100%;"></div>
   </div>
 </div>
 <div class="db-fullscreen-overlay" id="fc-fs">
@@ -2375,109 +2315,6 @@ function expandSection(id){
     scFsRefresh();
     return;
   }
-  if(id==='broker-fs'){
-    const c=document.getElementById('broker-fs-content');
-    c.style.cssText='height:100%;overflow-y:auto;padding:0;background:var(--surface);color:var(--text-primary);box-sizing:border-box;display:flex;flex-direction:column;';
-    // Local popup state
-    let fsSelWeek='all',fsSelDay='all',fsSelDir='all',fsSortKey='pct',fsSortDir=-1,fsSearch='';
-    function fsRender(){
-      const rows=bkData.filter(d=>{
-        if(fsSelWeek!=='all'&&bkGetMonday(d.date)!==fsSelWeek)return false;
-        if(fsSelDay!=='all'&&d.date!==fsSelDay)return false;
-        if(fsSelDir==='up'&&d.pct<=0)return false;
-        if(fsSelDir==='down'&&d.pct>=0)return false;
-        if(fsSearch&&!d.company.toLowerCase().includes(fsSearch)&&!d.tidm.toLowerCase().includes(fsSearch)&&!d.broker.toLowerCase().includes(fsSearch))return false;
-        return true;
-      });
-      rows.sort((a,b)=>{let av=a[fsSortKey],bv=b[fsSortKey];if(typeof av==='string')return av.localeCompare(bv)*fsSortDir;return(av-bv)*fsSortDir;});
-      const maxAbs=Math.max(...rows.map(d=>Math.abs(d.pct)),1);
-      const ups=rows.filter(d=>d.pct>0).length,downs=rows.filter(d=>d.pct<0).length;
-      const avgUp=ups?rows.filter(d=>d.pct>0).reduce((s,d)=>s+d.pct,0)/ups:0;
-      const avgDown=downs?rows.filter(d=>d.pct<0).reduce((s,d)=>s+d.pct,0)/downs:0;
-      // Summary
-      const sm=document.getElementById('bkfs-summary');
-      if(sm)sm.innerHTML=
-        '<div style="background:var(--surface2);border-radius:6px;padding:6px 10px;"><div style="font-size:16px;font-weight:500;color:var(--green)">'+ups+'</div><div style="font-size:10px;color:var(--text-dim)">Raises</div></div>'
-        +'<div style="background:var(--surface2);border-radius:6px;padding:6px 10px;"><div style="font-size:16px;font-weight:500;color:var(--red)">'+downs+'</div><div style="font-size:10px;color:var(--text-dim)">Cuts</div></div>'
-        +'<div style="background:var(--surface2);border-radius:6px;padding:6px 10px;"><div style="font-size:16px;font-weight:500;color:var(--green)">+'+avgUp.toFixed(1)+'%</div><div style="font-size:10px;color:var(--text-dim)">Avg raise</div></div>'
-        +'<div style="background:var(--surface2);border-radius:6px;padding:6px 10px;"><div style="font-size:16px;font-weight:500;color:var(--red)">'+avgDown.toFixed(1)+'%</div><div style="font-size:10px;color:var(--text-dim)">Avg cut</div></div>'
-        +'<div style="background:var(--surface2);border-radius:6px;padding:6px 10px;"><div style="font-size:16px;font-weight:500;">'+rows.length+'</div><div style="font-size:10px;color:var(--text-dim)">Shown</div></div>';
-      // Week buttons
-      const wr=document.getElementById('bkfs-week-row');
-      if(wr){
-        wr.innerHTML='<span class="bk-lbl">Week:</span>';
-        const a=document.createElement('button');a.className='bk-btn'+(fsSelWeek==='all'?' active':'');a.textContent='All';
-        a.onclick=()=>{fsSelWeek='all';fsSelDay='all';fsRender();};wr.appendChild(a);
-        bkWeeks.forEach(wk=>{const b=document.createElement('button');b.className='bk-btn'+(fsSelWeek===wk?' active':'');b.textContent=bkFmtWeek(wk);b.onclick=()=>{fsSelWeek=wk;fsSelDay='all';fsRender();};wr.appendChild(b);});
-      }
-      // Day buttons
-      const dr=document.getElementById('bkfs-day-row');
-      if(dr){
-        dr.innerHTML='<span class="bk-lbl">Day:</span>';
-        if(fsSelWeek==='all'){const p=document.createElement('span');p.style.cssText='font-size:11px;color:var(--text-dim)';p.textContent='select a week to filter by day';dr.appendChild(p);}
-        else{
-          const days=[...bkWeeksMap[fsSelWeek]].sort().reverse();
-          const a=document.createElement('button');a.className='bk-btn'+(fsSelDay==='all'?' active':'');a.textContent='All days';a.onclick=()=>{fsSelDay='all';fsRender();};dr.appendChild(a);
-          days.forEach(day=>{const b=document.createElement('button');b.className='bk-btn'+(fsSelDay===day?' active':'');b.textContent=bkFmtDay(day);b.onclick=()=>{fsSelDay=day;fsRender();};dr.appendChild(b);});
-        }
-      }
-      // Direction buttons
-      ['all','up','down'].forEach(val=>{const b=document.getElementById('bkfs-dir-'+val);if(b){b.className='bk-btn'+(fsSelDir===val?' active':'');b.onclick=()=>{fsSelDir=val;fsRender();};}});
-      // Table
-      const tb=document.getElementById('bkfs-tbody');
-      if(tb)tb.innerHTML=rows.map(d=>{
-        const pos=d.pct>=0,bw=Math.round(Math.abs(d.pct)/maxAbs*55);
-        const ps=(pos?'+':'')+d.pct.toFixed(1)+'%';
-        const bar=pos?'<span style="display:inline-block;height:6px;background:var(--green);border-radius:2px;vertical-align:middle;margin-left:3px;width:'+bw+'px"></span>'
-                     :'<span style="display:inline-block;height:6px;background:var(--red);border-radius:2px;vertical-align:middle;margin-left:3px;width:'+bw+'px"></span>';
-        const d2=new Date(d.date+'T12:00:00Z');
-        const dayStr=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d2.getUTCDay()]+' '+d2.getUTCDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d2.getUTCMonth()];
-        return'<tr onclick="bkSelRow(this)" style="border-bottom:1px solid var(--border);cursor:pointer;">'
-          +'<td style="padding:5px 8px;font-weight:500;white-space:nowrap;">'+d.company+'</td>'
-          +'<td style="padding:5px 8px;font-family:monospace;font-size:11px;color:var(--text-dim);">'+d.tidm+'</td>'
-          +'<td style="padding:5px 8px;color:var(--text-dim);font-size:12px;white-space:nowrap;">'+d.broker+'</td>'
-          +'<td style="padding:5px 8px;color:var(--text-dim);">'+(d.old===0?'—':d.old.toLocaleString())+'</td>'
-          +'<td style="padding:5px 8px;">'+d.new.toLocaleString()+'</td>'
-          +'<td style="padding:5px 8px;'+(d.old===0?'color:var(--amber)':pos?'color:var(--green)':'color:var(--red)')+';font-weight:500;white-space:nowrap;">'+(d.old===0?'INIT':ps)+bar+'</td>'
-          +'<td style="padding:5px 8px;color:var(--text-dim);font-size:12px;white-space:nowrap;">'+dayStr+'</td>'
-          +'</tr>';
-      }).join('');
-    }
-    // Build layout
-    c.innerHTML=
-      '<div style="padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">'
-        +'<div id="bkfs-summary" style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;"></div>'
-        +'<div id="bkfs-week-row" class="bk-row"></div>'
-        +'<div id="bkfs-day-row" class="bk-row"></div>'
-        +'<div class="bk-row">'
-          +'<span class="bk-lbl">Direction:</span>'
-          +'<button id="bkfs-dir-all" class="bk-btn active">All</button>'
-          +'<button id="bkfs-dir-up" class="bk-btn">Raises</button>'
-          +'<button id="bkfs-dir-down" class="bk-btn">Cuts</button>'
-          +'<input type="text" class="bk-search" placeholder="Search…" style="margin-left:auto;" oninput="document.getElementById(\'bkfs-search-val\').textContent=this.value;bkFsSearch(this.value)">'
-          +'<span id="bkfs-search-val" style="display:none"></span>'
-        +'</div>'
-      +'</div>'
-      +'<div style="overflow-y:auto;flex:1;padding:0 16px 16px;">'
-        +'<table style="width:100%;border-collapse:collapse;font-size:13px;">'
-          +'<thead><tr style="border-bottom:2px solid var(--border-bright);">'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;cursor:pointer;" onclick="bkFsSort(\'company\')">Company</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'tidm\')">TIDM</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'broker\')">Broker</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'old\')">Old (p)</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'new\')">New (p)</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'pct\')">% Chg</th>'
-            +'<th style="text-align:left;padding:5px 8px;font-weight:500;font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em;cursor:pointer;" onclick="bkFsSort(\'date\')">Date</th>'
-          +'</tr></thead>'
-          +'<tbody id="bkfs-tbody"></tbody>'
-        +'</table>'
-      +'</div>';
-    // Wire up sort/search via window functions so onclick attrs work
-    window.bkFsSort=function(key){if(fsSortKey===key)fsSortDir*=-1;else{fsSortKey=key;fsSortDir=key==='pct'?-1:1;}fsRender();};
-    window.bkFsSearch=function(v){fsSearch=v.toLowerCase();fsRender();};
-    fsRender();
-    return;
-  }
   if(id==='rns-fs'){
     const c=document.getElementById('rns-fs-content');
     c.style.padding='14px';
@@ -2559,587 +2396,8 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.querySelectorAll('.db-fullscreen-overlay.open').forEach(el=>el.classList.remove('open'));
 });
 
-/* ── BROKER CHANGES WIDGET ── */
-const bkData=[
-{company:"Rightmove",tidm:"RMV",broker:"BofA",old:460,new:430,pct:-6.5,"date":"2026-04-16"},
-{company:"Pearson",tidm:"PSON",broker:"BofA",old:1040,new:1100,pct:5.8,"date":"2026-04-16"},
-{company:"Auto Trader Group",tidm:"AUTO",broker:"BofA",old:590,new:545,pct:-7.6,"date":"2026-04-16"},
-{company:"Baltic Classifieds Group",tidm:"BCG",broker:"BofA",old:245,new:240,pct:-2.0,"date":"2026-04-16"},
-{company:"Informa",tidm:"INF",broker:"BofA",old:1070,new:1040,pct:-2.8,"date":"2026-04-16"},
-{company:"Barratt Redrow",tidm:"BTRW",broker:"UBS",old:470,new:432,pct:-8.1,"date":"2026-04-16"},
-{company:"Barratt Redrow",tidm:"BTRW",broker:"Barclays",old:490,new:482,pct:-1.6,"date":"2026-04-16"},
-{company:"Tristel",tidm:"TRTL",broker:"Stifel",old:0,new:460,pct:0,"date":"2026-04-16"},
-{company:"Bytes Technology Group",tidm:"BYIT",broker:"UBS",old:415,new:305,pct:-26.5,"date":"2026-04-16"},
-{company:"BP",tidm:"BP.",broker:"UBS",old:650,new:700,pct:7.7,"date":"2026-04-16"},
-{company:"BP",tidm:"BP.",broker:"TD Cowen",old:595,new:570,pct:-4.2,"date":"2026-04-16"},
-{company:"Halma",tidm:"HLMA",broker:"Barclays",old:4550,new:4930,pct:8.4,"date":"2026-04-16"},
-{company:"Flutter Entertainment",tidm:"FLTR",broker:"Barclays",old:16700,new:12900,pct:-22.8,"date":"2026-04-16"},
-{company:"Flutter Entertainment",tidm:"FLTR",broker:"Citigroup",old:15800,new:6800,pct:-57.0,"date":"2026-04-16"},
-{company:"Dunelm Group",tidm:"DNLM",broker:"Peel Hunt",old:1375,new:1225,pct:-10.9,"date":"2026-04-16"},
-{company:"Dunelm Group",tidm:"DNLM",broker:"Panmure Liberum",old:830,new:810,pct:-2.4,"date":"2026-04-16"},
-{company:"Mitie Group",tidm:"MTO",broker:"Peel Hunt",old:191,new:215,pct:12.6,"date":"2026-04-16"},
-{company:"Atalaya Mining",tidm:"ATYM",broker:"RBC",old:1125,new:1075,pct:-4.4,"date":"2026-04-16"},
-{company:"Unite Group",tidm:"UTG",broker:"Kepler Cheuvreux",old:550,new:585,pct:6.4,"date":"2026-04-16"},
-{company:"The Beauty Tech Group",tidm:"TBTG",broker:"Berenberg",old:450,new:500,pct:11.1,"date":"2026-04-16"},
-{company:"Ceres Power Holdings",tidm:"CWR",broker:"Jefferies",old:460,new:480,pct:4.3,"date":"2026-04-16"},
-{company:"Quilter",tidm:"QLT",broker:"Citigroup",old:200,new:190,pct:-5.0,"date":"2026-04-16"},
-{company:"St James\'s Place",tidm:"STJ",broker:"Citigroup",old:1870,new:1810,pct:-3.2,"date":"2026-04-16"},
-{company:"Man Group",tidm:"EMG",broker:"Citigroup",old:290,new:285,pct:-1.7,"date":"2026-04-17"},
-{company:"Aberdeen Group",tidm:"ABDN",broker:"Citigroup",old:235,new:225,pct:-4.3,"date":"2026-04-17"},
-{company:"Mitie Group",tidm:"MTO",broker:"Goldman Sachs",old:235,new:240,pct:2.1,"date":"2026-04-17"},
-{company:"Mitie Group",tidm:"MTO",broker:"Deutsche Bank",old:190,new:195,pct:2.6,"date":"2026-04-17"},
-{company:"Dunelm Group",tidm:"DNLM",broker:"Jefferies",old:1075,new:1041,pct:-3.2,"date":"2026-04-17"},
-{company:"Dunelm Group",tidm:"DNLM",broker:"Barclays",old:1250,new:1150,pct:-8.0,"date":"2026-04-17"},
-{company:"Dunelm Group",tidm:"DNLM",broker:"Berenberg",old:1425,new:1350,pct:-5.3,"date":"2026-04-17"},
-{company:"Reckitt",tidm:"RKT",broker:"Kepler Cheuvreux",old:6458,new:6000,pct:-7.1,"date":"2026-04-17"},
-{company:"BAE Systems",tidm:"BA.",broker:"Morgan Stanley",old:2342,new:2662,pct:13.7,"date":"2026-04-17"},
-{company:"Taylor Wimpey",tidm:"TW.",broker:"Investec",old:111,new:81,pct:-27.0,"date":"2026-04-17"},
-{company:"Ashmore Group",tidm:"ASHM",broker:"Deutsche Bank",old:150,new:145,pct:-3.3,"date":"2026-04-17"},
-{company:"Ashmore Group",tidm:"ASHM",broker:"Morgan Stanley",old:193,new:185,pct:-4.1,"date":"2026-04-17"},
-{company:"Standard Life",tidm:"SLA",broker:"Citigroup",old:769,new:840,pct:9.2,"date":"2026-04-17"},
-{company:"EasyJet",tidm:"EZJ",broker:"JP Morgan",old:350,new:340,pct:-2.9,"date":"2026-04-17"},
-{company:"EasyJet",tidm:"EZJ",broker:"RBC",old:440,new:415,pct:-5.7,"date":"2026-04-17"},
-{company:"EasyJet",tidm:"EZJ",broker:"Morgan Stanley",old:310,new:300,pct:-3.2,"date":"2026-04-17"},
-{company:"Hays",tidm:"HAS",broker:"RBC",old:65,new:60,pct:-7.7,"date":"2026-04-17"},
-{company:"Intertek Group",tidm:"ITRK",broker:"Barclays",old:5630,new:5902,pct:4.8,"date":"2026-04-17"},
-{company:"ITM Power",tidm:"ITM",broker:"Peel Hunt",old:70,new:92,pct:31.4,"date":"2026-04-17"},
-{company:"Entain",tidm:"ENT",broker:"Morgan Stanley",old:1050,new:1040,pct:-1.0,"date":"2026-04-17"},
-{company:"Rentokil",tidm:"RTO",broker:"Bernstein",old:570,new:576,pct:1.1,"date":"2026-04-17"},
-{company:"Rentokil",tidm:"RTO",broker:"Morgan Stanley",old:550,new:570,pct:3.6,"date":"2026-04-17"},
-{company:"Saga",tidm:"SAGA",broker:"Peel Hunt",old:700,new:850,pct:21.4,"date":"2026-04-17"},
-{company:"Tesco",tidm:"TSCO",broker:"Bernstein",old:490,new:520,pct:6.1,"date":"2026-04-17"},
-{company:"Tesco",tidm:"TSCO",broker:"JP Morgan",old:480,new:500,pct:4.2,"date":"2026-04-17"},
-{company:"Workspace Group",tidm:"WKP",broker:"Stifel",old:550,new:500,pct:-9.1,"date":"2026-04-17"},
-{company:"AJ Bell",tidm:"AJB",broker:"Citigroup",old:445,new:500,pct:12.4,"date":"2026-04-17"},
-{company:"Wise",tidm:"WISE",broker:"JP Morgan",old:1225,new:1260,pct:2.9,"date":"2026-04-17"},
-{company:"BP",tidm:"BP.",broker:"BofA",old:450,new:460,pct:2.2,"date":"2026-04-17"},
-{company:"Shell",tidm:"SHEL",broker:"BofA",old:3600,new:3500,pct:-2.8,"date":"2026-04-17"},
-{company:"A.G. Barr",tidm:"BAG",broker:"Peel Hunt",old:770,new:800,pct:3.9,date:"2026-04-14"},
-{company:"A.G. Barr",tidm:"BAG",broker:"Deutsche Bank",old:760,new:800,pct:5.3,date:"2026-04-14"},
-{company:"Halma",tidm:"HLMA",broker:"UBS",old:4200,new:4775,pct:13.7,date:"2026-04-14"},
-{company:"Glencore",tidm:"GLEN",broker:"HSBC",old:510,new:620,pct:21.6,date:"2026-04-14"},
-{company:"Weir Group",tidm:"WEIR",broker:"Goldman Sachs",old:3210,new:3340,pct:4.0,date:"2026-04-14"},
-{company:"Rentokil",tidm:"RTO",broker:"Barclays",old:550,new:630,pct:14.5,date:"2026-04-14"},
-{company:"Prudential",tidm:"PRU",broker:"Barclays",old:1330,new:1400,pct:5.3,date:"2026-04-14"},
-{company:"Keller Group",tidm:"KLR",broker:"RBC",old:2050,new:2270,pct:10.7,date:"2026-04-14"},
-{company:"ITM Power",tidm:"ITM",broker:"Berenberg",old:100,new:110,pct:10.0,date:"2026-04-14"},
-{company:"Hammerson",tidm:"HMSO",broker:"Berenberg",old:409,new:448,pct:9.5,date:"2026-04-14"},
-{company:"ConvaTec",tidm:"CTEC",broker:"Morgan Stanley",old:270,new:280,pct:3.7,date:"2026-04-14"},
-{company:"Polar Capital",tidm:"POLR",broker:"Deutsche Bank",old:790,new:900,pct:13.9,date:"2026-04-14"},
-{company:"Barclays",tidm:"BARC",broker:"Exane BNP",old:545,new:485,pct:-11.0,date:"2026-04-14"},
-{company:"HSBC",tidm:"HSBA",broker:"Exane BNP",old:1500,new:1450,pct:-3.3,date:"2026-04-14"},
-{company:"National Grid",tidm:"NG.",broker:"Goldman Sachs",old:1389,new:1386,pct:-0.2,date:"2026-04-14"},
-{company:"Anglo American",tidm:"AAL",broker:"HSBC",old:3150,new:3050,pct:-3.2,date:"2026-04-14"},
-{company:"Aston Martin Lagonda",tidm:"AML",broker:"Deutsche Bank",old:65,new:55,pct:-15.4,date:"2026-04-14"},
-{company:"Baltic Classifieds",tidm:"BCG",broker:"Barclays",old:270,new:260,pct:-3.7,date:"2026-04-14"},
-{company:"Barratt Redrow",tidm:"BTRW",broker:"Morgan Stanley",old:430,new:300,pct:-30.2,date:"2026-04-14"},
-{company:"Berkeley Group",tidm:"BKG",broker:"Morgan Stanley",old:3840,new:2990,pct:-22.1,date:"2026-04-14"},
-{company:"Brooks Macdonald",tidm:"BRK",broker:"RBC",old:1750,new:1600,pct:-8.6,date:"2026-04-14"},
-{company:"CRH",tidm:"CRH",broker:"JP Morgan",old:10430,new:10366,pct:-0.6,date:"2026-04-14"},
-{company:"Integrafin",tidm:"IHP",broker:"RBC",old:450,new:440,pct:-2.2,date:"2026-04-14"},
-{company:"Kingfisher",tidm:"KGF",broker:"Jefferies",old:303,new:291,pct:-4.0,date:"2026-04-14"},
-{company:"Pagegroup",tidm:"PAGE",broker:"RBC",old:305,new:250,pct:-18.0,date:"2026-04-14"},
-{company:"Persimmon",tidm:"PSN",broker:"Morgan Stanley",old:1610,new:1390,pct:-13.7,date:"2026-04-14"},
-{company:"Rathbones",tidm:"RAT",broker:"RBC",old:2500,new:2400,pct:-4.0,date:"2026-04-14"},
-{company:"St James's Place",tidm:"STJ",broker:"RBC",old:1425,new:1400,pct:-1.8,date:"2026-04-14"},
-{company:"Taylor Wimpey",tidm:"TW.",broker:"Morgan Stanley",old:90,new:80,pct:-11.1,date:"2026-04-14"},
-{company:"Unite Group",tidm:"UTG",broker:"Berenberg",old:774,new:623,pct:-19.5,date:"2026-04-14"},
-{company:"Vistry Group",tidm:"VTY",broker:"Morgan Stanley",old:510,new:380,pct:-25.5,date:"2026-04-14"},
-{company:"Intermediate Capital Group",tidm:"ICG",broker:"Citigroup",old:2550,new:2290,pct:-10.2,date:"2026-04-14"},
-{company:"Bridgepoint",tidm:"BPT",broker:"Citigroup",old:415,new:395,pct:-4.8,date:"2026-04-14"},
-{company:"Unilever",tidm:"ULVR",broker:"BofA",old:0,new:5300,pct:0,date:"2026-04-14"},
-{company:"Reckitt",tidm:"RKT",broker:"BofA",old:0,new:6100,pct:0,date:"2026-04-14"},
-{company:"Haleon",tidm:"HLN",broker:"BofA",old:0,new:400,pct:0,date:"2026-04-14"},
-{company:"Essentra",tidm:"ESNT",broker:"Jefferies",old:140,new:130,pct:-7.1,date:"2026-04-14"},
-{company:"Oxford Instruments",tidm:"OXIG",broker:"Jefferies",old:2370,new:2590,pct:9.3,date:"2026-04-14"},
-{company:"Guardian Metal Resources",tidm:"GMET",broker:"BMO",old:0,new:450,pct:0,date:"2026-04-14"},
-{company:"Anglo American",tidm:"AAL",broker:"Deutsche Bank",old:3600,new:3800,pct:5.6,date:"2026-04-15"},
-{company:"Antofagasta",tidm:"ANTO",broker:"Deutsche Bank",old:2900,new:3100,pct:6.9,date:"2026-04-15"},
-{company:"Glencore",tidm:"GLEN",broker:"Deutsche Bank",old:550,new:610,pct:10.9,date:"2026-04-15"},
-{company:"Rio Tinto",tidm:"RIO",broker:"Deutsche Bank",old:6200,new:6900,pct:11.3,date:"2026-04-15"},
-{company:"Airtel Africa",tidm:"AAF",broker:"Goldman Sachs",old:302,new:341,pct:12.9,date:"2026-04-15"},
-{company:"Vodafone",tidm:"VOD",broker:"Citigroup",old:100,new:115,pct:15.0,date:"2026-04-15"},
-{company:"Oxford Instruments",tidm:"OXIG",broker:"Deutsche Bank",old:2675,new:2900,pct:8.4,date:"2026-04-15"},
-{company:"Conduit Holdings",tidm:"CRE",broker:"Barclays",old:340,new:350,pct:2.9,date:"2026-04-15"},
-{company:"Entain",tidm:"ENT",broker:"Peel Hunt",old:850,new:750,pct:-11.8,date:"2026-04-15"},
-{company:"Jet2",tidm:"JET2",broker:"JP Morgan",old:1400,new:1300,pct:-7.1,date:"2026-04-15"},
-{company:"Ryanair",tidm:"RYA",broker:"JP Morgan",old:3800,new:3600,pct:-5.3,date:"2026-04-15"},
-{company:"EasyJet",tidm:"EZJ",broker:"JP Morgan",old:400,new:350,pct:-12.5,date:"2026-04-15"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"JP Morgan",old:1200,new:1100,pct:-8.3,date:"2026-04-15"},
-{company:"Pagegroup",tidm:"PAGE",broker:"Citigroup",old:440,new:300,pct:-31.8,date:"2026-04-15"},
-{company:"AB Foods",tidm:"ABF",broker:"Citigroup",old:1710,new:1600,pct:-6.4,date:"2026-04-15"},
-{company:"Entain",tidm:"ENT",broker:"Deutsche Bank",old:1055,new:1028,pct:-2.6,date:"2026-04-15"},
-{company:"Diageo",tidm:"DGE",broker:"Goldman Sachs",old:2000,new:1800,pct:-10.0,date:"2026-04-15"},
-{company:"Imperial Brands",tidm:"IMB",broker:"Goldman Sachs",old:3600,new:3550,pct:-1.4,date:"2026-04-15"},
-{company:"Imperial Brands",tidm:"IMB",broker:"Citigroup",old:3650,new:3550,pct:-2.7,date:"2026-04-15"},
-{company:"Chesnara",tidm:"CSN",broker:"RBC",old:370,new:360,pct:-2.7,date:"2026-04-15"},
-{company:"Lancashire Holdings",tidm:"LRE",broker:"Barclays",old:590,new:570,pct:-3.4,date:"2026-04-15"},
-{company:"Hiscox",tidm:"HSX",broker:"Barclays",old:1750,new:1730,pct:-1.1,date:"2026-04-15"},
-{company:"Quilter",tidm:"QLT",broker:"Jefferies",old:250,new:220,pct:-12.0,date:"2026-04-15"},
-{company:"Imperial Brands",tidm:"IMB",broker:"UBS",old:0,new:3150,pct:0,date:"2026-04-15"},
-{company:"Playtech",tidm:"PTEC",broker:"Jefferies",old:240,new:405,pct:68.8,date:"2026-04-09"},
-{company:"National Grid",tidm:"NG.",broker:"RBC",old:1125,new:1400,pct:24.4,date:"2026-04-09"},
-{company:"United Utilities",tidm:"UU.",broker:"RBC",old:1175,new:1450,pct:23.4,date:"2026-04-09"},
-{company:"SSE",tidm:"SSE",broker:"RBC",old:2475,new:3025,pct:22.2,date:"2026-04-09"},
-{company:"Severn Trent",tidm:"SVT",broker:"RBC",old:2850,new:3400,pct:19.3,date:"2026-04-09"},
-{company:"Rio Tinto",tidm:"RIO",broker:"Morgan Stanley",old:6330,new:6900,pct:9.0,date:"2026-04-09"},
-{company:"Pennon Group",tidm:"PNN",broker:"RBC",old:600,new:650,pct:8.3,date:"2026-04-09"},
-{company:"Lloyds Banking Group",tidm:"LLOY",broker:"Citigroup",old:106,new:114,pct:7.5,date:"2026-04-09"},
-{company:"Glencore",tidm:"GLEN",broker:"Morgan Stanley",old:570,new:610,pct:7.0,date:"2026-04-09"},
-{company:"Ceres Power Holdings",tidm:"CWR",broker:"Peel Hunt",old:190,new:200,pct:5.3,date:"2026-04-09"},
-{company:"IG Group",tidm:"IGG",broker:"Deutsche Bank",old:1600,new:1650,pct:3.1,date:"2026-04-09"},
-{company:"Rosebank Industries",tidm:"ROSE",broker:"Berenberg",old:440,new:450,pct:2.3,date:"2026-04-09"},
-{company:"Pearson",tidm:"PSON",broker:"JP Morgan",old:1420,new:1430,pct:0.7,date:"2026-04-09"},
-{company:"Quilter",tidm:"QLT",broker:"Deutsche Bank",old:175,new:170,pct:-2.9,date:"2026-04-09"},
-{company:"Liontrust",tidm:"LIO",broker:"Deutsche Bank",old:165,new:160,pct:-3.0,date:"2026-04-09"},
-{company:"Rathbones",tidm:"RAT",broker:"Deutsche Bank",old:2300,new:2200,pct:-4.3,date:"2026-04-09"},
-{company:"Entain",tidm:"ENT",broker:"Citigroup",old:1100,new:1050,pct:-4.5,date:"2026-04-09"},
-{company:"Motorpoint Group",tidm:"MOTR",broker:"Deutsche Bank",old:190,new:180,pct:-5.3,date:"2026-04-09"},
-{company:"St James Place",tidm:"STJ",broker:"Deutsche Bank",old:2000,new:1900,pct:-5.0,date:"2026-04-09"},
-{company:"Aberdeen Group",tidm:"ABDN",broker:"Deutsche Bank",old:240,new:225,pct:-6.2,date:"2026-04-09"},
-{company:"Man Group",tidm:"EMG",broker:"Deutsche Bank",old:305,new:280,pct:-8.2,date:"2026-04-09"},
-{company:"Polar Capital",tidm:"POLR",broker:"Deutsche Bank",old:860,new:790,pct:-8.1,date:"2026-04-09"},
-{company:"Endeavour Mining",tidm:"EDV",broker:"Morgan Stanley",old:5290,new:4830,pct:-8.7,date:"2026-04-09"},
-{company:"Fresnillo",tidm:"FRES",broker:"Morgan Stanley",old:2690,new:2400,pct:-10.8,date:"2026-04-09"},
-{company:"Jupiter Fund Mgmt",tidm:"JUP",broker:"Deutsche Bank",old:200,new:175,pct:-12.5,date:"2026-04-09"},
-{company:"Tritax Big Box REIT",tidm:"BBOX",broker:"Berenberg",old:230,new:196,pct:-14.8,date:"2026-04-09"},
-{company:"Antofagasta",tidm:"ANTO",broker:"Morgan Stanley",old:2930,new:2880,pct:-1.7,date:"2026-04-09"},
-{company:"Natwest Group",tidm:"NWG",broker:"Deutsche Bank",old:730,new:840,pct:15.1,date:"2026-03-27"},
-{company:"BT Group",tidm:"BT.A",broker:"Citigroup",old:140,new:175,pct:25.0,date:"2026-03-27"},
-{company:"Pollen Street Group",tidm:"POLN",broker:"Berenberg",old:1050,new:1100,pct:4.8,date:"2026-03-27"},
-{company:"Kingfisher",tidm:"KGF",broker:"Deutsche Bank",old:255,new:260,pct:2.0,date:"2026-03-27"},
-{company:"EasyJet",tidm:"EZJ",broker:"UBS",old:800,new:700,pct:-12.5,date:"2026-03-27"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"UBS",old:1630,new:1430,pct:-12.3,date:"2026-03-27"},
-{company:"IAG",tidm:"IAG",broker:"UBS",old:370,new:355,pct:-4.1,date:"2026-03-27"},
-{company:"Softcat",tidm:"SCT",broker:"Citigroup",old:1900,new:1550,pct:-18.4,date:"2026-03-27"},
-{company:"Aston Martin Lagonda",tidm:"AML",broker:"Citigroup",old:55,new:45,pct:-18.2,date:"2026-03-27"},
-{company:"Unilever",tidm:"ULVR",broker:"Barclays",old:6000,new:5000,pct:-16.7,date:"2026-03-27"},
-{company:"Reckitt",tidm:"RKT",broker:"Barclays",old:7000,new:6300,pct:-10.0,date:"2026-03-27"},
-{company:"3i Group",tidm:"III",broker:"Barclays",old:4810,new:4455,pct:-7.4,date:"2026-03-27"},
-{company:"RS Group",tidm:"RS1",broker:"Citigroup",old:700,new:650,pct:-7.1,date:"2026-03-27"},
-{company:"Tate & Lyle",tidm:"TATE",broker:"Barclays",old:410,new:395,pct:-3.7,date:"2026-03-27"},
-{company:"Haleon",tidm:"HLN",broker:"Barclays",old:420,new:415,pct:-1.2,date:"2026-03-27"},
-{company:"Berkeley Group",tidm:"BKG",broker:"BofA",old:4080,new:4020,pct:-1.5,date:"2026-03-27"},
-{company:"Diploma",tidm:"DPLM",broker:"JP Morgan",old:5120,new:5760,pct:12.5,date:"2026-03-27"},
-{company:"Mony Group",tidm:"MONY",broker:"Jefferies",old:205,new:230,pct:12.2,date:"2026-03-27"},
-{company:"Atalaya Mining",tidm:"ATYM",broker:"Peel Hunt",old:1200,new:1135,pct:-5.4,date:"2026-03-27"},
-{company:"Topps Tiles",tidm:"TPT",broker:"Peel Hunt",old:70,new:60,pct:-14.3,date:"2026-03-27"},
-{company:"Future",tidm:"FUTR",broker:"Jefferies",old:1220,new:466,pct:-61.8,date:"2026-03-27"},
-{company:"Bellway",tidm:"BWY",broker:"Peel Hunt",old:3060,new:2380,pct:-22.2,date:"2026-03-27"},
-{company:"Diageo",tidm:"DGE",broker:"Barclays",old:2310,new:2360,pct:2.2,date:"2026-03-26"},
-{company:"Hunting",tidm:"HTG",broker:"Kepler Cheuvreux",old:510,new:580,pct:13.7,date:"2026-03-26"},
-{company:"Luceco",tidm:"LUCE",broker:"Deutsche Bank",old:220,new:225,pct:2.3,date:"2026-03-26"},
-{company:"S4 Capital",tidm:"SFOR",broker:"Barclays",old:25,new:28,pct:12.0,date:"2026-03-26"},
-{company:"S4 Capital",tidm:"SFOR",broker:"Deutsche Bank",old:28,new:30,pct:7.1,date:"2026-03-26"},
-{company:"Bellway",tidm:"BWY",broker:"Goldman Sachs",old:2745,new:2425,pct:-11.7,date:"2026-03-26"},
-{company:"Entain",tidm:"ENT",broker:"Barclays",old:945,new:845,pct:-10.6,date:"2026-03-26"},
-{company:"Everplay Group",tidm:"EVPL",broker:"Barclays",old:425,new:330,pct:-22.4,date:"2026-03-26"},
-{company:"Everplay Group",tidm:"EVPL",broker:"Berenberg",old:450,new:370,pct:-17.8,date:"2026-03-26"},
-{company:"Fevertree Drinks",tidm:"FEVR",broker:"Barclays",old:1270,new:1190,pct:-6.3,date:"2026-03-26"},
-{company:"Foresight Solar Fund",tidm:"FSFL",broker:"RBC",old:80,new:75,pct:-6.2,date:"2026-03-26"},
-{company:"GB Group",tidm:"GBG",broker:"Panmure Liberum",old:440,new:400,pct:-9.1,date:"2026-03-26"},
-{company:"Prudential",tidm:"PRU",broker:"JP Morgan",old:1500,new:1450,pct:-3.3,date:"2026-03-26"},
-{company:"RS Group",tidm:"RS1",broker:"Kepler Cheuvreux",old:820,new:760,pct:-7.3,date:"2026-03-26"},
-{company:"RS Group",tidm:"RS1",broker:"Berenberg",old:670,new:600,pct:-10.4,date:"2026-03-26"},
-{company:"YouGov",tidm:"YOU",broker:"UBS",old:510,new:380,pct:-25.5,date:"2026-03-26"},
-{company:"BP",tidm:"BP.",broker:"Morgan Stanley",old:447,new:619,pct:38.5,date:"2026-03-25"},
-{company:"Shell",tidm:"SHEL",broker:"Morgan Stanley",old:2971,new:3589,pct:20.8,date:"2026-03-25"},
-{company:"SSE",tidm:"SSE",broker:"Bernstein",old:2600,new:3040,pct:16.9,date:"2026-03-25"},
-{company:"Hiscox",tidm:"HSX",broker:"Morgan Stanley",old:1470,new:1700,pct:15.6,date:"2026-03-25"},
-{company:"Centrica",tidm:"CNA",broker:"UBS",old:200,new:230,pct:15.0,date:"2026-03-25"},
-{company:"Luceco",tidm:"LUCE",broker:"Berenberg",old:175,new:200,pct:14.3,date:"2026-03-25"},
-{company:"Luceco",tidm:"LUCE",broker:"Peel Hunt",old:190,new:210,pct:10.5,date:"2026-03-25"},
-{company:"Fevertree Drinks",tidm:"FEVR",broker:"Deutsche Bank",old:840,new:900,pct:7.1,date:"2026-03-25"},
-{company:"National Grid",tidm:"NG.",broker:"Bernstein",old:1420,new:1450,pct:2.1,date:"2026-03-25"},
-{company:"Prudential",tidm:"PRU",broker:"UBS",old:1400,new:1470,pct:5.0,date:"2026-03-25"},
-{company:"Croda",tidm:"CRDA",broker:"Morgan Stanley",old:3280,new:3350,pct:2.1,date:"2026-03-25"},
-{company:"Reckitt",tidm:"RKT",broker:"Deutsche Bank",old:5500,new:5460,pct:-0.7,date:"2026-03-25"},
-{company:"Croda",tidm:"CRDA",broker:"UBS",old:4320,new:4300,pct:-0.5,date:"2026-03-25"},
-{company:"YouGov",tidm:"YOU",broker:"Deutsche Bank",old:370,new:350,pct:-5.4,date:"2026-03-25"},
-{company:"Kingfisher",tidm:"KGF",broker:"Berenberg",old:333,new:310,pct:-6.9,date:"2026-03-25"},
-{company:"Pinewood Technologies",tidm:"PINE",broker:"Berenberg",old:725,new:670,pct:-7.6,date:"2026-03-25"},
-{company:"RS Group",tidm:"RS1",broker:"JP Morgan",old:747,new:635,pct:-15.0,date:"2026-03-25"},
-{company:"Bellway",tidm:"BWY",broker:"Stifel",old:2280,new:1900,pct:-16.7,date:"2026-03-25"},
-{company:"Bytes Technology Grp",tidm:"BYIT",broker:"Panmure Liberum",old:540,new:450,pct:-16.7,date:"2026-03-25"},
-{company:"Franchise Brands",tidm:"FRAN",broker:"Stifel",old:260,new:210,pct:-19.2,date:"2026-03-25"},
-{company:"Michelmersh Brick",tidm:"MBH",broker:"Berenberg",old:150,new:120,pct:-20.0,date:"2026-03-25"},
-{company:"Diploma",tidm:"DPLM",broker:"Kepler Cheuvreux",old:5730,new:6530,pct:14.0,date:"2026-03-24"},
-{company:"IG Group",tidm:"IGG",broker:"UBS",old:1600,new:1680,pct:5.0,date:"2026-03-24"},
-{company:"Ithaca Energy",tidm:"ITH",broker:"Stifel",old:137,new:150,pct:9.5,date:"2026-03-24"},
-{company:"GYM Group",tidm:"GYM",broker:"Berenberg",old:230,new:235,pct:2.2,date:"2026-03-24"},
-{company:"Entain",tidm:"ENT",broker:"Deutsche Bank",old:1029,new:1055,pct:2.5,date:"2026-03-24"},
-{company:"3i Group",tidm:"III",broker:"Citigroup",old:4750,new:4280,pct:-9.9,date:"2026-03-24"},
-{company:"Bytes Technology Grp",tidm:"BYIT",broker:"Peel Hunt",old:638,new:375,pct:-41.2,date:"2026-03-24"},
-{company:"Croda",tidm:"CRDA",broker:"Deutsche Bank",old:3100,new:3000,pct:-3.2,date:"2026-03-24"},
-{company:"Everplay Group",tidm:"EVPL",broker:"Panmure Liberum",old:380,new:365,pct:-3.9,date:"2026-03-24"},
-{company:"Ibstock",tidm:"IBST",broker:"Deutsche Bank",old:144,new:110,pct:-23.6,date:"2026-03-24"},
-{company:"Natwest Group",tidm:"NWG",broker:"Morgan Stanley",old:720,new:700,pct:-2.8,date:"2026-03-24"},
-{company:"Next",tidm:"NXT",broker:"Barclays",old:13700,new:13100,pct:-4.4,date:"2026-03-24"},
-{company:"Oxford Nanopore Tech.",tidm:"ONT",broker:"RBC",old:300,new:225,pct:-25.0,date:"2026-03-24"},
-{company:"Sigmaroc",tidm:"SRC",broker:"Stifel",old:155,new:142,pct:-8.4,date:"2026-03-24"},
-{company:"Smiths Group",tidm:"SMIN",broker:"Kepler Cheuvreux",old:2950,new:2920,pct:-1.0,date:"2026-03-24"},
-{company:"YouGov",tidm:"YOU",broker:"Berenberg",old:600,new:395,pct:-34.2,date:"2026-03-24"},
-{company:"YouGov",tidm:"YOU",broker:"JP Morgan",old:380,new:350,pct:-7.9,date:"2026-03-24"},
-{company:"Saga",tidm:"SAGA",broker:"Peel Hunt",old:120,new:700,pct:483.3,date:"2026-03-23"},
-{company:"Balfour Beatty",tidm:"BBY",broker:"Jefferies",old:650,new:900,pct:38.5,date:"2026-03-23"},
-{company:"National Grid",tidm:"NG.",broker:"HSBC",old:1280,new:1500,pct:17.2,date:"2026-03-23"},
-{company:"SSE",tidm:"SSE",broker:"HSBC",old:2550,new:3000,pct:17.6,date:"2026-03-23"},
-{company:"Croda",tidm:"CRDA",broker:"Goldman Sachs",old:2800,new:3200,pct:14.3,date:"2026-03-23"},
-{company:"SSE",tidm:"SSE",broker:"Goldman Sachs",old:2535,new:2812,pct:10.9,date:"2026-03-23"},
-{company:"Diploma",tidm:"DPLM",broker:"Jefferies",old:5200,new:5700,pct:9.6,date:"2026-03-23"},
-{company:"Legal & General",tidm:"LGEN",broker:"RBC",old:205,new:220,pct:7.3,date:"2026-03-23"},
-{company:"Atalaya Mining",tidm:"ATYM",broker:"BofA",old:1350,new:1150,pct:-14.8,date:"2026-03-23"},
-{company:"Central Asia Metals",tidm:"CAML",broker:"Peel Hunt",old:245,new:230,pct:-6.1,date:"2026-03-23"},
-{company:"Foxtons Group",tidm:"FOXT",broker:"Peel Hunt",old:55,new:50,pct:-9.1,date:"2026-03-23"},
-{company:"J D Wetherspoon",tidm:"JDW",broker:"Deutsche Bank",old:490,new:460,pct:-6.1,date:"2026-03-23"},
-{company:"J D Wetherspoon",tidm:"JDW",broker:"Morgan Stanley",old:720,new:650,pct:-9.7,date:"2026-03-23"},
-{company:"Johnson Matthey",tidm:"JMAT",broker:"Berenberg",old:2250,new:2100,pct:-6.7,date:"2026-03-23"},
-{company:"Melrose Industries",tidm:"MRO",broker:"Deutsche Bank",old:620,new:570,pct:-8.1,date:"2026-03-23"},
-{company:"Sabre Insurance",tidm:"SBRE",broker:"Barclays",old:183,new:181,pct:-1.1,date:"2026-03-23"},
-{company:"Smiths Group",tidm:"SMIN",broker:"Panmure Liberum",old:3110,new:3070,pct:-1.3,date:"2026-03-23"},
-{company:"Ithaca Energy",tidm:"ITH",broker:"Barclays",old:100,new:200,pct:100.0,date:"2026-03-20"},
-{company:"BP",tidm:"BP.",broker:"HSBC",old:430,new:565,pct:31.4,date:"2026-03-20"},
-{company:"IG Group",tidm:"IGG",broker:"RBC",old:1275,new:1600,pct:25.5,date:"2026-03-20"},
-{company:"Sabre Insurance",tidm:"SBRE",broker:"RBC",old:135,new:160,pct:18.5,date:"2026-03-20"},
-{company:"Hammerson",tidm:"HMSO",broker:"Deutsche Bank",old:320,new:370,pct:15.6,date:"2026-03-20"},
-{company:"IG Group",tidm:"IGG",broker:"Deutsche Bank",old:1400,new:1600,pct:14.3,date:"2026-03-20"},
-{company:"Shell",tidm:"SHEL",broker:"HSBC",old:2950,new:3350,pct:13.6,date:"2026-03-20"},
-{company:"Diploma",tidm:"DPLM",broker:"Morgan Stanley",old:6550,new:7350,pct:12.2,date:"2026-03-20"},
-{company:"Centrica",tidm:"CNA",broker:"JP Morgan",old:224,new:245,pct:9.4,date:"2026-03-20"},
-{company:"SEGRO",tidm:"SGRO",broker:"Deutsche Bank",old:800,new:850,pct:6.2,date:"2026-03-20"},
-{company:"Shaftesbury Capital",tidm:"SHC",broker:"Deutsche Bank",old:175,new:185,pct:5.7,date:"2026-03-20"},
-{company:"Tritax Big Box REIT",tidm:"BBOX",broker:"Deutsche Bank",old:180,new:190,pct:5.6,date:"2026-03-20"},
-{company:"Primary Health Prop.",tidm:"PHP",broker:"Deutsche Bank",old:114,new:115,pct:0.9,date:"2026-03-20"},
-{company:"Anglo American",tidm:"AAL",broker:"JP Morgan",old:2800,new:2770,pct:-1.1,date:"2026-03-20"},
-{company:"Antofagasta",tidm:"ANTO",broker:"JP Morgan",old:3200,new:3100,pct:-3.1,date:"2026-03-20"},
-{company:"Unite Group",tidm:"UTG",broker:"Deutsche Bank",old:1100,new:1040,pct:-5.5,date:"2026-03-20"},
-{company:"Derwent London",tidm:"DLN",broker:"Deutsche Bank",old:2600,new:2430,pct:-6.5,date:"2026-03-20"},
-{company:"Jet2",tidm:"JET2",broker:"Deutsche Bank",old:1596,new:1457,pct:-8.7,date:"2026-03-20"},
-{company:"DFS Furniture",tidm:"DFS",broker:"UBS",old:230,new:200,pct:-13.0,date:"2026-03-20"},
-{company:"Sage Group",tidm:"SGE",broker:"JP Morgan",old:1300,new:1100,pct:-15.4,date:"2026-03-20"},
-{company:"Antofagasta",tidm:"ANTO",broker:"RBC",old:3600,new:2800,pct:-22.2,date:"2026-03-20"},
-{company:"Central Asia Metals",tidm:"CAML",broker:"RBC",old:230,new:170,pct:-26.1,date:"2026-03-20"},
-{company:"Atalaya Mining",tidm:"ATYM",broker:"RBC",old:1525,new:1125,pct:-26.2,date:"2026-03-20"},
-{company:"Aston Martin Lagonda",tidm:"AML",broker:"Barclays",old:75,new:55,pct:-26.7,date:"2026-03-20"},
-{company:"Pagegroup",tidm:"PAGE",broker:"Jefferies",old:215,new:145,pct:-32.6,date:"2026-03-20"},
-{company:"Hays",tidm:"HAS",broker:"Jefferies",old:44,new:28,pct:-36.4,date:"2026-03-20"},
-{company:"Ithaca Energy",tidm:"ITH",broker:"Goldman Sachs",old:210,new:240,pct:14.3,date:"2026-03-19"},
-{company:"Softcat",tidm:"SCT",broker:"UBS",old:1225,new:1350,pct:10.2,date:"2026-03-19"},
-{company:"Clarkson",tidm:"CKN",broker:"Deutsche Bank",old:4850,new:4950,pct:2.1,date:"2026-03-19"},
-{company:"IAG",tidm:"IAG",broker:"RBC",old:500,new:480,pct:-4.0,date:"2026-03-19"},
-{company:"Travis Perkins",tidm:"TPK",broker:"Jefferies",old:531,new:507,pct:-4.5,date:"2026-03-19"},
-{company:"Domino's Pizza Grp",tidm:"DOM",broker:"RBC",old:250,new:230,pct:-8.0,date:"2026-03-19"},
-{company:"IAG",tidm:"IAG",broker:"Deutsche Bank",old:500,new:460,pct:-8.0,date:"2026-03-19"},
-{company:"Softcat",tidm:"SCT",broker:"Jefferies",old:1500,new:1210,pct:-19.3,date:"2026-03-19"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"RBC",old:1200,new:900,pct:-25.0,date:"2026-03-19"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"Deutsche Bank",old:1250,new:900,pct:-28.0,date:"2026-03-19"},
-{company:"James Fisher & Sons",tidm:"FSJ",broker:"Berenberg",old:615,new:790,pct:28.5,date:"2026-03-18"},
-{company:"SSE",tidm:"SSE",broker:"Jefferies",old:2510,new:3060,pct:21.9,date:"2026-03-18"},
-{company:"Vesuvius",tidm:"VSVS",broker:"Peel Hunt",old:470,new:525,pct:11.7,date:"2026-03-18"},
-{company:"Trustpilot",tidm:"TRST",broker:"UBS",old:375,new:410,pct:9.3,date:"2026-03-18"},
-{company:"Liontrust",tidm:"LIO",broker:"RBC",old:220,new:240,pct:9.1,date:"2026-03-18"},
-{company:"IP Group",tidm:"IPO",broker:"Deutsche Bank",old:103,new:110,pct:6.8,date:"2026-03-18"},
-{company:"Trustpilot",tidm:"TRST",broker:"Deutsche Bank",old:354,new:375,pct:5.9,date:"2026-03-18"},
-{company:"Hochschild Mining",tidm:"HOC",broker:"Peel Hunt",old:875,new:920,pct:5.1,date:"2026-03-18"},
-{company:"Trustpilot",tidm:"TRST",broker:"Berenberg",old:300,new:315,pct:5.0,date:"2026-03-18"},
-{company:"Moonpig Group",tidm:"MOON",broker:"JP Morgan",old:275,new:285,pct:3.6,date:"2026-03-18"},
-{company:"DRAX Group",tidm:"DRX",broker:"HSBC",old:850,new:880,pct:3.5,date:"2026-03-18"},
-{company:"St James's Place",tidm:"STJ",broker:"JP Morgan",old:1740,new:1711,pct:-1.7,date:"2026-03-18"},
-{company:"Quilter",tidm:"QLT",broker:"JP Morgan",old:223,new:212,pct:-4.9,date:"2026-03-18"},
-{company:"Property Franchise Grp",tidm:"TPFG",broker:"Stifel",old:650,new:605,pct:-6.9,date:"2026-03-18"},
-{company:"Ashtead Technology",tidm:"AT.",broker:"Panmure Liberum",old:675,new:621,pct:-8.0,date:"2026-03-18"},
-{company:"Ocado",tidm:"OCDO",broker:"Alphavalue",old:279,new:256,pct:-8.2,date:"2026-03-18"},
-{company:"Victrex",tidm:"VCT",broker:"JP Morgan",old:725,new:625,pct:-13.8,date:"2026-03-18"},
-{company:"Liontrust",tidm:"LIO",broker:"Deutsche Bank",old:200,new:165,pct:-17.5,date:"2026-03-18"},
-{company:"BP",tidm:"BP.",broker:"Berenberg",old:520,new:700,pct:34.6,date:"2026-04-02"},
-{company:"Anglo American",tidm:"AAL",broker:"Berenberg",old:3900,new:3600,pct:-7.7,date:"2026-04-02"},
-{company:"Antofagasta",tidm:"ANTO",broker:"Berenberg",old:4300,new:3700,pct:-14.0,date:"2026-04-02"},
-{company:"Berkeley Group",tidm:"BKG",broker:"Berenberg",old:4500,new:4000,pct:-11.1,date:"2026-04-02"},
-{company:"Berkeley Group",tidm:"BKG",broker:"Goldman Sachs",old:3875,new:2995,pct:-22.7,date:"2026-04-02"},
-{company:"EasyJet",tidm:"EZJ",broker:"Morgan Stanley",old:410,new:310,pct:-24.4,date:"2026-04-02"},
-{company:"Experian",tidm:"EXPN",broker:"Goldman Sachs",old:4750,new:4080,pct:-14.1,date:"2026-04-02"},
-{company:"Ferrexpo",tidm:"FXPO",broker:"Peel Hunt",old:50,new:40,pct:-20.0,date:"2026-04-02"},
-{company:"Glencore",tidm:"GLEN",broker:"Berenberg",old:600,new:630,pct:5.0,date:"2026-04-02"},
-{company:"Henry Boot",tidm:"BOOT",broker:"Berenberg",old:326,new:230,pct:-29.4,date:"2026-04-02"},
-{company:"Hochschild Mining",tidm:"HOC",broker:"Berenberg",old:700,new:590,pct:-15.7,date:"2026-04-02"},
-{company:"IAG",tidm:"IAG",broker:"Morgan Stanley",old:370,new:310,pct:-16.2,date:"2026-04-02"},
-{company:"Kistos",tidm:"KIST",broker:"Berenberg",old:285,new:325,pct:14.0,date:"2026-04-02"},
-{company:"Mondi",tidm:"MNDI",broker:"JP Morgan",old:900,new:990,pct:10.0,date:"2026-04-02"},
-{company:"Pan African Resources",tidm:"PAF",broker:"Berenberg",old:181,new:165,pct:-8.8,date:"2026-04-02"},
-{company:"Rio Tinto",tidm:"RIO",broker:"Berenberg",old:6000,new:6700,pct:11.7,date:"2026-04-02"},
-{company:"Serica Energy",tidm:"SQZ",broker:"Berenberg",old:300,new:350,pct:16.7,date:"2026-04-02"},
-{company:"Shell",tidm:"SHEL",broker:"Berenberg",old:3300,new:4100,pct:24.2,date:"2026-04-02"},
-{company:"Shell",tidm:"SHEL",broker:"Jefferies",old:3500,new:4400,pct:25.7,date:"2026-04-02"},
-{company:"Smurfit Westrock",tidm:"SWR",broker:"JP Morgan",old:5000,new:4800,pct:-4.0,date:"2026-04-02"},
-{company:"St James's Place",tidm:"STJ",broker:"Jefferies",old:1800,new:1700,pct:-5.6,date:"2026-04-02"},
-{company:"Tate & Lyle",tidm:"TATE",broker:"Morgan Stanley",old:399,new:375,pct:-6.0,date:"2026-04-02"},
-{company:"Tharisa",tidm:"THS",broker:"Berenberg",old:210,new:220,pct:4.8,date:"2026-04-02"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"Morgan Stanley",old:1100,new:900,pct:-18.2,date:"2026-04-02"},
-{company:"Alfa Financial Software",tidm:"ALFA",broker:"Barclays",old:280,new:250,pct:-10.7,date:"2026-04-02"},
-{company:"Central Asia Metals",tidm:"CAML",broker:"Berenberg",old:210,new:190,pct:-9.5,date:"2026-04-02"},
-{company:"Barratt Redrow",tidm:"BTRW",broker:"RBC",old:425,new:350,pct:-17.6,date:"2026-04-01"},
-{company:"Bellway",tidm:"BWY",broker:"RBC",old:3150,new:2050,pct:-34.9,date:"2026-04-01"},
-{company:"Berkeley Group",tidm:"BKG",broker:"JP Morgan",old:5000,new:4200,pct:-16.0,date:"2026-04-01"},
-{company:"BP",tidm:"BP.",broker:"BofA",old:400,new:450,pct:12.5,date:"2026-04-01"},
-{company:"BP",tidm:"BP.",broker:"TD Cowen",old:433,new:595,pct:37.4,date:"2026-04-01"},
-{company:"Burberry",tidm:"BRBY",broker:"Deutsche Bank",old:1550,new:1480,pct:-4.5,date:"2026-04-01"},
-{company:"Derwent London",tidm:"DLN",broker:"Berenberg",old:2296,new:2210,pct:-3.7,date:"2026-04-01"},
-{company:"Future",tidm:"FUTR",broker:"Deutsche Bank",old:1875,new:1013,pct:-46.0,date:"2026-04-01"},
-{company:"Future",tidm:"FUTR",broker:"Barclays",old:640,new:285,pct:-55.5,date:"2026-04-01"},
-{company:"Future",tidm:"FUTR",broker:"Berenberg",old:970,new:330,pct:-66.0,date:"2026-04-01"},
-{company:"Grainger",tidm:"GRI",broker:"Citigroup",old:298,new:253,pct:-15.1,date:"2026-04-01"},
-{company:"Harworth Group",tidm:"HWG",broker:"Jefferies",old:213,new:190,pct:-10.8,date:"2026-04-01"},
-{company:"Henry Boot",tidm:"BOOT",broker:"Jefferies",old:266,new:231,pct:-13.2,date:"2026-04-01"},
-{company:"Kingfisher",tidm:"KGF",broker:"UBS",old:315,new:295,pct:-6.3,date:"2026-04-01"},
-{company:"National Grid",tidm:"NG.",broker:"Deutsche Bank",old:1430,new:1370,pct:-4.2,date:"2026-04-01"},
-{company:"National Grid",tidm:"NG.",broker:"JP Morgan",old:1250,new:1450,pct:16.0,date:"2026-04-01"},
-{company:"Persimmon",tidm:"PSN",broker:"RBC",old:1750,new:1350,pct:-22.9,date:"2026-04-01"},
-{company:"Sage Group",tidm:"SGE",broker:"Goldman Sachs",old:1250,new:1100,pct:-12.0,date:"2026-04-01"},
-{company:"Shell",tidm:"SHEL",broker:"BofA",old:3250,new:3600,pct:10.8,date:"2026-04-01"},
-{company:"Shell",tidm:"SHEL",broker:"TD Cowen",old:3064,new:4237,pct:38.3,date:"2026-04-01"},
-{company:"SSE",tidm:"SSE",broker:"JP Morgan",old:2580,new:2925,pct:13.4,date:"2026-04-01"},
-{company:"Taylor Wimpey",tidm:"TW.",broker:"RBC",old:155,new:120,pct:-22.6,date:"2026-04-01"},
-{company:"Trustpilot",tidm:"TRST",broker:"Panmure Liberum",old:220,new:235,pct:6.8,date:"2026-04-01"},
-{company:"Unilever",tidm:"ULVR",broker:"HSBC",old:5100,new:4800,pct:-5.9,date:"2026-04-01"},
-{company:"Unilever",tidm:"ULVR",broker:"TD Cowen",old:5800,new:5080,pct:-12.4,date:"2026-04-01"},
-{company:"Vistry Group",tidm:"VTY",broker:"RBC",old:385,new:180,pct:-53.2,date:"2026-04-01"},
-{company:"Croda International",tidm:"CRDA",broker:"Kepler Cheuvreux",old:2840,new:2865,pct:0.9,date:"2026-03-31"},
-{company:"Diageo",tidm:"DGE",broker:"Deutsche Bank",old:1790,new:1650,pct:-7.8,date:"2026-03-31"},
-{company:"Everplay Group",tidm:"EVPL",broker:"Jefferies",old:440,new:380,pct:-13.6,date:"2026-03-31"},
-{company:"Future",tidm:"FUTR",broker:"JP Morgan",old:1235,new:750,pct:-39.3,date:"2026-03-31"},
-{company:"ICG",tidm:"ICG",broker:"Barclays",old:2910,new:2405,pct:-17.4,date:"2026-03-31"},
-{company:"IMI",tidm:"IMI",broker:"JP Morgan",old:3330,new:3100,pct:-6.9,date:"2026-03-31"},
-{company:"JD Wetherspoon",tidm:"JDW",broker:"Barclays",old:825,new:540,pct:-34.5,date:"2026-03-31"},
-{company:"SEGRO",tidm:"SGRO",broker:"Berenberg",old:1067,new:915,pct:-14.2,date:"2026-03-31"},
-{company:"Weir Group",tidm:"WEIR",broker:"JP Morgan",old:3800,new:3500,pct:-7.9,date:"2026-03-31"},
-{company:"S4 Capital",tidm:"SFOR",broker:"Panmure Liberum",old:20.9,new:33.2,pct:58.9,date:"2026-04-08"},
-{company:"Shell",tidm:"SHEL",broker:"Rothschild & Co",old:310,new:364,pct:17.4,date:"2026-04-09"},
-{company:"Shaftesbury Capital",tidm:"SHC",broker:"Berenberg",old:153,new:151,pct:-1.3,date:"2026-04-09"},
-{company:"DCC",tidm:"DCC",broker:"Exane BNP",old:5500,new:6000,pct:9.1,date:"2026-04-09"},
-{company:"London Stock Exchange",tidm:"LSEG",broker:"Goldman Sachs",old:12740,new:13010,pct:2.1,date:"2026-04-09"},
-{company:"AJ Bell",tidm:"AJB",broker:"Goldman Sachs",old:475,new:495,pct:4.2,date:"2026-04-09"},
-{company:"AstraZeneca",tidm:"AZN",broker:"Morgan Stanley",old:16000,new:16500,pct:3.1,date:"2026-04-08"},
-{company:"Auto Trader",tidm:"AUTO",broker:"Citigroup",old:880,new:526,pct:-40.2,date:"2026-04-08"},
-{company:"Barratt Redrow",tidm:"BTRW",broker:"Jefferies",old:418,new:289,pct:-30.9,date:"2026-04-08"},
-{company:"Bellway",tidm:"BWY",broker:"Jefferies",old:3463,new:2394,pct:-30.9,date:"2026-04-08"},
-{company:"Berkeley Group",tidm:"BKG",broker:"Peel Hunt",old:4600,new:4000,pct:-13.0,date:"2026-04-08"},
-{company:"Chesnara",tidm:"CSN",broker:"Berenberg",old:333,new:339,pct:1.8,date:"2026-04-08"},
-{company:"Informa",tidm:"INF",broker:"Citigroup",old:1000,new:850,pct:-15.0,date:"2026-04-08"},
-{company:"Liontrust",tidm:"LIO",broker:"RBC",old:240,new:235,pct:-2.1,date:"2026-04-08"},
-{company:"M&G",tidm:"MNG",broker:"RBC",old:260,new:285,pct:9.6,date:"2026-04-08"},
-{company:"Persimmon",tidm:"PSN",broker:"Jefferies",old:1792,new:1591,pct:-11.2,date:"2026-04-08"},
-{company:"Primary Health Prop.",tidm:"PHP",broker:"JP Morgan",old:100,new:105,pct:5.0,date:"2026-04-08"},
-{company:"RELX",tidm:"REL",broker:"Citigroup",old:3325,new:2870,pct:-13.7,date:"2026-04-08"},
-{company:"Rightmove",tidm:"RMV",broker:"Citigroup",old:520,new:455,pct:-12.5,date:"2026-04-08"},
-{company:"Senior",tidm:"SNR",broker:"Panmure Liberum",old:358,new:300,pct:-16.2,date:"2026-04-08"},
-{company:"Shell",tidm:"SHEL",broker:"RBC",old:3700,new:4000,pct:8.1,date:"2026-04-08"},
-{company:"Solid State",tidm:"SOLI",broker:"Berenberg",old:240,new:245,pct:2.1,date:"2026-04-08"},
-{company:"Taylor Wimpey",tidm:"TW.",broker:"Jefferies",old:136,new:105,pct:-22.8,date:"2026-04-08"},
-{company:"Unilever",tidm:"ULVR",broker:"LBBW",old:5500,new:4700,pct:-14.5,date:"2026-04-08"},
-{company:"WPP",tidm:"WPP",broker:"Citigroup",old:310,new:275,pct:-11.3,date:"2026-04-08"},
-{company:"Next",tidm:"NXT",broker:"Citigroup",old:13542,new:13200,pct:-2.5,date:"2026-04-08"},
-{company:"Aberdeen Group",tidm:"ABDN",broker:"Morgan Stanley",old:218,new:202,pct:-7.3,date:"2026-04-07"},
-{company:"Accesso Technology",tidm:"ACSO",broker:"Peel Hunt",old:435,new:370,pct:-14.9,date:"2026-04-07"},
-{company:"Antofagasta",tidm:"ANTO",broker:"Peel Hunt",old:3285,new:3155,pct:-4.0,date:"2026-04-07"},
-{company:"Ashmore Group",tidm:"ASHM",broker:"Morgan Stanley",old:208,new:193,pct:-7.2,date:"2026-04-07"},
-{company:"Berkeley Group",tidm:"BKG",broker:"Jefferies",old:5093,new:4598,pct:-9.7,date:"2026-04-07"},
-{company:"ConvaTec",tidm:"CTEC",broker:"Goldman Sachs",old:360,new:310,pct:-13.9,date:"2026-04-07"},
-{company:"Endeavour Mining",tidm:"EDV",broker:"JP Morgan",old:6300,new:5900,pct:-6.3,date:"2026-04-07"},
-{company:"Hochschild Mining",tidm:"HOC",broker:"JP Morgan",old:990,new:950,pct:-4.0,date:"2026-04-07"},
-{company:"Intercontinental Hotels",tidm:"IHG",broker:"UBS",old:15050,new:15000,pct:-0.3,date:"2026-04-07"},
-{company:"Johnson Matthey",tidm:"JMAT",broker:"Jefferies",old:2420,new:2170,pct:-10.3,date:"2026-04-07"},
-{company:"Jupiter Fund Mgmt",tidm:"JUP",broker:"Morgan Stanley",old:189,new:170,pct:-10.1,date:"2026-04-07"},
-{company:"Kenmare Resources",tidm:"KMR",broker:"Peel Hunt",old:370,new:325,pct:-12.2,date:"2026-04-07"},
-{company:"Man Group",tidm:"EMG",broker:"Morgan Stanley",old:291,new:270,pct:-7.2,date:"2026-04-07"},
-{company:"Mulberry",tidm:"MUL",broker:"Barclays",old:86,new:100,pct:16.3,date:"2026-04-07"},
-{company:"Ninety One",tidm:"N91",broker:"BofA",old:280,new:260,pct:-7.1,date:"2026-04-07"},
-{company:"Pets at Home",tidm:"PETS",broker:"RBC",old:195,new:170,pct:-12.8,date:"2026-04-07"},
-{company:"Reckitt",tidm:"RKT",broker:"Morgan Stanley",old:6300,new:6200,pct:-1.6,date:"2026-04-07"},
-{company:"Rolls-Royce",tidm:"RR.",broker:"JP Morgan",old:1320,new:1500,pct:13.6,date:"2026-04-07"},
-{company:"Whitbread",tidm:"WTB",broker:"UBS",old:3605,new:3575,pct:-0.8,date:"2026-04-07"},
-{company:"AstraZeneca",tidm:"AZN",broker:"HSBC",old:17050,new:17200,pct:0.9,date:"2026-03-30"},
-{company:"Intercontinental Hotels",tidm:"IHG",broker:"Barclays",old:15600,new:15400,pct:-1.3,date:"2026-03-30"},
-{company:"Landsec",tidm:"LAND",broker:"Barclays",old:780,new:770,pct:-1.3,date:"2026-03-30"},
-{company:"Playtech",tidm:"PTEC",broker:"Deutsche Bank",old:395,new:443,pct:12.2,date:"2026-03-30"},
-{company:"Reckitt",tidm:"RKT",broker:"Jefferies",old:5900,new:5600,pct:-5.1,date:"2026-03-30"},
-{company:"Reckitt",tidm:"RKT",broker:"HSBC",old:6500,new:6400,pct:-1.5,date:"2026-03-30"},
-{company:"SEGRO",tidm:"SGRO",broker:"Barclays",old:550,new:625,pct:13.6,date:"2026-03-30"},
-{company:"SEGRO",tidm:"SGRO",broker:"Goldman Sachs",old:890,new:800,pct:-10.1,date:"2026-03-30"},
-{company:"Tritax Big Box REIT",tidm:"BBOX",broker:"Barclays",old:175,new:165,pct:-5.7,date:"2026-03-30"},
-{company:"Whitbread",tidm:"WHB",broker:"JP Morgan",old:2550,new:2500,pct:-2.0,date:"2026-03-30"},
-// ── 2026-04-09 initiations ──
-{company:"A.G. Barr",tidm:"BAG",broker:"BofA",old:0,new:850,pct:0,date:"2026-04-09"},
-{company:"Wickes Group",tidm:"WIX",broker:"Berenberg",old:0,new:280,pct:0,date:"2026-04-09"},
-// ── 2026-04-10 ──
-{company:"AstraZeneca",tidm:"AZN",broker:"Citigroup",old:17000,new:18000,pct:5.9,date:"2026-04-10"},
-{company:"BAE Systems",tidm:"BA.",broker:"UBS",old:2600,new:2650,pct:1.9,date:"2026-04-10"},
-{company:"Kingfisher",tidm:"KGF",broker:"Peel Hunt",old:330,new:350,pct:6.1,date:"2026-04-10"},
-{company:"London Stock Exchange",tidm:"LSEG",broker:"JP Morgan",old:13600,new:13700,pct:0.7,date:"2026-04-10"},
-{company:"Glencore",tidm:"GLEN",broker:"Jefferies",old:590,new:650,pct:10.2,date:"2026-04-10"},
-{company:"Tate & Lyle",tidm:"TATE",broker:"UBS",old:390,new:375,pct:-3.8,date:"2026-04-10"},
-{company:"Wise",tidm:"WISE",broker:"UBS",old:1240,new:1160,pct:-6.5,date:"2026-04-10"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"BofA",old:1080,new:950,pct:-12.0,date:"2026-04-10"},
-{company:"EasyJet",tidm:"EZJ",broker:"BofA",old:610,new:550,pct:-9.8,date:"2026-04-10"},
-{company:"IAG",tidm:"IAG",broker:"BofA",old:570,new:540,pct:-5.3,date:"2026-04-10"},
-{company:"Rolls-Royce",tidm:"RR.",broker:"UBS",old:1550,new:1500,pct:-3.2,date:"2026-04-10"},
-{company:"Bodycote",tidm:"BOY",broker:"Jefferies",old:920,new:905,pct:-1.6,date:"2026-04-10"},
-{company:"Impax Asset Mgmt",tidm:"IPX",broker:"Peel Hunt",old:225,new:200,pct:-11.1,date:"2026-04-10"},
-{company:"Shell",tidm:"SHEL",broker:"TD Cowen",old:4237,new:4168,pct:-1.6,date:"2026-04-10"},
-// ── 2026-04-10 initiations ──
-{company:"Elixirr International",tidm:"ELIX",broker:"Berenberg",old:0,new:1060,pct:0,date:"2026-04-10"},
-{company:"Smarter Web Company",tidm:"SMWC",broker:"TD Cowen",old:0,new:100,pct:0,date:"2026-04-10"},
-// ── 2026-04-13 ──
-{company:"Rentokil",tidm:"RTO",broker:"Peel Hunt",old:352,new:454,pct:29.0,date:"2026-04-13"},
-{company:"Pennon Group",tidm:"PNN",broker:"JP Morgan",old:565,new:615,pct:8.8,date:"2026-04-13"},
-{company:"Severn Trent",tidm:"SVT",broker:"JP Morgan",old:2975,new:3225,pct:8.4,date:"2026-04-13"},
-{company:"United Utilities",tidm:"UU.",broker:"JP Morgan",old:1300,new:1450,pct:11.5,date:"2026-04-13"},
-{company:"Natwest Group",tidm:"NWG",broker:"JP Morgan",old:750,new:780,pct:4.0,date:"2026-04-13"},
-{company:"Lloyds Banking Group",tidm:"LLOY",broker:"JP Morgan",old:117,new:121,pct:3.4,date:"2026-04-13"},
-{company:"Glencore",tidm:"GLEN",broker:"Citigroup",old:620,new:670,pct:8.1,date:"2026-04-13"},
-{company:"Rio Tinto",tidm:"RIO",broker:"Citigroup",old:7000,new:7200,pct:2.9,date:"2026-04-13"},
-{company:"Rio Tinto",tidm:"RIO",broker:"Goldman Sachs",old:7400,new:7600,pct:2.7,date:"2026-04-13"},
-{company:"Fresnillo",tidm:"FRES",broker:"Citigroup",old:4600,new:5000,pct:8.7,date:"2026-04-13"},
-{company:"Man Group",tidm:"EMG",broker:"Goldman Sachs",old:320,new:340,pct:6.3,date:"2026-04-13"},
-{company:"HSBC",tidm:"HSBA",broker:"Morgan Stanley",old:1409,new:1420,pct:0.8,date:"2026-04-13"},
-{company:"Standard Chartered",tidm:"STAN",broker:"Morgan Stanley",old:1863,new:1865,pct:0.1,date:"2026-04-13"},
-{company:"GSK",tidm:"GSK",broker:"Jefferies",old:2450,new:2500,pct:2.0,date:"2026-04-13"},
-{company:"GSK",tidm:"GSK",broker:"Goldman Sachs",old:1830,new:1920,pct:4.9,date:"2026-04-13"},
-{company:"TT Electronics",tidm:"TTG",broker:"Berenberg",old:120,new:150,pct:25.0,date:"2026-04-13"},
-{company:"Ryanair",tidm:"RYA",broker:"Bernstein",old:2800,new:3200,pct:14.3,date:"2026-04-13"},
-{company:"Ryanair",tidm:"RYA",broker:"Barclays",old:3250,new:3100,pct:-4.6,date:"2026-04-13"},
-{company:"IAG",tidm:"IAG",broker:"Barclays",old:440,new:425,pct:-3.4,date:"2026-04-13"},
-{company:"IAG",tidm:"IAG",broker:"Bernstein",old:480,new:470,pct:-2.1,date:"2026-04-13"},
-{company:"EasyJet",tidm:"EZJ",broker:"Barclays",old:600,new:550,pct:-8.3,date:"2026-04-13"},
-{company:"EasyJet",tidm:"EZJ",broker:"Bernstein",old:510,new:425,pct:-16.7,date:"2026-04-13"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"Barclays",old:1200,new:1100,pct:-8.3,date:"2026-04-13"},
-{company:"Wizz Air",tidm:"WIZZ",broker:"Bernstein",old:2500,new:1300,pct:-48.0,date:"2026-04-13"},
-{company:"Jet2",tidm:"JET2",broker:"Barclays",old:1700,new:1600,pct:-5.9,date:"2026-04-13"},
-{company:"Hays",tidm:"HAS",broker:"Barclays",old:87,new:44,pct:-49.4,date:"2026-04-13"},
-{company:"Pagegroup",tidm:"PAGE",broker:"Barclays",old:310,new:155,pct:-50.0,date:"2026-04-13"},
-{company:"WH Smith",tidm:"SMWH",broker:"RBC",old:675,new:650,pct:-3.7,date:"2026-04-13"},
-{company:"AB Foods",tidm:"ABF",broker:"RBC",old:2050,new:1850,pct:-9.8,date:"2026-04-13"},
-{company:"Rotork",tidm:"ROR",broker:"Barclays",old:375,new:355,pct:-5.3,date:"2026-04-13"},
-{company:"Weir Group",tidm:"WEIR",broker:"Citigroup",old:3550,new:3500,pct:-1.4,date:"2026-04-13"},
-{company:"Antofagasta",tidm:"ANTO",broker:"Goldman Sachs",old:4200,new:4000,pct:-4.8,date:"2026-04-13"},
-{company:"Fevertree Drinks",tidm:"FEVR",broker:"Jefferies",old:1100,new:1080,pct:-1.8,date:"2026-04-13"},
-{company:"LSL Property Services",tidm:"LSL",broker:"Jefferies",old:381,new:361,pct:-5.2,date:"2026-04-13"},
-{company:"Diageo",tidm:"DGE",broker:"Jefferies",old:2000,new:1900,pct:-5.0,date:"2026-04-13"},
-{company:"Tesco",tidm:"TSCO",broker:"Deutsche Bank",old:490,new:500,pct:2.0,date:"2026-04-13"},
-{company:"Sainsbury's",tidm:"SBRY",broker:"Deutsche Bank",old:350,new:360,pct:2.9,date:"2026-04-13"},
-{company:"RS Group",tidm:"RS1",broker:"Deutsche Bank",old:800,new:700,pct:-12.5,date:"2026-04-13"},
-{company:"Sirius Real Estate",tidm:"SRE",broker:"Berenberg",old:136,new:134,pct:-1.5,date:"2026-04-13"},
-// ── 2026-04-13 initiations ──
-{company:"Hostelworld Group",tidm:"HWG",broker:"Berenberg",old:0,new:171,pct:0,date:"2026-04-13"},
-{company:"Victrym",tidm:"VCTM",broker:"Canaccord",old:0,new:725,pct:0,date:"2026-04-13"},
-]
-const BK_DAY_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const BK_MON_NAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-function bkGetMonday(ds){const d=new Date(ds+'T12:00:00Z'),dow=d.getUTCDay(),diff=dow===0?-6:1-dow,m=new Date(d);m.setUTCDate(d.getUTCDate()+diff);return m.toISOString().slice(0,10);}
-function bkFmtWeek(ms){const d=new Date(ms+'T12:00:00Z');return'w/c '+d.getUTCDate()+' '+BK_MON_NAMES[d.getUTCMonth()];}
-function bkFmtDay(ds){const d=new Date(ds+'T12:00:00Z');return BK_DAY_NAMES[d.getUTCDay()]+' '+d.getUTCDate()+' '+BK_MON_NAMES[d.getUTCMonth()];}
-/* ── BROKER INDEX (rebuilt dynamically so restore/import stays in sync) ── */
-let bkWeeksMap={},bkWeeks=[],bkMonthsMap={},bkMonths=[];
-function bkRebuildIndex(){
-  bkWeeksMap={};bkMonthsMap={};
-  bkData.forEach(d=>{
-    const wk=bkGetMonday(d.date);
-    if(!bkWeeksMap[wk])bkWeeksMap[wk]=new Set();
-    bkWeeksMap[wk].add(d.date);
-    const mo=d.date.slice(0,7); /* YYYY-MM */
-    if(!bkMonthsMap[mo])bkMonthsMap[mo]=new Set();
-    bkMonthsMap[mo].add(wk);
-  });
-  bkWeeks=Object.keys(bkWeeksMap).sort().reverse();
-  bkMonths=Object.keys(bkMonthsMap).sort().reverse();
-}
-bkRebuildIndex();
-let bkSelMonth='all',bkSelWeek='all',bkSelDay='all',bkSelDir='all',bkSortKey='pct',bkSortDir=-1;
-function bkFmtMonth(mo){const[y,m]=mo.split('-');return BK_MON_NAMES[parseInt(m,10)-1]+' '+y;}
-function bkBuildMonthBtns(){
-  const mr=document.getElementById('bk-month-row');if(!mr)return;
-  mr.innerHTML='<span class="bk-lbl">Month:</span>';
-  const a=document.createElement('button');a.className='bk-btn'+(bkSelMonth==='all'?' active':'');
-  a.textContent='All';a.onclick=()=>{bkSelMonth='all';bkSelWeek='all';bkSelDay='all';bkBuildMonthBtns();bkBuildWeekBtns();bkBuildDayBtns();bkRender();};mr.appendChild(a);
-  bkMonths.forEach(mo=>{const b=document.createElement('button');b.className='bk-btn'+(bkSelMonth===mo?' active':'');
-    b.textContent=bkFmtMonth(mo);b.onclick=()=>{
-      bkSelMonth=mo;
-      /* auto-select most recent week in this month */
-      const wksInMo=[...bkMonthsMap[mo]].sort().reverse();
-      bkSelWeek=wksInMo[0]||'all';bkSelDay='all';
-      bkBuildMonthBtns();bkBuildWeekBtns();bkBuildDayBtns();bkRender();
-    };mr.appendChild(b);});
-}
-function bkBuildWeekBtns(){
-  const wr=document.getElementById('bk-week-row');if(!wr)return;
-  wr.innerHTML='<span class="bk-lbl">Week:</span>';
-  /* which weeks to show: if a month selected, only that month's weeks */
-  const wksToShow=bkSelMonth==='all'?bkWeeks:[...bkMonthsMap[bkSelMonth]].sort().reverse();
-  if(bkSelMonth!=='all'&&wksToShow.length===0){return;}
-  const a=document.createElement('button');a.className='bk-btn'+(bkSelWeek==='all'?' active':'');
-  a.textContent='All';a.onclick=()=>{bkSelWeek='all';bkSelDay='all';bkBuildWeekBtns();bkBuildDayBtns();bkRender();};wr.appendChild(a);
-  wksToShow.forEach(wk=>{const b=document.createElement('button');b.className='bk-btn'+(bkSelWeek===wk?' active':'');
-    b.textContent=bkFmtWeek(wk);b.onclick=()=>{bkSelWeek=wk;bkSelDay='all';bkBuildWeekBtns();bkBuildDayBtns();bkRender();};wr.appendChild(b);});
-}
-function bkBuildDayBtns(){
-  const dr=document.getElementById('bk-day-row');if(!dr)return;
-  dr.innerHTML='<span class="bk-lbl">Day:</span>';
-  if(bkSelWeek==='all'){const p=document.createElement('span');p.style.cssText='font-size:11px;color:var(--text-dim)';p.textContent='select a week to filter by day';dr.appendChild(p);return;}
-  const days=[...bkWeeksMap[bkSelWeek]].sort().reverse();
-  const a=document.createElement('button');a.className='bk-btn'+(bkSelDay==='all'?' active':'');
-  a.textContent='All days';a.onclick=()=>{bkSelDay='all';bkBuildDayBtns();bkRender();};dr.appendChild(a);
-  days.forEach(day=>{const b=document.createElement('button');b.className='bk-btn'+(bkSelDay===day?' active':'');
-    b.textContent=bkFmtDay(day);b.onclick=()=>{bkSelDay=day;bkBuildDayBtns();bkRender();};dr.appendChild(b);});
-}
-function bkSetDir(val,btn){bkSelDir=val;btn.parentElement.querySelectorAll('.bk-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');bkRender();}
-function bkSort(key){if(bkSortKey===key)bkSortDir*=-1;else{bkSortKey=key;bkSortDir=key==='pct'?-1:1;}bkRender();}
-
-function bkSelRow(tr){var tb=tr.closest("tbody");if(tb)tb.querySelectorAll("tr.bk-sel").forEach(function(r){if(r!==tr)r.classList.remove("bk-sel");});tr.classList.toggle("bk-sel");}
-function bkRender(){const search=(document.getElementById('bk-search')||{value:''}).value.toLowerCase();let rows=bkData.filter(d=>{if(bkSelMonth!=='all'&&d.date.slice(0,7)!==bkSelMonth)return false;if(bkSelWeek!=='all'&&bkGetMonday(d.date)!==bkSelWeek)return false;if(bkSelDay!=='all'&&d.date!==bkSelDay)return false;if(bkSelDir==='up'&&d.pct<=0)return false;if(bkSelDir==='down'&&d.pct>=0)return false;if(search&&!d.company.toLowerCase().includes(search)&&!d.tidm.toLowerCase().includes(search)&&!d.broker.toLowerCase().includes(search))return false;return true;});rows.sort((a,b)=>{let av=a[bkSortKey],bv=b[bkSortKey];if(typeof av==='string')return av.localeCompare(bv)*bkSortDir;return(av-bv)*bkSortDir;});const maxAbs=Math.max(...rows.map(d=>Math.abs(d.pct)),1);const ups=rows.filter(d=>d.pct>0).length,downs=rows.filter(d=>d.pct<0).length;const avgUp=ups?rows.filter(d=>d.pct>0).reduce((s,d)=>s+d.pct,0)/ups:0;const avgDown=downs?rows.filter(d=>d.pct<0).reduce((s,d)=>s+d.pct,0)/downs:0;const sm=document.getElementById('bk-summary');if(sm)sm.innerHTML='<div class="bk-metric"><div class="bk-metric-val" style="color:var(--green)">'+ups+'</div><div class="bk-metric-lbl">PT raises</div></div><div class="bk-metric"><div class="bk-metric-val" style="color:var(--red)">'+downs+'</div><div class="bk-metric-lbl">PT cuts</div></div><div class="bk-metric"><div class="bk-metric-val" style="color:var(--green)">+'+avgUp.toFixed(1)+'%</div><div class="bk-metric-lbl">Avg raise</div></div><div class="bk-metric"><div class="bk-metric-val" style="color:var(--red)">'+avgDown.toFixed(1)+'%</div><div class="bk-metric-lbl">Avg cut</div></div><div class="bk-metric"><div class="bk-metric-val">'+rows.length+'</div><div class="bk-metric-lbl">Shown</div></div>';const tb=document.getElementById('bk-tbody');if(tb)tb.innerHTML=rows.map(d=>{const pos=d.pct>=0,bw=Math.round(Math.abs(d.pct)/maxAbs*50);const ps=(pos?'+':'')+d.pct.toFixed(1)+'%';const bar=pos?'<span class="bk-barp" style="width:'+bw+'px"></span>':'<span class="bk-barn" style="width:'+bw+'px"></span>';return'<tr onclick="bkSelRow(this)" style="cursor:pointer"><td style="font-weight:500">'+d.company+'</td><td class="bk-tidm">'+d.tidm+'</td><td style="color:var(--text-dim);font-size:11px">'+d.broker+'</td><td style="color:var(--text-dim)">'+(d.old===0?'—':d.old.toLocaleString())+'</td><td>'+d.new.toLocaleString()+'</td><td class="'+(d.old===0?'':pos?'bk-pos':'bk-neg')+'" style="'+(d.old===0?'color:var(--amber);font-weight:500':'')+'">'+( d.old===0?'INIT':ps)+bar+'</td><td style="color:var(--text-dim);font-size:11px">'+bkFmtDay(d.date)+'</td></tr>';}).join('');}
-(function bkInit(){
-  /* Default to most recent date */
-  const latestDate=bkData.map(d=>d.date).sort().reverse()[0];
-  if(latestDate){
-    bkSelMonth=latestDate.slice(0,7);
-    bkSelWeek=bkGetMonday(latestDate);
-    bkSelDay=latestDate;
-  }
-  bkBuildMonthBtns();bkBuildWeekBtns();bkBuildDayBtns();bkRender();
-})();
-
-/* ── BROKER EXPORT / IMPORT ── */
-function bkExportJSON(){
-  const blob=new Blob([JSON.stringify({brokerChanges:bkData},null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  const today=new Date().toISOString().slice(0,10);
-  a.download='BrokerChanges_'+today+'.json';a.click();
-  toast('Exported '+bkData.length+' broker changes','ok');
-}
-function bkImportJSON(evt){
-  const file=evt.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const parsed=JSON.parse(e.target.result);
-      const incoming=parsed.brokerChanges||parsed;
-      if(!Array.isArray(incoming))throw new Error('Expected array');
-      /* deduplicate: key on company+broker+date */
-      const existKeys=new Set(bkData.map(d=>d.company+'|'+d.broker+'|'+d.date));
-      let added=0;
-      incoming.forEach(r=>{
-        const k=r.company+'|'+r.broker+'|'+r.date;
-        if(!existKeys.has(k)){bkData.push(r);existKeys.add(k);added++;}
-      });
-      bkRebuildIndex();
-      /* select most recent entry */
-      const latestDate=bkData.map(d=>d.date).sort().reverse()[0];
-      if(latestDate){bkSelMonth=latestDate.slice(0,7);bkSelWeek=bkGetMonday(latestDate);bkSelDay=latestDate;}
-      bkBuildMonthBtns();bkBuildWeekBtns();bkBuildDayBtns();bkRender();
-      toast('Imported '+added+' new broker changes ('+bkData.length+' total)','ok');
-    }catch(err){toast('Import failed: '+err.message,'err');}
-    evt.target.value='';
-  };
-  reader.readAsText(file);
-}
+/* ── BROKER CHANGES: UI removed; data kept only for database.json round-trip ── */
+const bkData=[];
 
 /* ══════════════════════════════════════════════════
    DAILY PREVIOUS-CLOSE SNAPSHOT
@@ -3406,6 +2664,11 @@ function parseCSVgeneric(text){
   if(text.charCodeAt(0)===0xFEFF)text=text.slice(1);
   const lines=text.split(/\r?\n/).filter(function(l){return l.trim();});
   if(!lines.length)return[];
+  /* Weekly Log sheet has a title banner above the real "Date,Snapshot" header — skip it */
+  if(lines.length>1){
+    const l2=splitCSVLine(lines[1]).map(function(s){return s.trim().toLowerCase();});
+    if(l2[0]==='date'&&l2[1]==='snapshot')lines.shift();
+  }
   const headers=splitCSVLine(lines[0]);
   return lines.slice(1).map(function(line){
     const vals=splitCSVLine(line);
@@ -4438,19 +3701,24 @@ function exExtractWeekly(rows4, ticker) {
     const m = snap.match(re);
     if (m) {
       const fields = m[1].split(',');
+      /* New 6-field weekly format: fc EPS, 2y fc EPS, fc Turnover, 2y fc Turnover, Consensus target, Close price */
       const eps   = (fields[0] || '').trim();
-      const rev   = (fields[1] || '').trim();
-      const price = (fields[2] || '').trim();
+      const eps2  = (fields[1] || '').trim();
+      const rev   = (fields[2] || '').trim();
+      const rev2  = (fields[3] || '').trim();
+      const price = (fields[4] || '').trim();
+      const close = (fields[5] || '').trim();
       const raw   = (row['Date'] || '').split(' ')[0];
       let dateStr = raw;
       let dateMs  = 0;
       try {
         const parts = raw.split('/');
-        const d = new Date(+parts[2], +parts[0]-1, +parts[1]);
+        /* Weekly log dates are DD/MM/YYYY (UK format) */
+        const d = new Date(+parts[2], +parts[1]-1, +parts[0]);
         dateStr = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' });
         dateMs  = d.getTime();
       } catch(e) {}
-      entries.push({ date: dateStr, eps: eps, rev: rev, price: price, ms: dateMs });
+      entries.push({ date: dateStr, eps: eps, eps2: eps2, rev: rev, rev2: rev2, price: price, close: close, ms: dateMs });
     }
   }
   // Sort chronologically oldest→newest regardless of file row order
@@ -4729,17 +3997,21 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   if (sector) lines.push('Sector             : ' + sector);
   lines.push('');
 
-  lines.push('── WEEKLY SNAPSHOT (EPS fc / Rev fc / Target Price) ─');
-  lines.push('Date          '.slice(0,13) + '     EPS    Rev(m)   Target Price');
-  lines.push('-'.repeat(44));
+  lines.push('── WEEKLY SNAPSHOT (EPS fc / 2y EPS / Rev fc / 2y Rev / Target / Close) ─');
+  lines.push('Date          '.slice(0,13) + '     EPS   2yEPS    Rev(m)   2yRev(m)   Target    Close');
+  lines.push('-'.repeat(72));
 
   const epsVals = [];
+  function exSnapCell(v,w){ v=(v===undefined||v===null||String(v).trim()==='')?'-':String(v).trim(); return (Array(w+1).join(' ')+v).slice(-w); }
   weekly.forEach(function(e, i) {
     const tag = i === 0 ? ' ◄ earliest' : (i === weekly.length-1 ? ' ◄ latest' : '');
     lines.push((e.date + '             ').slice(0,13) + ' ' +
-      ('       '+e.eps).slice(-7) + '  ' +
-      ('         '+e.rev).slice(-9) + '  ' +
-      ('        '+e.price).slice(-8) + tag);
+      exSnapCell(e.eps,7) + ' ' +
+      exSnapCell(e.eps2,7) + '  ' +
+      exSnapCell(e.rev,8) + '  ' +
+      exSnapCell(e.rev2,9) + ' ' +
+      exSnapCell(e.price,8) + ' ' +
+      exSnapCell(e.close,8) + tag);
     const f = parseFloat(e.eps);
     if (!isNaN(f)) epsVals.push(f);
   });
@@ -4752,7 +4024,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
     trendStr = last4[last4.length-1] > last4[0] ? 'RISING' : last4[last4.length-1] < last4[0] ? 'FALLING' : 'FLAT';
   }
 
-  lines.push('-'.repeat(44));
+  lines.push('-'.repeat(72));
   lines.push('EPS net change (full period) : ' + epsChange);
   lines.push('EPS last-4-week trend        : ' + trendStr);
   lines.push('');
@@ -4951,10 +4223,11 @@ function scGetFcTrend(dataBlock) {
     if (!inSnap) continue;
     if (line.includes('----')) { if (pastHdr) break; pastHdr=true; continue; }
     if (!pastHdr) continue;
-    const m = line.match(/^\s*(\d{1,2}\s+\w+\s+\d{2})\s+([-\d.]+|-)\s+([-\d.]+|-)/);
+    const m = line.match(/^\s*(\d{1,2}\s+\w+\s+\d{2})\s+([-\d.]+|-)\s+([-\d.]+|-)\s+([-\d.]+|-)/);
     if (!m) continue;
     const dt = scParseSnapDate(m[1]); if (!dt) continue;
-    rows.push({dt, eps:m[2]==='-'?null:parseFloat(m[2]), rev:m[3]==='-'?null:parseFloat(m[3])});
+    /* new column order: EPS, 2yEPS, Rev — m[4] is Rev */
+    rows.push({dt, eps:m[2]==='-'?null:parseFloat(m[2]), rev:m[4]==='-'?null:parseFloat(m[4])});
   }
   if (!rows.length) return null;
   const latest = rows[rows.length-1];
@@ -5919,6 +5192,8 @@ function fcSaveCache(){try{localStorage.setItem('fc_data',JSON.stringify(fcStock
 function fcLoadCache(){
   try{
     var d=localStorage.getItem('fc_data'); if(d) fcStockData=JSON.parse(d);
+    /* Migrate rows cached under the old 3-field format: tp was stored in pounds; new code uses pence */
+    Object.keys(fcStockData).forEach(function(t){(fcStockData[t]||[]).forEach(function(r){if(!('px' in r)){if(r.tp)r.tp=r.tp*100;r.px=null;r.eps2=(r.eps2===undefined)?null:r.eps2;r.rev2=(r.rev2===undefined)?null:r.rev2;}});});
     var t=localStorage.getItem('fc_tickers'); if(t) fcTickers=JSON.parse(t);
     var a=localStorage.getItem('fc_active'); if(a&&a!=='null') fcActive=a;
     var tab=localStorage.getItem('fc_tab'); if(tab) fcTab=tab;
@@ -5929,10 +5204,22 @@ function fcLoadCache(){
 }
 function fcSetLoaded(ok){var dot=document.getElementById('fc-statusDot'),txt=document.getElementById('fc-statusTxt');if(dot)dot.style.background=ok?'var(--green)':'var(--text-dim)';if(txt)txt.textContent=ok?(fcActive?fcActive+' loaded':'Data loaded'):'No data loaded';}
 function fcDetectTicker(txt){var m=txt.match(/SHARESCOPE DATA BLOCK\s*[—\-]+\s*(\w+)/i);return m?m[1].toUpperCase():null;}
+function fcNum(v){if(v===undefined||v===null)return null;v=String(v).trim();if(!v||v==='-')return null;var n=parseFloat(v.replace(/[£,]/g,'').replace(/p$/i,''));return isNaN(n)?null:n;}
+/* Prices in the weekly file follow ShareScope's convention: '107p' = pence, plain '21.98' = pounds.
+   Normalise everything to PENCE so target price and close price share one scale. */
+function fcPence(v){if(v===undefined||v===null)return null;v=String(v).trim();if(!v||v==='-')return null;var n=parseFloat(v.replace(/[£,]/g,'').replace(/p$/i,''));if(isNaN(n))return null;return /p$/i.test(v)?n:n*100;}
+function fcFmtPence(v){if(v===null||v===undefined||isNaN(v))return '—';return v>=1000?'£'+(v/100).toFixed(2):v.toFixed(1)+'p';}
 function fcParseTxt(txt){
   var rows=[];
   var bm=txt.match(/WEEKLY SNAPSHOT[\s\S]*?-{10,}\n([\s\S]*?)\n-{10,}/i);
-  if(bm){bm[1].split('\n').forEach(function(line){var m=line.match(/(\d{1,2}\s+\w+\s+\d{2,4})\s+(-?[\d.]+)\s+([\d.,]+)(?:\s+£?(-?[\d.]+))?/);if(m)rows.push({date:m[1].trim(),eps:parseFloat(m[2]),rev:parseFloat(m[3].replace(/,/g,'')),tp:m[4]?parseFloat(m[4]):0});});}
+  if(bm){bm[1].split('\n').forEach(function(line){
+    /* New 7-column layout: Date  EPS  2yEPS  Rev  2yRev  Target  Close */
+    var m=line.match(/^\s*(\d{1,2}\s+\w+\s+\d{2,4})\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/);
+    if(m){rows.push({date:m[1].trim(),eps:fcNum(m[2]),eps2:fcNum(m[3]),rev:fcNum(m[4]),rev2:fcNum(m[5]),tp:fcPence(m[6]),px:fcPence(m[7])});return;}
+    /* Old 3-column fallback (cached/older extractor blocks) */
+    var o=line.match(/(\d{1,2}\s+\w+\s+\d{2,4})\s+(-?[\d.]+)\s+([\d.,]+)(?:\s+£?(-?[\d.]+))?/);
+    if(o)rows.push({date:o[1].trim(),eps:parseFloat(o[2]),eps2:null,rev:parseFloat(o[3].replace(/,/g,'')),rev2:null,tp:o[4]?parseFloat(o[4])*100:null,px:null});
+  });}
   else{var lines=txt.split('\n'),hdr=lines[0].split(',').map(function(h){return h.trim().toLowerCase();});lines.slice(1).forEach(function(line){if(!line.trim())return;var cols=line.split(',').map(function(c){return c.trim().replace(/£/g,'');}),obj={};hdr.forEach(function(h,i){obj[h]=cols[i]||'';});var date=obj.date,eps=parseFloat(obj.eps_fy1||obj.eps||0),rev=parseFloat(obj.revenue_fy1||obj.rev||obj.revenue||0),tp=parseFloat(obj.tp||obj.targetprice||0);if(date&&eps)rows.push({date:date,eps:eps,rev:rev,tp:tp});});}
   return rows;
 }
@@ -5948,7 +5235,20 @@ function fcIngestText(txt,fallback){
   var fsEl=document.getElementById('fc-fs');
   if(fsEl&&fsEl.classList.contains('open')){fcFsActive=tk;fcFsRenderChips();fcFsUpdateStatus();fcFsRender();}
 }
-function fcAddT(){var v=document.getElementById('fc-ti').value.trim().toUpperCase();if(!v)return;if(fcTickers.length>=20){alert('Maximum 20 tickers.');return;}if(!fcTickers.includes(v))fcTickers.push(v);fcActive=v;document.getElementById('fc-ti').value='';fcRenderChips();fcSaveCache();if(fcStockData[fcActive])fcRender();else document.getElementById('fc-content').innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">📂</div><div class="fc-no-data-title">Ticker "'+v+'" added</div><div class="fc-no-data-sub">Load or paste the data for this ticker.</div></div>';}
+/* Pull weekly snapshot data for a ticker straight from the Extractor's File 4 (same source the H1 calculator uses) */
+function fcFetchFromExtractor(tk){
+  if(typeof exState==='undefined'||!exState.rows4||!exState.rows4.length)return null;
+  var w=exExtractWeekly(exState.rows4,tk);
+  if(!w.length)return null;
+  return w.map(function(e){return{date:e.date,eps:fcNum(e.eps),eps2:fcNum(e.eps2),rev:fcNum(e.rev),rev2:fcNum(e.rev2),tp:fcPence(e.price),px:fcPence(e.close)};});
+}
+function fcAddT(){var v=document.getElementById('fc-ti').value.trim().toUpperCase();if(!v)return;if(fcTickers.length>=20){alert('Maximum 20 tickers.');return;}
+  /* Try the Extractor's loaded File 4 first — no need to visit the Extractor section */
+  var rows=fcFetchFromExtractor(v);
+  if(rows)fcStockData[v]=rows;
+  if(!fcTickers.includes(v))fcTickers.push(v);fcActive=v;document.getElementById('fc-ti').value='';fcRenderChips();fcSaveCache();
+  if(fcStockData[fcActive]){fcSetLoaded(true);var s=document.getElementById('fc-statusTxt');if(s)s.textContent=v+' loaded — '+fcStockData[v].length+' rows';fcRender();}
+  else document.getElementById('fc-content').innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">📂</div><div class="fc-no-data-title">No snapshot data for "'+v+'"</div><div class="fc-no-data-sub">Load File 4 (Weekly Snapshot) in the Upload Zone or Extractor, or paste a data block.</div></div>';}
 function fcRemoveT(t){fcTickers=fcTickers.filter(function(x){return x!==t;});if(fcActive===t)fcActive=fcTickers[0]||null;fcRenderChips();fcSaveCache();if(fcActive&&fcStockData[fcActive])fcRender();else document.getElementById('fc-content').innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">📊</div><div class="fc-no-data-title">Add a ticker to begin</div></div>';}
 function fcSelT(t){fcActive=t;fcRenderChips();fcSaveCache();fcRender();}
 function fcRenderChips(){var el=document.getElementById('fc-chips');if(!el)return;el.innerHTML=fcTickers.map(function(t){return '<span class="chip '+(t===fcActive?'active':'')+'" onclick="fcSelT(\''+t+'\')">'+t+'<span class="x" onclick="event.stopPropagation();fcRemoveT(\''+t+'\')">×</span></span>';}).join('');}
@@ -5962,7 +5262,18 @@ function fcDestroyCharts(){Object.values(fcChartObjs).forEach(function(c){try{c.
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
 function fcBuildChart(id,labels,data,lineColor,fillColor,unit,dotArr,small){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d'),ts=small?8:9;fcChartObjs[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:unit,data:data,borderColor:lineColor,backgroundColor:fillColor,borderWidth:2,tension:0.1,fill:true,pointRadius:dotArr.map(function(d){return d.radius;}),pointBackgroundColor:dotArr.map(function(d){return d.color;}),pointBorderColor:dotArr.map(function(d){return d.radius>3?d.color:'transparent';}),pointBorderWidth:dotArr.map(function(d){return d.radius>3?2:0;}),pointHoverRadius:dotArr.map(function(d){return d.radius>3?7:5;}),yAxisID:'y'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:ts},bodyFont:{family:'Inter',size:ts},callbacks:{label:function(ctx){var v=ctx.parsed.y;return unit==='£'?' TP: £'+v.toFixed(2):unit==='£m'?' Rev: £'+v.toFixed(0)+'m':' EPS: '+v.toFixed(1)+'p';}}}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:small?7:10,font:{family:'Inter',size:ts},color:'#6a6a85',maxRotation:30}},y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:ts},color:lineColor,callback:function(v){return unit==='£'?'£'+v.toFixed(2):unit==='£m'?'£'+v.toFixed(0)+'m':v.toFixed(1)+'p';}}}}}}); }
 function fcStatsFor(rows){var f=rows[0],l=rows[rows.length-1];function pc(a,b){return(b&&isFinite((a-b)/b))?(((a-b)/b)*100).toFixed(1):'—';}return{first:f,last:l,epsChg:pc(l.eps,f.eps),revChg:pc(l.rev,f.rev),tpChg:pc(l.tp,f.tp)};}
-function fcNetDirection(rows){var dn=0,up=0;for(var i=1;i<rows.length;i++){var d=rows[i].eps-rows[i-1].eps;if(d<-0.049)dn++;else if(d>0.049)up++;}if(dn===up)return{label:'— Neutral',cls:'',sub:'over full period'};return dn>up?{label:'▼ Bearish',cls:'neg',sub:'over full period'}:{label:'▲ Bullish',cls:'pos',sub:'over full period'};}
+function fcNetDirection(rows){
+  /* Compound the weekly EPS fc changes, skipping blank weeks AND FY rollover jumps,
+     so a new financial year starting doesn't read as a broker upgrade. */
+  var prev=null,prevRow=null,factor=1,any=false;
+  for(var i=0;i<rows.length;i++){var v=rows[i].eps;if(v===null||v===undefined||isNaN(v))continue;
+    if(prev!==null&&Math.abs(prev)>0.0001&&!fcIsRollover('eps',v,prevRow)){factor*=v/prev;any=true;}
+    prev=v;prevRow=rows[i];}
+  if(!any)return{label:'— Neutral',cls:'',sub:'insufficient data'};
+  var pct=(factor-1)*100;
+  if(pct>1)return{label:'▲ Bullish',cls:'pos',sub:'EPS fc '+(pct>0?'+':'')+pct.toFixed(1)+'% over period'};
+  if(pct<-1)return{label:'▼ Bearish',cls:'neg',sub:'EPS fc '+pct.toFixed(1)+'% over period'};
+  return{label:'— Neutral',cls:'',sub:'EPS fc '+(pct>=0?'+':'')+pct.toFixed(1)+'% over period'};}
 function fcDots(rows,field){return rows.map(function(r,i){if(i===0)return{color:'rgba(0,0,0,0)',radius:3};var d=rows[i][field]-rows[i-1][field];if(Math.abs(d)<0.05)return{color:'rgba(255,255,255,0.15)',radius:3};return d<0?{color:'#e02525',radius:5}:{color:'#00c814',radius:5};});}
 function fcFmtChg(v){return(v==='—'||isNaN(parseFloat(v)))?'—':(parseFloat(v)>0?'+':'')+v+'%';}
 function fcChgColor(v){return parseFloat(v)<0?'color:var(--red)':parseFloat(v)>0?'color:var(--green)':'color:var(--text-secondary)';}
@@ -5971,34 +5282,74 @@ function fcEventLog(rows,field){var evts=[];for(var i=1;i<rows.length;i++){var p
 function fcEventLogSm(rows,field){var evts=[];for(var i=1;i<rows.length;i++){var p=rows[i-1],c=rows[i],diff=c[field]-p[field];if(Math.abs(diff)<0.05)continue;var pct=(diff/p[field]*100).toFixed(1),dn=diff<0,col=dn?'var(--red)':'var(--green)';var val=field==='eps'?c.eps.toFixed(1)+'p':field==='rev'?'£'+c.rev.toFixed(0)+'m':'£'+c.tp.toFixed(2);evts.push('<div style="display:grid;grid-template-columns:82px 1fr 58px;border-bottom:1px solid var(--border);align-items:center;"><div style="padding:7px 10px;font-size:10px;color:var(--text-dim);display:flex;align-items:center;gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span>'+c.date+'</div><div style="padding:7px 10px;font-size:11px;color:var(--text-primary)">'+val+'</div><div style="padding:7px 10px;text-align:right;font-weight:600;'+fcChgColor(pct)+';font-size:11px;">'+(dn?'':'+')+''+pct+'%</div></div>');}if(!evts.length)return '<div style="padding:10px;color:var(--text-dim);font-size:10px">No moves detected</div>';return '<div style="display:grid;grid-template-columns:82px 1fr 58px;background:var(--surface2);border-bottom:1px solid var(--border);"><span style="padding:5px 10px;font-size:8px;text-transform:uppercase;color:var(--text-dim)">Date</span><span style="padding:5px 10px;font-size:8px;text-transform:uppercase;color:var(--text-dim)">Value</span><span style="padding:5px 10px;font-size:8px;text-transform:uppercase;color:var(--text-dim);text-align:right">Chg%</span></div>'+evts.join('');}
 function fcDgTable(rows){var changes=[];for(var i=1;i<rows.length;i++){var p=rows[i-1],c=rows[i],eD=c.eps-p.eps,rD=c.rev-p.rev,tD=c.tp-p.tp;if(Math.abs(eD)<0.05&&Math.abs(rD)<0.5&&Math.abs(tD)<0.005)continue;var ep=parseFloat((eD/p.eps*100).toFixed(1)),rp=parseFloat((rD/p.rev*100).toFixed(1)),tpp=parseFloat((tD/p.tp*100).toFixed(1));var dir=eD<-0.049?'down':eD>0.049?'up':tD<0?'down':'up';changes.push({n:changes.length+1,date:c.date,dir:dir,eb:p.eps,ea:c.eps,ep:ep,rb:p.rev,ra:c.rev,rp:rp,tb:p.tp,ta:c.tp,tpp:tpp});}if(!changes.length)return '<div style="padding:20px;color:var(--text-dim);text-align:center;font-size:11px">No changes detected</div>';var th=function(label,r){return '<th style="padding:7px 10px;text-align:'+(r?'right':'left')+';font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">'+label+'</th>';};var sep='<th style="background:var(--border);width:1px;padding:0;border-bottom:1px solid var(--border)"></th>';return '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:var(--surface2);">'+th('#')+th('Date')+th('Dir')+sep+th('EPS before')+th('EPS after')+th('EPS △',1)+sep+th('Rev before')+th('Rev after')+th('Rev △',1)+sep+th('TP before')+th('TP after')+th('TP △',1)+'</tr></thead><tbody>'+changes.map(function(d){var dc=d.dir==='down'?'color:var(--red)':'color:var(--green)';var sd='<td style="background:var(--border);width:1px;padding:0"></td>';return '<tr><td style="padding:8px 10px;color:var(--text-dim)">'+d.n+'</td><td style="padding:8px 10px;">'+d.date+'</td><td style="padding:8px 10px;'+dc+';font-weight:600">'+(d.dir==='down'?'▼ DOWN':'▲ UP')+'</td>'+sd+'<td style="padding:8px 10px;">'+d.eb.toFixed(1)+'p</td><td style="padding:8px 10px;">'+d.ea.toFixed(1)+'p</td><td style="padding:8px 10px;text-align:right;'+(d.ep<0?'color:var(--red)':d.ep>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.ep>0?'+':'')+d.ep+'%</td>'+sd+'<td style="padding:8px 10px;">£'+d.rb.toFixed(0)+'m</td><td style="padding:8px 10px;">£'+d.ra.toFixed(0)+'m</td><td style="padding:8px 10px;text-align:right;'+(d.rp<0?'color:var(--red)':d.rp>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.rp>0?'+':'')+d.rp+'%</td>'+sd+'<td style="padding:8px 10px;">£'+d.tb.toFixed(2)+'</td><td style="padding:8px 10px;">£'+d.ta.toFixed(2)+'</td><td style="padding:8px 10px;text-align:right;'+(d.tpp<0?'color:var(--red)':d.tpp>0?'color:var(--green)':'color:var(--text-dim)')+'">'+(d.tpp>0?'+':'')+d.tpp+'%</td></tr>';}).join('')+'</tbody></table></div>';}
 function fcOvStatRow(start,now,chg,startDate,label){var cs=parseFloat(chg)<0?'color:var(--red)':parseFloat(chg)>0?'color:var(--green)':'color:var(--text-secondary)';return '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' start</div><div style="font-size:15px;font-weight:600;line-height:1;color:var(--text-primary)">'+start+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">'+startDate+'</div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' now</div><div style="font-size:15px;font-weight:600;line-height:1;color:var(--text-primary)">'+now+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">FY1</div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px 11px"><div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-bottom:3px">'+label+' △</div><div style="font-size:15px;font-weight:600;line-height:1;'+cs+'">'+fcFmtChg(chg)+'</div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">full period</div></div></div>';}
+var fcLogField='rev';
+function fcSetLog(f,prefix){fcLogField=f;['rev','eps','tp'].forEach(function(k){var btn=document.getElementById(prefix+'logbtn-'+k);if(btn)btn.className='fc-tab'+(k===f?' on':'');});var el=document.getElementById(prefix+'logbody');if(el)el.innerHTML=fcEventLog2(fcStockData[prefix==='fcfs-'?fcFsActive:fcActive]||[],f);}
+/* FY rollover detection: when ShareScope's FY1 rolls to the next year, the new fc value
+   lands on (or very near) the previous week's 2yr fc. That is a calendar event, not a broker change. */
+function fcIsRollover(field,curVal,prevRow){
+  var comp=field==='eps'?'eps2':field==='rev'?'rev2':null;
+  if(!comp||!prevRow)return false;
+  var p2=prevRow[comp],p1=prevRow[field];
+  if(p2===null||p2===undefined||isNaN(p2)||Math.abs(p2)<0.0001)return false;
+  if(p1===null||p1===undefined||isNaN(p1)||Math.abs(p1)<0.0001)return false;
+  var jump=Math.abs((curVal-p1)/p1);          /* how big the move looks */
+  var match=Math.abs((curVal-p2)/p2);         /* how close it sits to last week's 2yr fc */
+  return jump>0.02&&match<0.015;
+}
+function fcVal(v,dp,suf,pre){return (v===null||v===undefined||isNaN(v))?'—':(pre||'')+v.toFixed(dp)+(suf||'');}
+function fcDots2(rows,field){var prev=null,prevRow=null;return rows.map(function(r){var b=r[field];if(b===null||b===undefined||isNaN(b))return{color:'rgba(0,0,0,0)',radius:1.5};if(prev===null){prev=b;prevRow=r;return{color:'rgba(0,0,0,0)',radius:1.5};}var d=b-prev;var roll=fcIsRollover(field,b,prevRow);prev=b;prevRow=r;if(roll)return{color:'#4a9eff',radius:6,style:'triangle'};if(Math.abs(d)<0.05)return{color:'rgba(255,255,255,0.12)',radius:1.5};return d<0?{color:'#e02525',radius:3}:{color:'#00c814',radius:3};});}
+function fcEventLog2(rows,field){var evts=[];var prevVal=null,prevRow=null;for(var i=0;i<rows.length;i++){var c=rows[i];var v=c[field];if(v===null||v===undefined||isNaN(v))continue;if(prevVal===null){prevVal=v;prevRow=c;continue;}var p={};p[field]=prevVal;p.eps=prevRow.eps;p.rev=prevRow.rev;p.tp=prevRow.tp;var diff=v-prevVal;var skip=Math.abs(diff)<0.05;var roll=fcIsRollover(field,v,prevRow);prevVal=v;prevRow=c;if(skip)continue;
+  if(roll){evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;background:rgba(74,158,255,0.05);"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:#4a9eff;display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:10px;color:#4a9eff">FY ROLLOVER</span></div><div style="font-size:11px;color:var(--text-secondary);margin-top:2px;padding-left:12px;">fc now tracking the next financial year</div></div>');continue;}var pct=(diff/Math.abs(p[field])*100).toFixed(1),dn=diff<0,col=dn?'var(--red)':'var(--green)';var val='';if(field==='eps'){val=p.eps.toFixed(1)+'p → '+c.eps.toFixed(1)+'p';}else if(field==='rev'){val='£'+p.rev.toFixed(0)+'m → £'+c.rev.toFixed(0)+'m';}else{val=fcFmtPence(p.tp)+' → '+fcFmtPence(c.tp);}evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:11px;'+fcChgColor(pct)+'">'+(dn?'':'+')+pct+'%</span></div><div style="font-size:11px;color:var(--text-primary);margin-top:2px;padding-left:12px;">'+val+'</div></div>');}
+  if(!evts.length)return '<div style="padding:12px;color:var(--text-dim);font-size:11px">No significant moves detected</div>';
+  return evts.reverse().join('');}
+function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
+  var labels=rows.map(function(r){return r.date;});
+  var datasets=[];
+  /* Share price mountain (background). On the target-price chart it shares the main axis so price vs target is directly comparable. */
+  if(rows.some(function(r){return r.px!==null&&r.px!==undefined;})){
+    datasets.push({label:'Share price',data:rows.map(function(r){return r.px;}),borderColor:'rgba(200,210,235,0.30)',backgroundColor:'rgba(200,210,235,0.09)',borderWidth:1,tension:0,fill:true,pointRadius:0,pointHoverRadius:0,spanGaps:true,yAxisID:cfg.pxOnMain?'y':'y2',order:10});}
+  var dots=fcDots2(rows,cfg.f1);
+  datasets.push({label:cfg.l1,data:rows.map(function(r){return r[cfg.f1];}),borderColor:cfg.c1,backgroundColor:'transparent',borderWidth:2,tension:0.1,fill:false,spanGaps:true,pointRadius:dots.map(function(d){return d.radius;}),pointStyle:dots.map(function(d){return d.style||'circle';}),pointBackgroundColor:dots.map(function(d){return d.color;}),pointBorderColor:dots.map(function(d){return d.style==='triangle'?'#fff':'transparent';}),pointBorderWidth:dots.map(function(d){return d.style==='triangle'?1:0;}),pointHoverRadius:7,yAxisID:'y',order:1});
+  if(cfg.f2&&rows.some(function(r){return r[cfg.f2]!==null&&r[cfg.f2]!==undefined;})){
+    var dots2=fcDots2(rows,cfg.f2);
+    datasets.push({label:cfg.l2,data:rows.map(function(r){return r[cfg.f2];}),borderColor:cfg.c2,backgroundColor:'transparent',borderWidth:2,tension:0.1,fill:false,spanGaps:true,pointRadius:dots2.map(function(d){return d.radius;}),pointStyle:dots2.map(function(d){return d.style||'circle';}),pointBackgroundColor:dots2.map(function(d){return d.color;}),pointBorderColor:dots2.map(function(d){return d.style==='triangle'?'#fff':'transparent';}),pointBorderWidth:dots2.map(function(d){return d.style==='triangle'?1:0;}),pointHoverRadius:7,yAxisID:'y',order:2});}
+  var scales={x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:10,font:{family:'Inter',size:9},color:'#6a6a85',maxRotation:30}},
+    y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:9},color:cfg.c1,callback:cfg.fmt}}};
+  if(!cfg.pxOnMain)scales.y2={position:'right',grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'rgba(200,210,235,0.55)',callback:function(v){return fcFmtPence(v);}},title:{display:true,text:'Share price',font:{family:'Inter',size:8},color:'rgba(200,210,235,0.45)'}};
+  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales}});}
 function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var el=document.getElementById(contentId);if(!el)return;
   Object.values(chartStore).forEach(function(c){try{c.destroy();}catch(e){}});for(var k in chartStore)delete chartStore[k];
   if(!active||!fcStockData[active]){el.innerHTML='<div class="fc-no-data"><div class="fc-no-data-icon">🔍</div><div class="fc-no-data-title">No data for '+(active||'ticker')+'</div><div class="fc-no-data-sub">Load or paste a ShareScope data block.</div></div>';return;}
-  var rows=fcStockData[active],s=fcStatsFor(rows),nd=fcNetDirection(rows),f=s.first,l=s.last;
-  if(tab==='overview'){
-    var ndStyle='font-size:18px;font-weight:600;'+(nd.cls==='neg'?'color:var(--red)':nd.cls==='pos'?'color:var(--green)':'color:var(--text-secondary)');
-    el.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px">'+fcOvStatRow(f.eps.toFixed(1)+'p',l.eps.toFixed(1)+'p',s.epsChg,f.date,'EPS')+fcOvStatRow('£'+f.rev.toFixed(0)+'m','£'+l.rev.toFixed(0)+'m',s.revChg,f.date,'Rev')+fcOvStatRow('£'+f.tp.toFixed(2),'£'+l.tp.toFixed(2),s.tpChg,f.date,'TP')+'</div>'
-      +'<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px"><div class="fc-chart-card"><div class="fc-chart-title">EPS Forecast (FY1) — '+active+'</div><div style="position:relative;height:200px"><canvas id="'+chartPrefix+'ov1"></canvas></div></div><div class="fc-chart-card"><div class="fc-chart-title">Revenue Forecast (FY1) — '+active+'</div><div style="position:relative;height:200px"><canvas id="'+chartPrefix+'ov2"></canvas></div></div><div class="fc-chart-card"><div class="fc-chart-title">Target Price — '+active+'</div><div style="position:relative;height:200px"><canvas id="'+chartPrefix+'ov3"></canvas></div></div></div>'
-      +'<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:11px 18px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:10px"><span style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim)">Net direction</span><span style="'+ndStyle+'">'+nd.label+'</span><span style="font-size:11px;color:var(--text-dim)">'+nd.sub+' · '+f.date+' → '+l.date+'</span></div>'
-      +'<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px"><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">EPS changes</div>'+fcEventLogSm(rows,'eps')+'</div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">Revenue changes</div>'+fcEventLogSm(rows,'rev')+'</div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">Target price changes</div>'+fcEventLogSm(rows,'tp')+'</div></div>';
-    fcBuildChart(chartPrefix+'ov1',rows.map(function(r){return r.date;}),rows.map(function(r){return r.eps;}),'#00c814','rgba(0,217,126,0.07)','p',fcDots(rows,'eps'),true);
-    fcBuildChart(chartPrefix+'ov2',rows.map(function(r){return r.date;}),rows.map(function(r){return r.rev;}),'#4a9eff','rgba(74,158,255,0.07)','£m',fcDots(rows,'rev'),true);
-    fcBuildChart(chartPrefix+'ov3',rows.map(function(r){return r.date;}),rows.map(function(r){return r.tp;}),'#c07ef7','rgba(192,126,247,0.07)','£',fcDots(rows,'tp'),true);
-  }else if(tab==='eps'){
-    el.innerHTML=fcStatBar([{lbl:'EPS start ('+f.date+')',val:f.eps.toFixed(1)+'p',sub:'FY1 consensus'},{lbl:'EPS now',val:l.eps.toFixed(1)+'p',sub:'FY1 consensus'},{lbl:'EPS total △',val:fcFmtChg(s.epsChg),sub:f.date+' → '+l.date,chg:s.epsChg},{lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])+'<div class="fc-chart-card"><div class="fc-chart-title">EPS Forecast — FY1 — '+active+'</div><div style="position:relative;height:264px"><canvas id="'+chartPrefix+'c1"></canvas></div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">Event log</div>'+fcEventLog(rows,'eps')+'</div>';
-    fcBuildChart(chartPrefix+'c1',rows.map(function(r){return r.date;}),rows.map(function(r){return r.eps;}),'#00c814','rgba(0,217,126,0.07)','p',fcDots(rows,'eps'),false);
-  }else if(tab==='rev'){
-    el.innerHTML=fcStatBar([{lbl:'Rev start ('+f.date+')',val:'£'+f.rev.toFixed(0)+'m',sub:'FY1 consensus'},{lbl:'Rev now',val:'£'+l.rev.toFixed(0)+'m',sub:'FY1 consensus'},{lbl:'Rev total △',val:fcFmtChg(s.revChg),sub:f.date+' → '+l.date,chg:s.revChg},{lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])+'<div class="fc-chart-card"><div class="fc-chart-title">Revenue Forecast — FY1 — '+active+'</div><div style="position:relative;height:264px"><canvas id="'+chartPrefix+'c2"></canvas></div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">Event log</div>'+fcEventLog(rows,'rev')+'</div>';
-    fcBuildChart(chartPrefix+'c2',rows.map(function(r){return r.date;}),rows.map(function(r){return r.rev;}),'#4a9eff','rgba(74,158,255,0.07)','£m',fcDots(rows,'rev'),false);
-  }else if(tab==='tp'){
-    el.innerHTML=fcStatBar([{lbl:'TP start ('+f.date+')',val:'£'+f.tp.toFixed(2),sub:'Consensus'},{lbl:'TP now',val:'£'+l.tp.toFixed(2),sub:'Consensus'},{lbl:'TP total △',val:fcFmtChg(s.tpChg),sub:f.date+' → '+l.date,chg:s.tpChg},{lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])+'<div class="fc-chart-card"><div class="fc-chart-title">Target Price — '+active+'</div><div style="position:relative;height:264px"><canvas id="'+chartPrefix+'c3"></canvas></div></div><div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">Event log</div>'+fcEventLog(rows,'tp')+'</div>';
-    fcBuildChart(chartPrefix+'c3',rows.map(function(r){return r.date;}),rows.map(function(r){return r.tp;}),'#c07ef7','rgba(192,126,247,0.07)','£',fcDots(rows,'tp'),false);
-  }else{
-    var changes=[];for(var i=1;i<rows.length;i++){var pp=rows[i-1],cc=rows[i],eD=cc.eps-pp.eps,tD=cc.tp-pp.tp;if(Math.abs(eD)<0.05&&Math.abs(tD)<0.005)continue;changes.push(eD<-0.049?'down':eD>0.049?'up':tD<0?'down':'up');}
-    var dn2=changes.filter(function(x){return x==='down';}).length,up2=changes.filter(function(x){return x==='up';}).length;
-    el.innerHTML=fcStatBar([{lbl:'Total changes',val:changes.length,sub:'EPS, Rev or TP moves'},{lbl:'Downgrades',val:dn2,sub:'EPS cuts',cls:'neg'},{lbl:'Upgrades',val:up2,sub:'EPS raises',cls:'pos'},{lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])+'<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:10px"><div style="background:var(--surface3);padding:8px 14px;font-size:9px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border)">All changes — '+active+'</div>'+fcDgTable(rows)+'</div>';
-  }
+  var rows=fcStockData[active],f=rows[0],l=rows[rows.length-1],nd=fcNetDirection(rows);
+  function pc(a,b){return(a!==null&&b!==null&&a!==undefined&&b!==undefined&&b&&isFinite((a-b)/b))?(((a-b)/Math.abs(b))*100).toFixed(1):'—';}
+  var revChg=pc(l.rev,f.rev),epsChg=pc(l.eps,f.eps),tpChg=pc(l.tp,f.tp);
+  var ndStyle='font-size:18px;font-weight:600;'+(nd.cls==='neg'?'color:var(--red)':nd.cls==='pos'?'color:var(--green)':'color:var(--text-secondary)');
+  var fmtRev=function(v){return '£'+Number(v).toFixed(0)+'m';},fmtEps=function(v){return Number(v).toFixed(1)+'p';},fmtTp=function(v){return fcFmtPence(Number(v));};
+  el.innerHTML=
+    fcStatBar([{lbl:'Rev now',val:fcVal(l.rev,0,'m','£'),sub:fcFmtChg(revChg)+' · '+f.date+' → '+l.date,chg:revChg},
+               {lbl:'EPS now',val:fcVal(l.eps,1,'p'),sub:fcFmtChg(epsChg)+' full period',chg:epsChg},
+               {lbl:'Target now',val:l.tp!==null&&l.tp!==undefined?fcFmtPence(l.tp):'—',sub:fcFmtChg(tpChg)+' full period',chg:tpChg},
+               {lbl:'Net direction',val:nd.label,sub:nd.sub,cls:nd.cls}])
+    +'<div style="display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:10px;align-items:start;">'
+      +'<div>'
+        +'<div class="fc-chart-card"><div class="fc-chart-title">Revenue Forecast — fc vs 2yr fc — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'cr"></canvas></div></div>'
+        +'<div class="fc-chart-card" style="margin-top:10px"><div class="fc-chart-title">EPS Forecast — fc vs 2yr fc — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'ce"></canvas></div></div>'
+        +'<div class="fc-chart-card" style="margin-top:10px"><div class="fc-chart-title">Consensus Target Price vs Share Price — '+active+'</div><div style="position:relative;height:270px"><canvas id="'+chartPrefix+'ct"></canvas></div></div>'
+      +'</div>'
+      +'<div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;max-height:880px;">'
+        +'<div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">'
+          +'<button id="'+chartPrefix+'logbtn-rev" class="fc-tab'+(fcLogField==='rev'?' on':'')+'" onclick="fcSetLog(\'rev\',\''+chartPrefix+'\')">Rev</button>'
+          +'<button id="'+chartPrefix+'logbtn-eps" class="fc-tab'+(fcLogField==='eps'?' on':'')+'" onclick="fcSetLog(\'eps\',\''+chartPrefix+'\')">EPS</button>'
+          +'<button id="'+chartPrefix+'logbtn-tp" class="fc-tab'+(fcLogField==='tp'?' on':'')+'" onclick="fcSetLog(\'tp\',\''+chartPrefix+'\')">Target</button>'
+          +'<span style="margin-left:auto;padding:6px 10px;font-size:9px;text-transform:uppercase;color:var(--text-dim);align-self:center;">Event log</span>'
+        +'</div>'
+        +'<div id="'+chartPrefix+'logbody" style="flex:1;overflow-y:auto;">'+fcEventLog2(rows,fcLogField)+'</div>'
+      +'</div>'
+    +'</div>';
+  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev});
+  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps});
+  fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
 
@@ -6007,7 +5358,7 @@ var fcFsActive=null,fcFsTab='overview',fcFsChartObjs={};
 function fcFsRender(){fcRenderInto('fc-fs-content-inner',fcFsActive,fcFsTab,'fcfs-',fcFsChartObjs);}
 function fcDestroyFsCharts(){Object.values(fcFsChartObjs).forEach(function(c){try{c.destroy();}catch(e){}});fcFsChartObjs={};}
 function fcFsSwitchTab(t,el){fcFsTab=t;document.querySelectorAll('#fc-fs .fc-tab').forEach(function(x){x.classList.remove('on');});if(el)el.classList.add('on');fcFsRender();}
-function fcFsAddT(){var v=document.getElementById('fc-fs-ti');if(!v)return;var ticker=v.value.trim().toUpperCase();if(!ticker)return;if(!fcTickers.includes(ticker))fcTickers.push(ticker);fcActive=ticker;fcFsActive=ticker;v.value='';fcRenderChips();fcFsRenderChips();fcFsUpdateStatus();fcFsRender();fcRender();fcSaveCache();}
+function fcFsAddT(){var v=document.getElementById('fc-fs-ti');if(!v)return;var ticker=v.value.trim().toUpperCase();if(!ticker)return;var rows=fcFetchFromExtractor(ticker);if(rows)fcStockData[ticker]=rows;if(!fcTickers.includes(ticker))fcTickers.push(ticker);fcActive=ticker;fcFsActive=ticker;v.value='';fcRenderChips();fcFsRenderChips();fcFsUpdateStatus();fcFsRender();fcRender();fcSaveCache();}
 function fcFsSelT(t){fcFsActive=t;fcActive=t;fcFsRenderChips();fcRenderChips();fcFsUpdateStatus();fcFsRender();fcRender();fcSaveCache();}
 function fcFsRemoveT(t){fcTickers=fcTickers.filter(function(x){return x!==t;});if(fcFsActive===t)fcFsActive=fcTickers[0]||null;if(fcActive===t)fcActive=fcFsActive;fcFsRenderChips();fcRenderChips();fcFsUpdateStatus();fcFsRender();fcRender();fcSaveCache();}
 function fcFsRenderChips(){var el=document.getElementById('fc-fs-chips');if(!el)return;el.innerHTML=fcTickers.map(function(t){return '<span class="chip '+(t===fcFsActive?'active':'')+'" onclick="fcFsSelT(\''+t+'\')">'+t+'<span class="x" onclick="event.stopPropagation();fcFsRemoveT(\''+t+'\')">×</span></span>';}).join('');}
@@ -6034,12 +5385,6 @@ expandSection=function(id,title){
       +'<input type="text" id="fc-fs-ti" placeholder="Ticker e.g. GRG" maxlength="10" style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surface2);color:var(--text-primary);width:110px;text-transform:uppercase;outline:none;">'
       +'<button class="fc-btn primary" onclick="fcFsAddT()">Add</button>'
       +'<div id="fc-fs-chips" style="display:flex;gap:6px;flex-wrap:wrap;"></div>'
-      +'<button class="fc-btn" onclick="fcFsOpenPaste()">Paste data</button>'
-      +'<label for="fc-fs-fu" class="fc-btn">Load data</label>'
-      +'<input type="file" id="fc-fs-fu" accept=".txt,.csv" onchange="fcFsLoadFile(event)" style="display:none;">'
-    +'</div>'
-    +'<div style="display:flex;border-bottom:1px solid var(--border);flex-shrink:0;">'
-      +['overview','eps','rev','tp','dg'].map(function(t,i){var labels=['Overview','EPS Forecast','Revenue Forecast','Target Price','Upgrades / Downgrades'];return '<button class="fc-tab'+(i===0?' on':'')+'" id="fc-fs-tab-'+t+'" onclick="fcFsSwitchTab(\''+t+'\',this)">'+labels[i]+'</button>';}).join('')
     +'</div>'
     +'<div id="fc-fs-content-inner" style="flex:1;overflow:auto;padding:14px;"></div>'
     +'<div id="fc-fs-overlay" onclick="fcFsHandleOverlay(event)" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.6);z-index:10;align-items:center;justify-content:center;">'
