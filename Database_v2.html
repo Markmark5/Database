@@ -1337,6 +1337,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
           <button id="cs-manual-btn" onclick="csManualCapture()" title="Fetch live prices now, capture today's close snapshot, and stamp today's scorecards" style="display:none;font-family:var(--mono);font-size:9px;padding:2px 8px;margin-left:8px;border-radius:3px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);cursor:pointer;">⚡ Get Prices</button>
         </div>
         <div style="display:flex;gap:6px;align-items:center;">
+          <button class="xbtn xbtn-ghost" id="rns-clear-btn" onclick="rnsClearTickerFilter()" style="display:none;font-size:9px;padding:3px 9px;color:var(--amber);border-color:var(--amber-mid);">✕ Clear TICKER</button>
           <button class="xbtn xbtn-ghost" onclick="openSync()" style="font-size:9px;padding:3px 9px;">⇄ Sync</button>
           <button class="xbtn xbtn-green" onclick="openImport()" style="font-size:9px;padding:3px 9px;">＋ Import</button>
           <span id="rns-sb-toggle-btn" style="display:none;"></span>
@@ -2383,12 +2384,31 @@ function bwFsRefreshPrices(btn){
   try{ liveRefresh(); }
   catch(e){ if(btn){btn.textContent='\u26A1 Get Prices';btn.disabled=false;} }
 }
+function rnsUpdateClearBtn(){
+  var b=document.getElementById('rns-clear-btn');if(!b)return;
+  var tk=window.EXACT_TICKER;
+  if(tk){b.style.display='';b.textContent='\u2715 Clear '+tk;}
+  else b.style.display='none';
+}
+function rnsClearTickerFilter(){
+  window.EXACT_TICKER=null;
+  var inp=document.getElementById('search-inp');if(inp)inp.value='';
+  try{applyFilters();}catch(e){}
+  rnsUpdateClearBtn();
+}
+/* Called when a score badge on the Target chart is clicked */
+function fcScoreClick(tk){
+  var sb=document.getElementById('rns-sidebar');
+  if(sb&&!sb.classList.contains('collapsed')){try{toggleRnsSidebar();}catch(e){}}
+  bwGoToTicker(tk);
+}
 function bwGoToTicker(tk){
   try{ closeFullscreen('bw-fs'); }catch(e){}
   var inp=document.getElementById('search-inp');
   if(inp){ inp.value=tk; }
   window.EXACT_TICKER=tk;
   try{ applyFilters(); }catch(e){}
+  rnsUpdateClearBtn();
   var sec=document.getElementById('rns-section')||document.getElementById('search-inp');
   if(sec&&sec.scrollIntoView)sec.scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -5425,6 +5445,7 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
   var xs=chart.scales.x,ca=chart.chartArea;if(!xs||!ca)return;
   var n=chart.data.labels.length;if(n<2)return;
   var x0=xs.getPixelForValue(0),x1=xs.getPixelForValue(n-1);
+  chart._fcScoreHits=[];
   var ctx=chart.ctx;ctx.save();
   evs.forEach(function(v){
     var px=x0+(v.x/(n-1))*(x1-x0);
@@ -5436,6 +5457,23 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
       ctx.font='700 8px Inter';ctx.fillStyle='rgba(143,180,255,0.75)';
       ctx.textAlign=px>ca.left+((ca.right-ca.left)/2)?'right':'left';
       ctx.fillText(v.topLabel,px+(ctx.textAlign==='left'?4:-4),ca.top+9);
+    }
+    if(v.kind==='score'){
+      /* RNS scorecard badge: score number in a coloured circle at the top */
+      var cy=ca.top+14;
+      chart._fcScoreHits=chart._fcScoreHits||[];
+      chart._fcScoreHits.push({x:px,y:cy,r:11});
+      ctx.setLineDash([]);
+      ctx.fillStyle=v.color;ctx.strokeStyle='rgba(255,255,255,0.85)';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(px,cy,9,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.font='700 8px Inter';ctx.fillStyle='#0d0d16';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(String(v.label),px,cy+0.5);
+      ctx.textBaseline='alphabetic';
+      /* thin guide down to the axis so the date is readable */
+      ctx.strokeStyle=v.color.replace(')',',0.25)').replace('rgb','rgba');
+      ctx.strokeStyle=v.colorFaint||'rgba(255,255,255,0.10)';
+      ctx.beginPath();ctx.moveTo(px,cy+10);ctx.lineTo(px,ca.bottom);ctx.stroke();
+      return;
     }
     /* bottom label + exact-day tick */
     ctx.strokeStyle=v.color;ctx.lineWidth=1;ctx.setLineDash([]);
@@ -5458,7 +5496,26 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   var scales={x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:10,font:{family:'Inter',size:9},color:'#6a6a85',maxRotation:30}},
     y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:9},color:cfg.c1,callback:cfg.fmt}}};
   if(!cfg.pxOnMain)scales.y2={position:'right',grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'rgba(200,210,235,0.55)',callback:function(v){return fcFmtPence(v);}},title:{display:true,text:'Share price',font:{family:'Inter',size:8},color:'rgba(200,210,235,0.45)'}};
-  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales,_fcEvents:cfg.events||null},plugins:[fcVLinePlugin]});}
+  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;return ' '+c.dataset.label+': '+cfg.fmt(v);}}}},scales:scales,_fcEvents:cfg.events||null},plugins:[fcVLinePlugin]});
+  if(cfg.events&&cfg.events.some(function(e){return e.kind==='score';})){
+    canvas.style.cursor='default';
+    canvas.onclick=function(ev){
+      var ch=store[id];if(!ch||!ch._fcScoreHits)return;
+      var rect=canvas.getBoundingClientRect();
+      var mx=(ev.clientX-rect.left)*(canvas.width/rect.width)/(window.devicePixelRatio||1);
+      var my=(ev.clientY-rect.top)*(canvas.height/rect.height)/(window.devicePixelRatio||1);
+      for(var i=0;i<ch._fcScoreHits.length;i++){var h=ch._fcScoreHits[i];
+        if(Math.abs(mx-h.x)<=h.r&&Math.abs(my-h.y)<=h.r){fcScoreClick(fcActive);return;}}
+    };
+    canvas.onmousemove=function(ev){
+      var ch=store[id];if(!ch||!ch._fcScoreHits)return;
+      var rect=canvas.getBoundingClientRect();
+      var mx=(ev.clientX-rect.left)*(canvas.width/rect.width)/(window.devicePixelRatio||1);
+      var my=(ev.clientY-rect.top)*(canvas.height/rect.height)/(window.devicePixelRatio||1);
+      var hit=ch._fcScoreHits.some(function(h){return Math.abs(mx-h.x)<=h.r&&Math.abs(my-h.y)<=h.r;});
+      canvas.style.cursor=hit?'pointer':'default';
+    };
+  }}
 function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
   var el=document.getElementById(contentId);if(!el)return;
   Object.values(chartStore).forEach(function(c){try{c.destroy();}catch(e){}});for(var k in chartStore)delete chartStore[k];
@@ -5509,9 +5566,21 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
     var pd=fcFile5Date(active,ev.col);var x=fcXFrac(pd);
     if(x!==null)events.push({x:x,label:ev.label,color:ev.color,line:!!ev.line,
       topLabel:'FINALS '+pd.getDate()+' '+fcMonNames[pd.getMonth()]});});
+  /* RNS scorecard badges: score in a coloured circle at the RNS date (Target chart only) */
+  var scoreEvents=[];
+  if(typeof ALL!=='undefined'&&Array.isArray(ALL)){
+    var tkU=String(active).toUpperCase();
+    ALL.forEach(function(r){
+      if(!r||String(r.ticker||'').toUpperCase()!==tkU||r.score===undefined||!r.date)return;
+      var dm=String(r.date).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!dm)return;
+      var x=fcXFrac(new Date(+dm[1],+dm[2]-1,+dm[3]));if(x===null)return;
+      var sc=+r.score;
+      var col=sc>=75?'#00c814':sc>=50?'#ffc400':'#e02525';
+      var faint=sc>=75?'rgba(0,200,20,0.18)':sc>=50?'rgba(245,179,47,0.18)':'rgba(224,37,37,0.18)';
+      scoreEvents.push({x:x,kind:'score',label:sc,color:col,colorFaint:faint});});}
   fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events});
   fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events});
-  fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true});
+  fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true,events:scoreEvents});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
 
