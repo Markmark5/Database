@@ -1639,6 +1639,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
           <button class="ex-copy-btn" id="ex-sendFcBtn" onclick="exSendToFC()" disabled style="padding:3px 8px;font-size:9px;letter-spacing:.04em;text-transform:uppercase;border-color:var(--amber);color:var(--amber);">📊 → Charts</button>
           <button class="ex-copy-btn" id="ex-copyBtn" onclick="exCopyOutput()" disabled style="padding:3px 8px;font-size:9px;">📋 Copy</button>
           <button class="ex-copy-btn" id="ex-dlBtn" onclick="exDownloadOutput()" disabled style="padding:3px 8px;font-size:9px;">⬇ .txt</button>
+          <button class="ex-copy-btn" id="ex-ignBtn" onclick="exPushToIgnition()" disabled style="padding:3px 8px;font-size:9px;color:#ff8c00;" title="Push this output straight to the Ignition repo — Ignition auto-loads it on next open">⚡→Ignition</button>
           <button class="db-expand-btn" onclick="expandSection('ex-fs','Data Extractor')">⤢</button>
         </div>
       </div>
@@ -4069,6 +4070,7 @@ function exRun() {
   if (btn) btn.disabled = true;
   document.getElementById('ex-copyBtn').disabled = true;
   document.getElementById('ex-dlBtn').disabled = true;
+  var ib=document.getElementById('ex-ignBtn'); if(ib) ib.disabled = true;
 
   const CHUNK = 50;
   const blocks = [];
@@ -4125,6 +4127,7 @@ function exFinish(tickers, blocks, lastStats, dot, weeklyData) {
   }
   document.getElementById('ex-copyBtn').disabled = false;
   document.getElementById('ex-dlBtn').disabled = false;
+  var ib2=document.getElementById('ex-ignBtn'); if(ib2) ib2.disabled = false;
   document.getElementById('ex-runBtn').disabled = false;
   if (dot) dot.className = 'ex-dot ready';
   toast('✓ Extraction complete — ' + blocks.filter(function(b){return !b.startsWith('***');}).length + ' tickers', 'ok');
@@ -4141,6 +4144,36 @@ function exCopyOutput() {
     btn.textContent = '✓ Copied!';
     setTimeout(function(){ btn.textContent = '📋 Copy'; }, 2000);
   }).catch(function() { ta.select(); document.execCommand('copy'); });
+}
+
+/* Push the extractor output straight into the Ignition repo's data folder.
+   Ignition pulls data/weekly_snapshot.txt from GitHub at startup, so after this
+   push it loads the fresh snapshot automatically — no manual upload step. */
+function exPushToIgnition(){
+  var pat=(localStorage.getItem('gh_pat')||'').trim();
+  var btn=document.getElementById('ex-ignBtn');
+  if(!pat){ toast('No GitHub token — use the GITHUB button first','err',3500); return; }
+  var content=document.getElementById('ex-outputText').value;
+  if(!content||content.length<100){ toast('Nothing to push — run an extraction first','err',3000); return; }
+  var api='https://api.github.com/repos/Markmark5/Ignition/contents/data/weekly_snapshot.txt';
+  var b64;
+  try{ b64=btoa(unescape(encodeURIComponent(content))); }
+  catch(e){ toast('Encoding error: '+e.message,'err',4000); return; }
+  if(btn){ btn.disabled=true; btn.textContent='⏳ pushing…'; }
+  function done(ok,msg){ if(btn){ btn.disabled=false; btn.textContent='⚡→Ignition'; } toast(msg, ok?'ok':'err', 4000); }
+  fetch(api,{headers:{'Authorization':'token '+pat,'Accept':'application/vnd.github.v3+json'}})
+    .then(function(r){ return r.ok? r.json() : null; })
+    .then(function(meta){
+      var body={ message:'Weekly snapshot from Database extractor '+new Date().toISOString().slice(0,16).replace('T',' '), content:b64 };
+      if(meta&&meta.sha) body.sha=meta.sha;
+      return fetch(api,{method:'PUT',headers:{'Authorization':'token '+pat,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify(body)});
+    })
+    .then(function(r){
+      if(r.status===200||r.status===201) done(true,'✓ Snapshot pushed — Ignition will auto-load it');
+      else if(r.status===404) done(false,'Push failed: token has no access to the Ignition repo');
+      else done(false,'Push failed: HTTP '+r.status);
+    })
+    .catch(function(e){ done(false,'Push failed: '+e.message); });
 }
 
 async function exDownloadOutput() {
