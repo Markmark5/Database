@@ -3768,9 +3768,15 @@ function exExtractWeekly(rows4, ticker) {
       let dateStr = raw;
       let dateMs  = 0;
       try {
-        const parts = raw.split('/');
-        /* Weekly log dates are DD/MM/YYYY (UK format) */
-        const d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+        /* Weekly log dates: DD/MM/YYYY (UK, manual CSV) or YYYY-MM-DD (gviz feed) */
+        let d;
+        if (raw.indexOf('-') !== -1) {
+          const parts = raw.split('-');
+          d = new Date(+parts[0], +parts[1]-1, +parts[2]);
+        } else {
+          const parts = raw.split('/');
+          d = new Date(+parts[2], +parts[1]-1, +parts[0]);
+        }
         dateStr = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' });
         dateMs  = d.getTime();
       } catch(e) {}
