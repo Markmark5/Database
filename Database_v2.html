@@ -1539,6 +1539,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
           <div class="slot-label">Weekly<br>Snapshot</div>
           <div class="slot-name" id="slot4-name">Click to load CSV…</div>
           <div class="slot-date" id="slot4-date"></div>
+          <button onclick="event.preventDefault();event.stopPropagation();slot4FromSheet();" style="margin-top:4px;font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);cursor:pointer;position:relative;z-index:2;">⟳ Load from Sheet</button>
         </div>
         <!-- Slot 5 — EPS Waterfall Bridge -->
         <div class="upload-slot" id="slot5">
@@ -2722,6 +2723,40 @@ function loadSlot(num,input){
   };
   reader.readAsText(file);
   input.value='';
+}
+
+/* ── File 4 direct fetch from Google Sheet (gviz — reads live doc, no cache) ── */
+var SNAP_SHEET_ID = '1oov2nnwWUVcP4xTEi0wwkdqvr3uPqu8dmK4iJmy88sk';
+function slot4FromSheet(){
+  var url='https://docs.google.com/spreadsheets/d/'+SNAP_SHEET_ID+'/gviz/tq?tqx=out:csv&sheet='+encodeURIComponent('\ud83d\udcc5 Weekly Log');
+  toast('\u23f3 Fetching Weekly Log from Google Sheet\u2026','inf',3000);
+  fetch(url)
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+    .then(function(text){
+      var rows=parseCSVgeneric(text);
+      // Join any overflow chunk columns (B,C,...) back into one Snapshot string
+      rows.forEach(function(row){
+        var extras=[];
+        Object.keys(row).forEach(function(k){
+          if(k!=='Date'&&k!=='Snapshot'&&row[k]&&String(row[k]).trim()) extras.push(row[k]);
+        });
+        if(extras.length) row['Snapshot']=[row['Snapshot']].concat(extras).filter(Boolean).join(';');
+      });
+      if(!rows.length) throw new Error('No rows found \u2014 check sharing is "Anyone with link"');
+      slotState[4]=rows;
+      var slotEl=document.getElementById('slot4');
+      slotEl.classList.add('loaded');
+      var now=new Date();
+      var label=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('slot4-name').textContent='Google Sheet (live)';
+      document.getElementById('slot4-date').textContent='Loaded '+label+' \u00b7 '+rows.length+' rows';
+      dbFilePut(4,{id:'slot4',name:'Google Sheet (live)',text:text,date:now.toISOString(),rows:rows.length});
+      try{localStorage.setItem('db_slot4_name','Google Sheet (live)');localStorage.setItem('db_slot4_date',now.toISOString());}catch(ex){}
+      if(typeof exSyncSlot==='function') exSyncSlot(4, rows, 'Google Sheet (live)');
+      if(typeof applyFilters==='function') applyFilters();
+      toast('\u2713 File 4 loaded from Sheet \u2014 '+rows.length+' weeks','ok');
+    })
+    .catch(function(e){toast('\u26a0 Sheet fetch failed: '+e.message,'err',5000);});
 }
 
 function loadDailyScreener(input){
