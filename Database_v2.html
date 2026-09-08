@@ -2991,7 +2991,7 @@ function parseScorecard(html){
   /* sparkline arrays */
   doc.querySelectorAll('script').forEach(sc=>{
     const txt=sc.textContent;
-    const matches=[...txt.matchAll(/(?:const|let|var)\s+([A-Z]{2,8})Data\s*=\s*(\[)/g)];
+    const matches=[...txt.matchAll(/(?:const|let|var)\s+([A-Z0-9]{2,8})Data\s*=\s*(\[)/g)];
     matches.forEach(m=>{
       const ticker=m[1];const arrStart=txt.indexOf(m[0])+m[0].length-1;
       let depth=0,i=arrStart;
