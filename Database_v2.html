@@ -1567,8 +1567,6 @@ body.sig-wide .cell-ticker{justify-content:center;}
           <span id="sc-cache-chip" style="display:none;" class="sc-chip" style="color:var(--amber)"></span>
         </div>
         <div style="display:flex;gap:6px;align-items:center;">
-          <button class="sc-plain-btn" id="sc-load-prev-btn" onclick="document.getElementById('sc-prev-file-inp').click()">Load prev week</button>
-          <button class="sc-plain-btn" onclick="document.getElementById('sc-file-inp').click()">Load file</button>
           <button class="sc-plain-btn" onclick="scClearAll()" style="color:var(--red);border-color:var(--red-mid);">Clear all</button>
           <button class="db-expand-btn" onclick="expandSection('h1-fs','H1 Tracking')">⤢</button>
         </div>
@@ -1612,6 +1610,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
             <div class="sc-btn-group">
               <button class="sc-btn active" id="sc-btn-q2" onclick="scSetMode('q2')">Q2 — H1 ahead</button>
               <button class="sc-btn" id="sc-btn-q4" onclick="scSetMode('q4')">Q4 — H2 accel</button>
+              <button class="sc-btn" id="sc-btn-qchg" onclick="scToggleQChanged()" title="Show only tickers whose Q flipped between the last two weekly snapshots (File 4)">🆕 Q changed</button>
             </div>
             <div class="sc-btn-group">
               <button class="sc-mbtn active" id="sc-mbtn-eps" onclick="scSetMetric('eps')">EPS</button>
@@ -2300,6 +2299,7 @@ function expandSection(id){
     ctrl.innerHTML=
       '<button class="sc-btn'+(scState.mode==='q2'?' active':'')+'" onclick="scSetMode(\'q2\');scFsRefresh()">Q2 — H1 ahead</button>'
       +'<button class="sc-btn'+(scState.mode==='q4'?' active':'')+'" onclick="scSetMode(\'q4\');scFsRefresh()">Q4 — H2 accel</button>'
+      +'<button class="sc-btn'+(scState.qChangedOnly?' active':'')+'" onclick="scToggleQChanged();scFsRefresh()">🆕 Q changed</button>'
       +'<div style="width:1px;height:18px;background:var(--border);margin:0 4px;"></div>'
       +'<button class="sc-btn'+(scState.metric==='eps'?' active':'')+'" onclick="scSetMetric(\'eps\');scFsRefresh()">EPS</button>'
       +'<button class="sc-btn'+(scState.metric==='rev'?' active':'')+'" onclick="scSetMetric(\'rev\');scFsRefresh()">Revenue</button>'
@@ -2991,7 +2991,7 @@ function parseScorecard(html){
   /* sparkline arrays */
   doc.querySelectorAll('script').forEach(sc=>{
     const txt=sc.textContent;
-    const matches=[...txt.matchAll(/(?:const|let|var)\s+([A-Z0-9]{2,8})Data\s*=\s*(\[)/g)];
+    const matches=[...txt.matchAll(/(?:const|let|var)\s+([A-Z]{2,8})Data\s*=\s*(\[)/g)];
     matches.forEach(m=>{
       const ticker=m[1];const arrStart=txt.indexOf(m[0])+m[0].length-1;
       let depth=0,i=arrStart;
@@ -4255,7 +4255,7 @@ let scState = {
   mode: 'q2', metric: 'eps',
   sortKey: 'gap', sortDir: 'desc',
   prevResults: null, prevMeta: null,
-  showAll: false, results: null, lockedTicker: null,
+  showAll: false, results: null, lockedTicker: null, qChangedOnly: false,
 };
 
 /* ── Parsers ── */
@@ -4553,11 +4553,73 @@ function scGrPct(v) {
   return '<span style="color:'+(v>0?'var(--green)':'var(--red)')+';font-weight:500">'+(v>0?'+':'')+v.toFixed(1)+'%</span>';
 }
 
+/* ── Q-CHANGE DETECTION (from File 4 weekly snapshot) ──
+   The Apps Script appends the 'Latest quarterly report' Q as the
+   8th field of each ticker's snapshot entry (from 11/09/2026).
+   Compare the two most recent weeks that carry Q data; a flip
+   (e.g. Q4→Q2) means the company reported during that week. */
+function scQChangedInfo(){
+  if(!(typeof exState!=='undefined'&&exState.rows4&&exState.rows4.length)) return null;
+  var weeks=[];
+  for(var i=0;i<exState.rows4.length;i++){
+    var row=exState.rows4[i]; var snap=row['Snapshot']||''; if(!snap) continue;
+    var raw=(row['Date']||'').split(' ')[0]; var ms=0;
+    try{
+      var d;
+      if(raw.indexOf('-')!==-1){var p=raw.split('-');d=new Date(+p[0],+p[1]-1,+p[2]);}
+      else{var p2=raw.split('/');d=new Date(+p2[2],+p2[1]-1,+p2[0]);}
+      ms=d.getTime();
+    }catch(e){}
+    weeks.push({ms:ms,raw:raw,snap:snap});
+  }
+  weeks.sort(function(a,b){return a.ms-b.ms;});
+  function qMap(w){
+    var map={}; var parts=w.snap.split(';');
+    for(var j=0;j<parts.length;j++){
+      var f=parts[j].split(',');
+      var q=(f[7]||'').trim();
+      if(f[0]&&/^Q[1-4]$/.test(q)) map[f[0].trim().toUpperCase()]=q;
+    }
+    return map;
+  }
+  var qWeeks=[];
+  for(var k=0;k<weeks.length;k++){
+    var m=qMap(weeks[k]);
+    if(Object.keys(m).length>0) qWeeks.push({w:weeks[k],map:m});
+  }
+  if(!qWeeks.length) return {status:'none'};
+  if(qWeeks.length<2) return {status:'one',curDate:qWeeks[qWeeks.length-1].w.raw};
+  var prev=qWeeks[qWeeks.length-2], cur=qWeeks[qWeeks.length-1];
+  var changed={};
+  for(var t in cur.map){
+    if(prev.map[t]&&prev.map[t]!==cur.map[t]) changed[t]={from:prev.map[t],to:cur.map[t]};
+  }
+  return {status:'ok',changed:changed,prevDate:prev.w.raw,curDate:cur.w.raw,count:Object.keys(changed).length};
+}
+function scQFilter(rows){
+  if(!scState.qChangedOnly) return rows;
+  var qi=scQChangedInfo();
+  var ch=(qi&&qi.changed)||{};
+  return rows.filter(function(r){return !!ch[r.ticker];});
+}
+function scToggleQChanged(){
+  if(!scState.qChangedOnly){
+    var qi=scQChangedInfo();
+    if(!qi||qi.status==='none'){alert('No Q data found in the weekly snapshot.\nLoad File 4 (⟳ Load from Sheet) — Q logging started 11/09/2026.');return;}
+    if(qi.status==='one'){alert('Only one week of Q data so far ('+qi.curDate+').\nQ-change detection needs two weeks of Q — it goes live after next week\'s log.');return;}
+    if(!qi.count){alert('No Q changes between '+qi.prevDate+' and '+qi.curDate+'.');return;}
+  }
+  scState.qChangedOnly=!scState.qChangedOnly;
+  var b=document.getElementById('sc-btn-qchg');
+  if(b) b.classList.toggle('active',scState.qChangedOnly);
+  scRenderAll();
+}
+
 /* ── Row/sort helpers ── */
 function scGetRows() {
   const {results,mode,metric,showAll,lockedTicker}=scState;
   if (!results) return [];
-  const all=results[mode][metric]||[];
+  const all=scQFilter(results[mode][metric]||[]);
   if (lockedTicker) return all.filter(r=>r.ticker===lockedTicker);
   const diff=scGetDiff(all);
   // Only filter to new-only when a daily file has been loaded on top of the baseline
@@ -4568,7 +4630,7 @@ function scGetRows() {
 function scGetAllRows() {
   const {results,mode,metric,lockedTicker}=scState;
   if (!results) return [];
-  const all=results[mode][metric]||[];
+  const all=scQFilter(results[mode][metric]||[]);
   return lockedTicker?all.filter(r=>r.ticker===lockedTicker):all;
 }
 function scGetDiff(rows) {
@@ -4814,7 +4876,6 @@ function scHandlePrevFile(file) {
 function scShowResults() {
   document.getElementById('sc-dropzone').style.display='none';
   document.getElementById('sc-results').style.display='block';
-  document.getElementById('sc-load-prev-btn').style.display='';
   const q2t=scState.companies.filter(c=>c.routing==='Q2').length;
   const q4t=scState.companies.filter(c=>c.routing==='Q4').length;
   const isCsv=scState.fileName&&scState.fileName.toLowerCase().endsWith('.csv');
