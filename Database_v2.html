@@ -3764,6 +3764,7 @@ function exExtractWeekly(rows4, ticker) {
       const rev2  = (fields[3] || '').trim();
       const price = (fields[4] || '').trim();
       const close = (fields[5] || '').trim();
+      const q     = (fields[6] || '').trim();  /* 'Latest quarterly report' — logged from 11/09/2026 */
       const raw   = (row['Date'] || '').split(' ')[0];
       let dateStr = raw;
       let dateMs  = 0;
@@ -3780,7 +3781,7 @@ function exExtractWeekly(rows4, ticker) {
         dateStr = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' });
         dateMs  = d.getTime();
       } catch(e) {}
-      entries.push({ date: dateStr, eps: eps, eps2: eps2, rev: rev, rev2: rev2, price: price, close: close, ms: dateMs });
+      entries.push({ date: dateStr, eps: eps, eps2: eps2, rev: rev, rev2: rev2, price: price, close: close, q: q, ms: dateMs });
     }
   }
   // Sort chronologically oldest→newest regardless of file row order
@@ -4059,21 +4060,29 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   if (sector) lines.push('Sector             : ' + sector);
   lines.push('');
 
-  lines.push('── WEEKLY SNAPSHOT (EPS fc / 2y EPS / Rev fc / 2y Rev / Target / Close) ─');
-  lines.push('Date          '.slice(0,13) + '     EPS   2yEPS    Rev(m)   2yRev(m)   Target    Close');
-  lines.push('-'.repeat(72));
+  lines.push('── WEEKLY SNAPSHOT (EPS fc / 2y EPS / Rev fc / 2y Rev / Target / Close / Q) ─');
+  lines.push('Date          '.slice(0,13) + '     EPS   2yEPS    Rev(m)   2yRev(m)   Target    Close   Q');
+  lines.push('-'.repeat(76));
 
   const epsVals = [];
   function exSnapCell(v,w){ v=(v===undefined||v===null||String(v).trim()==='')?'-':String(v).trim(); return (Array(w+1).join(' ')+v).slice(-w); }
   weekly.forEach(function(e, i) {
-    const tag = i === 0 ? ' ◄ earliest' : (i === weekly.length-1 ? ' ◄ latest' : '');
+    /* Flag the week a new report landed: Q differs from the previous Q-bearing week */
+    let qTag = '';
+    if (e.q) {
+      for (let j = i - 1; j >= 0; j--) {
+        if (weekly[j].q) { if (weekly[j].q !== e.q) qTag = ' ◄ NEW RPT'; break; }
+      }
+    }
+    const tag = qTag || (i === 0 ? ' ◄ earliest' : (i === weekly.length-1 ? ' ◄ latest' : ''));
     lines.push((e.date + '             ').slice(0,13) + ' ' +
       exSnapCell(e.eps,7) + ' ' +
       exSnapCell(e.eps2,7) + '  ' +
       exSnapCell(e.rev,8) + '  ' +
       exSnapCell(e.rev2,9) + ' ' +
       exSnapCell(e.price,8) + ' ' +
-      exSnapCell(e.close,8) + tag);
+      exSnapCell(e.close,8) + ' ' +
+      exSnapCell(e.q,3) + tag);
     const f = parseFloat(e.eps);
     if (!isNaN(f)) epsVals.push(f);
   });
@@ -4086,7 +4095,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
     trendStr = last4[last4.length-1] > last4[0] ? 'RISING' : last4[last4.length-1] < last4[0] ? 'FALLING' : 'FLAT';
   }
 
-  lines.push('-'.repeat(72));
+  lines.push('-'.repeat(76));
   lines.push('EPS net change (full period) : ' + epsChange);
   lines.push('EPS last-4-week trend        : ' + trendStr);
   lines.push('');
