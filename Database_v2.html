@@ -1227,6 +1227,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
     <button class="db-actbtn drift-btn" onclick="openWebPopup('https://markmark5.github.io/Drift/index.html','Drift Tracker')"><span class="dt">&#127919;</span><span class="dw">Drift</span></button>
     <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
     <button class="db-actbtn" onclick="window.open('https://www.finhacker.cz/en/fear-and-greed-index-historical-data-and-chart/','_blank')" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
+    <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
   </div>
 </nav>
 
@@ -7516,6 +7517,81 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   });
   document.addEventListener('mouseup',function(){drag=false;});
 })();
+</script>
+
+<!-- ── AAII SENTIMENT MODAL ── -->
+<div id="aaii-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:#000000dd;z-index:2000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:900px;max-width:calc(100vw - 24px);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);">
+      <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text-primary);letter-spacing:.08em;text-transform:uppercase;">&#128552; AAII Investor Sentiment · 2026</span>
+      <button onclick="document.getElementById('aaii-overlay').style.display='none'" style="background:none;border:none;color:var(--text-secondary);font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div id="aaii-body" style="padding:16px 18px 22px;overflow-y:auto;font-family:var(--mono);color:var(--text-primary);"></div>
+  </div>
+</div>
+<style>
+#aaii-body .aa-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+#aaii-body .aa-tile{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+#aaii-body .aa-lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary)}
+#aaii-body .aa-val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+#aaii-body .aa-sub{font-size:11px;color:var(--text-dim)}
+#aaii-body h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-secondary);margin:14px 0 6px}
+#aaii-body .aa-leg{display:flex;gap:14px;font-size:11px;color:var(--text-secondary);margin-bottom:4px;flex-wrap:wrap}
+#aaii-body .aa-leg i{display:inline-block;width:10px;height:3px;margin-right:5px;vertical-align:middle}
+#aaii-body svg text{fill:var(--text-dim);font-size:10px;font-family:var(--mono)}
+#aaii-body table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+#aaii-body th{position:sticky;top:0;background:var(--surface3);color:var(--text-secondary);font-weight:600;text-align:right;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+#aaii-body td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--border)}
+#aaii-body th:first-child,#aaii-body td:first-child{text-align:left}
+#aaii-body .aa-tbl{max-height:300px;overflow:auto;border:1px solid var(--border);border-radius:6px}
+@media (max-width:640px){#aaii-body .aa-tiles{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+/* AAII data — live copy lives in GitHub: Markmark5/Database/data/aaii.json (updated weekly by scheduled task).
+   The embedded copy below is only a fallback if GitHub can't be reached. */
+let AAII_DATA = {"avg":{"bull":37.5,"neu":31.0,"bear":31.5},"rows":[["2026-01-01",42.0,31.0,27.0],["2026-01-08",42.5,27.5,30.0],["2026-01-15",49.5,22.3,28.2],["2026-01-22",43.2,24.1,32.7],["2026-01-29",44.4,24.8,30.8],["2026-02-05",39.7,31.3,29.0],["2026-02-12",38.5,23.3,38.1],["2026-02-19",34.5,28.5,36.9],["2026-02-26",33.2,27.0,39.8],["2026-03-05",33.1,31.4,35.5],["2026-03-12",31.9,21.7,46.4],["2026-03-19",30.4,17.6,52.0],["2026-03-26",32.1,18.1,49.8],["2026-04-02",33.6,15.0,51.4],["2026-04-09",35.7,21.3,43.0],["2026-04-16",31.7,25.5,42.8],["2026-04-23",46.0,19.5,34.4],["2026-04-30",38.1,22.2,39.7],["2026-05-07",38.3,28.7,33.0],["2026-05-14",39.3,24.1,36.6],["2026-05-21",31.7,24.7,43.6],["2026-05-28",35.6,22.6,41.9],["2026-06-04",36.3,26.7,37.0],["2026-06-11",30.4,22.0,47.7],["2026-06-18",36.6,24.1,39.4],["2026-06-25",44.9,18.9,36.1],["2026-07-02",31.4,26.4,42.3],["2026-07-09",36.3,26.5,37.2],["2026-07-16",44.9,22.2,32.9],["2026-07-23",29.6,28.1,42.3],["2026-07-30",31.0,26.9,42.1],["2026-08-06",37.0,25.0,38.0],["2026-08-13",34.7,27.4,37.9],["2026-08-20",35.5,24.6,39.9],["2026-08-27",32.9,22.6,44.4],["2026-09-03",39.7,22.7,37.6],["2026-09-10",38.0,22.7,39.3],["2026-09-17",28.8,17.9,53.3]]};
+async function aaiiOpen(){
+  document.getElementById('aaii-body').innerHTML='<div style="color:var(--text-secondary);font-size:12px">Loading latest AAII data…</div>';
+  document.getElementById('aaii-overlay').style.display='flex';
+  try{
+    const res=await fetch('https://raw.githubusercontent.com/Markmark5/Database/main/data/aaii.json?t='+Date.now(),{cache:'no-store'});
+    if(res.ok){const j=await res.json(); if(j&&j.rows&&j.rows.length>1) AAII_DATA=j;}
+  }catch(e){}
+  const D=AAII_DATA, R=D.rows, n=R.length, L=R[n-1], P=R[n-2];
+  const G='#3fd68a', Y='#ffc400', RD='#ff5a4f', f=x=>x.toFixed(1)+'%';
+  const fd=s=>new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  const sp=r=>r[1]-r[3], sgn=x=>(x>0?'+':'')+x.toFixed(1);
+  const dlt=(a,b)=>`<span style="color:${a-b>=0?G:RD}">${sgn(a-b)} vs prior wk</span>`;
+  const tile=(lab,val,col,sub)=>`<div class="aa-tile"><div class="aa-lab">${lab}</div><div class="aa-val" style="color:${col}">${val}</div><div class="aa-sub">${sub}</div></div>`;
+  let h=`<div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px">Week ending ${fd(L[0])} · ${n} weeks since 1 Jan 2026 · long-run averages since 1987${D.updated?' · data updated '+D.updated:''}</div>
+  <div class="aa-tiles">${tile('Bullish',f(L[1]),G,dlt(L[1],P[1])+' · avg '+f(D.avg.bull))}${tile('Neutral',f(L[2]),Y,dlt(L[2],P[2])+' · avg '+f(D.avg.neu))}${tile('Bearish',f(L[3]),RD,dlt(L[3],P[3])+' · avg '+f(D.avg.bear))}${tile('Bull–Bear',sgn(sp(L))+' pp',sp(L)<0?RD:G,dlt(sp(L),sp(P)))}</div>`;
+  // line chart
+  const W=860,H=230,l=34,r=10,t=10,b=24, x=i=>l+i*(W-l-r)/(n-1);
+  const lo=10,hi=60,y=v=>t+(hi-v)*(H-t-b)/(hi-lo);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  for(let v=lo;v<=hi;v+=10)s+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)"/><text x="${l-6}" y="${y(v)+3}" text-anchor="end">${v}</text>`;
+  let lastM='';R.forEach((q,i)=>{const m=q[0].slice(5,7);if(m!==lastM){lastM=m;s+=`<text x="${x(i)}" y="${H-6}" text-anchor="start">${new Date(q[0]+'T00:00:00').toLocaleDateString('en-GB',{month:'short'})}</text>`}});
+  const line=(k,c,w)=>`<polyline fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round" points="${R.map((q,i)=>x(i).toFixed(1)+','+y(q[k]).toFixed(1)).join(' ')}"/>`;
+  s+=`<line x1="${l}" x2="${W-r}" y1="${y(D.avg.bull)}" y2="${y(D.avg.bull)}" stroke="${G}" stroke-dasharray="3 4" opacity=".5"/>`;
+  s+=line(2,Y,1.2)+line(1,G,2)+line(3,RD,2);
+  [[1,G],[3,RD]].forEach(([k,c])=>s+=`<circle cx="${x(n-1)}" cy="${y(L[k])}" r="3.5" fill="${c}"/>`);
+  s+='</svg>';
+  h+=`<h4>Bullish / Neutral / Bearish %</h4><div class="aa-leg"><span><i style="background:${G}"></i>Bullish</span><span><i style="background:${Y}"></i>Neutral</span><span><i style="background:${RD}"></i>Bearish</span><span><i style="background:${G};opacity:.5"></i>Bull avg ${f(D.avg.bull)}</span></div>`+s;
+  // spread bars
+  const H2=150,mn=Math.min(-30,...R.map(sp)),mx=Math.max(30,...R.map(sp)),y2=v=>t+(mx-v)*(H2-t-b)/(mx-mn),bw=(W-l-r)/n*.65;
+  let s2=`<svg viewBox="0 0 ${W} ${H2}" width="100%">`;
+  for(let v=Math.ceil(mn/10)*10;v<=mx;v+=10)s2+=`<line x1="${l}" x2="${W-r}" y1="${y2(v)}" y2="${y2(v)}" stroke="var(--border)" ${v===0?'stroke-width="1.5" stroke="var(--border-bright)"':''}/><text x="${l-6}" y="${y2(v)+3}" text-anchor="end">${sgn(v).replace('.0','')}</text>`;
+  R.forEach((q,i)=>{const v=sp(q),a=y2(0),c=y2(v);s2+=`<rect x="${x(i)-bw/2}" y="${Math.min(a,c)}" width="${bw}" height="${Math.max(1,Math.abs(c-a))}" fill="${v<0?RD:G}" opacity="${i===n-1?1:.6}"><title>${fd(q[0])}: ${sgn(v)} pp</title></rect>`});
+  s2+='</svg>';
+  h+=`<h4>Bull–Bear spread (pp)</h4>`+s2;
+  // table
+  const avgOf=k=>R.reduce((a,q)=>a+q[k],0)/n;
+  h+=`<h4>Weekly results · 2026 avg: Bull ${f(avgOf(1))} / Neutral ${f(avgOf(2))} / Bear ${f(avgOf(3))}</h4><div class="aa-tbl"><table><thead><tr><th>Week ending</th><th>Bullish</th><th>Neutral</th><th>Bearish</th><th>Spread</th></tr></thead><tbody>`+
+    R.slice().reverse().map((q,i)=>`<tr style="${i?'':'font-weight:700;background:var(--surface2)'}"><td>${fd(q[0])}</td><td style="color:${G}">${f(q[1])}</td><td style="color:${Y}">${f(q[2])}</td><td style="color:${RD}">${f(q[3])}</td><td style="color:${sp(q)<0?RD:G}">${sgn(sp(q))}</td></tr>`).join('')+`</tbody></table></div>
+    <div style="font-size:10px;color:var(--text-dim);margin-top:10px">Source: AAII Sentiment Survey (aaii.com/sentimentsurvey). <a href="https://www.aaii.com/sentimentsurvey/sent_results" target="_blank" style="color:var(--blue)">Latest results ↗</a></div>`;
+  document.getElementById('aaii-body').innerHTML=h;
+  document.getElementById('aaii-overlay').style.display='flex';
+}
 </script>
 </body>
 </html>
