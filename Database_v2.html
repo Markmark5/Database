@@ -1226,7 +1226,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
     <button class="db-actbtn" onclick="openWebPopup('https://markmark5.github.io/Ignition/IgnitionV2.html','Ignition')" style="background:#1a0800;color:#ff8c00;border:1px solid #ff8c0066;"><span class="bi">&#9889;</span>Ignition</button>
     <button class="db-actbtn drift-btn" onclick="openWebPopup('https://markmark5.github.io/Drift/index.html','Drift Tracker')"><span class="dt">&#127919;</span><span class="dw">Drift</span></button>
     <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
-    <button class="db-actbtn" onclick="window.open('https://www.finhacker.cz/en/fear-and-greed-index-historical-data-and-chart/','_blank')" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
+    <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
     <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
   </div>
 </nav>
@@ -7521,7 +7521,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 
 <!-- ── AAII SENTIMENT MODAL ── -->
 <div id="aaii-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:#000000dd;z-index:2000;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:900px;max-width:calc(100vw - 24px);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overflow:hidden;">
+  <div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:1240px;max-width:calc(100vw - 20px);max-height:calc(100vh - 24px);display:flex;flex-direction:column;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);">
       <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text-primary);letter-spacing:.08em;text-transform:uppercase;">&#128552; AAII Investor Sentiment · 2026</span>
       <button onclick="document.getElementById('aaii-overlay').style.display='none'" style="background:none;border:none;color:var(--text-secondary);font-size:18px;cursor:pointer;">✕</button>
@@ -7593,5 +7593,180 @@ async function aaiiOpen(){
   document.getElementById('aaii-overlay').style.display='flex';
 }
 </script>
+
+<!-- ── CNN FEAR & GREED MODAL (white) ── -->
+<div id="fg-overlay" onclick="if(event.target===this)this.style.display='none'" style="display:none;position:fixed;inset:0;background:#000000dd;z-index:2000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border:1px solid #d8d8d8;border-radius:8px;width:1240px;max-width:calc(100vw - 20px);max-height:calc(100vh - 24px);display:flex;flex-direction:column;overflow:hidden;color:#14181c;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #e6e6e6;background:#f7f7f5;">
+      <span style="font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">&#128552; CNN Fear &amp; Greed Index</span>
+      <button onclick="document.getElementById('fg-overlay').style.display='none'" style="background:none;border:none;color:#888;font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div id="fg-body" style="padding:16px 18px 22px;overflow-y:auto;font-family:var(--mono);color:#14181c;background:#fff;"></div>
+  </div>
+</div>
+<style>
+#fg-body .fg-meta{font-size:11px;color:#6b6b6b;margin-bottom:10px}
+#fg-body .fg-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+#fg-body .fg-tile{background:#f7f7f5;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px}
+#fg-body .fg-tile.now{border-color:#b9b9b9}
+#fg-body .fg-lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b}
+#fg-body .fg-val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+#fg-body .fg-sub{font-size:11px;color:#8a8a8a}
+#fg-body h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;margin:14px 0 6px;display:flex;justify-content:space-between;align-items:center}
+#fg-body .fg-rng button{font-family:var(--mono);font-size:10px;padding:3px 8px;margin-left:4px;border-radius:4px;cursor:pointer;background:#fff;border:1px solid #ddd;color:#777;text-transform:uppercase;letter-spacing:.06em}
+#fg-body .fg-rng button.on{background:#14181c;border-color:#14181c;color:#fff}
+#fg-body .fg-leg{display:flex;gap:14px;font-size:10px;color:#6b6b6b;flex-wrap:wrap;margin-bottom:4px}
+#fg-body .fg-leg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+#fg-body .fg-stat{font-size:11px;color:#6b6b6b;margin:8px 0 2px}
+#fg-body table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+#fg-body th{position:sticky;top:0;background:#f0f0ee;color:#6b6b6b;font-weight:600;text-align:right;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+#fg-body td{text-align:right;padding:5px 8px;border-bottom:1px solid #eee}
+#fg-body th:first-child,#fg-body td:first-child{text-align:left}
+#fg-body tr.hi{font-weight:700;background:#f7f7f5}
+#fg-body .fg-tbl{max-height:280px;overflow:auto;border:1px solid #e6e6e6;border-radius:6px}
+#fg-body .fg-src{font-size:10px;color:#9a9a9a;margin-top:10px}
+#fg-body .fg-src a{color:#2a78d6}
+@media (max-width:760px){#fg-body .fg-tiles{grid-template-columns:1fr}}
+</style>
+<script>
+/* CNN Fear & Greed — daily history from the public mirror
+   github.com/whit3rabbit/fear-greed-data (GitHub Action refreshes fear-greed.csv
+   Mon–Fri 23:00 UTC from CNN's own endpoint). CNN's endpoint sends no CORS headers
+   so it can't be fetched from the browser directly — hence the mirror. Rows below
+   are only a fallback if GitHub can't be reached. Refetched on every open. */
+var FG_ROWS = [["2026-03-13",16.7],["2026-03-16",23.9],["2026-03-17",22.9],["2026-03-18",13.6],["2026-03-19",18.3],["2026-03-20",8.4],["2026-03-23",11.6],["2026-03-24",10.4],["2026-03-25",16.5],["2026-03-26",10.3],["2026-03-27",8.2],["2026-03-30",5.8],["2026-03-31",14.9],["2026-04-01",15.9],["2026-04-02",18.3],["2026-04-06",21.9],["2026-04-07",21.6],["2026-04-08",29.2],["2026-04-09",33.8],["2026-04-10",38.1],["2026-04-13",41.0],["2026-04-14",47.3],["2026-04-15",56.2],["2026-04-16",61.5],["2026-04-17",68.6],["2026-04-20",70.0],["2026-04-21",67.6],["2026-04-22",68.5],["2026-04-23",66.2],["2026-04-24",65.4],["2026-04-27",66.3],["2026-04-28",67.4],["2026-04-29",66.2],["2026-04-30",69.5],["2026-05-01",71.2],["2026-05-04",66.9],["2026-05-05",67.3],["2026-05-06",68.7],["2026-05-07",67.3],["2026-05-08",67.3],["2026-05-11",66.6],["2026-05-12",65.7],["2026-05-13",65.0],["2026-05-14",65.9],["2026-05-15",63.2],["2026-05-18",62.1],["2026-05-19",59.3],["2026-05-20",60.5],["2026-05-21",57.5],["2026-05-22",58.2],["2026-05-26",59.8],["2026-05-27",60.6],["2026-05-28",60.7],["2026-05-29",60.5],["2026-06-01",59.5],["2026-06-02",57.0],["2026-06-03",54.6],["2026-06-04",54.6],["2026-06-05",41.9],["2026-06-08",39.4],["2026-06-09",33.8],["2026-06-10",27.3],["2026-06-11",29.7],["2026-06-12",33.5],["2026-06-15",40.1],["2026-06-16",39.5],["2026-06-17",32.9],["2026-06-18",37.3],["2026-06-22",33.9],["2026-06-23",28.5],["2026-06-24",26.5],["2026-06-25",25.4],["2026-06-26",24.7],["2026-06-29",26.9],["2026-06-30",30.0],["2026-07-01",31.6],["2026-07-02",32.5],["2026-07-06",41.7],["2026-07-07",39.8],["2026-07-08",38.6],["2026-07-09",44.7],["2026-07-10",46.8],["2026-07-13",40.9],["2026-07-14",41.1],["2026-07-15",44.4],["2026-07-16",41.9],["2026-07-17",37.0],["2026-07-20",36.0],["2026-07-21",42.8],["2026-07-22",44.4],["2026-07-23",40.9],["2026-07-24",40.8],["2026-07-27",38.2],["2026-07-28",37.1],["2026-07-29",25.6],["2026-07-30",38.1],["2026-07-31",39.6],["2026-08-03",46.1],["2026-08-04",59.0],["2026-08-05",60.2],["2026-08-06",59.7],["2026-08-07",65.1],["2026-08-10",64.4],["2026-08-11",60.1],["2026-08-12",61.7],["2026-08-13",66.1],["2026-08-14",64.3],["2026-08-17",59.1],["2026-08-18",54.6],["2026-08-19",56.6],["2026-08-20",51.4],["2026-08-21",54.7],["2026-08-24",55.0],["2026-08-25",59.6],["2026-08-26",53.9],["2026-08-27",57.3],["2026-08-28",53.7],["2026-08-31",49.2],["2026-09-01",44.9],["2026-09-02",46.1],["2026-09-03",47.5],["2026-09-04",45.2],["2026-09-08",39.1],["2026-09-09",38.2],["2026-09-10",32.2],["2026-09-11",32.7],["2026-09-14",31.0],["2026-09-15",28.0],["2026-09-16",27.3],["2026-09-17",28.7]];
+var FG_SRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/fear-greed.csv';
+var FG_RANGE = '1y';
+var FG_GRN = '#00a810', FG_RED = '#e02525', FG_INK = '#14181c', FG_AXIS = '#8a8a8a', FG_GRID = '#e2e2e2';
+/* rating colours (text) / meter fills — light in the middle, dark at the extremes */
+var FG_BANDS = [
+  [0,  25,  '#b00000', 'Extreme fear',  '#00a810'],
+  [25, 45,  '#e02525', 'Fear',          '#d6f0d8'],
+  [45, 55,  '#d99a00', 'Neutral',       '#f2dfa8'],
+  [55, 75,  '#2fb81f', 'Greed',         '#fad4d4'],
+  [75, 101, '#00a810', 'Extreme greed', '#e02525']
+];
+function fgBand(v){for(var i=0;i<FG_BANDS.length;i++){if(v>=FG_BANDS[i][0]&&v<FG_BANDS[i][1])return FG_BANDS[i];}return FG_BANDS[0];}
+function fgSetRange(r){FG_RANGE=r;fgRender();}
+async function fgOpen(){
+  document.getElementById('fg-body').innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading latest Fear &amp; Greed data…</div>';
+  document.getElementById('fg-overlay').style.display='flex';
+  try{
+    var res=await fetch(FG_SRC+'?t='+Date.now(),{cache:'no-store'});
+    if(res.ok){
+      var txt=await res.text(), lines=txt.trim().split(/\r?\n/), out=[];
+      for(var i=1;i<lines.length;i++){
+        var c=lines[i].split(',');
+        if(c.length<2)continue;
+        var d=c[0].trim(), v=parseFloat(c[1]);
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!isFinite(v))continue;
+        out.push([d,Math.round(v*10)/10]);
+      }
+      if(out.length>100)FG_ROWS=out;
+    }
+  }catch(e){}
+  fgRender();
+}
+function fgRender(){
+  var R=FG_ROWS, n=R.length, L=R[n-1], last=L[0], B=fgBand(L[1]);
+  var fd=function(s){return new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});};
+  var sgn=function(x){return (x>0?'+':'')+x.toFixed(1);};
+  var at=function(daysBack){
+    var t=new Date(last+'T00:00:00'); t.setDate(t.getDate()-daysBack);
+    var key=t.toISOString().slice(0,10), best=null;
+    for(var i=n-1;i>=0;i--){ if(R[i][0]<=key){best=R[i];break;} }
+    return best||R[0];
+  };
+  var tile=function(lab,val,col,sub){
+    return '<div class="fg-tile'+(lab==='Now'?' now':'')+'"><div class="fg-lab">'+lab+'</div><div class="fg-val" style="color:'+col+'">'+val.toFixed(1)+'</div><div class="fg-sub">'+sub+'</div></div>';
+  };
+  // 1-year window for the low/high tiles
+  var yAgo=new Date(last+'T00:00:00'); yAgo.setDate(yAgo.getDate()-365);
+  var yKey=yAgo.toISOString().slice(0,10);
+  var Y1=R.filter(function(q){return q[0]>=yKey;});
+  if(Y1.length<2)Y1=R.slice();
+  var lo=Y1[0], hi=Y1[0];
+  Y1.forEach(function(q){ if(q[1]<lo[1])lo=q; if(q[1]>hi[1])hi=q; });
+  var span=hi[1]-lo[1], pos=span>0?((L[1]-lo[1])/span*100):50;
+  var dAgo=function(s0){ return Math.round((new Date(last+'T00:00:00')-new Date(s0+'T00:00:00'))/86400000); };
+  var h='<div class="fg-meta">Latest reading '+fd(last)+' \u00b7 '+n+' trading days from '+fd(R[0][0])+'</div>';
+  h+='<div class="fg-tiles">'
+    +tile('Now',L[1],B[2],'<b style="color:'+B[2]+'">'+B[3]+'</b> \u00b7 '+pos.toFixed(0)+'% of 1y range \u00b7 prev close '+at(1)[1].toFixed(1))
+    +tile('1 year low',lo[1],fgBand(lo[1])[2],sgn(L[1]-lo[1])+' above \u00b7 '+fd(lo[0])+' ('+dAgo(lo[0])+'d ago)')
+    +tile('1 year high',hi[1],fgBand(hi[1])[2],sgn(L[1]-hi[1])+' below \u00b7 '+fd(hi[0])+' ('+dAgo(hi[0])+'d ago)')
+    +'</div>';
+  // rating meter
+  var MW=1130,MH=54;
+  var m='<svg viewBox="0 0 '+MW+' '+MH+'" width="100%">';
+  FG_BANDS.forEach(function(bd){
+    var x0=bd[0]/100*MW, x1=Math.min(bd[1],100)/100*MW, on=(bd===B);
+    m+='<rect x="'+x0+'" y="14" width="'+(x1-x0)+'" height="16" fill="'+bd[4]+'"/>';
+    m+='<text x="'+((x0+x1)/2)+'" y="46" text-anchor="middle" font-size="10" font-weight="'+(on?700:400)+'" fill="'+(on?bd[2]:'#8a8a8a')+'">'+bd[3]+'</text>';
+  });
+  var px=L[1]/100*MW;
+  m+='<polygon points="'+(px-6)+',8 '+(px+6)+',8 '+px+',16" fill="'+FG_INK+'"/><line x1="'+px+'" x2="'+px+'" y1="12" y2="32" stroke="'+FG_INK+'" stroke-width="2"/></svg>';
+  h+=m;
+  // history chart — buy band under 25, sell band over 75, dotted mid at 50
+  var key;
+  if(FG_RANGE==='ytd'){ key=last.slice(0,4)+'-01-01'; }
+  else { var cut={'3m':92,'1y':365,'5y':1826,'all':99999}[FG_RANGE];
+         var t0=new Date(last+'T00:00:00'); t0.setDate(t0.getDate()-cut);
+         key=t0.toISOString().slice(0,10); }
+  var S=R.filter(function(q){return q[0]>=key;});
+  if(S.length<2)S=R.slice();
+  if(S.length>900){ var step=Math.ceil(S.length/900), T=[]; for(var i=0;i<S.length;i+=step)T.push(S[i]); if(T[T.length-1]!==S[S.length-1])T.push(S[S.length-1]); S=T; }
+  var sn=S.length, W=1130,H=300,l=36,r=52,t=10,b=22;
+  var x=function(i){return l+i*(W-l-r)/(sn-1);};
+  var y=function(v){return t+(100-v)*(H-t-b)/100;};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  s+='<rect x="'+l+'" y="'+y(25).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(0)-y(25)).toFixed(1)+'" fill="'+FG_GRN+'" opacity=".16"/>';
+  s+='<rect x="'+l+'" y="'+y(100).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(75)-y(100)).toFixed(1)+'" fill="'+FG_RED+'" opacity=".16"/>';
+  s+='<text x="'+(W-r+6)+'" y="'+((y(25)+y(0))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">BUY</text>';
+  s+='<text x="'+(W-r+6)+'" y="'+((y(100)+y(75))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">SELL</text>';
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(25).toFixed(1)+'" y2="'+y(25).toFixed(1)+'" stroke="'+FG_GRN+'" stroke-width="1" opacity=".6"/>';
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(75).toFixed(1)+'" y2="'+y(75).toFixed(1)+'" stroke="'+FG_RED+'" stroke-width="1" opacity=".6"/>';
+  [0,100].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'" stroke="'+FG_GRID+'"/>';});
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(50).toFixed(1)+'" y2="'+y(50).toFixed(1)+'" stroke="'+FG_AXIS+'" stroke-dasharray="2 5" opacity=".8"/>';
+  [0,25,50,75,100].forEach(function(v){
+    var c=(v===25?FG_GRN:(v===75?FG_RED:FG_AXIS));
+    s+='<text x="'+(l-6)+'" y="'+(y(v)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+c+'">'+v+'</text>';
+  });
+  s+='<polyline points="'+S.map(function(q,i){return x(i).toFixed(1)+','+y(q[1]).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
+  var lastLab='';
+  S.forEach(function(q,i){
+    if(i<4||i>sn-8)return;
+    var lab, txt, dt=new Date(q[0]+'T00:00:00');
+    if(FG_RANGE==='3m'){
+      lab=q[0].slice(0,7);
+      txt=dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    }else if(FG_RANGE==='ytd'||FG_RANGE==='1y'){
+      lab=q[0].slice(0,7);
+      txt=dt.toLocaleDateString('en-GB',{month:'short'})+(q[0].slice(5,7)==='01'?" '"+q[0].slice(2,4):'');
+    }else{
+      lab=q[0].slice(0,4);
+      txt=lab;
+    }
+    if(lab===lastLab)return;
+    lastLab=lab;
+    s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
+  });
+  s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/></svg>';
+  var rb=['3m','ytd','1y','5y','all'].map(function(k){return '<button class="'+(FG_RANGE===k?'on':'')+'" onclick="fgSetRange(\''+k+'\')">'+k+'</button>';}).join('');
+  h+='<h4><span>History · daily score</span><span class="fg-rng">'+rb+'</span></h4>';
+  h+=s;
+  var vals=S.map(function(q){return q[1];});
+  var avg=vals.reduce(function(a,c){return a+c;},0)/sn, mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+  h+='<div class="fg-stat">'+fd(S[0][0])+' – '+fd(S[sn-1][0])+' · '+sn+' points · average '+avg.toFixed(1)+' · low '+mn.toFixed(1)+' ('+fd(S[vals.indexOf(mn)][0])+') · high '+mx.toFixed(1)+' ('+fd(S[vals.indexOf(mx)][0])+')</div>';
+  h+='<h4><span>Recent readings</span></h4><div class="fg-tbl"><table><thead><tr><th>Date</th><th>Score</th><th>Chg</th><th>Rating</th></tr></thead><tbody>';
+  for(var i=n-1;i>=Math.max(0,n-40);i--){
+    var q=R[i], pv=i>0?R[i-1][1]:q[1], bd=fgBand(q[1]), ch=q[1]-pv;
+    h+='<tr'+(i===n-1?' class="hi"':'')+'><td>'+fd(q[0])+'</td><td>'+q[1].toFixed(1)+'</td><td style="color:'+(ch>=0?FG_GRN:FG_RED)+'">'+sgn(ch)+'</td><td style="color:'+bd[2]+';font-weight:700">'+bd[3]+'</td></tr>';
+  }
+  h+='</tbody></table></div>';
+  h+='<div class="fg-src">Source: CNN Business Fear &amp; Greed Index, via the public mirror <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank">whit3rabbit/fear-greed-data</a> (refreshed weekdays after the US close). Pre-2021 history is reconstructed from third-party archives and is approximate. <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank">CNN live ↗</a></div>';
+  document.getElementById('fg-body').innerHTML=h;
+}
+</script>
+
 </body>
 </html>
