@@ -7637,6 +7637,8 @@ async function aaiiOpen(){
 var FG_ROWS = [["2026-03-13",16.7],["2026-03-16",23.9],["2026-03-17",22.9],["2026-03-18",13.6],["2026-03-19",18.3],["2026-03-20",8.4],["2026-03-23",11.6],["2026-03-24",10.4],["2026-03-25",16.5],["2026-03-26",10.3],["2026-03-27",8.2],["2026-03-30",5.8],["2026-03-31",14.9],["2026-04-01",15.9],["2026-04-02",18.3],["2026-04-06",21.9],["2026-04-07",21.6],["2026-04-08",29.2],["2026-04-09",33.8],["2026-04-10",38.1],["2026-04-13",41.0],["2026-04-14",47.3],["2026-04-15",56.2],["2026-04-16",61.5],["2026-04-17",68.6],["2026-04-20",70.0],["2026-04-21",67.6],["2026-04-22",68.5],["2026-04-23",66.2],["2026-04-24",65.4],["2026-04-27",66.3],["2026-04-28",67.4],["2026-04-29",66.2],["2026-04-30",69.5],["2026-05-01",71.2],["2026-05-04",66.9],["2026-05-05",67.3],["2026-05-06",68.7],["2026-05-07",67.3],["2026-05-08",67.3],["2026-05-11",66.6],["2026-05-12",65.7],["2026-05-13",65.0],["2026-05-14",65.9],["2026-05-15",63.2],["2026-05-18",62.1],["2026-05-19",59.3],["2026-05-20",60.5],["2026-05-21",57.5],["2026-05-22",58.2],["2026-05-26",59.8],["2026-05-27",60.6],["2026-05-28",60.7],["2026-05-29",60.5],["2026-06-01",59.5],["2026-06-02",57.0],["2026-06-03",54.6],["2026-06-04",54.6],["2026-06-05",41.9],["2026-06-08",39.4],["2026-06-09",33.8],["2026-06-10",27.3],["2026-06-11",29.7],["2026-06-12",33.5],["2026-06-15",40.1],["2026-06-16",39.5],["2026-06-17",32.9],["2026-06-18",37.3],["2026-06-22",33.9],["2026-06-23",28.5],["2026-06-24",26.5],["2026-06-25",25.4],["2026-06-26",24.7],["2026-06-29",26.9],["2026-06-30",30.0],["2026-07-01",31.6],["2026-07-02",32.5],["2026-07-06",41.7],["2026-07-07",39.8],["2026-07-08",38.6],["2026-07-09",44.7],["2026-07-10",46.8],["2026-07-13",40.9],["2026-07-14",41.1],["2026-07-15",44.4],["2026-07-16",41.9],["2026-07-17",37.0],["2026-07-20",36.0],["2026-07-21",42.8],["2026-07-22",44.4],["2026-07-23",40.9],["2026-07-24",40.8],["2026-07-27",38.2],["2026-07-28",37.1],["2026-07-29",25.6],["2026-07-30",38.1],["2026-07-31",39.6],["2026-08-03",46.1],["2026-08-04",59.0],["2026-08-05",60.2],["2026-08-06",59.7],["2026-08-07",65.1],["2026-08-10",64.4],["2026-08-11",60.1],["2026-08-12",61.7],["2026-08-13",66.1],["2026-08-14",64.3],["2026-08-17",59.1],["2026-08-18",54.6],["2026-08-19",56.6],["2026-08-20",51.4],["2026-08-21",54.7],["2026-08-24",55.0],["2026-08-25",59.6],["2026-08-26",53.9],["2026-08-27",57.3],["2026-08-28",53.7],["2026-08-31",49.2],["2026-09-01",44.9],["2026-09-02",46.1],["2026-09-03",47.5],["2026-09-04",45.2],["2026-09-08",39.1],["2026-09-09",38.2],["2026-09-10",32.2],["2026-09-11",32.7],["2026-09-14",31.0],["2026-09-15",28.0],["2026-09-16",27.3],["2026-09-17",28.7]];
 var FG_SRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/fear-greed.csv';
 var FG_RANGE = '1y';
+var FG_SP = null, FG_SPON = false, FG_SPFAIL = false;
+var FG_SPSRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/json/cnn_output.json';
 var FG_GRN = '#00a810', FG_RED = '#e02525', FG_INK = '#14181c', FG_AXIS = '#8a8a8a', FG_GRID = '#e2e2e2';
 /* rating colours (text) / meter fills — light in the middle, dark at the extremes */
 var FG_BANDS = [
@@ -7648,6 +7650,20 @@ var FG_BANDS = [
 ];
 function fgBand(v){for(var i=0;i<FG_BANDS.length;i++){if(v>=FG_BANDS[i][0]&&v<FG_BANDS[i][1])return FG_BANDS[i];}return FG_BANDS[0];}
 function fgSetRange(r){FG_RANGE=r;fgRender();}
+async function fgToggleSP(){
+  if(!FG_SPON && !FG_SP && !FG_SPFAIL){
+    try{
+      var res=await fetch(FG_SPSRC+'?t='+Date.now(),{cache:'no-store'});
+      var j=await res.json(), map={};
+      (j.market_momentum_sp500.data||[]).forEach(function(pt){
+        map[new Date(pt.x).toISOString().slice(0,10)]=pt.y;
+      });
+      if(Object.keys(map).length>100)FG_SP=map; else FG_SPFAIL=true;
+    }catch(e){FG_SPFAIL=true;}
+  }
+  FG_SPON=!FG_SPON;
+  fgRender();
+}
 async function fgOpen(){
   document.getElementById('fg-body').innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading latest Fear &amp; Greed data…</div>';
   document.getElementById('fg-overlay').style.display='flex';
@@ -7715,14 +7731,14 @@ function fgRender(){
   var S=R.filter(function(q){return q[0]>=key;});
   if(S.length<2)S=R.slice();
   if(S.length>900){ var step=Math.ceil(S.length/900), T=[]; for(var i=0;i<S.length;i+=step)T.push(S[i]); if(T[T.length-1]!==S[S.length-1])T.push(S[S.length-1]); S=T; }
-  var sn=S.length, W=1130,H=300,l=36,r=52,t=10,b=22;
+  var sn=S.length, W=1130,H=300,l=36,r=(FG_SPON&&FG_SP?66:52),t=10,b=22;
   var x=function(i){return l+i*(W-l-r)/(sn-1);};
   var y=function(v){return t+(100-v)*(H-t-b)/100;};
   var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
   s+='<rect x="'+l+'" y="'+y(25).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(0)-y(25)).toFixed(1)+'" fill="'+FG_GRN+'" opacity=".16"/>';
   s+='<rect x="'+l+'" y="'+y(100).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(75)-y(100)).toFixed(1)+'" fill="'+FG_RED+'" opacity=".16"/>';
-  s+='<text x="'+(W-r+6)+'" y="'+((y(25)+y(0))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">BUY</text>';
-  s+='<text x="'+(W-r+6)+'" y="'+((y(100)+y(75))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">SELL</text>';
+  if(!(FG_SPON&&FG_SP))s+='<text x="'+(W-r+6)+'" y="'+((y(25)+y(0))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">BUY</text>';
+  if(!(FG_SPON&&FG_SP))s+='<text x="'+(W-r+6)+'" y="'+((y(100)+y(75))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">SELL</text>';
   s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(25).toFixed(1)+'" y2="'+y(25).toFixed(1)+'" stroke="'+FG_GRN+'" stroke-width="1" opacity=".6"/>';
   s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(75).toFixed(1)+'" y2="'+y(75).toFixed(1)+'" stroke="'+FG_RED+'" stroke-width="1" opacity=".6"/>';
   [0,100].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'" stroke="'+FG_GRID+'"/>';});
@@ -7731,6 +7747,28 @@ function fgRender(){
     var c=(v===25?FG_GRN:(v===75?FG_RED:FG_AXIS));
     s+='<text x="'+(l-6)+'" y="'+(y(v)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+c+'">'+v+'</text>';
   });
+  var spNote='';
+  if(FG_SPON){
+    if(!FG_SP){ spNote=' \u00b7 S&amp;P overlay unavailable'; }
+    else{
+      var SPC='#2a78d6', sv=[], prev=null;
+      for(var i=0;i<sn;i++){ var v=FG_SP[S[i][0]]; if(v==null)v=prev; prev=v; sv.push(v); }
+      var i0=0; while(i0<sn && sv[i0]==null)i0++;
+      if(i0>=sn){ spNote=' \u00b7 S&amp;P data starts Feb 21 \u2014 none in this window'; }
+      else{
+        var spv=sv.slice(i0), smn=Math.min.apply(null,spv), smx=Math.max.apply(null,spv);
+        var pad=(smx-smn)*.05||1; smn-=pad; smx+=pad;
+        var ys=function(v){return t+(smx-v)*(H-t-b)/(smx-smn);};
+        var pl=''; for(var i=i0;i<sn;i++){ pl+=x(i).toFixed(1)+','+ys(sv[i]).toFixed(1)+' '; }
+        s+='<polygon points="'+x(i0).toFixed(1)+','+(H-b)+' '+pl+x(sn-1).toFixed(1)+','+(H-b)+'" fill="'+SPC+'" opacity=".10"/>';
+        s+='<polyline points="'+pl.trim()+'" fill="none" stroke="'+SPC+'" stroke-width="1.3" stroke-linejoin="round" opacity=".8"/>';
+        [0,.5,1].forEach(function(f){ var v=smn+(smx-smn)*f; s+='<text x="'+(W-r+6)+'" y="'+(ys(v)+3).toFixed(1)+'" font-size="10" fill="'+SPC+'">'+Math.round(v).toLocaleString()+'</text>'; });
+        s+='<text x="'+(l+6)+'" y="'+(t+12)+'" font-size="10" font-weight="700" fill="'+FG_INK+'">Fear &amp; Greed</text>';
+        s+='<text x="'+(l+110)+'" y="'+(t+12)+'" font-size="10" font-weight="700" fill="'+SPC+'">S&amp;P 500 \u2192</text>';
+        if(i0>0) spNote=' \u00b7 S&amp;P from '+fd(S[i0][0]);
+      }
+    }
+  }
   s+='<polyline points="'+S.map(function(q,i){return x(i).toFixed(1)+','+y(q[1]).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
   var lastLab='';
   S.forEach(function(q,i){
@@ -7751,12 +7789,12 @@ function fgRender(){
     s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
   });
   s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/></svg>';
-  var rb=['3m','ytd','1y','5y','all'].map(function(k){return '<button class="'+(FG_RANGE===k?'on':'')+'" onclick="fgSetRange(\''+k+'\')">'+k+'</button>';}).join('');
+  var rb='<button class="'+(FG_SPON?'on':'')+'" style="'+(FG_SPON?'background:#2a78d6;border-color:#2a78d6;':'color:#2a78d6;border-color:#2a78d6aa;')+'" onclick="fgToggleSP()">S&amp;P overlay</button> ' + ['3m','ytd','1y','5y','all'].map(function(k){return '<button class="'+(FG_RANGE===k?'on':'')+'" onclick="fgSetRange(\''+k+'\')">'+k+'</button>';}).join('');
   h+='<h4><span>History · daily score</span><span class="fg-rng">'+rb+'</span></h4>';
   h+=s;
   var vals=S.map(function(q){return q[1];});
   var avg=vals.reduce(function(a,c){return a+c;},0)/sn, mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
-  h+='<div class="fg-stat">'+fd(S[0][0])+' – '+fd(S[sn-1][0])+' · '+sn+' points · average '+avg.toFixed(1)+' · low '+mn.toFixed(1)+' ('+fd(S[vals.indexOf(mn)][0])+') · high '+mx.toFixed(1)+' ('+fd(S[vals.indexOf(mx)][0])+')</div>';
+  h+='<div class="fg-stat">'+fd(S[0][0])+' – '+fd(S[sn-1][0])+' · '+sn+' points · average '+avg.toFixed(1)+' · low '+mn.toFixed(1)+' ('+fd(S[vals.indexOf(mn)][0])+') · high '+mx.toFixed(1)+' ('+fd(S[vals.indexOf(mx)][0])+')'+spNote+'</div>';
   h+='<h4><span>Recent readings</span></h4><div class="fg-tbl"><table><thead><tr><th>Date</th><th>Score</th><th>Chg</th><th>Rating</th></tr></thead><tbody>';
   for(var i=n-1;i>=Math.max(0,n-40);i--){
     var q=R[i], pv=i>0?R[i-1][1]:q[1], bd=fgBand(q[1]), ch=q[1]-pv;
