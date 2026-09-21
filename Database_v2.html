@@ -7370,6 +7370,18 @@ function ghAutoLoad() {
 <script>
 let _webPopupFS = false;
 
+/* Answer scorecard requests from embedded tools (Ignition iframe):
+   {type:'rns_request', ticker} → {type:'rns_response', ticker, cards} */
+window.addEventListener('message', function(ev){
+  var d = ev.data || {};
+  if (d.type !== 'rns_request' || !d.ticker) return;
+  var t = String(d.ticker).toUpperCase();
+  var cards = (typeof ALL !== 'undefined' && Array.isArray(ALL))
+    ? ALL.filter(function(r){ return String(r.ticker||'').toUpperCase() === t; })
+    : [];
+  try { ev.source.postMessage({type:'rns_response', ticker:t, cards:cards}, '*'); } catch(e){}
+});
+
 function openWebPopup(url, title) {
   _webPopupFS = false;
   const box = document.getElementById('web-popup-box');
