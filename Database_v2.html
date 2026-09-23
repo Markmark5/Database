@@ -6444,7 +6444,33 @@ var liveTblSortKey   = 'pct';
 var liveTblSortDir   = -1;
 
 /* ── URL persistence ── */
+/* Live Sectors presets: gviz endpoints read the live sheet directly
+   (published /pub URLs serve stale, cached snapshots). */
+var LIVE_PRESET_URLS = [
+  'https://docs.google.com/spreadsheets/d/1g2SfvuceP4fFcOoV2dg9h6JFdNVgs_MUjPMmT0patDQ/gviz/tq?tqx=out:csv&headers=1',
+  'https://docs.google.com/spreadsheets/d/1c_Xg00mSdmkK96Xz2Z7j6aaOUx7AiZA3Wz3cH7NX6pI/gviz/tq?tqx=out:csv&headers=1',
+  'https://docs.google.com/spreadsheets/d/18ZpCyKIhQ8nigeNxmYA0H22JaMjuLTX2/gviz/tq?tqx=out:csv&headers=1',
+  'https://docs.google.com/spreadsheets/d/1egstDjMoVw16N6Y7jCp0esrm_MUbzdC-/gviz/tq?tqx=out:csv&headers=1',
+  'https://docs.google.com/spreadsheets/d/1AinGDBEW5xfi4YNYLJI_F_jGVwOVmcr0QxNRLbc1_so/gviz/tq?tqx=out:csv&headers=1',
+  'https://docs.google.com/spreadsheets/d/1CMyM7ybjYvoCFhsoA84Ip-iuuyxIJDF-n7dpBCzReDc/gviz/tq?tqx=out:csv&headers=1'
+];
+/* Replace empty or old published-format slots with the gviz presets.
+   Runs on load and after a backup restore, so stale /pub URLs can't return. */
+function liveMigrateUrls() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(LIVE_URL_KEY) || '[]');
+    var changed = false;
+    for (var i = 0; i < 6; i++) {
+      var v = saved[i] || '';
+      if (!v || v.indexOf('/pub?') >= 0 || v.indexOf('2PACX') >= 0) {
+        saved[i] = LIVE_PRESET_URLS[i]; changed = true;
+      }
+    }
+    if (changed) localStorage.setItem(LIVE_URL_KEY, JSON.stringify(saved));
+  } catch(e) {}
+}
 function liveLoadUrls() {
+  liveMigrateUrls();
   try {
     var saved = JSON.parse(localStorage.getItem(LIVE_URL_KEY) || '[]');
     for (var i = 1; i <= 6; i++) {
@@ -6465,6 +6491,7 @@ function liveSaveUrls() {
 }
 
 function liveGetUrls() {
+  liveMigrateUrls();
   var urls = [];
   try { var saved = JSON.parse(localStorage.getItem(LIVE_URL_KEY) || '[]'); } catch(e) { var saved = []; }
   for (var i = 1; i <= 6; i++) {
@@ -6588,9 +6615,9 @@ function liveRefresh() {
   liveData={};
   var pending=urls.length; var errors=0;
   urls.forEach(function(url) {
-    var fetchUrl = url;
+    var fetchUrl = url + (url.indexOf('?')>=0 ? '&' : '?') + 'cb=' + Date.now();
     console.log('⚡ Fetching:', fetchUrl);
-    fetch(fetchUrl)
+    fetch(fetchUrl, { cache: 'no-store' })
       .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
       .then(function(text){liveIngestRows(liveParseCsv(text));})
       .catch(function(e){errors++;console.warn('⚡ Live sheet error for URL:', url, '— Error:', e.message, e);})
@@ -7077,6 +7104,7 @@ function dbRestoreApply(backup) {
     }
     if (backup.liveUrls) {
       try{ localStorage.setItem('live_sheet_urls', backup.liveUrls); }catch(ex){}
+      try{ liveMigrateUrls(); }catch(ex){}   /* old backups carry /pub URLs */
       if (typeof liveLoadUrls === 'function') liveLoadUrls();
       log.push('live URLs');
     }
@@ -7131,11 +7159,7 @@ function dbRestoreApply(backup) {
 document.addEventListener('DOMContentLoaded', function() {
   // Pre-populate Sheet 1 URL if not yet saved
   try {
-    var saved = JSON.parse(localStorage.getItem(LIVE_URL_KEY) || '[]');
-    if (!saved[0]) {
-      saved[0] = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIq-jlCxtZRyqkcyDwNqHM6qkGGS11844FmUURLQMC0X_HSLQj5OfW7mZExpZLpE6rSjfTZFnvPC35/pub?gid=347956013&single=true&output=csv';
-      localStorage.setItem(LIVE_URL_KEY, JSON.stringify(saved));
-    }
+    liveMigrateUrls();   /* gviz presets replace any old published URLs */
   } catch(e) {}
   liveRestoreCache();
 
