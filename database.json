@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-09-24T16:30:15.424Z",
-    "savedAtLabel": "24 Sept 2026 17:30",
+    "savedAt": "2026-09-24T21:30:31.500Z",
+    "savedAtLabel": "24 Sept 2026 22:30",
     "source": "github-sync"
   },
   "scorecards": [
@@ -163448,6 +163448,301 @@
         }
       ],
       "entryPrice": 72.5
+    },
+    {
+      "id": "SCT_2026_09_17",
+      "ticker": "SCT",
+      "score": 67,
+      "company": "Softcat PLC",
+      "verdict": "Modest upgrade",
+      "date": "2026-09-17",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "Beat",
+          "type": "green",
+          "textHTML": "FY26 underlying op profit guide raised to <span class=\"val-up\">high-teens</span> from mid-teens after strong Q4; GP growth moderately above; cash conversion towards top of 85–95% range",
+          "textPlain": "FY26 underlying op profit guide raised to high-teens from mid-teens after strong Q4; GP growth moderately above; cash conversion towards top of 85–95% range"
+        },
+        {
+          "pill": "Guide",
+          "type": "green",
+          "textHTML": "FY27 ex-GDT <span class=\"val-up\">high single-digit</span> op profit growth guided on raised base, implying EBIT ~£228m vs cons £222.5m (<span class=\"val-up\">+2.7%</span>); placing dilution holds FY27 EPS ~flat",
+          "textPlain": "FY27 ex-GDT high single-digit op profit growth guided on raised base, implying EBIT ~£228m vs cons £222.5m (+2.7%); placing dilution holds FY27 EPS ~flat"
+        },
+        {
+          "pill": "Deal",
+          "type": "grey",
+          "textHTML": "GDT bought for <span class=\"val-fl\">$1,050m</span> EV (£785m): c.$240m GP (+30%), c.$80m EBITDA CY26; <span class=\"val-up\">HSD–LDD</span> underlying EPS accretion in first full year; closing by end Q1 CY2027",
+          "textPlain": "GDT bought for $1,050m EV (£785m): c.$240m GP (+30%), c.$80m EBITDA CY26; HSD–LDD underlying EPS accretion in first full year; closing by end Q1 CY2027"
+        },
+        {
+          "pill": "H2",
+          "type": "green",
+          "textHTML": "Implied H2 EPS <span class=\"val-up\">44.9p</span> needs <span class=\"val-up\">+11.1%</span> vs 40.4p prior H2 (RNS-derived 45.7p, +13.1%); H1 EPS already +25.8%, so the H2 burden looks comfortably achievable on trend",
+          "textPlain": "Implied H2 EPS 44.9p needs +11.1% vs 40.4p prior H2 (RNS-derived 45.7p, +13.1%); H1 EPS already +25.8%, so the H2 burden looks comfortably achievable on trend"
+        },
+        {
+          "pill": "Risk",
+          "type": "amber",
+          "textHTML": "Net cash (0.7)x flips to <span class=\"val-dn\">1.3x</span> ND/EBITDA at close; £350m placing ~9% dilution; GDT net loss $(58.4)m FY25; USD earnings lift FX sensitivity after closing",
+          "textPlain": "Net cash (0.7)x flips to 1.3x ND/EBITDA at close; £350m placing ~9% dilution; GDT net loss $(58.4)m FY25; USD earnings lift FX sensitivity after closing"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+0–2%",
+          "sub": "cons 81.0p→81.1–82.5p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "cons 85.1p→84–87p",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "cons £1,787m→flat",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+5–15%",
+          "sub": "£1,975m→£2.07–2.27bn",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "70.4p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "79.5p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+12.9%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "Falling",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+19.0%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "+9.0%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "FY26 EPS fc vs price · Mar–Sep 26",
+      "sparkSVG": "\n        <svg id=\"spark-SCT\" viewBox=\"0 0 480 56\" width=\"100%\" height=\"56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-SCT\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-09-24T21:30:03.218Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar 26",
+          "eps": 70.4,
+          "price": 1141
+        },
+        {
+          "d": "06 Mar 26",
+          "eps": 70.5,
+          "price": 1167
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 70.5,
+          "price": 1165
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 75.7,
+          "price": 1254
+        },
+        {
+          "d": "27 Mar 26",
+          "eps": 74,
+          "price": 1213
+        },
+        {
+          "d": "03 Apr 26",
+          "eps": 74,
+          "price": 1240
+        },
+        {
+          "d": "10 Apr 26",
+          "eps": 74,
+          "price": 1202
+        },
+        {
+          "d": "17 Apr 26",
+          "eps": 74,
+          "price": 1311
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 74.3,
+          "price": 1330
+        },
+        {
+          "d": "08 May 26",
+          "eps": 74.3,
+          "price": 1418
+        },
+        {
+          "d": "15 May 26",
+          "eps": 74.3,
+          "price": 1367
+        },
+        {
+          "d": "22 May 26",
+          "eps": 74.3,
+          "price": 1442
+        },
+        {
+          "d": "02 Jun 26",
+          "eps": 78.7,
+          "price": 1869
+        },
+        {
+          "d": "05 Jun 26",
+          "eps": 78.7,
+          "price": 1880
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 78.7,
+          "price": 1806
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 79.2,
+          "price": 1778
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 79.2,
+          "price": 1778
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 79.5,
+          "price": 1947
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 79.5,
+          "price": 1870
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 79.6,
+          "price": 1889
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 79.5,
+          "price": 1845
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 79.5,
+          "price": 1960
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 79.6,
+          "price": 1992
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 79.6,
+          "price": 2008
+        },
+        {
+          "d": "21 Aug 26",
+          "eps": 79.6,
+          "price": 2040
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 79.6,
+          "price": 2112
+        },
+        {
+          "d": "07 Sep 26",
+          "eps": 79.6,
+          "price": 2048
+        },
+        {
+          "d": "11 Sep 26",
+          "eps": 79.6,
+          "price": 1857
+        },
+        {
+          "d": "18 Sep 26",
+          "eps": 79.5,
+          "price": 1895
+        }
+      ],
+      "calData": {
+        "beat": true,
+        "beatPhrase": "high-teens growth in full year underlying operating profit, up from mid-teens previously",
+        "events": [
+          {
+            "event": "FY26 preliminary results",
+            "type": "FY results",
+            "from": "2026-10-14",
+            "to": "2026-10-14",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      }
     }
   ],
   "brokerChanges": [
@@ -282392,7 +282687,7 @@
       }
     ],
     "slot4Name": "Google Sheet (live)",
-    "slot4Date": "2026-09-22T11:21:16.426Z",
+    "slot4Date": "2026-09-24T21:11:49.407Z",
     "rows4": [
       {
         "Date": "03/03/2026",
@@ -320496,6 +320791,21 @@
         "rns": "2026-07-02",
         "manual": false,
         "note": ""
+      },
+      {
+        "id": "emug1ppcqsgru",
+        "ticker": "SCT",
+        "company": "Softcat PLC",
+        "type": "FY results",
+        "event": "FY26 preliminary results",
+        "from": "2026-10-14",
+        "to": "2026-10-14",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-17",
+        "manual": false,
+        "note": ""
       }
     ],
     "stars": {
@@ -320561,6 +320871,8 @@
         "since": "2026-07-30"
       }
     },
-    "synced": {}
+    "synced": {
+      "SCT_2026_09_17": 1
+    }
   }
 }
