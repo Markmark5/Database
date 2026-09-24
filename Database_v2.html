@@ -1228,6 +1228,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
     <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
     <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
     <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
+    <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
   </div>
 </nav>
 
@@ -7841,6 +7842,588 @@ function fgRender(){
   document.getElementById('fg-body').innerHTML=h;
 }
 </script>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     RNS CALENDAR — additive, self-contained, safe to delete.
+     Delete this whole block and the "Calendar" nav button to remove.
+     Reads ALL (scorecards) read-only. Stores its own data in
+     localStorage 'rnscal_db_v1' and adds 'rnsCalendar' to the
+     GitHub payload / restore by wrapping (not editing) existing fns.
+═══════════════════════════════════════════════════════════════ -->
+<style>
+#rcal-ov{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:8000;display:none;align-items:flex-start;justify-content:center;padding:4vh 16px;overflow:auto;font-family:var(--sans,'Inter',sans-serif)}
+#rcal-ov.rc-open{display:flex}
+#rcal-ov *,#rcal-ev-ov *,#rcal-data-ov *,#rcal-rns-ov *{box-sizing:border-box}
+.rc-box{width:min(1180px,96vw);background:var(--surface,#0a0a0a);border:1px solid var(--border-bright,#3a3a50);border-radius:6px;color:var(--text-primary,#f2f2f8);font-size:13px}
+.rc-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border,#2a2a38)}
+.rc-title{font-size:14px;font-weight:600}
+.rc-title small{font-weight:400;color:var(--text-dim,#6a6a85);font-size:11px;margin-left:8px}
+.rc-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rc-btn{background:transparent;color:var(--text-secondary,#9a9ab5);border:1px solid var(--border,#2a2a38);border-radius:3px;padding:5px 10px;font-size:11px;font-weight:500;font-family:inherit;cursor:pointer}
+.rc-btn:hover{color:var(--text-primary,#f2f2f8);border-color:var(--border-bright,#3a3a50)}
+.rc-btn.rc-on{background:var(--surface3,#1a1a1a);color:var(--text-primary,#f2f2f8);border-color:var(--border-bright,#3a3a50)}
+.rc-btn.rc-add{color:#00c814;border-color:#00c81444;background:#00c81418}
+.rc-btn.rc-pink.rc-on{color:#ff0a78;border-color:#ff0a7899;background:#ff0a7814}
+.rc-btn.rc-del{color:#e02525;border-color:#e0252544}
+.rc-btn.rc-pri{color:#000;background:#00c814;border-color:#00c814;font-weight:600}
+.rc-seg{display:flex;border:1px solid var(--border,#2a2a38);border-radius:3px;overflow:hidden}
+.rc-seg .rc-btn{border:none;border-radius:0}
+.rc-x{background:none;border:none;color:var(--text-secondary,#9a9ab5);font-size:16px;cursor:pointer;margin-left:6px}
+.rc-search{background:var(--surface2,#111);border:1px solid var(--border,#2a2a38);border-radius:3px;color:var(--text-primary,#f2f2f8);padding:5px 8px;width:110px;text-transform:uppercase;font-family:inherit;font-size:11px}
+.rc-key{display:flex;flex-wrap:wrap;gap:14px;padding:8px 14px;font-size:11px;color:var(--text-dim,#6a6a85);border-bottom:1px solid var(--border,#2a2a38)}
+#rcal-list{padding-bottom:14px}
+.rc-wk{display:flex;align-items:baseline;gap:10px;padding:14px 14px 8px;margin-top:22px;border-top:1px solid var(--border,#2a2a38);font-size:11px;font-weight:600;color:var(--text-secondary,#9a9ab5)}
+.rc-wk span{font-weight:400;color:var(--text-dim,#6a6a85)}
+.rc-wk.rc-pastwk{color:var(--text-dim,#6a6a85)}
+#rcal-list>.rc-wk:first-child{margin-top:0;border-top:none}
+.rc-row{display:grid;grid-template-columns:128px 150px minmax(0,1fr) 78px 124px 60px 28px;gap:14px;align-items:center;padding:8px 14px;border-top:1px solid #16161f;cursor:pointer}
+.rc-row:hover{background:var(--surface2,#111)}
+.rc-row.rc-star{box-shadow:inset 3px 0 0 #d4a000;background:rgba(212,160,0,.10)}
+.rc-row.rc-star:hover{background:rgba(212,160,0,.15)}
+.rc-row.rc-past{opacity:.62}
+.rc-d1{font-weight:500}
+.rc-d2{font-size:10px;color:var(--text-dim,#6a6a85);margin-top:1px}
+.rc-tk{font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline;text-decoration-color:#ffffff30;text-underline-offset:3px;display:inline-block}
+.rc-tk:hover{color:#ffc400;text-decoration-color:#ffc40044}
+.rc-co{font-size:10px;color:var(--text-secondary,#9a9ab5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-ev{min-width:0}
+.rc-e1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-e2{font-size:10px;color:var(--text-dim,#6a6a85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-cf-c{color:var(--text-primary,#f2f2f8)}.rc-cf-p{color:#ffc400}.rc-cf-i{color:var(--text-dim,#6a6a85)}
+.rc-mk{display:flex;gap:3px;font-size:14px;align-items:center}
+.rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid #1c1c26;color:#34344a;background:none;min-width:22px;cursor:pointer;font-family:inherit}
+.rc-beat:hover{color:var(--text-dim,#6a6a85);border-color:var(--border,#2a2a38)}
+.rc-beat.rc-on{color:#00c814;border:1px solid #00c81444;background:#00c81418}
+.rc-beat.rc-man{box-shadow:0 0 0 1px #4a9eff44}
+.rc-sc{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-dim,#6a6a85);min-width:0}
+.rc-pill{font-weight:700;font-size:11px;padding:2px 6px;border-radius:3px;min-width:28px;text-align:center;flex-shrink:0}
+.rc-p-g{background:#00c81418;color:#00c814;border:1px solid #00c81444}
+.rc-p-a{background:#ffc40018;color:#ffc400;border:1px solid #ffc40044}
+.rc-p-r{background:#e0252518;color:#e02525;border:1px solid #e0252544}
+.rc-p-n{background:var(--surface2,#111);color:var(--text-dim,#6a6a85);border:1px solid var(--border,#2a2a38)}
+.rc-vd{font-size:9px;color:var(--text-dim,#6a6a85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-days{font-size:11px;color:var(--text-secondary,#9a9ab5);text-align:right}
+.rc-days.rc-soon{color:#ffc400;font-weight:600}
+.rc-days.rc-win{color:var(--text-dim,#6a6a85);font-size:10px}
+.rc-st{background:none;border:none;font-size:15px;color:var(--text-dim,#6a6a85);line-height:1;cursor:pointer}
+.rc-st.rc-on{color:#ff0a78}
+.rc-empty{padding:40px 14px;text-align:center;color:var(--text-dim,#6a6a85)}
+.rc-foot{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;padding:10px 14px;border-top:1px solid var(--border,#2a2a38);font-size:10px;color:var(--text-dim,#6a6a85)}
+.rc-sub-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:flex-start;justify-content:center;padding:60px 16px;overflow:auto;font-family:var(--sans,'Inter',sans-serif);color:var(--text-primary,#f2f2f8)}
+.rc-sub-ov.rc-open{display:flex}
+#rcal-ev-ov,#rcal-data-ov{z-index:8600}
+.rc-modal{background:var(--surface2,#111);border:1px solid var(--border-bright,#3a3a50);border-radius:6px;width:100%;max-width:460px;padding:16px;font-size:12px}
+.rc-modal.rc-wide{max-width:720px}
+.rc-mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:600;font-size:13px}
+.rc-fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.rc-fl label{font-size:10px;color:var(--text-secondary,#9a9ab5);font-weight:500}
+.rc-fl input,.rc-fl select,.rc-fl textarea{background:var(--surface,#0a0a0a);border:1px solid var(--border,#2a2a38);border-radius:3px;color:var(--text-primary,#f2f2f8);padding:7px 8px;font-family:inherit;font-size:12px}
+.rc-fl textarea{min-height:64px;resize:vertical}
+.rc-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rc-hint{font-size:10px;color:var(--text-dim,#6a6a85);margin-top:2px}
+.rc-err{font-size:11px;color:#e02525;margin-bottom:8px;display:none}
+.rc-mf{display:flex;gap:8px;justify-content:space-between;margin-top:6px}
+.rc-tabs{display:flex;gap:6px;margin-bottom:10px}
+#rcal-ov button:focus-visible,#rcal-ev-ov :focus-visible,#rcal-data-ov :focus-visible{outline:2px solid #4a9eff;outline-offset:1px}
+@media (max-width:760px){.rc-row{grid-template-columns:70px minmax(0,1fr) 64px 28px}.rc-row .rc-ev{grid-column:2/4}.rc-row .rc-mk,.rc-row .rc-days{display:none}}
+</style>
+
+<div id="rcal-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-title">
+  <div class="rc-box">
+    <div class="rc-head">
+      <div class="rc-title" id="rcal-title">🗓 RNS calendar<small id="rcal-today"></small></div>
+      <div class="rc-bar">
+        <div class="rc-seg" id="rcal-rng">
+          <button class="rc-btn" data-r="7">7d</button><button class="rc-btn rc-on" data-r="30">30d</button><button class="rc-btn" data-r="90">90d</button><button class="rc-btn" data-r="9999">All</button>
+        </div>
+        <button class="rc-btn rc-pink" id="rcal-fstar">★ Starred</button>
+        <button class="rc-btn" id="rcal-fbeat">▲ Beat last</button>
+        <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
+        <button class="rc-btn rc-add" id="rcal-add">＋ Add date</button>
+        <button class="rc-x" id="rcal-close" aria-label="Close calendar">✕</button>
+      </div>
+    </div>
+    <div class="rc-key">
+      <span><span style="color:#ff0a78">★</span> your pick (click star)</span>
+      <span>▲ ahead of forecasts at last update (click to override)</span>
+      <span>📈 H1 ahead of seasonal</span><span>🔬 H1 ahead, hypothetical</span><span>🚀 growth accelerating</span>
+      <span>Click a ticker for its scorecards</span>
+    </div>
+    <div id="rcal-list"></div>
+    <div class="rc-foot">
+      <span id="rcal-stats"></span>
+      <span class="rc-bar">
+        <button class="rc-btn" id="rcal-databtn">Backup / restore</button>
+        <button class="rc-btn" id="rcal-seed">Load recent dates</button>
+        <button class="rc-btn rc-del" id="rcal-clear">Clear calendar</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-ev-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-ev-title">
+  <div class="rc-modal">
+    <div class="rc-mh"><span id="rcal-ev-title">Add date</span><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    <div class="rc-fl"><label for="rcal-ev-paste">Paste RNS line (optional)</label>
+      <textarea id="rcal-ev-paste" placeholder="The Company will announce its interim results on 14 October 2026"></textarea>
+      <div class="rc-hint">Fills the event and date below. Check them before saving.</div></div>
+    <div class="rc-two">
+      <div class="rc-fl"><label for="rcal-ev-tk">Ticker</label><input id="rcal-ev-tk" list="rcal-tklist" autocomplete="off" style="text-transform:uppercase"><datalist id="rcal-tklist"></datalist></div>
+      <div class="rc-fl"><label for="rcal-ev-type">Event</label>
+        <select id="rcal-ev-type"><option>H1 results</option><option>FY results</option><option>Pre-H1 TU</option><option>Pre-FY TU</option><option>Q1</option><option>Q3</option><option>Trading update</option><option>AGM</option><option>Other</option></select></div>
+    </div>
+    <div class="rc-fl"><label for="rcal-ev-co">Company</label><input id="rcal-ev-co" placeholder="Filled from your scorecards if known"></div>
+    <div class="rc-fl"><label>Date</label>
+      <div class="rc-tabs"><button class="rc-btn rc-on" data-rc-dm="exact">Exact date</button><button class="rc-btn" data-rc-dm="window">Month window</button></div>
+      <div id="rcal-dm-exact"><input type="date" id="rcal-ev-date" style="width:100%;background:var(--surface,#0a0a0a);border:1px solid var(--border,#2a2a38);border-radius:3px;color:var(--text-primary,#f2f2f8);padding:7px 8px;color-scheme:dark"></div>
+      <div id="rcal-dm-window" class="rc-two" style="display:none">
+        <input type="month" id="rcal-ev-month" style="background:var(--surface,#0a0a0a);border:1px solid var(--border,#2a2a38);border-radius:3px;color:var(--text-primary,#f2f2f8);padding:7px 8px;color-scheme:dark">
+        <select id="rcal-ev-part" style="background:var(--surface,#0a0a0a);border:1px solid var(--border,#2a2a38);border-radius:3px;color:var(--text-primary,#f2f2f8);padding:7px 8px"><option value="all">Sometime in month</option><option value="early">Early</option><option value="mid">Mid</option><option value="late">Late</option></select>
+      </div>
+    </div>
+    <div class="rc-two">
+      <div class="rc-fl"><label for="rcal-ev-conf">Confidence</label><select id="rcal-ev-conf"><option value="confirmed">Confirmed</option><option value="provisional">Provisional</option><option value="implied">Implied</option></select></div>
+      <div class="rc-fl"><label for="rcal-ev-src">Source</label><input id="rcal-ev-src" value="RNS"></div>
+    </div>
+    <div class="rc-fl"><label for="rcal-ev-note">Note</label><input id="rcal-ev-note" placeholder="Optional"></div>
+    <div class="rc-err" id="rcal-ev-err"></div>
+    <div class="rc-mf"><button class="rc-btn rc-del" id="rcal-ev-del" style="visibility:hidden">Delete</button>
+      <span class="rc-bar"><button class="rc-btn" data-rc-close>Cancel</button><button class="rc-btn rc-pri" id="rcal-ev-save">Save date</button></span></div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-data-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-data-title">
+  <div class="rc-modal rc-wide">
+    <div class="rc-mh"><span id="rcal-data-title">Calendar backup / restore</span><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    <div class="rc-fl"><label for="rcal-data-txt">Calendar data (JSON)</label><textarea id="rcal-data-txt" style="min-height:220px;font-size:11px"></textarea>
+      <div class="rc-hint">Copy keeps a backup. Paste a backup here, including one from the standalone test page, and press Restore. Your GitHub Save also includes the calendar.</div></div>
+    <div class="rc-err" id="rcal-data-err"></div>
+    <div class="rc-mf"><span></span><span class="rc-bar"><button class="rc-btn" id="rcal-data-copy">Copy</button><button class="rc-btn rc-pri" id="rcal-data-restore">Restore</button></span></div>
+  </div>
+</div>
+
+<script>
+/* RNS CALENDAR — additive, safe to delete */
+(function(){
+'use strict';
+var KEY='rnscal_db_v1';
+function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function pd(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONL=['january','february','march','april','may','june','july','august','september','october','november','december'];
+function fmt(s){var d=pd(s);return d.getDate()+' '+MON[d.getMonth()];}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function uid(){return 'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function $(id){return document.getElementById(id);}
+function note(m,t){if(typeof toast==='function')toast(m,t||'ok',2600);}
+
+var S={events:[],stars:{},beatOv:{},synced:{}};
+var storageOK=true;
+function blank(){return {events:[],stars:{},beatOv:{},synced:{}};}
+function normalise(o){
+  var s=blank();if(!o)return s;
+  s.events=Array.isArray(o.events)?o.events:[];s.stars=o.stars||{};s.beatOv=o.beatOv||{};s.synced=o.synced||{};
+  s.events.forEach(function(e){if(e.type==='Capital markets day')e.type='Other';if(!e.id)e.id=uid();});
+  return s;
+}
+function load(){try{var r=localStorage.getItem(KEY);if(r)S=normalise(JSON.parse(r));}catch(e){storageOK=false;}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){storageOK=false;}}
+
+/* ── scorecards: read-only view of ALL ── */
+function allCards(){try{return (typeof ALL!=='undefined'&&Array.isArray(ALL))?ALL:[];}catch(e){return [];}}
+function recs(tk){tk=String(tk).toUpperCase();return allCards().filter(function(r){return String(r.ticker||'').toUpperCase()===tk;}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));});}
+function latest(tk){var r=recs(tk);return r.length?r[r.length-1]:null;}
+function flags(r){
+  var f={h1:false,hyp:false,acc:false};if(!r)return f;
+  (r.h1Inds||[]).forEach(function(i){
+    if(i.state==='pos')f.h1=true;
+    var txt=(i.mark||'')+' '+(i.dev||'');
+    if(i.state!=='pos'&&/🔬/.test(txt)&&/\+/.test(i.dev||''))f.hyp=true;
+  });
+  (r.accelInds||[]).forEach(function(i){if(i.state==='pos')f.acc=true;});
+  return f;
+}
+function beatState(tk){
+  var L=latest(tk);var since=L?String(L.date||''):'';var ov=S.beatOv[tk];
+  var auto=!!(L&&L.calData&&L.calData.beat);var phrase=L&&L.calData?L.calData.beatPhrase:'';
+  if(ov&&ov.since===since)return {on:!!ov.v,man:true,phrase:phrase};
+  return {on:auto,man:false,phrase:phrase};
+}
+function band(s){return s==null?'rc-p-n':s>=75?'rc-p-g':s>=50?'rc-p-a':'rc-p-r';}
+function confCls(c){return c==='confirmed'?'rc-cf-c':c==='provisional'?'rc-cf-p':'rc-cf-i';}
+function confLbl(c){return c==='confirmed'?'Confirmed':c==='provisional'?'Provisional':'Implied';}
+
+/* ── event types ── */
+function typeOf(txt){
+  var t=(txt||'').toLowerCase();
+  if(/capital markets|investor day|\bcmd\b/.test(t))return 'Other';
+  if(/\bagm\b|annual general/.test(t)&&!/trading/.test(t))return 'AGM';
+  if(/\bq1\b|first quarter|three months/.test(t))return 'Q1';
+  if(/\bq3\b|third quarter|nine months/.test(t))return 'Q3';
+  if(/interim|half[- ]?year|\bh1\b|\bhy\d*\b/.test(t)&&!/trading|pre-close|preclose/.test(t))return 'H1 results';
+  if(/final result|full[- ]?year result|preliminary|\bfy\d*\b.*result|annual result/.test(t))return 'FY results';
+  if(/(half[- ]?year|\bh1\b|\bhy\d*\b|six months|first half).*(trading|pre-close|update)|(trading|pre-close|update).*(six months|first half|half[- ]?year|\bh1\b)/.test(t))return 'Pre-H1 TU';
+  if(/pre-close|preclose|(full[- ]?year|\bfy\d*\b|year[- ]end|twelve months).*(trading|update)|(trading|update).*(full[- ]?year|year[- ]end|twelve months)/.test(t))return 'Pre-FY TU';
+  if(/trading|update|statement/.test(t))return 'Trading update';
+  return 'Other';
+}
+function windowOf(y,m,part){
+  var last=new Date(y,m+1,0).getDate();
+  var r={all:[1,last],early:[1,10],mid:[11,20],late:[21,last]}[part]||[1,last];
+  return {from:iso(new Date(y,m,r[0])),to:iso(new Date(y,m,r[1])),label:(part==='all'?'':part[0].toUpperCase()+part.slice(1)+' ')+MON[m]+' '+y};
+}
+function partOf(e){
+  if(e.from===e.to)return 'exact';
+  if(e.from.slice(0,7)!==e.to.slice(0,7))return 'range';
+  var d1=+e.from.slice(8),d2=+e.to.slice(8),last=new Date(+e.from.slice(0,4),+e.from.slice(5,7),0).getDate();
+  if(d1===1&&d2<=10)return 'early';if(d1>=11&&d2<=20)return 'mid';if(d1>=21)return 'late';if(d1===1&&d2===last)return 'month';return 'range';
+}
+function sortKey(e){var p=partOf(e);if(p==='exact'||p==='early'||p==='range')return e.from;if(p==='mid')return e.from.slice(0,8)+'15';return e.to;}
+var RANK={exact:0,early:1,range:1,mid:2,late:3,month:4};
+function shortWin(e){var p=partOf(e),m=MON[+e.from.slice(5,7)-1];return p==='early'?'Early '+m:p==='mid'?'Mid '+m:p==='late'?'Late '+m:p==='month'?m:fmt(e.from)+'+';}
+
+/* ── merge events from a scorecard ── */
+function sameEvent(a,b){if(a.ticker!==b.ticker||a.type!==b.type)return false;return Math.abs(pd(a.from)-pd(b.from))/864e5<=35;}
+function mergeImported(tk,incoming,rnsDate){
+  var t0=iso(today());
+  S.events=S.events.filter(function(e){return !(e.ticker===tk&&!e.manual&&e.to>=t0&&(e.rns||'')<=rnsDate&&!incoming.some(function(n){return sameEvent(n,e);}));});
+  incoming.forEach(function(n){
+    var ex=S.events.filter(function(e){return sameEvent(e,n);})[0];
+    if(!ex){S.events.push(n);return;}
+    var exExact=ex.from===ex.to,nExact=n.from===n.to;
+    if(ex.manual){if(nExact&&!exExact){ex.from=n.from;ex.to=n.to;ex.label=n.label;ex.conf=n.conf;ex.src=n.src;}return;}
+    if(nExact||!exExact||(n.rns||'')>=(ex.rns||'')){var id=ex.id;Object.keys(n).forEach(function(k){ex[k]=n[k];});ex.id=id;}
+  });
+}
+/* pick up .cal-data carried on scorecards in ALL (once per scorecard) */
+function syncFromCards(){
+  var changed=false;
+  allCards().filter(function(r){return r&&r.calData&&Array.isArray(r.calData.events);})
+   .sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));})
+   .forEach(function(r){
+     var sid=r.id||(r.ticker+'_'+r.date);if(S.synced[sid])return;
+     var tk=String(r.ticker).toUpperCase();
+     var evs=r.calData.events.filter(function(e){return e&&e.from;}).map(function(e){
+       return {id:uid(),ticker:tk,company:r.company||'',type:e.type||typeOf(e.event),event:e.event||e.type||'',from:e.from,to:e.to||e.from,
+         label:e.label||'',conf:String(e.conf||'implied').toLowerCase(),src:e.src||'RNS',rns:String(r.date||''),manual:false,note:''};});
+     mergeImported(tk,evs,String(r.date||''));S.synced[sid]=1;changed=true;
+   });
+  if(changed)save();
+}
+
+/* ── paste-line parser ── */
+function parseLine(txt){
+  var t=txt.toLowerCase(),res={};if(t.trim())res.type=typeOf(t);
+  var m=t.match(/(\d{1,2})(?:st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/);
+  if(m){res.date=iso(new Date(+m[3],MONL.indexOf(m[2]),+m[1]));return res;}
+  m=t.match(/(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})/);
+  if(m){res.date=iso(new Date(+m[3],MONL.indexOf(m[1]),+m[2]));return res;}
+  m=t.match(/(early|beginning of|mid|middle of|late|end of|towards the end of)?\s*-?\s*(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/);
+  if(m){var p=m[1]||'';res.month=m[3]+'-'+String(MONL.indexOf(m[2])+1).padStart(2,'0');res.part=/early|beginning/.test(p)?'early':/mid|middle/.test(p)?'mid':/late|end/.test(p)?'late':'all';}
+  return res;
+}
+
+/* ── render ── */
+var RNG=30,FSTAR=false,FBEAT=false,FQ='';
+function render(){
+  var T=today(),t0=iso(T);
+  $('rcal-today').textContent='Today '+T.getDate()+' '+MON[T.getMonth()]+' '+T.getFullYear();
+  var list=$('rcal-list');
+  var horizon=iso(new Date(T.getTime()+RNG*864e5)),pastFrom=iso(new Date(T.getTime()-21*864e5));
+  if(!S.events.length){
+    list.innerHTML='<div class="rc-empty">No dates yet. Dates arrive with new scorecards, or add one with ＋ Add date.<br><br><button class="rc-btn" id="rcal-eseed">Load recent dates</button></div>';
+    $('rcal-eseed').onclick=seed;stats();return;
+  }
+  var ev=S.events.filter(function(e){
+    if(FQ&&e.ticker.indexOf(FQ)<0)return false;
+    if(FSTAR&&!S.stars[e.ticker])return false;
+    if(FBEAT&&!beatState(e.ticker).on)return false;
+    if(e.to<t0)return e.to>=pastFrom;
+    return sortKey(e)<=horizon;
+  });
+  var past=ev.filter(function(e){return e.to<t0;}).sort(function(a,b){return b.to.localeCompare(a.to);});
+  var up=ev.filter(function(e){return e.to>=t0;}).sort(function(a,b){
+    return sortKey(a).localeCompare(sortKey(b))||RANK[partOf(a)]-RANK[partOf(b)]||(S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||a.ticker.localeCompare(b.ticker);});
+  var h='';
+  if(past.length){h+='<div class="rc-wk rc-pastwk">Recently reported <span>last 21 days</span></div>';past.forEach(function(e){h+=row(e,true,T);});}
+  var last='';
+  function wkStart(e){var k=sortKey(e);var f=pd(k<t0?t0:k);var m=new Date(f);m.setDate(f.getDate()-((f.getDay()+6)%7));return m;}
+  up.forEach(function(e){
+    var mon=wkStart(e),k=iso(mon);
+    if(k!==last){var n=up.filter(function(x){return iso(wkStart(x))===k;}).length;
+      h+='<div class="rc-wk">Week of '+mon.getDate()+' '+MON[mon.getMonth()]+' <span>'+n+' event'+(n>1?'s':'')+'</span></div>';last=k;}
+    h+=row(e,false,T);
+  });
+  if(!past.length&&!up.length)h='<div class="rc-empty">No events match these filters.</div>';
+  list.innerHTML=h;stats();
+}
+function row(e,isPast,T){
+  var L=latest(e.ticker),bs=beatState(e.ticker),star=!!S.stars[e.ticker],fl=flags(L);
+  var exact=e.from===e.to,days=Math.round((pd(e.from)-T)/864e5);
+  var dlab=e.label&&!exact?e.label:fmt(e.from);
+  var dtxt=isPast?'':(exact?(days<=0?'today':days+'d'):shortWin(e));
+  var mk='<button class="rc-beat'+(bs.on?' rc-on':'')+(bs.man?' rc-man':'')+'" data-rc-beat="'+esc(e.ticker)+'" title="'+esc(bs.man?'Set manually. Click to toggle.':(bs.phrase?'“'+bs.phrase+'”. Click to override.':(bs.on?'Ahead of forecasts at last update. Click to override.':'Not flagged. Click to mark.')))+'">▲</button>';
+  if(fl.h1)mk+='<span title="H1 ahead of seasonal average (last card)">📈</span>';
+  if(fl.hyp)mk+='<span title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
+  if(fl.acc)mk+='<span title="Growth accelerating vs prior year (last card)">🚀</span>';
+  var sc;
+  if(isPast){
+    var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
+    var pv=bef.length?bef[bef.length-1]:null,nw=aft.length?aft[0]:null;
+    sc='<span class="rc-pill '+band(pv&&pv.score)+'">'+(pv?pv.score:'—')+'</span> → '+(nw?'<span class="rc-pill '+band(nw.score)+'">'+nw.score+'</span>':'<span title="Import the new scorecard to record the result">awaiting</span>');
+  }else{
+    sc='<span class="rc-pill '+band(L&&L.score)+'">'+(L?L.score:'—')+'</span><span class="rc-vd" title="'+esc(L?(L.verdict||'')+' · '+(L.date||''):'No scorecard yet')+'">'+esc(L?(L.verdict||L.date):'no card')+'</span>';
+  }
+  var co=e.company||(L&&L.company)||'';
+  return '<div class="rc-row'+(star?' rc-star':'')+(isPast?' rc-past':'')+'" data-rc-id="'+e.id+'" tabindex="0">'
+   +'<div><div class="rc-d1">'+esc(dlab)+'</div><div class="rc-d2">'+(exact?['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pd(e.from).getDay()]:fmt(e.from)+'–'+fmt(e.to))+'</div></div>'
+   +'<div style="min-width:0"><span class="rc-tk" data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards">'+esc(e.ticker)+'</span><div class="rc-co">'+esc(co)+'</div></div>'
+   +'<div class="rc-ev"><div class="rc-e1">'+esc(e.event||e.type)+'</div><div class="rc-e2"><span class="'+confCls(e.conf)+'">'+confLbl(e.conf)+'</span> · '+esc(e.src||'')+(e.manual?' · added by you':'')+(e.note?' · '+esc(e.note):'')+'</div></div>'
+   +'<div class="rc-mk">'+mk+'</div><div class="rc-sc">'+sc+'</div>'
+   +'<div class="rc-days'+(!isPast&&exact&&days<=7?' rc-soon':'')+(!exact?' rc-win':'')+'">'+dtxt+'</div>'
+   +'<button class="rc-st'+(star?' rc-on':'')+'" data-rc-star="'+esc(e.ticker)+'" aria-label="'+(star?'Unstar ':'Star ')+esc(e.ticker)+'">'+(star?'★':'☆')+'</button></div>';
+}
+function stats(){
+  var t0=iso(today()),up=S.events.filter(function(e){return e.to>=t0;}).length,st=Object.keys(S.stars).filter(function(k){return S.stars[k];}).length;
+  $('rcal-stats').textContent=up+' upcoming · '+st+' starred · scores from '+allCards().length+' scorecards'+(storageOK?'':' · browser storage unavailable');
+}
+
+/* ── open / close ── */
+function open(){load();syncFromCards();render();$('rcal-ov').classList.add('rc-open');}
+function close(){$('rcal-ov').classList.remove('rc-open');}
+window.rcalOpen=open;
+$('rcal-close').onclick=close;
+$('rcal-ov').addEventListener('click',function(e){if(e.target===$('rcal-ov'))close();});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var rn=$('rcal-rns-ov');if(rn&&rn.style.display==='flex'){rn.style.display='none';return;}
+  var subs=document.querySelectorAll('.rc-sub-ov.rc-open');if(subs.length){subs.forEach(function(o){o.classList.remove('rc-open');});return;}
+  if($('rcal-ov').classList.contains('rc-open'))close();
+});
+
+/* ── list interactions ── */
+$('rcal-list').addEventListener('click',function(ev){
+  var s=ev.target.closest('[data-rc-star]');
+  if(s){var k=s.getAttribute('data-rc-star');if(S.stars[k])delete S.stars[k];else S.stars[k]=true;save();render();return;}
+  var b=ev.target.closest('[data-rc-beat]');
+  if(b){var t=b.getAttribute('data-rc-beat'),L=latest(t),cur=beatState(t).on,auto=!!(L&&L.calData&&L.calData.beat),nv=!cur;
+    if(nv===auto)delete S.beatOv[t];else S.beatOv[t]={v:nv,since:L?String(L.date||''):''};
+    save();render();note(t+(nv?' marked ▲ beat':' ▲ beat removed'));return;}
+  var tk=ev.target.closest('[data-rc-rns]');if(tk){showRNS(tk.getAttribute('data-rc-rns'));return;}
+  var r=ev.target.closest('.rc-row');if(r)openEv(r.getAttribute('data-rc-id'));
+});
+$('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.target.classList.contains('rc-row'))openEv(ev.target.getAttribute('data-rc-id'));});
+document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
+$('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);render();};
+$('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);render();};
+$('rcal-fq').oninput=function(){FQ=this.value.trim().toUpperCase();render();};
+
+/* ── sub-modals ── */
+function openSub(id){$(id).classList.add('rc-open');}
+document.querySelectorAll('[data-rc-close]').forEach(function(b){b.onclick=function(){b.closest('.rc-sub-ov').classList.remove('rc-open');};});
+document.querySelectorAll('.rc-sub-ov').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('rc-open');});});
+
+var EDIT=null,DM='exact';
+function setDM(m){DM=m;document.querySelectorAll('[data-rc-dm]').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-rc-dm')===m);});
+  $('rcal-dm-exact').style.display=m==='exact'?'':'none';$('rcal-dm-window').style.display=m==='window'?'grid':'none';}
+document.querySelectorAll('[data-rc-dm]').forEach(function(b){b.onclick=function(){setDM(b.getAttribute('data-rc-dm'));};});
+function fillTk(){var seen={},o='';allCards().forEach(function(r){var t=String(r.ticker||'').toUpperCase();if(t&&!seen[t]){seen[t]=1;o+='<option value="'+esc(t)+'">'+esc(r.company||'')+'</option>';}});$('rcal-tklist').innerHTML=o;}
+function openEv(id){
+  EDIT=id?S.events.filter(function(e){return e.id===id;})[0]:null;fillTk();
+  $('rcal-ev-title').textContent=EDIT?'Edit date':'Add date';$('rcal-ev-del').style.visibility=EDIT?'visible':'hidden';
+  $('rcal-ev-err').style.display='none';$('rcal-ev-paste').value='';
+  var e=EDIT||{ticker:'',type:'H1 results',company:'',from:'',to:'',conf:'confirmed',src:'RNS',note:''};
+  $('rcal-ev-tk').value=e.ticker;$('rcal-ev-type').value=e.type;$('rcal-ev-co').value=e.company||'';$('rcal-ev-conf').value=e.conf;$('rcal-ev-src').value=e.src||'RNS';$('rcal-ev-note').value=e.note||'';
+  if(e.from&&e.from!==e.to){setDM('window');$('rcal-ev-month').value=e.from.slice(0,7);var p=partOf(e);$('rcal-ev-part').value=(p==='early'||p==='mid'||p==='late')?p:'all';}
+  else{setDM('exact');$('rcal-ev-date').value=e.from||'';}
+  openSub('rcal-ev-ov');setTimeout(function(){$('rcal-ev-tk').focus();},30);
+}
+$('rcal-add').onclick=function(){openEv(null);};
+$('rcal-ev-tk').oninput=function(){var L=latest(this.value.trim().toUpperCase());if(L&&!$('rcal-ev-co').value)$('rcal-ev-co').value=L.company||'';$('rcal-ev-err').style.display='none';};
+$('rcal-ev-paste').oninput=function(){var r=parseLine(this.value);if(r.type)$('rcal-ev-type').value=r.type;
+  if(r.date){setDM('exact');$('rcal-ev-date').value=r.date;}else if(r.month){setDM('window');$('rcal-ev-month').value=r.month;$('rcal-ev-part').value=r.part;}};
+['rcal-ev-date','rcal-ev-month'].forEach(function(i){$(i).addEventListener('input',function(){$('rcal-ev-err').style.display='none';});});
+$('rcal-ev-save').onclick=function(){
+  var err=$('rcal-ev-err'),tk=$('rcal-ev-tk').value.trim().toUpperCase(),from,to,label='';
+  if(!tk){err.textContent='Enter a ticker.';err.style.display='block';return;}
+  if(DM==='exact'){from=to=$('rcal-ev-date').value;if(!from){err.textContent='Pick a date.';err.style.display='block';return;}}
+  else{var m=$('rcal-ev-month').value;if(!m){err.textContent='Pick a month.';err.style.display='block';return;}
+    var w=windowOf(+m.slice(0,4),+m.slice(5,7)-1,$('rcal-ev-part').value);from=w.from;to=w.to;label=w.label;}
+  var type=$('rcal-ev-type').value;
+  var data={ticker:tk,type:type,event:type,company:$('rcal-ev-co').value.trim(),from:from,to:to,label:label,conf:$('rcal-ev-conf').value,src:$('rcal-ev-src').value.trim(),note:$('rcal-ev-note').value.trim(),manual:true};
+  if(EDIT){Object.keys(data).forEach(function(k){EDIT[k]=data[k];});}else{data.id=uid();data.rns='';S.events.push(data);}
+  save();render();$('rcal-ev-ov').classList.remove('rc-open');note(tk+' '+type+' saved');
+};
+$('rcal-ev-del').onclick=function(){if(!EDIT)return;if(!confirm('Delete '+EDIT.ticker+' '+EDIT.type+'?'))return;
+  S.events=S.events.filter(function(e){return e!==EDIT;});save();render();$('rcal-ev-ov').classList.remove('rc-open');note('Date deleted');};
+
+/* backup / restore */
+$('rcal-databtn').onclick=function(){$('rcal-data-txt').value=JSON.stringify({version:1,exported:new Date().toISOString(),events:S.events,stars:S.stars,beatOv:S.beatOv},null,1);$('rcal-data-err').style.display='none';openSub('rcal-data-ov');};
+$('rcal-data-copy').onclick=function(){var t=$('rcal-data-txt');t.select();try{navigator.clipboard.writeText(t.value).then(function(){note('Copied');},function(){document.execCommand('copy');note('Copied');});}catch(e){document.execCommand('copy');note('Copied');}};
+$('rcal-data-restore').onclick=function(){
+  try{var o=JSON.parse($('rcal-data-txt').value);if(!o||!Array.isArray(o.events))throw 0;
+    var keepSynced=S.synced;S=normalise(o);S.synced=Object.assign({},keepSynced,o.synced||{});save();render();$('rcal-data-ov').classList.remove('rc-open');note('Calendar restored');}
+  catch(e){var er=$('rcal-data-err');er.textContent='That isn\u2019t a calendar backup. Paste the full JSON copied from a calendar backup box.';er.style.display='block';}
+};
+$('rcal-clear').onclick=function(){if(!confirm('Clear all calendar dates, stars and ▲ overrides? Scorecards are not affected.'))return;var ks=S.synced;S=blank();S.synced=ks;save();render();note('Calendar cleared','err');};
+$('rcal-seed').onclick=function(){seed();};
+
+/* recent dates from past sessions (one-off starter list) */
+function seed(){
+  var E=[
+    ['GRG','Q3','Q3 trading update','2026-10-01','2026-10-01','','confirmed','Mark',true],
+    ['FAN','FY results','FY results','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['GNC','FY results','FY results','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['BOWL','Pre-FY TU','FY trading update','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['HAS','Q1','Q1 FY27 trading update','2026-10-12','2026-10-12','','confirmed','Mark',true],
+    ['BYIT','H1 results','H1 FY27 results','2026-10-13','2026-10-13','','confirmed','Mark',true],
+    ['RWA','Q3','Q3 trading update','2026-10-14','2026-10-14','','confirmed','Mark',true],
+    ['DSCV','Pre-H1 TU','H1 trading update','2026-10-14','2026-10-14','','confirmed','Mark',true],
+    ['SSIT','FY results','FY results','2026-10-15','2026-10-15','','confirmed','Mark',true],
+    ['TPK','Q3','Q3 trading update','2026-10-15','2026-10-15','','confirmed','Mark',true],
+    ['BNZL','Q3','Q3 trading update','2026-10-20','2026-10-20','','confirmed','Mark',true],
+    ['SDG','H1 results','Interim results','2026-10-21','2026-10-21','','confirmed','Mark',true],
+    ['RSW','Q1','Q1 trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['AJB','Pre-FY TU','FY trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['ATG','Pre-FY TU','FY26 pre-close trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['REL','Q3','Q3 trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['LUCE','Q3','Q3 trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['ALU','AGM','AGM trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['RWS','Pre-FY TU','FY trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['ELM','Q3','Q3 trading update','2026-10-28','2026-10-28','','confirmed','Mark',true],
+    ['SFOR','H1 results','Interim results','2026-10-28','2026-10-28','','confirmed','Mark',true],
+    ['MOTR','Pre-H1 TU','H1 trading update','2026-10-01','2026-10-10','Early Oct 2026','provisional','Mark',true],
+    ['HDD','Pre-FY TU','FY trading update','2026-10-11','2026-10-20','Mid Oct 2026','provisional','Mark',true],
+    ['BKS','Trading update','Trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['QTX','Trading update','Trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['VLX','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['TSTL','FY results','FY results','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BMY','H1 results','H1 results','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BOOM','Q3','Q3 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['CLBS','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['WIX','Q3','Q3 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BWY','FY results','Full year results','2026-10-13','2026-10-13','','confirmed','RNS',false],
+    ['VTU','H1 results','Interim results','2026-10-14','2026-10-14','','confirmed','RNS',false],
+    ['G4M','Pre-H1 TU','H1 trading update','2026-10-20','2026-10-20','','confirmed','RNS',false],
+    ['HFD','Pre-H1 TU','HY27 trading update','2026-10-21','2026-10-21','','confirmed','RNS',false],
+    ['REVB','H1 results','Interim results','2026-10-27','2026-10-27','','confirmed','RNS',false],
+    ['CCR','H1 results','Interim results','2026-10-28','2026-10-28','','confirmed','RNS',false],
+    ['BRCK','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','RNS',false],
+    ['SYS1','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','implied','RNS',false],
+    ['ULTP','FY results','Full year results','2026-10-01','2026-10-31','Oct 2026','implied','Broker note',false],
+    ['IWG','Q3','Q3 trading update','2026-11-03','2026-11-03','','confirmed','RNS',false],
+    ['TRN','H1 results','H1 FY27 results','2026-11-04','2026-11-04','','confirmed','RNS',false],
+    ['BTRW','AGM','AGM and trading update','2026-11-04','2026-11-04','','confirmed','RNS',false],
+    ['ASC','FY results','FY26 results','2026-11-05','2026-11-05','','confirmed','RNS',false],
+    ['KNOS','H1 results','H1 FY27 results','2026-11-09','2026-11-09','','confirmed','RNS',false],
+    ['DIA','H1 results','Interim results','2026-11-10','2026-11-10','','confirmed','RNS',false],
+    ['WOSG','Pre-H1 TU','H1 trading update','2026-11-10','2026-11-10','','confirmed','RNS',false],
+    ['FRP','Pre-H1 TU','H1 FY27 trading update','2026-11-11','2026-11-20','Mid Nov 2026','implied','RNS',false],
+    ['HLMA','H1 results','H1 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['BAB','H1 results','HY27 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['INVP','H1 results','Interim results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['TRCS','FY results','FY26 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['JD.','Q3','Q3 trading statement','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['AO.','H1 results','H1 results','2026-11-24','2026-11-24','','confirmed','RNS',false],
+    ['KGF','Q3','Q3 trading update','2026-11-24','2026-11-24','','confirmed','RNS',false],
+    ['OTB','FY results','FY26 results','2026-12-01','2026-12-01','','confirmed','RNS',false],
+    ['CURY','H1 results','Interim results','2026-12-17','2026-12-17','','confirmed','RNS',false]
+  ];
+  var n=0;
+  E.forEach(function(x){
+    var L=latest(x[0]);
+    var ev={id:uid(),ticker:x[0],company:L?L.company||'':'',type:x[1],event:x[2],from:x[3],to:x[4],label:x[5],conf:x[6],src:x[7],rns:L?String(L.date||''):'',manual:!!x[8],note:''};
+    var ex=S.events.filter(function(e){return e.ticker===ev.ticker&&(e.from===ev.from||sameEvent(e,ev));})[0];
+    if(ex){if(ev.manual&&!ex.manual){['type','event','from','to','label','conf','src'].forEach(function(k){ex[k]=ev[k];});ex.manual=true;n++;}return;}
+    S.events.push(ev);n++;});
+  save();render();note(n+' dates added');
+}
+
+/* ── RNS SCORECARDS POPUP — same layout as Ignition, reads ALL directly ── */
+function showRNS(t){t=String(t||'').toUpperCase();rnsRender(t,recs(t));}
+function rnsShell(t,inner){
+  var ov=$('rcal-rns-ov');
+  if(!ov){ov=document.createElement('div');ov.id='rcal-rns-ov';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9000;display:flex;align-items:center;justify-content:center;padding:30px;font-family:var(--sans,Inter,sans-serif);';
+    ov.onclick=function(ev){if(ev.target===ov)ov.style.display='none';};document.body.appendChild(ov);}
+  ov.style.display='flex';
+  ov.innerHTML='<div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:min(880px,94vw);max-height:86vh;display:flex;flex-direction:column;overflow:hidden;" onclick="event.stopPropagation()">'
+    +'<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">'
+    +'<span style="font-weight:700;font-size:15px;color:var(--amber);">'+esc(t)+'</span>'
+    +'<span id="rcal-rns-sub" style="font-size:11px;color:var(--text-secondary);"></span>'
+    +'<button onclick="document.getElementById(\'rcal-rns-ov\').style.display=\'none\'" aria-label="Close" style="margin-left:auto;background:none;border:none;color:var(--text-secondary);font-size:16px;cursor:pointer;">✕</button>'
+    +'</div><div id="rcal-rns-body" style="overflow-y:auto;padding:10px 14px;">'+inner+'</div></div>';
+}
+function rnsBand(s){return s>=75?'var(--green)':s>=50?'var(--amber)':'var(--red)';}
+function rnsRender(t,cards){
+  rnsShell(t,'');
+  var sub=$('rcal-rns-sub'),body=$('rcal-rns-body');
+  if(!cards||!cards.length){if(sub)sub.textContent='no scorecards';body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text-dim);">No RNS scorecards for '+esc(t)+' in the Database.</div>';return;}
+  var sorted=cards.slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));});
+  if(sub)sub.textContent=(sorted[0].company||'')+' · '+sorted.length+' scorecard'+(sorted.length>1?'s':'');
+  body.innerHTML=sorted.map(function(c){
+    var col=rnsBand(+c.score||0);
+    var sigs=(c.signals||[]).map(function(s){
+      var tc=s.type==='red'?'var(--red)':s.type==='green'?'var(--green)':s.type==='amber'?'var(--amber)':'var(--blue)';
+      return '<div style="display:flex;gap:8px;margin:5px 0;align-items:flex-start;">'
+        +'<span style="flex-shrink:0;font-size:8px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border:1px solid '+tc+';border-radius:3px;color:'+tc+';white-space:nowrap;">'+esc(s.pill||'')+'</span>'
+        +'<span style="font-size:11px;color:var(--text-secondary);line-height:1.45;">'+esc(s.textPlain||'')+'</span></div>';}).join('');
+    return '<div style="border:1px solid var(--border);border-radius:6px;margin:8px 0;overflow:hidden;">'
+      +'<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);">'
+      +'<span style="font-weight:700;font-size:20px;color:'+col+';">'+(c.score!==undefined?c.score:'—')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">/100</span>'
+      +'<div style="display:flex;flex-direction:column;">'
+      +'<span style="font-size:11px;color:var(--text-primary);font-weight:600;">'+esc(c.verdict||'')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">'+esc(c.date||'')+' · '+esc(c.rnsType||'')+(c.mode?' · '+esc(c.mode):'')+(c.index?' · '+esc(c.index):'')+'</span>'
+      +'</div></div>'
+      +'<div style="padding:6px 12px;">'+(sigs||'<span style="font-size:10px;color:var(--text-dim);">No signals stored</span>')+'</div></div>';
+  }).join('');
+}
+
+/* ── hooks: wrap existing functions, never edit them ── */
+/* 1. Scorecard import: read hidden .cal-data per card into rec.calData */
+if(typeof window.parseScorecard==='function'&&!window.parseScorecard._rcal){
+  var _origParse=window.parseScorecard;
+  var wrappedParse=function(html){
+    var recsOut=_origParse.apply(this,arguments);
+    try{
+      var doc=new DOMParser().parseFromString(html,'text/html');
+      doc.querySelectorAll('.row-wrap').forEach(function(w){
+        var tkEl=w.querySelector('.ticker-sym'),cd=w.querySelector('script.cal-data');
+        if(!tkEl||!cd)return;
+        var tk=tkEl.textContent.trim().toUpperCase();
+        var rec=(recsOut||[]).filter(function(r){return r.ticker===tk;})[0];if(!rec)return;
+        var j=JSON.parse(cd.textContent);
+        rec.calData=Array.isArray(j)?{beat:false,beatPhrase:'',events:j}:{beat:!!j.beat,beatPhrase:j.beatPhrase||'',events:Array.isArray(j.events)?j.events:[]};
+      });
+    }catch(e){console.warn('RNS calendar: cal-data read skipped',e);}
+    return recsOut;
+  };
+  wrappedParse._rcal=true;window.parseScorecard=wrappedParse;
+}
+/* 2. GitHub Save: add the calendar to the payload */
+if(typeof window.ghBuildPayload==='function'&&!window.ghBuildPayload._rcal){
+  var _origPayload=window.ghBuildPayload;
+  var wrappedPayload=function(){var b=_origPayload.apply(this,arguments);try{load();b.rnsCalendar={events:S.events,stars:S.stars,beatOv:S.beatOv,synced:S.synced};}catch(e){}return b;};
+  wrappedPayload._rcal=true;window.ghBuildPayload=wrappedPayload;
+}
+/* 3. GitHub Pull / Restore: bring the calendar back if the backup has one */
+if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
+  var _origRestore=window.dbRestoreApply;
+  var wrappedRestore=function(backup){
+    var out=_origRestore.apply(this,arguments);
+    try{if(backup&&backup.rnsCalendar&&Array.isArray(backup.rnsCalendar.events)){S=normalise(backup.rnsCalendar);save();if($('rcal-ov').classList.contains('rc-open')){syncFromCards();render();}}}catch(e){}
+    return out;
+  };
+  wrappedRestore._rcal=true;window.dbRestoreApply=wrappedRestore;
+}
+
+load();
+})();
+</script>
+<!-- ═══ END RNS CALENDAR ═══ -->
 
 </body>
 </html>
