@@ -8180,7 +8180,7 @@ function row(e,isPast,T){
   return '<div class="rc-row'+(star?' rc-star':'')+(isPast?' rc-past':'')+'" data-rc-id="'+e.id+'" tabindex="0">'
    +'<div><div class="rc-d1">'+esc(dlab)+'</div><div class="rc-d2">'+(exact?['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pd(e.from).getDay()]:fmt(e.from)+'–'+fmt(e.to))+'</div></div>'
    +'<div style="min-width:0"><span class="rc-tk" data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards">'+esc(e.ticker)+'</span><div class="rc-co">'+esc(co)+'</div></div>'
-   +'<div class="rc-ev"><div class="rc-e1">'+esc(e.event||e.type)+'</div><div class="rc-e2"><span class="'+confCls(e.conf)+'">'+confLbl(e.conf)+'</span> · '+esc(e.src||'')+(e.manual?' · added by you':'')+(e.note?' · '+esc(e.note):'')+'</div></div>'
+   +'<div class="rc-ev"><div class="rc-e1">'+esc(e.event||e.type)+'</div><div class="rc-e2"><span class="'+confCls(e.conf)+'">'+confLbl(e.conf)+'</span>'+(e.userAdded?' · added manually':'')+(e.note?' · '+esc(e.note):'')+'</div></div>'
    +'<div class="rc-mk">'+mk+'</div><div class="rc-sc">'+sc+'</div>'
    +'<div class="rc-days'+(!isPast&&exact&&days<=7?' rc-soon':'')+(!exact?' rc-win':'')+'">'+dtxt+'</div>'
    +'<button class="rc-st'+(star?' rc-on':'')+'" data-rc-star="'+esc(e.ticker)+'" aria-label="'+(star?'Unstar ':'Star ')+esc(e.ticker)+'">'+(star?'★':'☆')+'</button></div>';
@@ -8253,7 +8253,7 @@ $('rcal-ev-save').onclick=function(){
     var w=windowOf(+m.slice(0,4),+m.slice(5,7)-1,$('rcal-ev-part').value);from=w.from;to=w.to;label=w.label;}
   var type=$('rcal-ev-type').value;
   var data={ticker:tk,type:type,event:type,company:$('rcal-ev-co').value.trim(),from:from,to:to,label:label,conf:$('rcal-ev-conf').value,src:$('rcal-ev-src').value.trim(),note:$('rcal-ev-note').value.trim(),manual:true};
-  if(EDIT){Object.keys(data).forEach(function(k){EDIT[k]=data[k];});}else{data.id=uid();data.rns='';S.events.push(data);}
+  if(EDIT){Object.keys(data).forEach(function(k){EDIT[k]=data[k];});}else{data.id=uid();data.rns='';data.userAdded=true;S.events.push(data);}
   save();render();$('rcal-ev-ov').classList.remove('rc-open');note(tk+' '+type+' saved');
 };
 $('rcal-ev-del').onclick=function(){if(!EDIT)return;if(!confirm('Delete '+EDIT.ticker+' '+EDIT.type+'?'))return;
