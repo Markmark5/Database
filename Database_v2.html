@@ -3111,12 +3111,12 @@ function applyFilters(){
   });
   FILTERED.sort(function(a,c){
     switch(sort){
-      case'date-desc':{const d=c.date.localeCompare(a.date);return d||c.importedAt.localeCompare(a.importedAt);}
-      case'date-asc':{const d=a.date.localeCompare(c.date);return d||a.importedAt.localeCompare(c.importedAt);}
+      case'date-desc':{const d=c.date.localeCompare(a.date);return d||(c.score-a.score)||c.importedAt.localeCompare(a.importedAt);}
+      case'date-asc':{const d=a.date.localeCompare(c.date);return d||(c.score-a.score)||a.importedAt.localeCompare(c.importedAt);}
       case'score-desc':return c.score-a.score;
       case'score-asc':return a.score-c.score;
       case'ticker-asc':return a.ticker.localeCompare(c.ticker);
-      default:{const d=c.date.localeCompare(a.date);return d||c.importedAt.localeCompare(a.importedAt);}
+      default:{const d=c.date.localeCompare(a.date);return d||(c.score-a.score)||c.importedAt.localeCompare(a.importedAt);}
     }
   });
   PAGE=1;renderRows();updateBandCounts();
