@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Database</title>
@@ -7878,7 +7877,7 @@ function fgRender(){
 .rc-wk span{font-weight:400;color:var(--text-dim,#6a6a85)}
 .rc-wk.rc-pastwk{color:var(--text-dim,#6a6a85)}
 #rcal-list>.rc-wk:first-child{margin-top:0;border-top:none}
-.rc-row{display:grid;grid-template-columns:128px 150px minmax(0,1fr) 78px 124px 60px 28px;gap:14px;align-items:center;padding:8px 14px;border-top:1px solid #16161f;cursor:pointer}
+.rc-row{display:grid;grid-template-columns:128px 150px minmax(0,1fr) 104px 124px 60px 28px;gap:14px;align-items:center;padding:8px 14px;border-top:1px solid #16161f;cursor:pointer}
 .rc-row:hover{background:var(--surface2,#111)}
 .rc-row.rc-star{box-shadow:inset 3px 0 0 #d4a000;background:rgba(212,160,0,.10)}
 .rc-row.rc-star:hover{background:rgba(212,160,0,.15)}
@@ -7895,6 +7894,9 @@ function fgRender(){
 .rc-mk{display:flex;gap:3px;font-size:14px;align-items:center}
 .rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid #1c1c26;color:#34344a;background:none;min-width:22px;cursor:pointer;font-family:inherit}
 .rc-beat:hover{color:var(--text-dim,#6a6a85);border-color:var(--border,#2a2a38)}
+.rc-ring{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;line-height:1}
+.rc-r1{background:#4a9eff26;box-shadow:0 0 0 1.5px #4a9eff}
+.rc-r2{background:#ff8c1a26;box-shadow:0 0 0 1.5px #ff8c1a}
 .rc-beat.rc-on{color:#00c814;border:1px solid #00c81444;background:#00c81418}
 .rc-beat.rc-man{box-shadow:0 0 0 1px #4a9eff44}
 .rc-sc{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-dim,#6a6a85);min-width:0}
@@ -7948,7 +7950,7 @@ function fgRender(){
     <div class="rc-key">
       <span><span style="color:#ff0a78">★</span> your pick (click star)</span>
       <span>▲ ahead of forecasts at last update (click to override)</span>
-      <span>📈 H1 ahead of seasonal</span><span>🔬 H1 ahead, hypothetical</span><span>🚀 growth accelerating</span>
+      <span>📈 H1 ahead of seasonal</span><span><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical</span><span>🔥 H2 accelerating</span><span><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical</span><span>📈🔥 double</span><span>🚀 full-year acceleration</span>
       <span>Click a ticker for its scorecards</span>
     </div>
     <div id="rcal-list"></div>
@@ -8036,15 +8038,28 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){storag
 function allCards(){try{return (typeof ALL!=='undefined'&&Array.isArray(ALL))?ALL:[];}catch(e){return [];}}
 function recs(tk){tk=String(tk).toUpperCase();return allCards().filter(function(r){return String(r.ticker||'').toUpperCase()===tk;}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));});}
 function latest(tk){var r=recs(tk);return r.length?r[r.length-1]:null;}
+function devPP(s){var m=String(s||'').replace(/−/g,'-').match(/([+-]?\d+(?:\.\d+)?)\s*pp/);return m?parseFloat(m[1]):null;}
 function flags(r){
-  var f={h1:false,hyp:false,acc:false};if(!r)return f;
+  /* h1: H1 ✓ · hyp1: H1 🔬 ≥ +1.5pp · h2: H2 🔥 · hyp2: H2 🔬 ≥ +3pp · acc: FY accel ✓ */
+  var f={h1:false,hyp1:false,h2:false,hyp2:false,acc:false};if(!r)return f;
   (r.h1Inds||[]).forEach(function(i){
-    if(i.state==='pos')f.h1=true;
-    var txt=(i.mark||'')+' '+(i.dev||'');
-    if(i.state!=='pos'&&/🔬/.test(txt)&&/\+/.test(i.dev||''))f.hyp=true;
+    var isH2=/H2/i.test(i.lbl||''),hyp=/🔬/.test((i.mark||'')+(i.dev||'')),d=devPP(i.dev);
+    if(hyp){ if(d!==null){ if(isH2&&d>=3)f.hyp2=true; if(!isH2&&d>=1.5)f.hyp1=true; } }
+    else if(i.state==='pos'){ if(isH2)f.h2=true; else f.h1=true; }
   });
   (r.accelInds||[]).forEach(function(i){if(i.state==='pos')f.acc=true;});
   return f;
+}
+/* earlier H1 ✓ or 🔬 ≥ +1.5pp within 273 days before this card */
+function h1Before(tk,date){
+  var lim=pd(date);lim.setDate(lim.getDate()-273);var from=iso(lim);
+  return recs(tk).filter(function(r){var d=String(r.date||'');return d<date&&d>=from;}).reverse().filter(function(r){var f=flags(r);return f.h1||f.hyp1;})[0]||null;
+}
+function doubleOf(L){
+  if(!L)return null;
+  var fl=flags(L);if(!fl.h2)return null;
+  if(L.calData&&typeof L.calData.double==='boolean'){return L.calData.double?(h1Before(L.ticker,String(L.date))||{}):null;}
+  return h1Before(L.ticker,String(L.date||''));
 }
 function beatState(tk){
   var L=latest(tk);var since=L?String(L.date||''):'';var ov=S.beatOv[tk];
@@ -8166,9 +8181,15 @@ function row(e,isPast,T){
   var dlab=e.label&&!exact?e.label:fmt(e.from);
   var dtxt=isPast?'':(exact?(days<=0?'today':days+'d'):shortWin(e));
   var mk='<button class="rc-beat'+(bs.on?' rc-on':'')+(bs.man?' rc-man':'')+'" data-rc-beat="'+esc(e.ticker)+'" title="'+esc(bs.man?'Set manually. Click to toggle.':(bs.phrase?'“'+bs.phrase+'”. Click to override.':(bs.on?'Ahead of forecasts at last update. Click to override.':'Not flagged. Click to mark.')))+'">▲</button>';
-  if(fl.h1)mk+='<span title="H1 ahead of seasonal average (last card)">📈</span>';
-  if(fl.hyp)mk+='<span title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
-  if(fl.acc)mk+='<span title="Growth accelerating vs prior year (last card)">🚀</span>';
+  var dbl=doubleOf(L);
+  if(dbl){mk+='<span title="Double: H1 ahead earlier'+(dbl.date?' ('+esc(dbl.date)+(dbl.score!=null?', '+dbl.score:'')+')':'')+', H2 accelerating now">📈🔥</span>';}
+  else{
+    if(fl.h1)mk+='<span title="H1 ahead of seasonal (last card)">📈</span>';
+    if(fl.h2)mk+='<span title="H2 accelerating vs last H2 (last card)">🔥</span>';
+  }
+  if(fl.hyp1)mk+='<span class="rc-ring rc-r1" title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
+  if(fl.hyp2)mk+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical (last card)">🔬</span>';
+  if(fl.acc)mk+='<span title="Full-year growth accelerating vs prior year (last card)">🚀</span>';
   var sc;
   if(isPast){
     var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
@@ -8397,7 +8418,7 @@ if(typeof window.parseScorecard==='function'&&!window.parseScorecard._rcal){
         var tk=tkEl.textContent.trim().toUpperCase();
         var rec=(recsOut||[]).filter(function(r){return r.ticker===tk;})[0];if(!rec)return;
         var j=JSON.parse(cd.textContent);
-        rec.calData=Array.isArray(j)?{beat:false,beatPhrase:'',events:j}:{beat:!!j.beat,beatPhrase:j.beatPhrase||'',events:Array.isArray(j.events)?j.events:[]};
+        rec.calData=Array.isArray(j)?{beat:false,beatPhrase:'',events:j}:{beat:!!j.beat,beatPhrase:j.beatPhrase||'',double:(typeof j.double==='boolean'?j.double:undefined),events:Array.isArray(j.events)?j.events:[]};
       });
     }catch(e){console.warn('RNS calendar: cal-data read skipped',e);}
     return recsOut;
