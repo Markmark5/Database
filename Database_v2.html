@@ -8104,6 +8104,7 @@ function fgRender(){
         </div>
         <button class="rc-btn rc-pink" id="rcal-fstar">★ Starred</button>
         <button class="rc-btn" id="rcal-fbeat">▲ Beat last</button>
+        <button class="rc-btn" id="rcal-fnew" title="Dates added or moved by scorecards in the last 7 days">✦ New</button>
         <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
         <button class="rc-btn rc-add" id="rcal-add">＋ Add date</button>
         <button class="rc-x" id="rcal-close" aria-label="Close calendar">✕</button>
@@ -8269,10 +8270,11 @@ function mergeImported(tk,incoming,rnsDate){
   S.events=S.events.filter(function(e){return !(e.ticker===tk&&!e.manual&&e.to>=t0&&(e.rns||'')<=rnsDate&&!incoming.some(function(n){return sameEvent(n,e);}));});
   incoming.forEach(function(n){
     var ex=S.events.filter(function(e){return sameEvent(e,n);})[0];
-    if(!ex){S.events.push(n);return;}
-    var exExact=ex.from===ex.to,nExact=n.from===n.to;
-    if(ex.manual){if(nExact&&!exExact){ex.from=n.from;ex.to=n.to;ex.label=n.label;ex.conf=n.conf;ex.src=n.src;}return;}
-    if(nExact||!exExact||(n.rns||'')>=(ex.rns||'')){var id=ex.id;Object.keys(n).forEach(function(k){ex[k]=n[k];});ex.id=id;}
+    if(!ex){n.added=Date.now();S.events.push(n);return;}
+    var exExact=ex.from===ex.to,nExact=n.from===n.to,of=ex.from,ot=ex.to,oa=ex.added,om=ex.moved;
+    if(ex.manual){if(nExact&&!exExact){ex.from=n.from;ex.to=n.to;ex.label=n.label;ex.conf=n.conf;ex.src=n.src;ex.added=Date.now();ex.moved=1;}return;}
+    if(nExact||!exExact||(n.rns||'')>=(ex.rns||'')){var id=ex.id;Object.keys(n).forEach(function(k){ex[k]=n[k];});ex.id=id;
+      if(ex.from!==of||ex.to!==ot){ex.added=Date.now();ex.moved=1;}else{ex.added=oa;ex.moved=om;}}
   });
 }
 /* pick up .cal-data carried on scorecards in ALL (once per scorecard) */
@@ -8321,8 +8323,33 @@ function grpLabel(e){
 }
 
 /* ── render ── */
-var RNG=30,FSTAR=false,FBEAT=false,FQ='';
+var RNG=30,FSTAR=false,FBEAT=false,FQ='',FNEW=false;
+/* when a date was added/moved by a scorecard (older dates fall back to their RNS date) */
+function addedAt(e){if(e.added)return +e.added;if(!e.manual&&e.rns){var t=Date.parse(String(e.rns).slice(0,10)+'T12:00:00');return isNaN(t)?0:t;}return 0;}
+function newList(){var now=Date.now();return S.events.filter(function(e){
+  if(FQ&&e.ticker.indexOf(FQ)<0)return false;
+  if(FSTAR&&!S.stars[e.ticker])return false;
+  if(FBEAT&&!beatState(e.ticker).on)return false;
+  var a=addedAt(e);return a&&now-a<=7*864e5;});}
+function renderNew(){
+  var T=today(),t0=iso(T),now=Date.now(),list=$('rcal-list');
+  var ev=newList().sort(function(a,b){return addedAt(b)-addedAt(a)||sortKey(a).localeCompare(sortKey(b));});
+  var G=[{t:'Added in the last day',max:1},{t:'Added 1–3 days ago',max:3},{t:'Added 3–7 days ago',max:7}];
+  var h='';
+  G.forEach(function(g,gi){
+    var lo=gi?G[gi-1].max:0;
+    var part=ev.filter(function(e){var d=(now-addedAt(e))/864e5;return d>lo&&d<=g.max||(gi===0&&d<=0);});
+    if(!part.length)return;
+    var mv=part.filter(function(e){return e.moved;}).length;
+    h+='<div class="rc-wk"><b>'+esc(g.t)+'</b><span>'+part.length+' date'+(part.length>1?'s':'')+(mv?' · '+mv+' moved':'')+'</span></div>';
+    var alt=false;part.forEach(function(e){h+=row(e,e.to<t0,T,alt);alt=!alt;});
+  });
+  if(!h)h='<div class="rc-empty">No dates added by scorecards in the last 7 days.</div>';
+  list.innerHTML=h;stats();
+}
 function render(){
+  try{var nb=$('rcal-fnew');if(nb){var nn=newList().length;nb.textContent='✦ New'+(nn?' ('+nn+')':'');}}catch(e){}
+  if(FNEW&&S.events.length){renderNew();return;}
   var T=today(),t0=iso(T);
   $('rcal-today').textContent='Today '+T.getDate()+' '+MON[T.getMonth()]+' '+T.getFullYear();
   var list=$('rcal-list');
@@ -8418,6 +8445,7 @@ $('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.t
 document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
 $('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);render();};
 $('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);render();};
+$('rcal-fnew').onclick=function(){FNEW=!FNEW;this.classList.toggle('rc-on',FNEW);render();};
 $('rcal-fq').oninput=function(){FQ=this.value.trim().toUpperCase();render();};
 
 /* ── sub-modals ── */
@@ -8565,7 +8593,15 @@ function rnsRender(t,cards){
   if(sub)sub.textContent=(sorted[0].company||'')+' · '+sorted.length+' scorecard'+(sorted.length>1?'s':'');
   body.innerHTML=sorted.map(function(c){
     var col=rnsBand(+c.score||0);
-    var sigs=(c.signals||[]).map(function(s){
+    var revs=(c.revisions||[]).slice(0,4).map(function(v){
+      var cl=/^(var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8})$/i.test(String(v.color||''))?v.color:'var(--text-primary)';
+      return '<div style="display:flex;flex-direction:column;min-width:92px;max-width:150px;">'
+        +'<span style="font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);">'+esc(v.lbl||'')+'</span>'
+        +'<span style="font-size:12px;font-weight:700;color:'+cl+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(v.val||'')+'</span>'
+        +'<span style="font-size:9px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+esc(v.sub||'')+'">'+esc(v.sub||'')+'</span></div>';
+    }).join('');
+    var revHtml=revs?'<div style="display:flex;gap:14px;margin-left:auto;padding-left:12px;">'+revs+'</div>':'';
+        var sigs=(c.signals||[]).map(function(s){
       var ty=['red','green','amber','grey'].indexOf(s.type)>=0?s.type:'blue';
       return '<div class="signal-tag rcal-sig" title="'+esc(s.textPlain||'')+'"><span class="stag stag-'+ty+'">'+esc(s.pill||'')+'</span><span class="signal-text">'+(s.textHTML||esc(s.textPlain||''))+'</span></div>';}).join('');
     return '<div style="border:1px solid var(--border);border-radius:6px;margin:8px 0;overflow:hidden;">'
@@ -8575,7 +8611,7 @@ function rnsRender(t,cards){
       +'<div style="display:flex;flex-direction:column;">'
       +'<span style="font-size:11px;color:var(--text-primary);font-weight:600;">'+esc(c.verdict||'')+'</span>'
       +'<span style="font-size:9px;color:var(--text-dim);">'+esc(c.date||'')+' · '+esc(c.rnsType||'')+(c.mode?' · '+esc(c.mode):'')+(c.index?' · '+esc(c.index):'')+'</span>'
-      +'</div></div>'
+      +'</div>'+revHtml+'</div>'
       +'<div style="padding:6px 12px;">'+(sigs||'<span style="font-size:10px;color:var(--text-dim);">No signals stored</span>')+'</div></div>';
   }).join('');
 }
