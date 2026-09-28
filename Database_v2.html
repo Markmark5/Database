@@ -3027,7 +3027,7 @@ function drawSparkline(svgEl,ttEl,data,lineColor){
   let pa='M'+xOf(0)+','+( PT+iH);data.forEach((d,i)=>{pa+=' L'+xOf(i)+','+yP(d.price);});pa+=' L'+xOf(n-1)+','+(PT+iH)+'Z';
   el('path',{d:pa,fill:'#4d9eff','fill-opacity':'0.05'});
   let pd='';data.forEach((d,i)=>{pd+=(i===0?'M':'L')+xOf(i)+','+yP(d.price)+' ';});
-  el('path',{d:pd,fill:'none',stroke:'#3a3a55','stroke-width':'1','stroke-dasharray':'3 2'});
+  el('path',{d:pd,fill:'none',stroke:'#7a7a95','stroke-width':'1','stroke-dasharray':'3 2'});
   let ea='M'+xOf(0)+','+(PT+iH);data.forEach((d,i)=>{ea+=' L'+xOf(i)+','+yE(d.eps);});ea+=' L'+xOf(n-1)+','+(PT+iH)+'Z';
   el('path',{d:ea,fill:lineColor,'fill-opacity':'0.18'});
   let ed='';data.forEach((d,i)=>{ed+=(i===0?'M':'L')+xOf(i)+','+yE(d.eps)+' ';});
