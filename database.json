@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-09-28T11:27:47.003Z",
-    "savedAtLabel": "28 Sept 2026 12:27",
+    "savedAt": "2026-09-28T14:22:57.195Z",
+    "savedAtLabel": "28 Sept 2026 15:22",
     "source": "github-sync"
   },
   "scorecards": [
@@ -162966,6 +162966,34 @@
       "arc": null
     },
     {
+      "id": "LIKE_2026_09_28",
+      "ticker": "LIKE",
+      "company": "Likewise Group PLC",
+      "score": 91,
+      "verdict": "Upgrade likely",
+      "date": "2026-09-28",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 34.75,
+      "importedAt": "2026-09-28T11:27:20.538Z",
+      "arc": null
+    },
+    {
+      "id": "CCT_2026_09_28",
+      "ticker": "CCT",
+      "company": "Character Group (The) PLC",
+      "score": 91,
+      "verdict": "Upgrade likely",
+      "date": "2026-09-28",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 309,
+      "importedAt": "2026-09-28T11:27:20.538Z",
+      "arc": null
+    },
+    {
       "id": "ABDP_2026-03-12_1773599210137_um0v",
       "ticker": "ABDP",
       "company": "AB Dynamics PLC",
@@ -164199,34 +164227,6 @@
       "importedAt": "2026-03-17T08:31:15.278Z",
       "hasAnalysis": true,
       "arc": "2026-03"
-    },
-    {
-      "id": "LIKE_2026_09_28",
-      "ticker": "LIKE",
-      "company": "Likewise Group PLC",
-      "score": 91,
-      "verdict": "Upgrade likely",
-      "date": "2026-09-28",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 34.75,
-      "importedAt": "2026-09-28T11:27:20.538Z",
-      "arc": null
-    },
-    {
-      "id": "CCT_2026_09_28",
-      "ticker": "CCT",
-      "company": "Character Group (The) PLC",
-      "score": 91,
-      "verdict": "Upgrade likely",
-      "date": "2026-09-28",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 309,
-      "importedAt": "2026-09-28T11:27:20.538Z",
-      "arc": null
     }
   ],
   "brokerChanges": [
@@ -320786,6 +320786,38 @@
         "rns": "2026-09-25",
         "manual": false,
         "note": ""
+      },
+      {
+        "id": "emul6n0bh2eh7",
+        "ticker": "CCT",
+        "company": "Character Group (The) PLC",
+        "type": "FY results",
+        "event": "Audited annual results FY26",
+        "from": "2026-12-01",
+        "to": "2026-12-31",
+        "label": "Dec 2026",
+        "conf": "implied",
+        "src": "RNS",
+        "rns": "2026-09-28",
+        "manual": false,
+        "note": "",
+        "added": 1790596021086
+      },
+      {
+        "ticker": "TRI",
+        "type": "Pre-H1 TU",
+        "event": "Pre-H1 TU",
+        "company": "Trifast plc",
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "note": "",
+        "manual": true,
+        "id": "emulaw6cyhg9w",
+        "rns": "",
+        "userAdded": true
       }
     ],
     "stars": {
@@ -320799,7 +320831,9 @@
       "HFD": true,
       "RSW": true,
       "ATG": true,
-      "LUCE": true
+      "LUCE": true,
+      "SYS1": true,
+      "ELM": true
     },
     "beatOv": {
       "MOTR": {
@@ -320849,6 +320883,14 @@
       "ELM": {
         "v": true,
         "since": "2026-07-30"
+      },
+      "SYS1": {
+        "v": true,
+        "since": "2026-09-24"
+      },
+      "KGF": {
+        "v": true,
+        "since": "2026-09-22"
       }
     },
     "synced": {
@@ -320860,7 +320902,20 @@
       "AEX_2026_09_25": 1,
       "RBN_2026_09_25": 1,
       "SSTY_2026_09_25": 1,
-      "GEM_2026_09_25": 1
+      "GEM_2026_09_25": 1,
+      "WVIA_2026_09_28": 1,
+      "CKT_2026_09_28": 1,
+      "TLW_2026_09_28": 1,
+      "SHR_2026_09_28": 1,
+      "HUD_2026_09_28": 1,
+      "GEMR_2026_09_28": 1,
+      "MET_2026_09_28": 1,
+      "CTG_2026_09_28": 1,
+      "TST_2026_09_28": 1,
+      "RCN_2026_09_28": 1,
+      "4BB_2026_09_28": 1,
+      "LIKE_2026_09_28": 1,
+      "CCT_2026_09_28": 1
     }
   }
 }
