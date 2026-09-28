@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-09-25T15:20:37.263Z",
-    "savedAtLabel": "25 Sept 2026 16:20",
+    "savedAt": "2026-09-28T06:47:34.043Z",
+    "savedAtLabel": "28 Sept 2026 07:47",
     "source": "github-sync"
   },
   "scorecards": [
@@ -166051,6 +166051,1319 @@
         ]
       },
       "entryPrice": 3.5
+    },
+    {
+      "id": "LIKE_2026_09_28",
+      "ticker": "LIKE",
+      "score": 91,
+      "company": "Likewise Group PLC",
+      "verdict": "Upgrade likely",
+      "date": "2026-09-28",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "GUIDANCE",
+          "type": "green",
+          "textHTML": "FY26 underlying PBT now guided at <span class=\"val-up\">not less than £5.0m</span> vs £4.0m consensus (+25%), \"materially ahead\" of market expectations; FY25 delivered only £3.1m.",
+          "textPlain": "FY26 underlying PBT now guided at not less than £5.0m vs £4.0m consensus (+25%), \"materially ahead\" of market expectations; FY25 delivered only £3.1m."
+        },
+        {
+          "pill": "Q3 SALES",
+          "type": "green",
+          "textHTML": "Q3 revenue <span class=\"val-up\">+29.1%</span> (1 Jul–25 Sep) and YTD +20.7%; H1 revenue £89.9m (+15.4%), now putting £200m of sales within reach vs the £190.5m FY26 revenue consensus.",
+          "textPlain": "Q3 revenue +29.1% (1 Jul–25 Sep) and YTD +20.7%; H1 revenue £89.9m (+15.4%), now putting £200m of sales within reach vs the £190.5m FY26 revenue consensus."
+        },
+        {
+          "pill": "MARGIN",
+          "type": "green",
+          "textHTML": "Gross margin up 0.8pp to 32.1%; underlying EBITDA +15.9% to £5.1m and underlying PBT +79.5% to £1.32m as operational gearing lands on higher sales volumes.",
+          "textPlain": "Gross margin up 0.8pp to 32.1%; underlying EBITDA +15.9% to £5.1m and underlying PBT +79.5% to £1.32m as operational gearing lands on higher sales volumes."
+        },
+        {
+          "pill": "DILUTION",
+          "type": "amber",
+          "textHTML": "£32.5m placing lifts shares to 365.2m vs 253.0m H1 weighted average; EPS upgrade diluted to +15–25% against the +25% PBT floor, with the tax rate now at 19%.",
+          "textPlain": "£32.5m placing lifts shares to 365.2m vs 253.0m H1 weighted average; EPS upgrade diluted to +15–25% against the +25% PBT floor, with the tax rate now at 19%."
+        },
+        {
+          "pill": "H1 TRACK",
+          "type": "amber",
+          "textHTML": "H1 revenue 47.2% of FY vs 47.6% seasonal norm (−0.4pp, in line); H2 needs +18.2% vs the Q3 +29.1% run-rate. LTM revenue −8.1% and PBT −8.0% vs consensus.",
+          "textPlain": "H1 revenue 47.2% of FY vs 47.6% seasonal norm (−0.4pp, in line); H2 needs +18.2% vs the Q3 +29.1% run-rate. LTM revenue −8.1% and PBT −8.0% vs consensus."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+15–25%",
+          "sub": "cons 1.3p→1.50–1.63p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "na",
+          "sub": "no FY27 consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+2–5%",
+          "sub": "cons £190.5m→£194–200m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "na",
+          "sub": "no FY27 consensus",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "0.9p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "1.3p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+44.4%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "Steady",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+17.7%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "—",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · 03 Mar – 25 Sep 26",
+      "sparkSVG": "<svg id=\"spark-LIKE\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-LIKE\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-09-28T06:36:24.139Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 0.9,
+          "price": 24.5
+        },
+        {
+          "d": "06 Mar",
+          "eps": 0.9,
+          "price": 24
+        },
+        {
+          "d": "13 Mar",
+          "eps": 0.9,
+          "price": 22.5
+        },
+        {
+          "d": "20 Mar",
+          "eps": 0.9,
+          "price": 21.5
+        },
+        {
+          "d": "27 Mar",
+          "eps": 0.9,
+          "price": 21.2
+        },
+        {
+          "d": "03 Apr",
+          "eps": 0.9,
+          "price": 20.5
+        },
+        {
+          "d": "10 Apr",
+          "eps": 0.9,
+          "price": 21.5
+        },
+        {
+          "d": "17 Apr",
+          "eps": 0.9,
+          "price": 22.5
+        },
+        {
+          "d": "24 Apr",
+          "eps": 0.9,
+          "price": 25
+        },
+        {
+          "d": "08 May",
+          "eps": 1.2,
+          "price": 25.25
+        },
+        {
+          "d": "15 May",
+          "eps": 1.2,
+          "price": 24.5
+        },
+        {
+          "d": "22 May",
+          "eps": 1.2,
+          "price": 25
+        },
+        {
+          "d": "02 Jun",
+          "eps": 1.2,
+          "price": 26.2
+        },
+        {
+          "d": "05 Jun",
+          "eps": 1.2,
+          "price": 27.25
+        },
+        {
+          "d": "12 Jun",
+          "eps": 1.2,
+          "price": 27.25
+        },
+        {
+          "d": "19 Jun",
+          "eps": 1.2,
+          "price": 31
+        },
+        {
+          "d": "26 Jun",
+          "eps": 1.2,
+          "price": 30
+        },
+        {
+          "d": "03 Jul",
+          "eps": 1.2,
+          "price": 29.5
+        },
+        {
+          "d": "10 Jul",
+          "eps": 1.2,
+          "price": 29.5
+        },
+        {
+          "d": "17 Jul",
+          "eps": 1.2,
+          "price": 31.25
+        },
+        {
+          "d": "24 Jul",
+          "eps": 1.2,
+          "price": 34.25
+        },
+        {
+          "d": "31 Jul",
+          "eps": 1.3,
+          "price": 32.75
+        },
+        {
+          "d": "07 Aug",
+          "eps": 1.3,
+          "price": 29.25
+        },
+        {
+          "d": "14 Aug",
+          "eps": 1.3,
+          "price": 30
+        },
+        {
+          "d": "21 Aug",
+          "eps": 1.3,
+          "price": 30.5
+        },
+        {
+          "d": "28 Aug",
+          "eps": 1.3,
+          "price": 31.5
+        },
+        {
+          "d": "07 Sep",
+          "eps": 1.3,
+          "price": 37
+        },
+        {
+          "d": "11 Sep",
+          "eps": 1.3,
+          "price": 33.75
+        },
+        {
+          "d": "18 Sep",
+          "eps": 1.3,
+          "price": 34.25
+        },
+        {
+          "d": "25 Sep",
+          "eps": 1.3,
+          "price": 33.9
+        }
+      ],
+      "calData": {
+        "beat": true,
+        "beatPhrase": "materially ahead of current market expectations at not less than £5.0 million",
+        "events": []
+      },
+      "entryPrice": 34.75
+    },
+    {
+      "id": "CCT_2026_09_28",
+      "ticker": "CCT",
+      "score": 91,
+      "company": "Character Group (The) PLC",
+      "verdict": "Upgrade likely",
+      "date": "2026-09-28",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "FY26 PBT before highlighted items guided <span class=\"val-up\">~20% above consensus</span> (~£6.0m vs £5.0m) for a year already closed on 31 August; audited results due in December.",
+          "textPlain": "FY26 PBT before highlighted items guided ~20% above consensus (~£6.0m vs £5.0m) for a year already closed on 31 August; audited results due in December."
+        },
+        {
+          "pill": "MARGIN",
+          "type": "green",
+          "textHTML": "H1 gross margin gain held right through H2 and into Christmas 2026 trading; UK and Scandinavian divisions trended higher, offsetting lower USA and international sales.",
+          "textPlain": "H1 gross margin gain held right through H2 and into Christmas 2026 trading; UK and Scandinavian divisions trended higher, offsetting lower USA and international sales."
+        },
+        {
+          "pill": "SALES",
+          "type": "amber",
+          "textHTML": "FY26 revenue \"broadly similar\" to FY25's £100.5m (+0.3% vs £100.2m consensus); implied H2 up 10.1% to £52.2m, fully reversing the sales drop reported in H1.",
+          "textPlain": "FY26 revenue \"broadly similar\" to FY25's £100.5m (+0.3% vs £100.2m consensus); implied H2 up 10.1% to £52.2m, fully reversing the sales drop reported in H1."
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "Middleton warehouse sold for £9.8m in July; cash now over £20m, about 37% of the £54m market cap, with a return of excess cash to shareholders under Board review.",
+          "textPlain": "Middleton warehouse sold for £9.8m in July; cash now over £20m, about 37% of the £54m market cap, with a return of excess cash to shareholders under Board review."
+        },
+        {
+          "pill": "FY27",
+          "type": "grey",
+          "textHTML": "Board optimistic for FY27 with ranges selling well and higher margin maintained, but flags economic challenges; FY27 EPS cons 27.6p, upgrades of 3–8% likely.",
+          "textPlain": "Board optimistic for FY27 with ranges selling well and higher margin maintained, but flags economic challenges; FY27 EPS cons 27.6p, upgrades of 3–8% likely."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+17–22%",
+          "sub": "cons 22.3p→26.1–27.2p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+3–8%",
+          "sub": "cons 27.6p→28.4–29.8p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "cons £100.2m→~£100.5m",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "cons £103.5m, hold",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "14.1p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "22.3p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+58.2%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "Steady",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "+11.1%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · 03 Mar – 25 Sep 26",
+      "sparkSVG": "<svg id=\"spark-CCT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-CCT\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-09-28T06:36:24.140Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 14.1,
+          "price": 240
+        },
+        {
+          "d": "06 Mar",
+          "eps": 14.1,
+          "price": 237
+        },
+        {
+          "d": "13 Mar",
+          "eps": 14.1,
+          "price": 236
+        },
+        {
+          "d": "20 Mar",
+          "eps": 14.1,
+          "price": 237
+        },
+        {
+          "d": "27 Mar",
+          "eps": 14.1,
+          "price": 227
+        },
+        {
+          "d": "03 Apr",
+          "eps": 14.1,
+          "price": 225
+        },
+        {
+          "d": "10 Apr",
+          "eps": 14.1,
+          "price": 236
+        },
+        {
+          "d": "17 Apr",
+          "eps": 14.1,
+          "price": 246
+        },
+        {
+          "d": "24 Apr",
+          "eps": 14.1,
+          "price": 246
+        },
+        {
+          "d": "08 May",
+          "eps": 12.7,
+          "price": 250
+        },
+        {
+          "d": "15 May",
+          "eps": 22.3,
+          "price": 270
+        },
+        {
+          "d": "22 May",
+          "eps": 22.3,
+          "price": 275
+        },
+        {
+          "d": "02 Jun",
+          "eps": 22.3,
+          "price": 276
+        },
+        {
+          "d": "05 Jun",
+          "eps": 22.3,
+          "price": 282
+        },
+        {
+          "d": "12 Jun",
+          "eps": 22.3,
+          "price": 285
+        },
+        {
+          "d": "19 Jun",
+          "eps": 22.3,
+          "price": 290
+        },
+        {
+          "d": "26 Jun",
+          "eps": 22.3,
+          "price": 280
+        },
+        {
+          "d": "03 Jul",
+          "eps": 22.3,
+          "price": 290
+        },
+        {
+          "d": "10 Jul",
+          "eps": 22.3,
+          "price": 295
+        },
+        {
+          "d": "17 Jul",
+          "eps": 22.3,
+          "price": 308
+        },
+        {
+          "d": "24 Jul",
+          "eps": 22.3,
+          "price": 304
+        },
+        {
+          "d": "31 Jul",
+          "eps": 22.3,
+          "price": 304
+        },
+        {
+          "d": "07 Aug",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "14 Aug",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "21 Aug",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "28 Aug",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "07 Sep",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "11 Sep",
+          "eps": 22.3,
+          "price": 315
+        },
+        {
+          "d": "18 Sep",
+          "eps": 22.3,
+          "price": 313
+        },
+        {
+          "d": "25 Sep",
+          "eps": 22.3,
+          "price": 309
+        }
+      ],
+      "calData": {
+        "beat": true,
+        "beatPhrase": "exceed current market expectations by approximately 20%",
+        "events": [
+          {
+            "event": "Audited annual results FY26",
+            "type": "FY results",
+            "from": "2026-12-01",
+            "to": "2026-12-31",
+            "label": "Dec 2026",
+            "conf": "implied",
+            "src": "RNS"
+          }
+        ]
+      },
+      "entryPrice": 309
+    },
+    {
+      "id": "WVIA_2026_09_28",
+      "ticker": "WVIA",
+      "score": 79,
+      "company": "Winvia Entertainment PLC",
+      "verdict": "Modest upgrades",
+      "date": "2026-09-28",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM",
+      "signals": [
+        {
+          "pill": "UPGRADE",
+          "type": "green",
+          "textHTML": "FY26 adjusted EBITDA now expected <span class=\"val-up\">ahead of £37.1m consensus</span> on underlying trading alone, excluding the Giveaway Guys/Win Life acquisition announced today.",
+          "textPlain": "FY26 adjusted EBITDA now expected ahead of £37.1m consensus on underlying trading alone, excluding the Giveaway Guys/Win Life acquisition announced today."
+        },
+        {
+          "pill": "RUN-RATE",
+          "type": "green",
+          "textHTML": "Prize Draw adj EBITDA trending close to £2m a month in Q4 after a £1.0m H1 loss on £14.0m marketing spend; August was the segment's best month on record.",
+          "textPlain": "Prize Draw adj EBITDA trending close to £2m a month in Q4 after a £1.0m H1 loss on £14.0m marketing spend; August was the segment's best month on record."
+        },
+        {
+          "pill": "GAMING",
+          "type": "green",
+          "textHTML": "Online Gaming revenue +54.6% to £88.7m and adj EBITDA +96.2% to £20.4m, with deposits more than doubled; 81% of group revenue comes from the Romanian market.",
+          "textPlain": "Online Gaming revenue +54.6% to £88.7m and adj EBITDA +96.2% to £20.4m, with deposits more than doubled; 81% of group revenue comes from the Romanian market."
+        },
+        {
+          "pill": "TAX",
+          "type": "amber",
+          "textHTML": "H1 statutory EPS of 10.0p flattered by a 9.6% tax rate and a £0.75m fair-value gain; restated at the ~24.5% rate implied in consensus, EPS is about 7.9–8.4p.",
+          "textPlain": "H1 statutory EPS of 10.0p flattered by a 9.6% tax rate and a £0.75m fair-value gain; restated at the ~24.5% rate implied in consensus, EPS is about 7.9–8.4p."
+        },
+        {
+          "pill": "VAT RISK",
+          "type": "red",
+          "textHTML": "Prize-draw VAT treated as an unquantified contingent liability with no provision made; HMRC engagement is ongoing and a determination is expected across 2026–27.",
+          "textPlain": "Prize-draw VAT treated as an unquantified contingent liability with no provision made; HMRC engagement is ongoing and a determination is expected across 2026–27."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+4–9%",
+          "sub": "cons 21.7p→22.6–23.7p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "+2–6%",
+          "sub": "cons 28.9p→29.5–30.6p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+1–4%",
+          "sub": "cons £217m→£219–226m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+2–5%",
+          "sub": "cons £260m→£266–273m",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "25.4p",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "21.7p",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "−14.6%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "Steady",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+26.7%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "—",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · 03 Mar – 25 Sep 26",
+      "sparkSVG": "<svg id=\"spark-WVIA\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-WVIA\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+5.4",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-09-28T06:36:24.140Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 25.4,
+          "price": 245
+        },
+        {
+          "d": "06 Mar",
+          "eps": 25.4,
+          "price": 240
+        },
+        {
+          "d": "13 Mar",
+          "eps": 25.4,
+          "price": 225
+        },
+        {
+          "d": "20 Mar",
+          "eps": 25.4,
+          "price": 217.5
+        },
+        {
+          "d": "27 Mar",
+          "eps": 25.4,
+          "price": 215
+        },
+        {
+          "d": "03 Apr",
+          "eps": 25.4,
+          "price": 215
+        },
+        {
+          "d": "10 Apr",
+          "eps": 25.4,
+          "price": 225
+        },
+        {
+          "d": "17 Apr",
+          "eps": 25.4,
+          "price": 222.5
+        },
+        {
+          "d": "24 Apr",
+          "eps": 25.4,
+          "price": 220
+        },
+        {
+          "d": "08 May",
+          "eps": 25.4,
+          "price": 225
+        },
+        {
+          "d": "15 May",
+          "eps": 25.4,
+          "price": 225
+        },
+        {
+          "d": "22 May",
+          "eps": 22.9,
+          "price": 240
+        },
+        {
+          "d": "02 Jun",
+          "eps": 22.9,
+          "price": 266
+        },
+        {
+          "d": "05 Jun",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "12 Jun",
+          "eps": 22.9,
+          "price": 242.5
+        },
+        {
+          "d": "19 Jun",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "26 Jun",
+          "eps": 22.9,
+          "price": 245
+        },
+        {
+          "d": "03 Jul",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "10 Jul",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "17 Jul",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "24 Jul",
+          "eps": 22.9,
+          "price": 255
+        },
+        {
+          "d": "31 Jul",
+          "eps": 22.9,
+          "price": 251
+        },
+        {
+          "d": "07 Aug",
+          "eps": 21.7,
+          "price": 240
+        },
+        {
+          "d": "14 Aug",
+          "eps": 21.7,
+          "price": 241
+        },
+        {
+          "d": "21 Aug",
+          "eps": 21.7,
+          "price": 240
+        },
+        {
+          "d": "28 Aug",
+          "eps": 21.7,
+          "price": 240
+        },
+        {
+          "d": "07 Sep",
+          "eps": 21.7,
+          "price": 235
+        },
+        {
+          "d": "11 Sep",
+          "eps": 21.7,
+          "price": 232.5
+        },
+        {
+          "d": "18 Sep",
+          "eps": 21.7,
+          "price": 232.5
+        },
+        {
+          "d": "25 Sep",
+          "eps": 21.7,
+          "price": 242
+        }
+      ],
+      "calData": {
+        "beat": true,
+        "beatPhrase": "full year Adjusted EBITDA is now expected to be ahead of current market expectations",
+        "events": []
+      },
+      "entryPrice": 242.5
+    },
+    {
+      "id": "CKT_2026_09_28",
+      "ticker": "CKT",
+      "score": 57,
+      "company": "Checkit PLC",
+      "verdict": "No coverage",
+      "date": "2026-09-28",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "PROFIT",
+          "type": "green",
+          "textHTML": "Adjusted EBITDA swung to a <span class=\"val-up\">£0.3m profit</span> from a £0.9m loss; operating cash inflow of £0.3m vs a £2.3m outflow as the structurally lower cost base took effect.",
+          "textPlain": "Adjusted EBITDA swung to a £0.3m profit from a £0.9m loss; operating cash inflow of £0.3m vs a £2.3m outflow as the structurally lower cost base took effect."
+        },
+        {
+          "pill": "ARR",
+          "type": "green",
+          "textHTML": "Continuing ARR +5% at constant currency to £12.8m; new bookings rose to £0.7m (from £0.6m) and churn fell to £0.5m (from £0.8m); recurring revenue now 97%.",
+          "textPlain": "Continuing ARR +5% at constant currency to £12.8m; new bookings rose to £0.7m (from £0.6m) and churn fell to £0.5m (from £0.8m); recurring revenue now 97%."
+        },
+        {
+          "pill": "FSP ENDED",
+          "type": "red",
+          "textHTML": "Formal sale process launched in March terminated today with no offer at a value the Board could recommend, removing any takeover floor under the 22.5p share price.",
+          "textPlain": "Formal sale process launched in March terminated today with no offer at a value the Board could recommend, removing any takeover floor under the 22.5p share price."
+        },
+        {
+          "pill": "LEGACY",
+          "type": "amber",
+          "textHTML": "Retirement of a single-customer legacy product cuts £1.6m of ARR and £0.7m of annual cost; it made £0.3m profit in H1 and is now reported as a discontinued operation.",
+          "textPlain": "Retirement of a single-customer legacy product cuts £1.6m of ARR and £0.7m of annual cost; it made £0.3m profit in H1 and is now reported as a discontinued operation."
+        },
+        {
+          "pill": "NO CONS",
+          "type": "grey",
+          "textHTML": "No broker consensus; two-year framework targets NRR of 105–110% and GRR above 95% (now 102% and 94%), with unified platform customer migration from Feb 2027.",
+          "textPlain": "No broker consensus; two-year framework targets NRR of 105–110% and GRR above 95% (now 102% and 94%), with unified platform customer migration from Feb 2027."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "—",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "—",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "—",
+          "style": ""
+        },
+        {
+          "lbl": "4-wk",
+          "val": "—",
+          "style": ""
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "—",
+          "style": ""
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "—",
+          "style": ""
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · no coverage",
+      "sparkSVG": "<svg id=\"spark-CKT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"><line x1=\"4\" x2=\"476\" y1=\"28\" y2=\"28\" stroke=\"#2a2a38\" stroke-width=\"0.5\"></line><text x=\"240\" y=\"31\" text-anchor=\"middle\" font-size=\"9\" fill=\"#4a4a62\" font-family=\"Inter,sans-serif\">No broker consensus — price 16.5p → 22.5p</text></svg><div class=\"spark-tt\" id=\"tt-CKT\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-09-28T06:36:24.141Z",
+      "source": "html-dom",
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "events": []
+      },
+      "entryPrice": 23
+    },
+    {
+      "id": "TLW_2026_09_28",
+      "ticker": "TLW",
+      "score": 19,
+      "company": "Tullow Oil PLC",
+      "verdict": "Downgrades probable",
+      "date": "2026-09-28",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE Small Cap",
+      "signals": [
+        {
+          "pill": "⛔⛔ RISK",
+          "type": "red",
+          "textHTML": "H1 loss per share widened to <span class=\"val-dn\">−6.8c</span> vs FY26 consensus of +4.4c; H2 must deliver 11.2c EPS, a record half, with no UK tax relief on $215m of finance costs.",
+          "textPlain": "H1 loss per share widened to −6.8c vs FY26 consensus of +4.4c; H2 must deliver 11.2c EPS, a record half, with no UK tax relief on $215m of finance costs."
+        },
+        {
+          "pill": "OPS",
+          "type": "green",
+          "textHTML": "Production 43.7 kboepd in H1, FY guided at the high end of 34–42 kboepd; 14 cargoes expected vs 12 initially guided, with 8 of them lifted in the second half.",
+          "textPlain": "Production 43.7 kboepd in H1, FY guided at the high end of 34–42 kboepd; 14 cargoes expected vs 12 initially guided, with 8 of them lifted in the second half."
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "FY free cash flow guide $170–250m at $70–100/bbl (upgraded in August); H1 FCF $4m after $70m one-off refinancing costs; Ghana receivables now fully recovered.",
+          "textPlain": "FY free cash flow guide $170–250m at $70–100/bbl (upgraded in August); H1 FCF $4m after $70m one-off refinancing costs; Ghana receivables now fully recovered."
+        },
+        {
+          "pill": "DEBT",
+          "type": "red",
+          "textHTML": "Net debt $1.4bn with FY26 interest cover of 2.0x; the 2028 notes and cargo prepayment mature in May 2028 unless an asset-sale SPA is signed by 30 September 2027.",
+          "textPlain": "Net debt $1.4bn with FY26 interest cover of 2.0x; the 2028 notes and cargo prepayment mature in May 2028 unless an asset-sale SPA is signed by 30 September 2027."
+        },
+        {
+          "pill": "RESERVES",
+          "type": "grey",
+          "textHTML": "2P reserves up to 121.7 mmboe on ~380% reserves replacement, Jubilee licence extended to 2040 and a Campaign 2 rig signed for up to 10 wells across 2027–28.",
+          "textPlain": "2P reserves up to 121.7 mmboe on ~380% reserves replacement, Jubilee licence extended to 2040 and a Campaign 2 rig signed for up to 10 wells across 2027–28."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−5–20%",
+          "sub": "PBT $226m→$181–215m",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "cons 2.1c, hold",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+2–5%",
+          "sub": "$1,099m→$1,121–1,154m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "cons $1,047m, hold",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "EPS Start",
+          "val": "−3.8c",
+          "style": ""
+        },
+        {
+          "lbl": "EPS Now",
+          "val": "4.4c",
+          "style": ""
+        },
+        {
+          "lbl": "Net Δ",
+          "val": "+215.8%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "4-wk",
+          "val": "Rising",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "Rev Δ",
+          "val": "+23.5%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "TP Δ",
+          "val": "+41.7%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · 03 Mar – 25 Sep 26",
+      "sparkSVG": "<svg id=\"spark-TLW\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-TLW\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✕",
+          "dev": "−4.2",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-09-28T06:36:24.141Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": -3.8,
+          "price": 12.78
+        },
+        {
+          "d": "06 Mar",
+          "eps": -3.8,
+          "price": 13.5
+        },
+        {
+          "d": "13 Mar",
+          "eps": -3.8,
+          "price": 13.5
+        },
+        {
+          "d": "20 Mar",
+          "eps": -3.8,
+          "price": 13.12
+        },
+        {
+          "d": "27 Mar",
+          "eps": -3.8,
+          "price": 13
+        },
+        {
+          "d": "03 Apr",
+          "eps": -3.8,
+          "price": 12.86
+        },
+        {
+          "d": "10 Apr",
+          "eps": -3.8,
+          "price": 12.6
+        },
+        {
+          "d": "17 Apr",
+          "eps": -3.8,
+          "price": 11.9
+        },
+        {
+          "d": "24 Apr",
+          "eps": -3.8,
+          "price": 11.66
+        },
+        {
+          "d": "08 May",
+          "eps": 1.1,
+          "price": 14.32
+        },
+        {
+          "d": "15 May",
+          "eps": 1.1,
+          "price": 16.02
+        },
+        {
+          "d": "22 May",
+          "eps": 1.1,
+          "price": 17.32
+        },
+        {
+          "d": "02 Jun",
+          "eps": 3.5,
+          "price": 16.1
+        },
+        {
+          "d": "05 Jun",
+          "eps": 3.5,
+          "price": 15.8
+        },
+        {
+          "d": "12 Jun",
+          "eps": 3.5,
+          "price": 15.46
+        },
+        {
+          "d": "19 Jun",
+          "eps": 3.5,
+          "price": 12.12
+        },
+        {
+          "d": "26 Jun",
+          "eps": 3.5,
+          "price": 12.52
+        },
+        {
+          "d": "03 Jul",
+          "eps": 3.5,
+          "price": 11.54
+        },
+        {
+          "d": "10 Jul",
+          "eps": 3.5,
+          "price": 12.78
+        },
+        {
+          "d": "17 Jul",
+          "eps": 3.5,
+          "price": 13.42
+        },
+        {
+          "d": "24 Jul",
+          "eps": 3.5,
+          "price": 15.3
+        },
+        {
+          "d": "31 Jul",
+          "eps": 3.5,
+          "price": 14.96
+        },
+        {
+          "d": "07 Aug",
+          "eps": 4.1,
+          "price": 14
+        },
+        {
+          "d": "14 Aug",
+          "eps": 4.1,
+          "price": 14.52
+        },
+        {
+          "d": "21 Aug",
+          "eps": 4.1,
+          "price": 19.9
+        },
+        {
+          "d": "28 Aug",
+          "eps": 4.1,
+          "price": 19.96
+        },
+        {
+          "d": "07 Sep",
+          "eps": 4.1,
+          "price": 21.2
+        },
+        {
+          "d": "11 Sep",
+          "eps": 4.4,
+          "price": 23
+        },
+        {
+          "d": "18 Sep",
+          "eps": 4.4,
+          "price": 22.05
+        },
+        {
+          "d": "25 Sep",
+          "eps": 4.4,
+          "price": 21.75
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "events": []
+      },
+      "entryPrice": 21.575
     }
   ],
   "brokerChanges": [
