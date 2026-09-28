@@ -7881,7 +7881,7 @@ function fgRender(){
 .rc-wk b{background:#8ee68e;color:#123;font-size:14px;font-weight:700;padding:5px 12px;display:inline-block}
 .rc-wk.rc-pastwk b{background:#c9c9d2;color:#44444f}
 .rc-row{display:grid;grid-template-columns:96px 150px minmax(0,1fr) 104px 150px 64px 28px;gap:12px;align-items:center;padding:6px 14px;background:#fff;cursor:pointer;font-size:12.5px}
-.rc-row.rc-alt{background:#f6f6f8}
+.rc-row.rc-alt{background:#fff}
 .rc-row:hover{background:#e3f2ff}
 .rc-row.rc-star{box-shadow:inset 3px 0 0 #d6005f;background:#fbd3e4}
 .rc-row.rc-star:hover{background:#f8c4da}
@@ -7899,8 +7899,9 @@ function fgRender(){
 .rc-ring{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;line-height:1}
 .rc-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
 .rc-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
-.rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid #dcdce3;color:#c4c4cf;background:#fff;min-width:22px;cursor:pointer;font-family:inherit}
-.rc-beat:hover{color:#8a8a98;border-color:#b5b5c2}
+.rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid transparent;color:#e4e4e4;background:transparent;min-width:22px;cursor:pointer;font-family:inherit}
+.rc-row:hover .rc-beat{color:#c4c4c4}
+.rc-beat:hover{color:#8a8a8a;border-color:#c9c9c9;background:#fff}
 .rc-beat.rc-on{color:#0b7a36;border-color:#9fd8b4;background:#e2f5e9}
 .rc-beat.rc-man{box-shadow:0 0 0 1px #4a9eff88}
 .rc-sc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6a6a78;min-width:0}
