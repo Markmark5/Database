@@ -3142,12 +3142,16 @@ function renderRows(){
   if(!total){container.innerHTML='';empty.style.display='block';document.getElementById('pagination').innerHTML='';return;}
   empty.style.display='none';
   const page=FILTERED.slice((PAGE-1)*PER_PAGE,PAGE*PER_PAGE);
+  if(typeof arcHydrate==='function'){
+    const _stubs=page.filter(function(r){return r&&r._stub&&!ARC_FAILED[r.arc];});
+    if(_stubs.length) arcHydrate(_stubs).then(function(){renderRows();});
+  }
   const bandInfo={green:{label:'Upgrade Cycle Likely · Score ≥75',cls:'up'},amber:{label:'Mixed / Modest Impact · Score 50–74',cls:'mixed'},red:{label:'Cuts Probable · Score 0–49',cls:'down'}};
   let html='',lastBand=null;
   page.forEach(function(rec){
     const b=band(rec.score);
     if(b!==lastBand){html+='<div class="section-divider '+bandInfo[b].cls+'">'+bandInfo[b].label+'</div>';lastBand=b;}
-    html+=buildRow(rec);
+    html+=rec._stub?arcStubRow(rec):buildRow(rec);
   });
   container.innerHTML=html;
   page.forEach(function(rec){
@@ -5612,6 +5616,10 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
          100 touches the top of the plot, 0 touches the bottom, 50 sits centre */
       var R=9,sc=Math.max(0,Math.min(100,+v.label||0));
       var cy=ca.top+R+(1-sc/100)*(ca.bottom-ca.top-2*R);
+      /* centre on the target line when we have a value there */
+      if(v.yVal!==null&&v.yVal!==undefined&&chart.scales.y){cy=chart.scales.y.getPixelForValue(v.yVal);}
+      cy=Math.max(ca.top+R,Math.min(ca.bottom-R,cy));
+      if(v.pinned){px=Math.min(px,ca.right-R-1)-(v.pinIdx||0)*(2*R+4);}
       chart._fcScoreHits=chart._fcScoreHits||[];
       chart._fcScoreHits.push({x:px,y:cy,r:12});
       ctx.setLineDash([]);
@@ -5619,7 +5627,10 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
       ctx.strokeStyle=v.colorFaint||'rgba(255,255,255,0.10)';ctx.lineWidth=1;
       ctx.beginPath();ctx.moveTo(px,ca.top);ctx.lineTo(px,ca.bottom);ctx.stroke();
       ctx.fillStyle=v.color;ctx.strokeStyle='rgba(255,255,255,0.85)';
+      if(v.pinned)ctx.setLineDash([2,2]);
       ctx.beginPath();ctx.arc(px,cy,R,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.setLineDash([]);
+      if(v.pinned){ctx.font='700 7px Inter';ctx.fillStyle=v.color;ctx.textAlign='center';ctx.fillText(String(v.date||'').slice(8,10)+'/'+String(v.date||'').slice(5,7),px,cy-R-4);}
       ctx.font='700 8px Inter';ctx.fillStyle='#0d0d16';ctx.textAlign='center';ctx.textBaseline='middle';
       ctx.fillText(String(v.label),px,cy+0.5);
       ctx.textBaseline='alphabetic';
@@ -5723,11 +5734,21 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
     ALL.forEach(function(r){
       if(!r||String(r.ticker||'').toUpperCase()!==tkU||r.score===undefined||!r.date)return;
       var dm=String(r.date).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!dm)return;
-      var x=fcXFrac(new Date(+dm[1],+dm[2]-1,+dm[3]));if(x===null)return;
+      var pdt=new Date(+dm[1],+dm[2]-1,+dm[3]),x=fcXFrac(pdt),pinned=false;
+      if(x===null){ /* newer than the last data row → pin to the right edge until data catches up */
+        var dnR=fcRowDate(rows[rows.length-1].date);
+        if(!dnR||pdt<=dnR.dt)return;
+        x=rows.length-1;pinned=true;}
+      /* sit the badge on the consensus-target line at that point */
+      var tpY=null,i0=Math.floor(x),fr=x-i0;
+      var tpAt=function(i,dir){for(;i>=0&&i<rows.length;i+=dir){var v=rows[i].tp;if(v!==null&&v!==undefined&&!isNaN(v))return +v;}return null;};
+      var ta=tpAt(i0,-1),tb=tpAt(Math.min(i0+1,rows.length-1),1);
+      if(ta!==null&&tb!==null)tpY=ta+(tb-ta)*fr;else tpY=(ta!==null?ta:tb);
       var sc=+r.score;
       var col=sc>=75?'#00c814':sc>=50?'#ffc400':'#e02525';
       var faint=sc>=75?'rgba(0,200,20,0.18)':sc>=50?'rgba(245,179,47,0.18)':'rgba(224,37,37,0.18)';
-      scoreEvents.push({x:x,kind:'score',label:sc,color:col,colorFaint:faint});});}
+      scoreEvents.push({x:x,kind:'score',label:sc,color:col,colorFaint:faint,yVal:tpY,pinned:pinned,date:r.date});});
+    var _pinN=0;scoreEvents.filter(function(e){return e.pinned;}).sort(function(a,b){return String(b.date).localeCompare(String(a.date));}).forEach(function(e){e.pinIdx=_pinN++;});}
   fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events});
   fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events});
   fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true,events:scoreEvents});
@@ -7041,6 +7062,8 @@ function dbRestoreFile(file) {
 }
 
 function dbRestoreApply(backup) {
+  if (backup && Array.isArray(backup.scorecardIndex) && typeof arcMergeIndex==='function')
+    backup.scorecards = arcMergeIndex(backup.scorecards, backup.scorecardIndex);
   var status = document.getElementById('db-restore-status');
   var log = [];
 
@@ -7180,6 +7203,110 @@ var GH_FILE = 'database.json';
 var GH_API  = 'https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_FILE;
 var GH_RAW  = 'https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_FILE;
 
+/* ═══════════════════════════════════════════════
+   SCORECARD ARCHIVE — live window + slim index + monthly archives
+   database.json : full cards from the last ARC_MONTHS months,
+                   plus scorecardIndex (slim entry for EVERY card)
+   archive/scorecards_YYYY-MM.json : older full cards
+   Older cards sit in ALL as stubs {_stub:true, arc:'YYYY-MM'} and are
+   fetched (hydrated) on demand when a view needs their detail.
+═══════════════════════════════════════════════ */
+var ARC_MONTHS = 6;
+var ARC_DIR = 'archive';
+var ARC_IDX_FIELDS = ['id','ticker','company','score','verdict','date','rnsType','mode','index','entryPrice','importedAt','hasAnalysis'];
+var ARC_CACHE = {};   // name -> Promise<{id:card}>
+var ARC_FAILED = {};  // name -> true (stop retry loops this session)
+
+function arcCutoff(){ var d=new Date(); d.setMonth(d.getMonth()-ARC_MONTHS); return d.toISOString().slice(0,10); }
+function arcNameFor(date){ var m=String(date||'').match(/^(\d{4})-(\d{2})/); return m ? m[1]+'-'+m[2] : null; }
+/* dates before 2020 are treated as bad data and kept live */
+function arcIsOld(r){ var d=String(r&&r.date||''); return d>='2020' && d<arcCutoff(); }
+function arcSlim(r, arc){ var s={}; ARC_IDX_FIELDS.forEach(function(k){ if(r[k]!==undefined) s[k]=r[k]; }); s.arc=arc||null; return s; }
+function arcStub(r, arc){ var s=arcSlim(r, arc); s._stub=true; return s; }
+function arcPath(name){ return ARC_DIR+'/scorecards_'+name+'.json'; }
+
+/* Pull: live cards + stubs for every indexed card not in the live file */
+function arcMergeIndex(cards, idx){
+  cards=(cards||[]).slice(); if(!Array.isArray(idx)) return cards;
+  var have={}; cards.forEach(function(r){ if(r&&r.id) have[r.id]=1; });
+  idx.forEach(function(e){ if(e&&e.id&&e.arc&&!have[e.id]){ var s=Object.assign({},e); s._stub=true; cards.push(s); } });
+  return cards;
+}
+
+function arcLoad(name){
+  if(ARC_CACHE[name]) return ARC_CACHE[name];
+  var p=fetch('https://raw.githubusercontent.com/'+GH_REPO+'/main/'+arcPath(name)+'?t='+Date.now())
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status+' '+name); return r.json(); })
+    .then(function(j){ var m={}; (j.scorecards||[]).forEach(function(c){ if(c&&c.id) m[c.id]=c; }); return m; });
+  ARC_CACHE[name]=p;
+  p.catch(function(){ delete ARC_CACHE[name]; ARC_FAILED[name]=true; });
+  return p;
+}
+
+/* Replace stubs in ALL (and FILTERED) with full cards from their archives */
+function arcHydrate(stubs){
+  var names={}; (stubs||[]).forEach(function(s){ if(s&&s._stub&&s.arc&&!ARC_FAILED[s.arc]) names[s.arc]=1; });
+  var list=Object.keys(names); if(!list.length) return Promise.resolve();
+  return Promise.all(list.map(function(n){ return arcLoad(n).then(function(m){ return {n:n,m:m}; }, function(){ return null; }); }))
+    .then(function(res){
+      var full={}; res.forEach(function(x){ if(!x) return; Object.keys(x.m).forEach(function(id){ full[id]=x.m[id]; }); });
+      [ALL, (typeof FILTERED!=='undefined'?FILTERED:[])].forEach(function(arr){
+        for(var i=0;i<arr.length;i++){ var r=arr[i]; if(r&&r._stub&&full[r.id]) arr[i]=full[r.id]; }
+      });
+    });
+}
+function arcHydrateTicker(t){
+  t=String(t||'').toUpperCase();
+  return arcHydrate(ALL.filter(function(r){ return r&&r._stub&&String(r.ticker||'').toUpperCase()===t; }));
+}
+function arcStubRow(rec){
+  var failed=ARC_FAILED[rec.arc];
+  return '<div style="padding:10px 14px;border:1px dashed var(--border);border-radius:4px;margin:6px 0;font-family:var(--mono);font-size:11px;color:var(--text-dim);">'
+    +'<span style="color:var(--text-primary);font-weight:700;">'+rec.ticker+'</span> · '+rec.date+' · score '+rec.score+' · '
+    +(failed?'<span style="color:var(--red);">archive '+rec.arc+' unavailable</span>':'loading archived card…')+'</div>';
+}
+
+/* Push step 1: write old full cards into their monthly archive files */
+function arcGhFetch(url, pat, accept){
+  return fetch(url, { headers:{ 'Authorization':'token '+pat, 'Accept':accept||'application/vnd.github.v3+json' }, cache:'no-store' });
+}
+function arcWriteAll(old, pat){
+  var groups={}; old.forEach(function(r){ var n=arcNameFor(r.date); (groups[n]=groups[n]||[]).push(r); });
+  var names=Object.keys(groups).sort();
+  var api='https://api.github.com/repos/'+GH_REPO+'/contents/';
+  return arcGhFetch(api+ARC_DIR+'?t='+Date.now(), pat)
+    .then(function(r){ return r.ok ? r.json() : []; })
+    .then(function(listing){
+      var shas={}; (Array.isArray(listing)?listing:[]).forEach(function(f){ shas[f.path]=f.sha; });
+      var chain=Promise.resolve();
+      names.forEach(function(name){
+        chain=chain.then(function(){
+          var path=arcPath(name), sha=shas[path];
+          ghSetStatus('Archiving '+name+' ('+groups[name].length+' cards)…','blue');
+          var getExisting = sha
+            ? arcGhFetch(api+path+'?t='+Date.now(), pat, 'application/vnd.github.raw+json')
+                .then(function(r){ if(!r.ok) throw new Error('read '+name+' HTTP '+r.status); return r.json(); })
+            : Promise.resolve({scorecards:[]});
+          return getExisting.then(function(j){
+            var m={}; (j.scorecards||[]).forEach(function(c){ if(c&&c.id) m[c.id]=c; });
+            var changed=false;
+            groups[name].forEach(function(c){ if(!m[c.id]||JSON.stringify(m[c.id])!==JSON.stringify(c)){ m[c.id]=c; changed=true; } });
+            ARC_CACHE[name]=Promise.resolve(m); delete ARC_FAILED[name];
+            if(!changed) return;
+            var cards=Object.keys(m).map(function(k){ return m[k]; }).sort(function(a,b){ return String(a.date).localeCompare(String(b.date)); });
+            var str=JSON.stringify({_meta:{month:name,savedAt:new Date().toISOString(),count:cards.length},scorecards:cards});
+            var body={ message:'Archive '+name+' ('+cards.length+' cards)', content:btoa(unescape(encodeURIComponent(str))) };
+            if(sha) body.sha=sha;
+            return fetch(api+path, { method:'PUT', headers:{ 'Authorization':'token '+pat,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json' }, body:JSON.stringify(body) })
+              .then(function(r){ if(r.status!==200&&r.status!==201) return r.json().then(function(e){ throw new Error(name+' HTTP '+r.status+': '+(e.message||'')); }); });
+          });
+        });
+      });
+      return chain;
+    });
+}
+
+
 function ghGetToken() {
   try { return localStorage.getItem('gh_pat') || ''; } catch(e) { return ''; }
 }
@@ -7249,7 +7376,17 @@ function ghBuildPayload() {
     }
   };
   // Scorecards
-  if (typeof ALL !== 'undefined' && Array.isArray(ALL)) backup.scorecards = ALL.slice();
+  if (typeof ALL !== 'undefined' && Array.isArray(ALL)) {
+    var _live=[], _idx=[];
+    ALL.forEach(function(r){
+      if(!r) return;
+      if(r._stub) _idx.push(arcSlim(r, r.arc));
+      else if(arcIsOld(r)) _idx.push(arcSlim(r, arcNameFor(r.date)));
+      else { _live.push(r); _idx.push(arcSlim(r, null)); }
+    });
+    backup.scorecards = _live;
+    backup.scorecardIndex = _idx;
+  }
   // Broker changes
   if (typeof bkData !== 'undefined' && Array.isArray(bkData)) backup.brokerChanges = bkData.slice();
   // Upload zone
@@ -7274,6 +7411,23 @@ function ghBuildPayload() {
 
 // ── PUSH to GitHub ──
 function ghPush() {
+  var pat = ghGetToken();
+  if (!pat) { ghSetStatus('⚠ No token — enter your PAT first', 'amber'); return; }
+  var old = (typeof ALL!=='undefined'?ALL:[]).filter(function(r){ return r && !r._stub && arcIsOld(r); });
+  if (!old.length) return ghPushLive();
+  ghSetStatus('Archiving '+old.length+' older cards…', 'blue');
+  arcWriteAll(old, pat).then(function(){
+    old.forEach(function(r){
+      var s=arcStub(r, arcNameFor(r.date));
+      [ALL, FILTERED].forEach(function(arr){ var i=arr.indexOf(r); if(i>=0) arr[i]=s; });
+      try{ dbPut(s).catch(function(){}); }catch(e){}
+    });
+    ghPushLive();
+  }).catch(function(e){
+    ghSetStatus('⚠ Archive failed — nothing pushed: '+e.message, 'red');
+  });
+}
+function ghPushLive() {
   var pat = ghGetToken();
   if (!pat) {
     ghSetStatus('⚠ No token — enter your PAT first', 'amber');
@@ -7403,11 +7557,14 @@ let _webPopupFS = false;
 window.addEventListener('message', function(ev){
   var d = ev.data || {};
   if (d.type !== 'rns_request' || !d.ticker) return;
-  var t = String(d.ticker).toUpperCase();
-  var cards = (typeof ALL !== 'undefined' && Array.isArray(ALL))
-    ? ALL.filter(function(r){ return String(r.ticker||'').toUpperCase() === t; })
-    : [];
-  try { ev.source.postMessage({type:'rns_response', ticker:t, cards:cards}, '*'); } catch(e){}
+  var t = String(d.ticker).toUpperCase(), src = ev.source;
+  var send = function(){
+    var cards = (typeof ALL !== 'undefined' && Array.isArray(ALL))
+      ? ALL.filter(function(r){ return r && !r._stub && String(r.ticker||'').toUpperCase() === t; })
+      : [];
+    try { src.postMessage({type:'rns_response', ticker:t, cards:cards}, '*'); } catch(e){}
+  };
+  if (typeof arcHydrateTicker === 'function') arcHydrateTicker(t).then(send, send); else send();
 });
 
 function openWebPopup(url, title) {
@@ -8385,7 +8542,7 @@ function seed(){
 }
 
 /* ── RNS SCORECARDS POPUP — same layout as Ignition, reads ALL directly ── */
-function showRNS(t){t=String(t||'').toUpperCase();rnsRender(t,recs(t));}
+function showRNS(t){t=String(t||'').toUpperCase();var go=function(){rnsRender(t,recs(t).filter(function(r){return !r._stub;}));};if(typeof arcHydrateTicker==='function')arcHydrateTicker(t).then(go,go);else go();}
 function rnsShell(t,inner){
   var ov=$('rcal-rns-ov');
   if(!ov){ov=document.createElement('div');ov.id='rcal-rns-ov';
