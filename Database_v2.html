@@ -2360,8 +2360,8 @@ function expandSection(id){
         if(!rec.sparkData||rec.sparkData.length<2)return;
         const uid=rec.id.replace(/[^a-zA-Z0-9]/g,'_');
         const col2=band(rec.score)==='green'?'#00c814':band(rec.score)==='amber'?'#ffc400':'#e02525';
-        const svgEl=document.getElementById('spark-'+uid);
-        const ttEl=document.getElementById('tt-'+uid);
+        const svgEl=c.querySelector('[id="spark-'+uid+'"]');
+        const ttEl=c.querySelector('[id="tt-'+uid+'"]');
         if(svgEl&&ttEl)drawSparkline(svgEl,ttEl,rec.sparkData,col2);
       });
       // Pagination bar at bottom
@@ -3016,7 +3016,7 @@ function getSparkEvents(data){
 function drawSparkline(svgEl,ttEl,data,lineColor){
   if(!svgEl||!ttEl||!data||data.length<2)return;
   while(svgEl.firstChild)svgEl.removeChild(svgEl.firstChild);
-  const W=480,H=56,PL=4,PR=4,PT=6,PB=16,iW=W-PL-PR,iH=H-PT-PB,n=data.length;
+  const H=56,PL=4,PR=4,PT=6,PB=4,W=Math.round(svgEl.getBoundingClientRect().width)||480;svgEl.setAttribute('viewBox','0 0 '+W+' '+H);const iW=W-PL-PR,iH=H-PT-PB,n=data.length;
   const epsArr=data.map(d=>d.eps),prArr=data.map(d=>d.price);
   const epsMin=Math.min(...epsArr),epsMax=Math.max(...epsArr),epsR=epsMax-epsMin||1;
   const prMin=Math.min(...prArr),prMax=Math.max(...prArr),prR=prMax-prMin||1;
@@ -3036,8 +3036,6 @@ function drawSparkline(svgEl,ttEl,data,lineColor){
   events.forEach(ev=>{el('circle',{cx:xOf(ev.idx),cy:yE(data[ev.idx].eps),r:'4',fill:ev.type==='up'?'#00c814':'#e02525',stroke:'#0a0a0f','stroke-width':'1.5'});});
   el('circle',{cx:xOf(n-1),cy:yE(data[n-1].eps),r:'3.5',fill:lineColor,stroke:'#0a0a0f','stroke-width':'1.5'});
   function svgTxt(x,y,anchor,content){const t=document.createElementNS(ns,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',anchor);t.setAttribute('font-size','7.5');t.setAttribute('fill','#4a4a62');t.setAttribute('font-family','Inter,sans-serif');t.textContent=content;svgEl.appendChild(t);}
-  svgTxt(PL,H-1,'start',data[0].d+'  '+data[0].eps+'p');
-  svgTxt(W-PR,H-1,'end',data[n-1].d+'  '+data[n-1].eps+'p');
   svgEl.addEventListener('mousemove',function(e){
     const rect=svgEl.getBoundingClientRect();
     const i=Math.round(Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width))*(n-1));
