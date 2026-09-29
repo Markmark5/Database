@@ -22,7 +22,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          
 
       - name: Install
         run: |
@@ -36,7 +35,7 @@ jobs:
         run: |
           git config user.name  "calendar-bot"
           git config user.email "calendar-bot@users.noreply.github.com"
-          git add calendar/pending_events.json calendar/scrape_report.json calendar/scrape_report.md
+          git add -A calendar/pending_events.json calendar/scrape_report.json calendar/scrape_report.md calendar/debug
           git diff --staged --quiet || git commit -m "Calendar scrape $(date -u +%F)"
           git pull --rebase --autostash
           git push
