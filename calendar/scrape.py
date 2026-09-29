@@ -290,6 +290,8 @@ def extract(lines):
                 conf = "provisional"
             if d1 < TODAY or d0 > HORIZON:
                 continue
+            if kind == "window" and d1 <= TODAY + timedelta(days=2):
+                continue                 # "September 2026" seen on 29 Sep: stale, the real date was set by RNS
             # event text: same line minus the date, else neighbours
             text = (line[:span[0]] + " " + line[span[1]:])
             text = re.sub(r"\b(mon|tues|wednes|thurs|fri|satur|sun)day\b,?", " ", text, flags=re.I).strip(" |-–:,")
@@ -446,12 +448,13 @@ async def main():
                 still = [i for i in retry if results[i]["status"] is None or results[i]["status"] in (401, 403, 429)]
                 if still:
                     await browser_pass(p, sources, results, still, "chrome", channel="chrome",
-                                       args=["--disable-blink-features=AutomationControlled"])
+                                       args=["--disable-blink-features=AutomationControlled", "--disable-http2"])
         except ImportError:
             print("playwright not installed - browser fallback skipped", file=sys.stderr)
 
     pending, report = [], []
     approved_keys = {(a.get("url"), a.get("type"), a.get("from"), a.get("to")) for a in approved}
+    approved_ids = {a.get("id") for a in approved}   # original scraped id, kept even if Mark edited the date
     for src, r in zip(sources, results):
         events = extract(r["lines"]) if r["lines"] else []
         st = r["status"]
@@ -469,10 +472,12 @@ async def main():
         for e in events:
             key = (src["url"], e["type"], e["from"], e["to"])
             eid = event_id(src["url"], e)
-            if key in approved_keys or eid in rejected:
+            if key in approved_keys or eid in approved_ids or eid in rejected:
                 continue
+            # same source + type within 60 days = the same event moved (not next year's one)
             prior = [a for a in approved if a.get("url") == src["url"] and a.get("type") == e["type"]
-                     and a.get("to", "") >= TODAY.isoformat()]
+                     and a.get("to", "") >= TODAY.isoformat() and a.get("from")
+                     and abs((date.fromisoformat(a["from"]) - date.fromisoformat(e["from"])).days) <= 60]
             e.update({"id": eid, "epic": src["epic"], "company": src["company"], "url": src["url"],
                       "src": "Web", "status": "changed" if prior else "new",
                       "was": f"{prior[0]['from']}" if prior else "",

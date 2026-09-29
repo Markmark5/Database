@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RNS Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  RNS CALENDAR — standalone page, also embedded by Database_v2.html (Calendar button).
+  Reads:  database.json (scorecards + cal-data; the parent page's copy when embedded)
+          calendar/calendar_state.json  (manual dates, stars, ▲ overrides, synced ids)
+          calendar/approved_events.json (web dates approved from the scraper)
+          calendar/pending_events.json  (scraper output awaiting approval)
+          calendar/rejected.json
+  Writes (only with the Database's GitHub key, localStorage 'gh_pat'):
+          calendar/calendar_state.json, approved_events.json, rejected.json
+  Without a key the calendar is read-only and the Pending button is hidden.
+-->
+<style>
+:root{
+  --surface:#0a0a0a;--surface2:#111111;--border:#2a2a38;--border-bright:#3a3a50;
+  --text-primary:#f2f2f8;--text-secondary:#9a9ab5;--text-dim:#6a6a85;
+  --green:#00c814;--green-dim:#00c81418;--green-mid:#00c81444;
+  --red:#e02525;--red-dim:#e0252518;--red-mid:#e0252544;
+  --amber:#ffc400;--amber-dim:#ffc40018;--amber-mid:#ffc40044;
+  --blue:#4a9eff;--blue-dim:#4a9eff18;--blue-mid:#4a9eff44;
+  --mono:'Inter',sans-serif;--sans:'Inter',sans-serif;
+}
+html,body{margin:0;padding:0}
+body{background:#e9e9ee;font-family:'Inter',system-ui,sans-serif;color:#1d1d24}
+body.rc-embed{background:rgba(0,0,0,.6)}
+*{box-sizing:border-box}
+
+/* RNS calendar — light theme (ShareScope style: grey date band, green date tab, soft zebra rows) */
+#rcal-ov{display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;min-height:100vh}
+.rc-box{width:min(1180px,96vw);background:#fff;border:1px solid #c9c9d2;border-radius:6px;color:#1d1d24;font-size:13px;overflow:hidden;box-shadow:0 10px 40px #0007}
+.rc-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;background:#f4f4f6;border-bottom:1px solid #d9d9df}
+.rc-title{font-size:15px;font-weight:700;color:#1d1d24}
+.rc-title small{font-weight:400;color:#7a7a88;font-size:11px;margin-left:8px}
+.rc-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rc-btn{background:#fff;color:#44444f;border:1px solid #c9c9d2;border-radius:3px;padding:5px 10px;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-block}
+.rc-btn:hover{border-color:#9a9aa8;color:#1d1d24}
+.rc-btn:disabled{opacity:.5;cursor:default}
+.rc-btn.rc-on{background:#1d1d24;color:#fff;border-color:#1d1d24}
+.rc-btn.rc-add{background:#1f9d55;color:#fff;border-color:#1f9d55}
+.rc-btn.rc-pink.rc-on{background:#ff0a78;color:#fff;border-color:#ff0a78}
+.rc-btn.rc-del{color:#b42323;border-color:#f1a9a9}
+.rc-btn.rc-pri{background:#1f9d55;color:#fff;border-color:#1f9d55}
+.rc-btn.rc-pend{background:#fff4d6;color:#8a5a00;border-color:#e8c46a}
+.rc-seg{display:flex;border-radius:3px;overflow:hidden}
+.rc-seg .rc-btn{border-radius:0;border-right-width:0}.rc-seg .rc-btn:last-child{border-right-width:1px}
+.rc-x{background:none;border:none;color:#7a7a88;font-size:16px;cursor:pointer;margin-left:6px}
+.rc-search{background:#fff;border:1px solid #c9c9d2;border-radius:3px;color:#1d1d24;padding:5px 8px;width:110px;text-transform:uppercase;font-family:inherit;font-size:11px}
+.rc-key{display:flex;flex-wrap:wrap;gap:14px;padding:8px 14px;font-size:11px;color:#6a6a78;background:#fafafb;border-bottom:1px solid #e3e3e8;align-items:center}
+#rcal-list{padding-bottom:6px}
+.rc-wk{display:flex;align-items:center;gap:10px;background:#f0f0f0;font-size:11px;color:#555}
+.rc-wk b{background:#8ee68e;color:#123;font-size:14px;font-weight:700;padding:5px 12px;display:inline-block}
+.rc-wk.rc-pastwk b{background:#c9c9d2;color:#44444f}
+.rc-row{display:grid;grid-template-columns:96px 150px minmax(0,1fr) 104px 150px 64px 28px;gap:12px;align-items:center;padding:6px 14px;background:#fff;cursor:pointer;font-size:12.5px}
+.rc-row.rc-alt{background:#fff}
+.rc-row:hover{background:#e3f2ff}
+.rc-row.rc-star{box-shadow:inset 3px 0 0 #d6005f;background:#fbd3e4}
+.rc-row.rc-star:hover{background:#f8c4da}
+.rc-row.rc-past{opacity:.55}
+.rc-ro .rc-row{cursor:default}
+.rc-d1{font-weight:600}
+.rc-d2{font-size:10.5px;color:#6a6a78;margin-top:1px}
+.rc-tk{font-weight:700;font-size:13px;cursor:pointer;text-decoration:underline;text-decoration-color:#1d1d2455;text-underline-offset:3px;display:inline-block}
+.rc-tk:hover{color:#1f6fd1;text-decoration-color:#1f6fd1}
+.rc-co{font-size:10.5px;color:#6a6a78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-ev{min-width:0}
+.rc-e1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-e2{font-size:10.5px;color:#6a6a78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-cf-c{color:#1d1d24;font-weight:600}.rc-cf-p{color:#b07800;font-weight:600}.rc-cf-i{color:#8a8a98}
+.rc-web{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;color:#1f6fd1;border:1px solid #a9c8f0;background:#eef5ff;border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
+.rc-mk{display:flex;gap:3px;font-size:14px;align-items:center}
+.rc-ring{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;line-height:1}
+.rc-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
+.rc-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
+.rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid transparent;color:#e4e4e4;background:transparent;min-width:22px;cursor:pointer;font-family:inherit}
+.rc-row:hover .rc-beat{color:#c4c4c4}
+.rc-beat:hover{color:#8a8a8a;border-color:#c9c9c9;background:#fff}
+.rc-beat.rc-on{color:#0b7a36;border-color:#9fd8b4;background:#e2f5e9}
+.rc-beat.rc-man{box-shadow:0 0 0 1px #4a9eff88}
+.rc-ro .rc-beat{cursor:default}
+.rc-sc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6a6a78;min-width:0}
+.rc-pill{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-weight:700;font-size:9px;line-height:1;color:#0d0d16;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.18);flex-shrink:0}
+.rc-p-g{background:#00c814}
+.rc-p-a{background:#ffc400}
+.rc-p-r{background:#e02525}
+.rc-p-n{background:#f0f0f3;color:#8a8a98}
+.rc-vd{font-size:10px;color:#6a6a78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-days{font-size:11px;color:#44444f;text-align:right}
+.rc-days.rc-soon{color:#b07800;font-weight:700}
+.rc-days.rc-win{color:#8a8a98;font-size:10.5px}
+.rc-st{background:none;border:none;font-size:15px;color:#b5b5c2;line-height:1;cursor:pointer}
+.rc-st.rc-on{color:#ff0a78}
+.rc-ro .rc-st{cursor:default}
+.rc-empty{padding:40px 14px;text-align:center;color:#8a8a98}
+.rc-foot{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;padding:10px 14px;background:#f4f4f6;border-top:1px solid #d9d9df;font-size:10.5px;color:#7a7a88}
+.rc-sub-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;padding:60px 16px;overflow:auto;font-family:'Inter',system-ui,sans-serif;color:#1d1d24;z-index:8600}
+.rc-sub-ov.rc-open{display:flex}
+.rc-modal{background:#fff;border:1px solid #c9c9d2;border-radius:6px;width:100%;max-width:460px;padding:16px;font-size:12px;box-shadow:0 10px 40px #0005}
+.rc-modal.rc-wide{max-width:720px}
+.rc-modal.rc-xwide{max-width:1180px;padding:0;overflow:hidden}
+.rc-mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:700;font-size:13px}
+.rc-fl{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.rc-fl label{font-size:10px;color:#6a6a78;font-weight:600}
+.rc-fl input,.rc-fl select,.rc-fl textarea,#rcal-ev-ov input,#rcal-ev-ov select,.pd-ed input,.pd-ed select{background:#fff !important;border:1px solid #c9c9d2 !important;border-radius:3px;color:#1d1d24 !important;padding:7px 8px;font-family:inherit;font-size:12px;color-scheme:light !important}
+.rc-fl textarea{min-height:64px;resize:vertical}
+.rc-two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rc-hint{font-size:10px;color:#8a8a98;margin-top:2px}
+.rc-err{font-size:11px;color:#b42323;margin-bottom:8px;display:none}
+.rc-mf{display:flex;gap:8px;justify-content:space-between;margin-top:6px}
+.rc-tabs{display:flex;gap:6px;margin-bottom:10px}
+.rc-status{font-size:10.5px;color:#7a7a88}
+.rc-status.rc-bad{color:#b42323}
+#rcal-ov button:focus-visible,.rc-sub-ov :focus-visible{outline:2px solid #1f6fd1;outline-offset:1px}
+
+/* pending review panel */
+.pd-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;background:#f4f4f6;border-bottom:1px solid #d9d9df}
+.pd-grp{display:flex;align-items:center;gap:10px;background:#f0f0f0;font-size:11px;color:#555;cursor:default}
+.pd-grp b{background:#ffd98a;color:#3a2a00;font-size:13px;font-weight:700;padding:5px 12px;display:inline-block}
+.pd-grp.pd-chg b{background:#9fc9ff;color:#0b2a55}
+.pd-grp.pd-dup b,.pd-grp.pd-unv b{background:#c9c9d2;color:#44444f}
+.pd-grp .pd-tog{margin-left:auto;margin-right:10px}
+.pd-row{display:grid;grid-template-columns:22px 150px 150px minmax(0,1fr) 190px;gap:12px;align-items:start;padding:8px 14px;border-bottom:1px solid #eeeef2;font-size:12px}
+.pd-row:hover{background:#f7fbff}
+.pd-tk{font-weight:700}
+.pd-snip{font-size:11px;color:#55556a;font-style:italic;margin-top:3px;word-break:break-word}
+.pd-src{font-size:10.5px;margin-top:3px;word-break:break-all}
+.pd-src a{color:#1f6fd1}
+.pd-was{font-size:10.5px;color:#8a5a00}
+.pd-act{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.pd-ed{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#f7f7fa;border:1px solid #e3e3e8;border-radius:4px;padding:8px}
+.pd-foot{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center;padding:10px 14px;background:#f4f4f6;border-top:1px solid #d9d9df}
+.pd-body{max-height:72vh;overflow:auto}
+
+/* scorecard popup (same dark look as the Database / Ignition) */
+.signal-tag{display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;}
+.stag{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;white-space:nowrap;}
+.stag-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red-mid);}
+.stag-green{background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);}
+.stag-amber{background:var(--amber-dim);color:var(--amber);border:1px solid var(--amber-mid);}
+.stag-grey{background:#ffffff0a;color:var(--text-dim);border:1px solid var(--border);}
+.signal-text{font-family:var(--mono);font-size:11px;color:#b8b8c8;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+#rcal-rns-ov .rcal-sig{margin:4px 0;gap:10px;}
+#rcal-rns-ov .rcal-sig .stag{min-width:104px;text-align:center;}
+#rcal-rns-ov .stag-blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-mid);}
+
+#toast-wrap{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:6px;z-index:9999}
+.toast{background:#1d1d24;color:#fff;font-size:12px;padding:8px 12px;border-radius:4px;box-shadow:0 4px 14px #0004}
+.toast.err{background:#b42323}
+
+@media (max-width:760px){
+  .rc-row{grid-template-columns:70px minmax(0,1fr) 64px 28px}.rc-row .rc-ev{grid-column:2/4}.rc-row .rc-mk,.rc-row .rc-days{display:none}
+  .pd-row{grid-template-columns:22px minmax(0,1fr)}.pd-row>div:nth-child(n+3){grid-column:2}.pd-act{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div id="rcal-ov">
+  <div class="rc-box" id="rcal-box">
+    <div class="rc-head">
+      <div class="rc-title" id="rcal-title">🗓 RNS calendar<small id="rcal-today"></small></div>
+      <div class="rc-bar">
+        <div class="rc-seg" id="rcal-rng">
+          <button class="rc-btn" data-r="7">7d</button><button class="rc-btn" data-r="14">14d</button><button class="rc-btn rc-on" data-r="30">30d</button><button class="rc-btn" data-r="90">90d</button><button class="rc-btn" data-r="9999">All</button>
+        </div>
+        <button class="rc-btn rc-pink" id="rcal-fstar">★ Starred</button>
+        <button class="rc-btn" id="rcal-fbeat">▲ Beat last</button>
+        <button class="rc-btn" id="rcal-fnew" title="Dates added or moved in the last 7 days">✦ New</button>
+        <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
+        <button class="rc-btn rc-pend" id="rcal-pend" style="display:none" title="Dates found on company websites, awaiting your approval">Pending</button>
+        <button class="rc-btn rc-add" id="rcal-add" style="display:none">＋ Add date</button>
+        <button class="rc-x" id="rcal-close" aria-label="Close calendar" style="display:none">✕</button>
+      </div>
+    </div>
+    <div class="rc-key">
+      <span><span style="color:#ff0a78">★</span> your pick (click star)</span>
+      <span>▲ ahead of forecasts at last update (click to override)</span>
+      <span>📈 H1 ahead of seasonal</span><span><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical</span><span>🔥 H2 accelerating</span><span><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical</span><span>📈🔥 double</span><span>🚀 full-year acceleration</span>
+      <span><span class="rc-web">WEB</span> date from company website</span>
+      <span>Click a ticker for its scorecards</span>
+    </div>
+    <div id="rcal-list"><div class="rc-empty">Loading calendar…</div></div>
+    <div class="rc-foot">
+      <span><span id="rcal-stats"></span> <span class="rc-status" id="rcal-sync"></span></span>
+      <span class="rc-bar" id="rcal-foot-edit" style="display:none">
+        <button class="rc-btn" id="rcal-databtn">Backup / restore</button>
+        <button class="rc-btn" id="rcal-seed">Load recent dates</button>
+        <button class="rc-btn rc-del" id="rcal-clear">Clear calendar</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-ev-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-ev-title">
+  <div class="rc-modal">
+    <div class="rc-mh"><span id="rcal-ev-title">Add date</span><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    <div class="rc-fl"><label for="rcal-ev-paste">Paste RNS line (optional)</label>
+      <textarea id="rcal-ev-paste" placeholder="The Company will announce its interim results on 14 October 2026"></textarea>
+      <div class="rc-hint">Fills the event and date below. Check them before saving.</div></div>
+    <div class="rc-two">
+      <div class="rc-fl"><label for="rcal-ev-tk">Ticker</label><input id="rcal-ev-tk" list="rcal-tklist" autocomplete="off" style="text-transform:uppercase"><datalist id="rcal-tklist"></datalist></div>
+      <div class="rc-fl"><label for="rcal-ev-type">Event</label>
+        <select id="rcal-ev-type"><option>H1 results</option><option>FY results</option><option>Pre-H1 TU</option><option>Pre-FY TU</option><option>Q1</option><option>Q3</option><option>Trading update</option><option>AGM</option><option>Other</option></select></div>
+    </div>
+    <div class="rc-fl"><label for="rcal-ev-co">Company</label><input id="rcal-ev-co" placeholder="Filled from your scorecards if known"></div>
+    <div class="rc-fl"><label>Date</label>
+      <div class="rc-tabs"><button class="rc-btn rc-on" data-rc-dm="exact">Exact date</button><button class="rc-btn" data-rc-dm="window">Month window</button></div>
+      <div id="rcal-dm-exact"><input type="date" id="rcal-ev-date" style="width:100%"></div>
+      <div id="rcal-dm-window" class="rc-two" style="display:none">
+        <input type="month" id="rcal-ev-month">
+        <select id="rcal-ev-part"><option value="all">Sometime in month</option><option value="early">Early</option><option value="mid">Mid</option><option value="late">Late</option></select>
+      </div>
+    </div>
+    <div class="rc-two">
+      <div class="rc-fl"><label for="rcal-ev-conf">Confidence</label><select id="rcal-ev-conf"><option value="confirmed">Confirmed</option><option value="provisional">Provisional</option><option value="implied">Implied</option></select></div>
+      <div class="rc-fl"><label for="rcal-ev-src">Source</label><input id="rcal-ev-src" value="RNS"></div>
+    </div>
+    <div class="rc-fl"><label for="rcal-ev-note">Note</label><input id="rcal-ev-note" placeholder="Optional"></div>
+    <div class="rc-err" id="rcal-ev-err"></div>
+    <div class="rc-mf"><button class="rc-btn rc-del" id="rcal-ev-del" style="visibility:hidden">Delete</button>
+      <span class="rc-bar"><button class="rc-btn" data-rc-close>Cancel</button><button class="rc-btn rc-pri" id="rcal-ev-save">Save date</button></span></div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-web-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-web-title">
+  <div class="rc-modal rc-wide">
+    <div class="rc-mh"><span id="rcal-web-title">Web date</span><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    <div id="rcal-web-body"></div>
+    <div class="rc-mf"><button class="rc-btn rc-del" id="rcal-web-del">Remove from calendar</button>
+      <span class="rc-bar"><button class="rc-btn" data-rc-close>Close</button></span></div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-data-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-data-title">
+  <div class="rc-modal rc-wide">
+    <div class="rc-mh"><span id="rcal-data-title">Calendar backup / restore</span><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    <div class="rc-fl"><label for="rcal-data-txt">Calendar data (JSON)</label><textarea id="rcal-data-txt" style="min-height:220px;font-size:11px"></textarea>
+      <div class="rc-hint">Copy keeps a backup. Paste a backup here and press Restore. The calendar saves itself to calendar/calendar_state.json on GitHub.</div></div>
+    <div class="rc-err" id="rcal-data-err"></div>
+    <div class="rc-mf"><span></span><span class="rc-bar"><button class="rc-btn" id="rcal-data-copy">Copy</button><button class="rc-btn rc-pri" id="rcal-data-restore">Restore</button></span></div>
+  </div>
+</div>
+
+<div class="rc-sub-ov" id="rcal-pd-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-pd-title" style="padding-top:4vh">
+  <div class="rc-modal rc-xwide">
+    <div class="pd-head">
+      <div class="rc-title" id="rcal-pd-title">Pending web dates<small id="rcal-pd-gen"></small></div>
+      <div class="rc-bar"><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    </div>
+    <div class="pd-body" id="rcal-pd-body"></div>
+    <div class="pd-foot">
+      <span class="rc-status" id="rcal-pd-status">Approve adds the date to the calendar. Reject stops it coming back unless the company changes the date.</span>
+      <span class="rc-bar"><button class="rc-btn rc-del" id="rcal-pd-rejsel">Reject selected</button><button class="rc-btn rc-pri" id="rcal-pd-appsel">Approve selected</button></span>
+    </div>
+  </div>
+</div>
+
+<div id="toast-wrap"></div>
+
+<script>
+(function(){
+'use strict';
+var REPO='Markmark5/Database', BRANCH='main';
+var F_STATE='calendar/calendar_state.json', F_APPROVED='calendar/approved_events.json',
+    F_REJECTED='calendar/rejected.json', F_PENDING='calendar/pending_events.json';
+var CACHE_KEY='rnscal_db_v1';   /* same key the Database used: local cache + first-run migration */
+var EMBED=window.parent!==window;
+var PARENT=null; try{ if(EMBED&&window.parent.document) PARENT=window.parent; }catch(e){ PARENT=null; }
+
+function today(){var d=new Date();d.setHours(0,0,0,0);return d;}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function pd(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONL=['january','february','march','april','may','june','july','august','september','october','november','december'];
+function fmt(s){var d=pd(s);return d.getDate()+' '+MON[d.getMonth()];}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function uid(){return 'e'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function $(id){return document.getElementById(id);}
+function note(m,t){var w=$('toast-wrap'),d=document.createElement('div');d.className='toast '+(t||'ok');d.textContent=m;w.appendChild(d);setTimeout(function(){d.remove();},2600);}
+
+/* ── GitHub key: shared with the Database page (same origin, localStorage 'gh_pat') ── */
+function ghKey(){try{return (localStorage.getItem('gh_pat')||'').trim();}catch(e){return '';}}
+var CAN_EDIT=!!ghKey();
+var API='https://api.github.com/repos/'+REPO+'/contents/';
+function b64(str){return btoa(unescape(encodeURIComponent(str)));}
+
+/* read a repo JSON file: API with the key (fresh, no CDN cache), else the site copy, else raw */
+function getJSON(path){
+  var k=ghKey();
+  if(k){
+    return fetch(API+path+'?ref='+BRANCH+'&t='+Date.now(),{headers:{'Authorization':'token '+k,'Accept':'application/vnd.github.raw+json'},cache:'no-store'})
+      .then(function(r){if(r.status===404)return null;if(!r.ok)throw new Error(path+' HTTP '+r.status);return r.json();});
+  }
+  var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}):Promise.reject();
+  return rel.then(function(r){if(r.status===404)return null;if(!r.ok)throw 0;return r.json();})
+    .catch(function(){return fetch('https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/'+path+'?t='+Date.now())
+      .then(function(r){if(r.status===404)return null;if(!r.ok)throw new Error(path+' HTTP '+r.status);return r.json();});});
+}
+/* write a repo JSON file; update(current) returns the new content (read-modify-write, retried on sha clash) */
+function putJSON(path,update,msg,tries){
+  var k=ghKey();if(!k)return Promise.reject(new Error('No GitHub key'));
+  tries=tries||0;
+  var h={'Authorization':'token '+k,'Accept':'application/vnd.github.v3+json'};
+  return fetch(API+path+'?ref='+BRANCH+'&t='+Date.now(),{headers:h,cache:'no-store'})
+    .then(function(r){if(r.status===404)return {sha:null,data:null};if(!r.ok)throw new Error('read '+path+' HTTP '+r.status);
+      return r.json().then(function(j){var txt=decodeURIComponent(escape(atob(String(j.content||'').replace(/\n/g,''))));
+        var data=null;try{data=JSON.parse(txt);}catch(e){}return {sha:j.sha,data:data};});})
+    .then(function(cur){
+      var next=update(cur.data);
+      var body={message:msg,content:b64(JSON.stringify(next,null,1)+'\n'),branch:BRANCH};if(cur.sha)body.sha=cur.sha;
+      return fetch(API+path,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},h),body:JSON.stringify(body)})
+        .then(function(r){
+          if((r.status===409||r.status===422)&&tries<2)return putJSON(path,update,msg,tries+1);
+          if(r.status!==200&&r.status!==201)return r.json().then(function(e){throw new Error(path+' HTTP '+r.status+': '+(e.message||''));});
+          return next;});
+    });
+}
+
+/* ── state (manual dates, stars, ▲ overrides, synced scorecard ids) ── */
+var S={events:[],stars:{},beatOv:{},synced:{}};
+var storageOK=true;
+function blank(){return {events:[],stars:{},beatOv:{},synced:{}};}
+function normalise(o){
+  var s=blank();if(!o)return s;
+  s.events=Array.isArray(o.events)?o.events:[];s.stars=o.stars||{};s.beatOv=o.beatOv||{};s.synced=o.synced||{};
+  s.events.forEach(function(e){if(e.type==='Capital markets day')e.type='Other';if(!e.id)e.id=uid();});
+  return s;
+}
+function loadCache(){try{var r=localStorage.getItem(CACHE_KEY);return r?normalise(JSON.parse(r)):null;}catch(e){storageOK=false;return null;}}
+function cache(){try{localStorage.setItem(CACHE_KEY,JSON.stringify(S));}catch(e){storageOK=false;}}
+
+var saveTimer=null,saving=false,saveAgain=false,dirty=false;
+function syncMsg(t,bad){var e=$('rcal-sync');e.textContent=t;e.classList.toggle('rc-bad',!!bad);}
+/* every edit: cache locally, then push calendar_state.json 1.5s after the last change */
+function save(){
+  cache();if(!CAN_EDIT)return;
+  dirty=true;syncMsg('· unsaved changes…');clearTimeout(saveTimer);saveTimer=setTimeout(pushState,1500);
+}
+function pushState(){
+  if(saving){saveAgain=true;return;}
+  saving=true;dirty=false;syncMsg('· saving…');
+  var snap={version:1,saved:new Date().toISOString(),events:S.events,stars:S.stars,beatOv:S.beatOv,synced:S.synced};
+  putJSON(F_STATE,function(){return snap;},'Calendar edit '+new Date().toISOString().slice(0,16).replace('T',' '))
+    .then(function(){syncMsg('· saved to GitHub');},function(e){dirty=true;syncMsg('· save failed: '+e.message,true);note('Calendar save failed','err');})
+    .then(function(){saving=false;if(saveAgain){saveAgain=false;pushState();}});
+}
+
+/* ── scorecards: the Database's copy when embedded, else database.json ── */
+var OWN_CARDS=[],OWN_LEGACY=null,cardsReady=false;
+function allCards(){
+  try{if(PARENT&&Array.isArray(PARENT.ALL)&&PARENT.ALL.length)return PARENT.ALL;}catch(e){}
+  return OWN_CARDS;
+}
+function loadCards(){
+  try{if(PARENT&&Array.isArray(PARENT.ALL)&&PARENT.ALL.length){cardsReady=true;return Promise.resolve();}}catch(e){}
+  syncMsg('· loading scorecards…');
+  var rel=/^https?:/.test(location.protocol)?fetch('database.json?t='+Date.now()):Promise.reject();
+  return rel.then(function(r){if(!r.ok)throw 0;return r.json();})
+    .catch(function(){return fetch('https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/database.json?t='+Date.now()).then(function(r){return r.json();});})
+    .then(function(d){
+      var cards=(d&&d.scorecards)||[],have={};
+      cards.forEach(function(r){if(r&&r.id)have[r.id]=1;});
+      (d&&Array.isArray(d.scorecardIndex)?d.scorecardIndex:[]).forEach(function(e){if(e&&e.id&&e.arc&&!have[e.id]){var s=Object.assign({},e);s._stub=true;cards.push(s);}});
+      OWN_CARDS=cards;OWN_LEGACY=d&&d.rnsCalendar||null;cardsReady=true;syncMsg('');
+    },function(){cardsReady=true;syncMsg('· scorecards unavailable',true);});
+}
+/* archived scorecards: the Database's loader when embedded, else fetch archive/scorecards_YYYY-MM.json */
+var ARC={};
+function hydrateTicker(t){
+  try{if(PARENT&&typeof PARENT.arcHydrateTicker==='function')return PARENT.arcHydrateTicker(t);}catch(e){}
+  var stubs=OWN_CARDS.filter(function(r){return r&&r._stub&&String(r.ticker||'').toUpperCase()===t;});
+  var names={};stubs.forEach(function(s){if(s.arc)names[s.arc]=1;});
+  return Promise.all(Object.keys(names).map(function(n){
+    if(!ARC[n])ARC[n]=getJSON('archive/scorecards_'+n+'.json').then(function(j){var m={};((j&&j.scorecards)||[]).forEach(function(c){if(c&&c.id)m[c.id]=c;});return m;},function(){return {};});
+    return ARC[n];
+  })).then(function(maps){
+    var full={};maps.forEach(function(m){Object.keys(m).forEach(function(id){full[id]=m[id];});});
+    for(var i=0;i<OWN_CARDS.length;i++){var r=OWN_CARDS[i];if(r&&r._stub&&full[r.id])OWN_CARDS[i]=full[r.id];}
+  });
+}
+
+function recs(tk){tk=String(tk).toUpperCase();return allCards().filter(function(r){return String(r.ticker||'').toUpperCase()===tk;}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));});}
+function latest(tk){var r=recs(tk);return r.length?r[r.length-1]:null;}
+function devPP(s){var m=String(s||'').replace(/−/g,'-').match(/([+-]?\d+(?:\.\d+)?)\s*pp/);return m?parseFloat(m[1]):null;}
+function flags(r){
+  /* h1: H1 ✓ · hyp1: H1 🔬 ≥ +1.5pp · h2: H2 🔥 · hyp2: H2 🔬 ≥ +3pp · acc: FY accel ✓ */
+  var f={h1:false,hyp1:false,h2:false,hyp2:false,acc:false};if(!r)return f;
+  (r.h1Inds||[]).forEach(function(i){
+    var isH2=/H2/i.test(i.lbl||''),hyp=/🔬/.test((i.mark||'')+(i.dev||'')),d=devPP(i.dev);
+    if(hyp){ if(d!==null){ if(isH2&&d>=3)f.hyp2=true; if(!isH2&&d>=1.5)f.hyp1=true; } }
+    else if(i.state==='pos'){ if(isH2)f.h2=true; else f.h1=true; }
+  });
+  (r.accelInds||[]).forEach(function(i){if(i.state==='pos')f.acc=true;});
+  return f;
+}
+/* earlier H1 ✓ or 🔬 ≥ +1.5pp within 273 days before this card */
+function h1Before(tk,date){
+  var lim=pd(date);lim.setDate(lim.getDate()-273);var from=iso(lim);
+  return recs(tk).filter(function(r){var d=String(r.date||'');return d<date&&d>=from;}).reverse().filter(function(r){var f=flags(r);return f.h1||f.hyp1;})[0]||null;
+}
+function doubleOf(L){
+  if(!L)return null;
+  var fl=flags(L);if(!fl.h2)return null;
+  if(L.calData&&typeof L.calData.double==='boolean'){return L.calData.double?(h1Before(L.ticker,String(L.date))||{}):null;}
+  return h1Before(L.ticker,String(L.date||''));
+}
+function beatState(tk){
+  var L=latest(tk);var since=L?String(L.date||''):'';var ov=S.beatOv[tk];
+  var auto=!!(L&&L.calData&&L.calData.beat);var phrase=L&&L.calData?L.calData.beatPhrase:'';
+  if(ov&&ov.since===since)return {on:!!ov.v,man:true,phrase:phrase};
+  return {on:auto,man:false,phrase:phrase};
+}
+function band(s){return s==null?'rc-p-n':s>=75?'rc-p-g':s>=50?'rc-p-a':'rc-p-r';}
+function confCls(c){return c==='confirmed'?'rc-cf-c':c==='provisional'?'rc-cf-p':'rc-cf-i';}
+function confLbl(c){return c==='confirmed'?'Confirmed':c==='provisional'?'Provisional':'Implied';}
+
+/* ── event types ── */
+var TYPES=['H1 results','FY results','Pre-H1 TU','Pre-FY TU','Q1','Q3','Trading update','AGM','Other'];
+function typeOf(txt){
+  var t=(txt||'').toLowerCase();
+  if(/capital markets|investor day|\bcmd\b/.test(t))return 'Other';
+  if(/\bagm\b|annual general/.test(t)&&!/trading/.test(t))return 'AGM';
+  if(/\bq1\b|first quarter|three months/.test(t))return 'Q1';
+  if(/\bq3\b|third quarter|nine months/.test(t))return 'Q3';
+  if(/interim|half[- ]?year|\bh1\b|\bhy\d*\b/.test(t)&&!/trading|pre-close|preclose/.test(t))return 'H1 results';
+  if(/final result|full[- ]?year result|preliminary|\bfy\d*\b.*result|annual result/.test(t))return 'FY results';
+  if(/(half[- ]?year|\bh1\b|\bhy\d*\b|six months|first half).*(trading|pre-close|update)|(trading|pre-close|update).*(six months|first half|half[- ]?year|\bh1\b)/.test(t))return 'Pre-H1 TU';
+  if(/pre-close|preclose|(full[- ]?year|\bfy\d*\b|year[- ]end|twelve months).*(trading|update)|(trading|update).*(full[- ]?year|year[- ]end|twelve months)/.test(t))return 'Pre-FY TU';
+  if(/trading|update|statement/.test(t))return 'Trading update';
+  return 'Other';
+}
+function windowOf(y,m,part){
+  var last=new Date(y,m+1,0).getDate();
+  var r={all:[1,last],early:[1,10],mid:[11,20],late:[21,last]}[part]||[1,last];
+  return {from:iso(new Date(y,m,r[0])),to:iso(new Date(y,m,r[1])),label:(part==='all'?'':part[0].toUpperCase()+part.slice(1)+' ')+MON[m]+' '+y};
+}
+function partOf(e){
+  if(e.from===e.to)return 'exact';
+  if(e.from.slice(0,7)!==e.to.slice(0,7))return 'range';
+  var d1=+e.from.slice(8),d2=+e.to.slice(8),last=new Date(+e.from.slice(0,4),+e.from.slice(5,7),0).getDate();
+  if(d1===1&&d2<=10)return 'early';if(d1>=11&&d2<=20)return 'mid';if(d1>=21)return 'late';if(d1===1&&d2===last)return 'month';return 'range';
+}
+function sortKey(e){var p=partOf(e);if(p==='exact'||p==='early'||p==='range')return e.from;if(p==='mid')return e.from.slice(0,8)+'15';return e.to;}
+var RANK={exact:0,early:1,range:1,mid:2,late:3,month:4};
+function shortWin(e){var p=partOf(e),m=MON[+e.from.slice(5,7)-1];return p==='early'?'Early '+m:p==='mid'?'Mid '+m:p==='late'?'Late '+m:p==='month'?m:fmt(e.from)+'+';}
+
+/* ── merge events from a scorecard ── */
+function sameEvent(a,b){if(a.ticker!==b.ticker||a.type!==b.type)return false;return Math.abs(pd(a.from)-pd(b.from))/864e5<=35;}
+function mergeImported(tk,incoming,rnsDate){
+  var t0=iso(today());
+  S.events=S.events.filter(function(e){return !(e.ticker===tk&&!e.manual&&e.to>=t0&&(e.rns||'')<=rnsDate&&!incoming.some(function(n){return sameEvent(n,e);}));});
+  incoming.forEach(function(n){
+    var ex=S.events.filter(function(e){return sameEvent(e,n);})[0];
+    if(!ex){n.added=Date.now();S.events.push(n);return;}
+    var exExact=ex.from===ex.to,nExact=n.from===n.to,of=ex.from,ot=ex.to,oa=ex.added,om=ex.moved;
+    if(ex.manual){if(nExact&&!exExact){ex.from=n.from;ex.to=n.to;ex.label=n.label;ex.conf=n.conf;ex.src=n.src;ex.added=Date.now();ex.moved=1;}return;}
+    if(nExact||!exExact||(n.rns||'')>=(ex.rns||'')){var id=ex.id;Object.keys(n).forEach(function(k){ex[k]=n[k];});ex.id=id;
+      if(ex.from!==of||ex.to!==ot){ex.added=Date.now();ex.moved=1;}else{ex.added=oa;ex.moved=om;}}
+  });
+}
+/* pick up .cal-data carried on scorecards (once per scorecard) */
+function syncFromCards(){
+  var changed=false;
+  allCards().filter(function(r){return r&&r.calData&&Array.isArray(r.calData.events);})
+   .sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));})
+   .forEach(function(r){
+     var sid=r.id||(r.ticker+'_'+r.date);if(S.synced[sid])return;
+     var tk=String(r.ticker).toUpperCase();
+     var evs=r.calData.events.filter(function(e){return e&&e.from;}).map(function(e){
+       return {id:uid(),ticker:tk,company:r.company||'',type:e.type||typeOf(e.event),event:e.event||e.type||'',from:e.from,to:e.to||e.from,
+         label:e.label||'',conf:String(e.conf||'implied').toLowerCase(),src:e.src||'RNS',rns:String(r.date||''),manual:false,note:''};});
+     mergeImported(tk,evs,String(r.date||''));S.synced[sid]=1;changed=true;
+   });
+  if(changed)save();
+}
+
+/* ── approved web dates (from the scraper, via the Pending panel) ── */
+var APPROVED=[],REJECTED=[],PENDING=null;
+function webTicker(a){return String(a.epic||a.company||'?').toUpperCase();}
+function webEvents(){
+  return APPROVED.filter(function(a){return a&&a.from;}).map(function(a){
+    return {id:'w_'+a.id,web:a,ticker:webTicker(a),company:a.company||'',type:a.type,event:a.event||a.type,from:a.from,to:a.to||a.from,
+      label:a.label||'',conf:a.conf||'confirmed',src:'Web',added:a.approved?Date.parse(a.approved+'T12:00:00'):0};
+  }).filter(function(w){return !S.events.some(function(e){return sameEvent(e,w);});});   /* a scorecard/manual date wins */
+}
+function allEvents(){return S.events.concat(webEvents());}
+
+/* ── paste-line parser ── */
+function parseLine(txt){
+  var t=txt.toLowerCase(),res={};if(t.trim())res.type=typeOf(t);
+  var m=t.match(/(\d{1,2})(?:st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/);
+  if(m){res.date=iso(new Date(+m[3],MONL.indexOf(m[2]),+m[1]));return res;}
+  m=t.match(/(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})/);
+  if(m){res.date=iso(new Date(+m[3],MONL.indexOf(m[1]),+m[2]));return res;}
+  m=t.match(/(early|beginning of|mid|middle of|late|end of|towards the end of)?\s*-?\s*(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})/);
+  if(m){var p=m[1]||'';res.month=m[3]+'-'+String(MONL.indexOf(m[2])+1).padStart(2,'0');res.part=/early|beginning/.test(p)?'early':/mid|middle/.test(p)?'mid':/late|end/.test(p)?'late':'all';}
+  return res;
+}
+
+/* ── trading days: weekdays excluding England & Wales bank holidays (LSE closed), computed for any year ── */
+var HOLS={};
+function easter(y){var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/114);return new Date(y,Math.floor((h+l-7*m+114)/31)-1,((h+l-7*m+114)%31)+1);}
+function addHol(d){HOLS[iso(d)]=1;}
+function wkend(d){var w=d.getDay();return w===0||w===6;}
+function holsFor(y){
+  var e=easter(y);addHol(new Date(y,e.getMonth(),e.getDate()-2));addHol(new Date(y,e.getMonth(),e.getDate()+1));
+  var firstMon=function(m){var d=new Date(y,m,1);while(d.getDay()!==1)d.setDate(d.getDate()+1);return d;};
+  var lastMon=function(m){var d=new Date(y,m+1,0);while(d.getDay()!==1)d.setDate(d.getDate()-1);return d;};
+  addHol(firstMon(4));addHol(lastMon(4));addHol(lastMon(7));
+  var ny=new Date(y,0,1);while(wkend(ny))ny.setDate(ny.getDate()+1);addHol(ny);
+  [25,26].forEach(function(day){var d=new Date(y,11,day);while(wkend(d)||HOLS[iso(d)])d.setDate(d.getDate()+1);addHol(d);});
+}
+(function(){var y=new Date().getFullYear();for(var i=y-1;i<=y+3;i++)holsFor(i);})();
+function isTD(d){return !wkend(d)&&!HOLS[iso(d)];}
+function tdays(T,target){var d=new Date(T),end=pd(target),n=0;if(end<=d)return 0;while(d<end){d.setDate(d.getDate()+1);if(isTD(d))n++;}return n;}
+var MONF=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function ordn(n){var s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+function grpKey(e){var p=partOf(e);return p==='exact'?'d'+e.from:p+e.from.slice(0,7)+(p==='range'?e.from:'');}
+function grpLabel(e){
+  var p=partOf(e),d=pd(e.from),M=MONF[d.getMonth()]+' '+d.getFullYear();
+  if(p==='exact')return {t:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+ordn(d.getDate())+' '+M,s:''};
+  if(p==='early')return {t:'Early '+M,s:fmt(e.from)+'–'+fmt(e.to)};
+  if(p==='mid')return {t:'Mid '+M,s:fmt(e.from)+'–'+fmt(e.to)};
+  if(p==='late')return {t:'Late '+M,s:fmt(e.from)+'–'+fmt(e.to)};
+  if(p==='month')return {t:M,s:'date not yet set'};
+  return {t:'From '+fmt(e.from),s:fmt(e.from)+'–'+fmt(e.to)};
+}
+
+/* ── render ── */
+var RNG=30,FSTAR=false,FBEAT=false,FQ='',FNEW=false;
+/* when a date was added/moved (older scorecard dates fall back to their RNS date) */
+function addedAt(e){if(e.added)return +e.added;if(!e.manual&&e.rns){var t=Date.parse(String(e.rns).slice(0,10)+'T12:00:00');return isNaN(t)?0:t;}return 0;}
+function passes(e){
+  if(FQ&&e.ticker.indexOf(FQ)<0)return false;
+  if(FSTAR&&!S.stars[e.ticker])return false;
+  if(FBEAT&&!beatState(e.ticker).on)return false;
+  return true;
+}
+function newList(){var now=Date.now();return allEvents().filter(function(e){if(!passes(e))return false;var a=addedAt(e);return a&&now-a<=7*864e5;});}
+function renderNew(){
+  var T=today(),t0=iso(T),now=Date.now(),list=$('rcal-list');
+  var ev=newList().sort(function(a,b){return addedAt(b)-addedAt(a)||sortKey(a).localeCompare(sortKey(b));});
+  var G=[{t:'Added in the last day',max:1},{t:'Added 1–3 days ago',max:3},{t:'Added 3–7 days ago',max:7}];
+  var h='';
+  G.forEach(function(g,gi){
+    var lo=gi?G[gi-1].max:0;
+    var part=ev.filter(function(e){var d=(now-addedAt(e))/864e5;return d>lo&&d<=g.max||(gi===0&&d<=0);});
+    if(!part.length)return;
+    var mv=part.filter(function(e){return e.moved;}).length;
+    h+='<div class="rc-wk"><b>'+esc(g.t)+'</b><span>'+part.length+' date'+(part.length>1?'s':'')+(mv?' · '+mv+' moved':'')+'</span></div>';
+    var alt=false;part.forEach(function(e){h+=row(e,e.to<t0,T,alt);alt=!alt;});
+  });
+  if(!h)h='<div class="rc-empty">No dates added in the last 7 days.</div>';
+  list.innerHTML=h;stats();
+}
+function render(){
+  try{var nb=$('rcal-fnew');if(nb){var nn=newList().length;nb.textContent='✦ New'+(nn?' ('+nn+')':'');}}catch(e){}
+  pendButton();
+  var T=today(),t0=iso(T);
+  $('rcal-today').textContent='Today '+T.getDate()+' '+MON[T.getMonth()]+' '+T.getFullYear();
+  var EV=allEvents();
+  if(FNEW&&EV.length){renderNew();return;}
+  var list=$('rcal-list');
+  var horizon=iso(new Date(T.getTime()+RNG*864e5)),pastFrom=iso(new Date(T.getTime()-21*864e5));
+  if(!EV.length){
+    list.innerHTML='<div class="rc-empty">No dates yet. Dates arrive with new scorecards and approved web dates'+(CAN_EDIT?', or add one with ＋ Add date.<br><br><button class="rc-btn" id="rcal-eseed">Load recent dates</button>':'.')+'</div>';
+    if($('rcal-eseed'))$('rcal-eseed').onclick=seed;stats();return;
+  }
+  var ev=EV.filter(function(e){
+    if(!passes(e))return false;
+    if(e.to<t0)return e.to>=pastFrom;
+    return sortKey(e)<=horizon;
+  });
+  var past=ev.filter(function(e){return e.to<t0;}).sort(function(a,b){return b.to.localeCompare(a.to);});
+  var up=ev.filter(function(e){return e.to>=t0;}).sort(function(a,b){
+    return sortKey(a).localeCompare(sortKey(b))||RANK[partOf(a)]-RANK[partOf(b)]||(S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||a.ticker.localeCompare(b.ticker);});
+  var h='',alt=false;
+  if(past.length){h+='<div class="rc-wk rc-pastwk"><b>Recently reported</b><span>last 21 days</span></div>';past.forEach(function(e){h+=row(e,true,T,alt);alt=!alt;});}
+  var last='';
+  up.forEach(function(e){
+    var k=grpKey(e);
+    if(k!==last){var g=grpLabel(e);
+      h+='<div class="rc-wk"><b>'+esc(g.t)+'</b>'+(g.s?'<span>'+esc(g.s)+'</span>':'')+'</div>';last=k;alt=false;}
+    h+=row(e,false,T,alt);alt=!alt;
+  });
+  if(!past.length&&!up.length)h='<div class="rc-empty">No events match these filters.</div>';
+  list.innerHTML=h;stats();
+}
+function row(e,isPast,T,alt){
+  var L=latest(e.ticker),bs=beatState(e.ticker),star=!!S.stars[e.ticker],fl=flags(L);
+  var exact=e.from===e.to,days=tdays(T,e.from);
+  var dlab=e.label&&!exact?e.label:fmt(e.from);
+  var dtxt=isPast?'':(exact?(days<=0?'today':days+' td'):shortWin(e));
+  var mk='<button class="rc-beat'+(bs.on?' rc-on':'')+(bs.man?' rc-man':'')+'" data-rc-beat="'+esc(e.ticker)+'" title="'+esc(bs.man?'Set manually.'+(CAN_EDIT?' Click to toggle.':''):(bs.phrase?'“'+bs.phrase+'”.'+(CAN_EDIT?' Click to override.':''):(bs.on?'Ahead of forecasts at last update.':'Not flagged.')))+'">▲</button>';
+  var dbl=doubleOf(L);
+  if(dbl){mk+='<span title="Double: H1 ahead earlier'+(dbl.date?' ('+esc(dbl.date)+(dbl.score!=null?', '+dbl.score:'')+')':'')+', H2 accelerating now">📈🔥</span>';}
+  else{
+    if(fl.h1)mk+='<span title="H1 ahead of seasonal (last card)">📈</span>';
+    if(fl.h2)mk+='<span title="H2 accelerating vs last H2 (last card)">🔥</span>';
+  }
+  if(fl.hyp1)mk+='<span class="rc-ring rc-r1" title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
+  if(fl.hyp2)mk+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical (last card)">🔬</span>';
+  if(fl.acc)mk+='<span title="Full-year growth accelerating vs prior year (last card)">🚀</span>';
+  var sc;
+  if(isPast){
+    var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
+    var pv=bef.length?bef[bef.length-1]:null,nw=aft.length?aft[0]:null;
+    sc='<span class="rc-pill '+band(pv&&pv.score)+'">'+(pv?pv.score:'—')+'</span> → '+(nw?'<span class="rc-pill '+band(nw.score)+'">'+nw.score+'</span>':'<span title="Import the new scorecard to record the result">awaiting</span>');
+  }else{
+    sc='<span class="rc-pill '+band(L&&L.score)+'">'+(L?L.score:'—')+'</span><span class="rc-vd" title="'+esc(L?(L.verdict||'')+' · '+(L.date||''):'No scorecard yet')+'">'+esc(L?(L.verdict||L.date):(cardsReady?'no card':'…'))+'</span>';
+  }
+  var co=e.company||(L&&L.company)||'';
+  var web=e.web?'<span class="rc-web" title="Found on the company website'+(e.web.url?': '+esc(e.web.url):'')+'">WEB</span>':'';
+  return '<div class="rc-row'+(alt?' rc-alt':'')+(star?' rc-star':'')+(isPast?' rc-past':'')+'" data-rc-id="'+esc(e.id)+'" tabindex="0">'
+   +'<div><div class="rc-d1">'+esc(dlab)+'</div><div class="rc-d2">'+(exact?['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pd(e.from).getDay()]:fmt(e.from)+'–'+fmt(e.to))+'</div></div>'
+   +'<div style="min-width:0"><span class="rc-tk" data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards">'+esc(e.ticker)+'</span><div class="rc-co">'+esc(co)+'</div></div>'
+   +'<div class="rc-ev"><div class="rc-e1">'+esc(e.event||e.type)+'</div><div class="rc-e2"><span class="'+confCls(e.conf)+'">'+confLbl(e.conf)+'</span>'+web+(e.userAdded?' · added manually':'')+(e.note?' · '+esc(e.note):'')+'</div></div>'
+   +'<div class="rc-mk">'+mk+'</div><div class="rc-sc">'+sc+'</div>'
+   +'<div class="rc-days'+(!isPast&&exact&&days<=5?' rc-soon':'')+(!exact?' rc-win':'')+'" title="'+(exact&&!isPast?days+' trading days (weekends and bank holidays excluded)':'')+'">'+dtxt+'</div>'
+   +'<button class="rc-st'+(star?' rc-on':'')+'" data-rc-star="'+esc(e.ticker)+'" aria-label="'+(star?'Unstar ':'Star ')+esc(e.ticker)+'">'+(star?'★':'☆')+'</button></div>';
+}
+function stats(){
+  var t0=iso(today()),up=allEvents().filter(function(e){return e.to>=t0;}).length,st=Object.keys(S.stars).filter(function(k){return S.stars[k];}).length;
+  $('rcal-stats').textContent=up+' upcoming · '+st+' starred · scores from '+allCards().length+' scorecards'+(CAN_EDIT?'':' · read-only')+(storageOK?'':' · browser storage unavailable');
+}
+
+/* ── open / close (embedded in the Database) ── */
+function close(){try{if(PARENT&&typeof PARENT.rcalClose==='function')PARENT.rcalClose();}catch(e){}}
+if(EMBED){document.body.classList.add('rc-embed');$('rcal-close').style.display='';$('rcal-close').onclick=close;
+  $('rcal-ov').addEventListener('click',function(e){if(e.target===$('rcal-ov'))close();});}
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var rn=$('rcal-rns-ov');if(rn&&rn.style.display==='flex'){rn.style.display='none';return;}
+  var subs=document.querySelectorAll('.rc-sub-ov.rc-open');if(subs.length){subs.forEach(function(o){o.classList.remove('rc-open');});return;}
+  close();
+});
+/* the Database calls this each time its Calendar button is pressed */
+window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();render();loadRemote(false);};
+
+/* ── list interactions ── */
+$('rcal-list').addEventListener('click',function(ev){
+  var tk=ev.target.closest('[data-rc-rns]');if(tk){showRNS(tk.getAttribute('data-rc-rns'));return;}
+  if(!CAN_EDIT)return;
+  var s=ev.target.closest('[data-rc-star]');
+  if(s){var k=s.getAttribute('data-rc-star');if(S.stars[k])delete S.stars[k];else S.stars[k]=true;save();render();return;}
+  var b=ev.target.closest('[data-rc-beat]');
+  if(b){var t=b.getAttribute('data-rc-beat'),L=latest(t),cur=beatState(t).on,auto=!!(L&&L.calData&&L.calData.beat),nv=!cur;
+    if(nv===auto)delete S.beatOv[t];else S.beatOv[t]={v:nv,since:L?String(L.date||''):''};
+    save();render();note(t+(nv?' marked ▲ beat':' ▲ beat removed'));return;}
+  var r=ev.target.closest('.rc-row');if(!r)return;
+  var id=r.getAttribute('data-rc-id');
+  if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);
+});
+$('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&CAN_EDIT&&ev.target.classList.contains('rc-row')){var id=ev.target.getAttribute('data-rc-id');if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);}});
+document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
+$('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);render();};
+$('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);render();};
+$('rcal-fnew').onclick=function(){FNEW=!FNEW;this.classList.toggle('rc-on',FNEW);render();};
+$('rcal-fq').oninput=function(){FQ=this.value.trim().toUpperCase();render();};
+
+/* ── sub-modals ── */
+function openSub(id){$(id).classList.add('rc-open');}
+document.querySelectorAll('[data-rc-close]').forEach(function(b){b.onclick=function(){b.closest('.rc-sub-ov').classList.remove('rc-open');};});
+document.querySelectorAll('.rc-sub-ov').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('rc-open');});});
+
+var EDIT=null,DM='exact';
+function setDM(m){DM=m;document.querySelectorAll('[data-rc-dm]').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-rc-dm')===m);});
+  $('rcal-dm-exact').style.display=m==='exact'?'':'none';$('rcal-dm-window').style.display=m==='window'?'grid':'none';}
+document.querySelectorAll('[data-rc-dm]').forEach(function(b){b.onclick=function(){setDM(b.getAttribute('data-rc-dm'));};});
+function fillTk(){var seen={},o='';allCards().forEach(function(r){var t=String(r.ticker||'').toUpperCase();if(t&&!seen[t]){seen[t]=1;o+='<option value="'+esc(t)+'">'+esc(r.company||'')+'</option>';}});$('rcal-tklist').innerHTML=o;}
+function openEv(id){
+  EDIT=id?S.events.filter(function(e){return e.id===id;})[0]:null;fillTk();
+  $('rcal-ev-title').textContent=EDIT?'Edit date':'Add date';$('rcal-ev-del').style.visibility=EDIT?'visible':'hidden';
+  $('rcal-ev-err').style.display='none';$('rcal-ev-paste').value='';
+  var e=EDIT||{ticker:'',type:'H1 results',company:'',from:'',to:'',conf:'confirmed',src:'RNS',note:''};
+  $('rcal-ev-tk').value=e.ticker;$('rcal-ev-type').value=e.type;$('rcal-ev-co').value=e.company||'';$('rcal-ev-conf').value=e.conf;$('rcal-ev-src').value=e.src||'RNS';$('rcal-ev-note').value=e.note||'';
+  if(e.from&&e.from!==e.to){setDM('window');$('rcal-ev-month').value=e.from.slice(0,7);var p=partOf(e);$('rcal-ev-part').value=(p==='early'||p==='mid'||p==='late')?p:'all';}
+  else{setDM('exact');$('rcal-ev-date').value=e.from||'';}
+  openSub('rcal-ev-ov');setTimeout(function(){$('rcal-ev-tk').focus();},30);
+}
+$('rcal-add').onclick=function(){openEv(null);};
+$('rcal-ev-tk').oninput=function(){var L=latest(this.value.trim().toUpperCase());if(L&&!$('rcal-ev-co').value)$('rcal-ev-co').value=L.company||'';$('rcal-ev-err').style.display='none';};
+$('rcal-ev-paste').oninput=function(){var r=parseLine(this.value);if(r.type)$('rcal-ev-type').value=r.type;
+  if(r.date){setDM('exact');$('rcal-ev-date').value=r.date;}else if(r.month){setDM('window');$('rcal-ev-month').value=r.month;$('rcal-ev-part').value=r.part;}};
+['rcal-ev-date','rcal-ev-month'].forEach(function(i){$(i).addEventListener('input',function(){$('rcal-ev-err').style.display='none';});});
+$('rcal-ev-save').onclick=function(){
+  var err=$('rcal-ev-err'),tk=$('rcal-ev-tk').value.trim().toUpperCase(),from,to,label='';
+  if(!tk){err.textContent='Enter a ticker.';err.style.display='block';return;}
+  if(DM==='exact'){from=to=$('rcal-ev-date').value;if(!from){err.textContent='Pick a date.';err.style.display='block';return;}}
+  else{var m=$('rcal-ev-month').value;if(!m){err.textContent='Pick a month.';err.style.display='block';return;}
+    var w=windowOf(+m.slice(0,4),+m.slice(5,7)-1,$('rcal-ev-part').value);from=w.from;to=w.to;label=w.label;}
+  var type=$('rcal-ev-type').value;
+  var data={ticker:tk,type:type,event:type,company:$('rcal-ev-co').value.trim(),from:from,to:to,label:label,conf:$('rcal-ev-conf').value,src:$('rcal-ev-src').value.trim(),note:$('rcal-ev-note').value.trim(),manual:true};
+  if(EDIT){Object.keys(data).forEach(function(k){EDIT[k]=data[k];});}else{data.id=uid();data.rns='';data.userAdded=true;data.added=Date.now();S.events.push(data);}
+  save();render();$('rcal-ev-ov').classList.remove('rc-open');note(tk+' '+type+' saved');
+};
+$('rcal-ev-del').onclick=function(){if(!EDIT)return;if(!confirm('Delete '+EDIT.ticker+' '+EDIT.type+'?'))return;
+  S.events=S.events.filter(function(e){return e!==EDIT;});save();render();$('rcal-ev-ov').classList.remove('rc-open');note('Date deleted');};
+
+/* web date details: source link, remove (= reject so it doesn't come back) */
+var WEB=null;
+function openWeb(id){
+  WEB=APPROVED.filter(function(a){return a.id===id;})[0];if(!WEB)return;
+  $('rcal-web-title').textContent=webTicker(WEB)+' · '+WEB.type;
+  $('rcal-web-body').innerHTML='<div class="rc-fl"><label>Company</label><div>'+esc(WEB.company)+'</div></div>'
+    +'<div class="rc-fl"><label>Date</label><div>'+esc(WEB.label||(WEB.from===WEB.to?fmt(WEB.from)+' '+WEB.from.slice(0,4):WEB.from+' – '+WEB.to))+' · '+esc(confLbl(WEB.conf))+'</div></div>'
+    +(WEB.snippet?'<div class="rc-fl"><label>Text on the page</label><div class="pd-snip">“'+esc(WEB.snippet)+'”</div></div>':'')
+    +'<div class="rc-fl"><label>Source</label><div class="pd-src"><a href="'+esc(WEB.url)+'" target="_blank" rel="noopener">'+esc(WEB.url)+'</a></div></div>'
+    +'<div class="rc-hint">Approved '+esc(WEB.approved||'')+'. To change the date, add it with ＋ Add date (a manual date replaces this one).</div>';
+  openSub('rcal-web-ov');
+}
+$('rcal-web-del').onclick=function(){
+  if(!WEB||!confirm('Remove '+webTicker(WEB)+' '+WEB.type+' from the calendar?'))return;
+  var id=WEB.id;
+  putJSON(F_APPROVED,function(cur){return (Array.isArray(cur)?cur:[]).filter(function(a){return a.id!==id;});},'Calendar: remove '+webTicker(WEB)+' '+WEB.type)
+    .then(function(next){APPROVED=next;return putJSON(F_REJECTED,function(cur){cur=Array.isArray(cur)?cur:[];if(cur.indexOf(id)<0)cur.push(id);return cur;},'Calendar: reject '+id);})
+    .then(function(next){REJECTED=next;$('rcal-web-ov').classList.remove('rc-open');render();note('Removed');},function(e){note('Remove failed: '+e.message,'err');});
+};
+
+/* backup / restore */
+$('rcal-databtn').onclick=function(){$('rcal-data-txt').value=JSON.stringify({version:1,exported:new Date().toISOString(),events:S.events,stars:S.stars,beatOv:S.beatOv},null,1);$('rcal-data-err').style.display='none';openSub('rcal-data-ov');};
+$('rcal-data-copy').onclick=function(){var t=$('rcal-data-txt');t.select();try{navigator.clipboard.writeText(t.value).then(function(){note('Copied');},function(){document.execCommand('copy');note('Copied');});}catch(e){document.execCommand('copy');note('Copied');}};
+$('rcal-data-restore').onclick=function(){
+  try{var o=JSON.parse($('rcal-data-txt').value);if(!o||!Array.isArray(o.events))throw 0;
+    var keepSynced=S.synced;S=normalise(o);S.synced=Object.assign({},keepSynced,o.synced||{});save();render();$('rcal-data-ov').classList.remove('rc-open');note('Calendar restored');}
+  catch(e){var er=$('rcal-data-err');er.textContent='That isn’t a calendar backup. Paste the full JSON copied from a calendar backup box.';er.style.display='block';}
+};
+$('rcal-clear').onclick=function(){if(!confirm('Clear all calendar dates, stars and ▲ overrides? Scorecards and approved web dates are not affected.'))return;var ks=S.synced;S=blank();S.synced=ks;save();render();note('Calendar cleared','err');};
+$('rcal-seed').onclick=function(){seed();};
+
+/* recent dates from past sessions (one-off starter list) */
+function seed(){
+  var E=[
+    ['GRG','Q3','Q3 trading update','2026-10-01','2026-10-01','','confirmed','Mark',true],
+    ['FAN','FY results','FY results','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['GNC','FY results','FY results','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['BOWL','Pre-FY TU','FY trading update','2026-10-08','2026-10-08','','confirmed','Mark',true],
+    ['HAS','Q1','Q1 FY27 trading update','2026-10-12','2026-10-12','','confirmed','Mark',true],
+    ['BYIT','H1 results','H1 FY27 results','2026-10-13','2026-10-13','','confirmed','Mark',true],
+    ['RWA','Q3','Q3 trading update','2026-10-14','2026-10-14','','confirmed','Mark',true],
+    ['DSCV','Pre-H1 TU','H1 trading update','2026-10-14','2026-10-14','','confirmed','Mark',true],
+    ['SSIT','FY results','FY results','2026-10-15','2026-10-15','','confirmed','Mark',true],
+    ['TPK','Q3','Q3 trading update','2026-10-15','2026-10-15','','confirmed','Mark',true],
+    ['BNZL','Q3','Q3 trading update','2026-10-20','2026-10-20','','confirmed','Mark',true],
+    ['SDG','H1 results','Interim results','2026-10-21','2026-10-21','','confirmed','Mark',true],
+    ['RSW','Q1','Q1 trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['AJB','Pre-FY TU','FY trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['ATG','Pre-FY TU','FY26 pre-close trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['REL','Q3','Q3 trading update','2026-10-22','2026-10-22','','confirmed','Mark',true],
+    ['LUCE','Q3','Q3 trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['ALU','AGM','AGM trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['RWS','Pre-FY TU','FY trading update','2026-10-27','2026-10-27','','confirmed','Mark',true],
+    ['ELM','Q3','Q3 trading update','2026-10-28','2026-10-28','','confirmed','Mark',true],
+    ['SFOR','H1 results','Interim results','2026-10-28','2026-10-28','','confirmed','Mark',true],
+    ['MOTR','Pre-H1 TU','H1 trading update','2026-10-01','2026-10-10','Early Oct 2026','provisional','Mark',true],
+    ['HDD','Pre-FY TU','FY trading update','2026-10-11','2026-10-20','Mid Oct 2026','provisional','Mark',true],
+    ['BKS','Trading update','Trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['QTX','Trading update','Trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['VLX','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['TSTL','FY results','FY results','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BMY','H1 results','H1 results','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BOOM','Q3','Q3 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['CLBS','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['WIX','Q3','Q3 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','Mark',true],
+    ['BWY','FY results','Full year results','2026-10-13','2026-10-13','','confirmed','RNS',false],
+    ['VTU','H1 results','Interim results','2026-10-14','2026-10-14','','confirmed','RNS',false],
+    ['G4M','Pre-H1 TU','H1 trading update','2026-10-20','2026-10-20','','confirmed','RNS',false],
+    ['HFD','Pre-H1 TU','HY27 trading update','2026-10-21','2026-10-21','','confirmed','RNS',false],
+    ['REVB','H1 results','Interim results','2026-10-27','2026-10-27','','confirmed','RNS',false],
+    ['CCR','H1 results','Interim results','2026-10-28','2026-10-28','','confirmed','RNS',false],
+    ['BRCK','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','provisional','RNS',false],
+    ['SYS1','Pre-H1 TU','H1 trading update','2026-10-21','2026-10-31','Late Oct 2026','implied','RNS',false],
+    ['ULTP','FY results','Full year results','2026-10-01','2026-10-31','Oct 2026','implied','Broker note',false],
+    ['IWG','Q3','Q3 trading update','2026-11-03','2026-11-03','','confirmed','RNS',false],
+    ['TRN','H1 results','H1 FY27 results','2026-11-04','2026-11-04','','confirmed','RNS',false],
+    ['BTRW','AGM','AGM and trading update','2026-11-04','2026-11-04','','confirmed','RNS',false],
+    ['ASC','FY results','FY26 results','2026-11-05','2026-11-05','','confirmed','RNS',false],
+    ['KNOS','H1 results','H1 FY27 results','2026-11-09','2026-11-09','','confirmed','RNS',false],
+    ['DIA','H1 results','Interim results','2026-11-10','2026-11-10','','confirmed','RNS',false],
+    ['WOSG','Pre-H1 TU','H1 trading update','2026-11-10','2026-11-10','','confirmed','RNS',false],
+    ['FRP','Pre-H1 TU','H1 FY27 trading update','2026-11-11','2026-11-20','Mid Nov 2026','implied','RNS',false],
+    ['HLMA','H1 results','H1 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['BAB','H1 results','HY27 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['INVP','H1 results','Interim results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['TRCS','FY results','FY26 results','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['JD.','Q3','Q3 trading statement','2026-11-19','2026-11-19','','confirmed','RNS',false],
+    ['AO.','H1 results','H1 results','2026-11-24','2026-11-24','','confirmed','RNS',false],
+    ['KGF','Q3','Q3 trading update','2026-11-24','2026-11-24','','confirmed','RNS',false],
+    ['OTB','FY results','FY26 results','2026-12-01','2026-12-01','','confirmed','RNS',false],
+    ['CURY','H1 results','Interim results','2026-12-17','2026-12-17','','confirmed','RNS',false]
+  ];
+  var n=0;
+  E.forEach(function(x){
+    var L=latest(x[0]);
+    var ev={id:uid(),ticker:x[0],company:L?L.company||'':'',type:x[1],event:x[2],from:x[3],to:x[4],label:x[5],conf:x[6],src:x[7],rns:L?String(L.date||''):'',manual:!!x[8],note:''};
+    var ex=S.events.filter(function(e){return e.ticker===ev.ticker&&(e.from===ev.from||sameEvent(e,ev));})[0];
+    if(ex){if(ev.manual&&!ex.manual){['type','event','from','to','label','conf','src'].forEach(function(k){ex[k]=ev[k];});ex.manual=true;n++;}return;}
+    S.events.push(ev);n++;});
+  save();render();note(n+' dates added');
+}
+
+/* ── PENDING REVIEW — scraper dates awaiting approval (key holders only) ── */
+var PD_SEL={},PD_EDIT=null,PD_OPEN={dup:false,unv:false};
+function pendingList(){
+  if(!PENDING||!Array.isArray(PENDING.events))return [];
+  var done={};APPROVED.forEach(function(a){done[a.id]=1;});REJECTED.forEach(function(id){done[id]=1;});
+  return PENDING.events.filter(function(p){return p&&p.id&&!done[p.id];});
+}
+/* already in the calendar: same ticker + type within 3 days of a scorecard / manual / approved date */
+function inCalendar(p){
+  var tk=webTicker(p);
+  return S.events.concat(webEvents()).some(function(e){return e.ticker===tk&&e.type===p.type&&Math.abs(pd(e.from)-pd(p.from))/864e5<=3;});
+}
+function pdGroups(){
+  var L=pendingList(),g={nw:[],chg:[],dup:[]};
+  L.forEach(function(p){if(inCalendar(p))g.dup.push(p);else if(p.status==='changed')g.chg.push(p);else g.nw.push(p);});
+  return g;
+}
+function pendButton(){
+  var b=$('rcal-pend');if(!CAN_EDIT){b.style.display='none';return;}
+  var g=pdGroups(),n=g.nw.length+g.chg.length;
+  b.style.display=n?'':'none';b.textContent='Pending ('+n+')';
+}
+function pdDate(p){return p.label||(p.from===p.to?fmt(p.from)+' '+p.from.slice(0,4):fmt(p.from)+'–'+fmt(p.to)+' '+p.to.slice(0,4));}
+function pdRow(p,kind){
+  var id=esc(p.id),ed=PD_EDIT===p.id;
+  var h='<div class="pd-row" data-pd="'+id+'">'
+    +'<div><input type="checkbox" data-pd-sel="'+id+'"'+(PD_SEL[p.id]?' checked':'')+' aria-label="Select"></div>'
+    +'<div><div class="pd-tk">'+esc(webTicker(p))+'</div><div class="rc-co">'+esc(p.company||'')+'</div></div>'
+    +'<div><div class="rc-d1">'+esc(pdDate(p))+'</div><div class="rc-e2">'+esc(p.type)+' · <span class="'+confCls(p.conf)+'">'+confLbl(p.conf)+'</span></div>'
+      +(kind==='chg'&&p.was?'<div class="pd-was">was '+esc(fmt(p.was)+' '+p.was.slice(0,4))+' → now '+esc(pdDate(p))+'</div>':'')+'</div>'
+    +'<div style="min-width:0"><div class="rc-e1">'+esc(p.event||p.type)+'</div>'
+      +(p.snippet?'<div class="pd-snip">“'+esc(p.snippet)+'”</div>':'')
+      +'<div class="pd-src"><a href="'+esc(p.url)+'" target="_blank" rel="noopener">'+esc(p.url)+' ↗</a></div></div>'
+    +'<div class="pd-act">'+(kind==='unv'?'':'<button class="rc-btn rc-pri" data-pd-app="'+id+'">Approve</button><button class="rc-btn" data-pd-ed="'+id+'">Edit</button><button class="rc-btn rc-del" data-pd-rej="'+id+'">'+(kind==='dup'?'Dismiss':'Reject')+'</button>')+'</div>';
+  if(ed){
+    var opts=TYPES.map(function(t){return '<option'+(t===p.type?' selected':'')+'>'+esc(t)+'</option>';}).join('');
+    h+='<div class="pd-ed"><select id="pd-e-type">'+opts+'</select>'
+      +'<label class="rc-hint">From <input type="date" id="pd-e-from" value="'+esc(p.from)+'"></label>'
+      +'<label class="rc-hint">To <input type="date" id="pd-e-to" value="'+esc(p.to)+'"></label>'
+      +'<select id="pd-e-conf"><option value="confirmed"'+(p.conf==='confirmed'?' selected':'')+'>Confirmed</option><option value="provisional"'+(p.conf==='provisional'?' selected':'')+'>Provisional</option><option value="implied"'+(p.conf==='implied'?' selected':'')+'>Implied</option></select>'
+      +'<button class="rc-btn rc-pri" data-pd-edsave="'+id+'">Save &amp; approve</button><button class="rc-btn" data-pd-edcancel="1">Cancel</button></div>';
+  }
+  return h+'</div>';
+}
+function renderPending(){
+  var g=pdGroups(),h='';
+  var sec=function(cls,title,sub,list,kind,collapsible){
+    if(!list.length)return '';
+    var open=!collapsible||PD_OPEN[kind];
+    var s='<div class="pd-grp '+cls+'"><b>'+esc(title)+'</b><span>'+list.length+' · '+esc(sub)+'</span>'
+      +(collapsible?'<button class="rc-btn pd-tog" data-pd-tog="'+kind+'">'+(open?'Hide':'Show')+'</button>':'')+'</div>';
+    if(open)list.forEach(function(p){s+=pdRow(p,kind);});
+    return s;
+  };
+  h+=sec('','New','not in the calendar yet',g.nw,'nw',false);
+  h+=sec('pd-chg','Changed','an approved date has moved on the website',g.chg,'chg',false);
+  h+=sec('pd-dup','Already in calendar','matches a scorecard, manual or approved date',g.dup,'dup',true);
+  var unv=(PENDING&&PENDING.unverified)||[];
+  if(unv.length){
+    h+='<div class="pd-grp pd-unv"><b>Unverified</b><span>'+unv.length+' · approved dates whose website could not be read tonight</span>'
+      +'<button class="rc-btn pd-tog" data-pd-tog="unv">'+(PD_OPEN.unv?'Hide':'Show')+'</button></div>';
+    if(PD_OPEN.unv)unv.forEach(function(p){h+=pdRow(p,'unv');});
+  }
+  if(!h)h='<div class="rc-empty">Nothing waiting for approval.</div>';
+  $('rcal-pd-body').innerHTML=h;
+  $('rcal-pd-gen').textContent=PENDING&&PENDING.generated?'scraped '+String(PENDING.generated).slice(0,16).replace('T',' ')+' UTC':'';
+  var n=Object.keys(PD_SEL).filter(function(k){return PD_SEL[k];}).length;
+  $('rcal-pd-appsel').textContent='Approve selected'+(n?' ('+n+')':'');$('rcal-pd-rejsel').textContent='Reject selected'+(n?' ('+n+')':'');
+  $('rcal-pd-appsel').disabled=$('rcal-pd-rejsel').disabled=!n;
+}
+function pdFind(id){return pendingList().filter(function(p){return p.id===id;})[0];}
+function pdBusy(on,msg){['rcal-pd-appsel','rcal-pd-rejsel'].forEach(function(i){$(i).disabled=on;});$('rcal-pd-status').textContent=msg||'';}
+/* approve: append to approved_events.json; a "changed" item replaces the approved date it moved from */
+function approve(items){
+  if(!items.length)return;
+  var today0=iso(today());
+  pdBusy(true,'Saving '+items.length+' approval'+(items.length>1?'s':'')+'…');
+  putJSON(F_APPROVED,function(cur){
+    cur=Array.isArray(cur)?cur:[];
+    items.forEach(function(p){
+      if(p.status==='changed')cur=cur.filter(function(a){return !(a.url===p.url&&a.type===p.type&&a.from===p.was);});
+      cur=cur.filter(function(a){return a.id!==p.id;});
+      cur.push({id:p.id,epic:p.epic||'',company:p.company||'',type:p.type,event:p.event||p.type,from:p.from,to:p.to,label:p.label||'',
+        conf:p.conf||'confirmed',snippet:p.snippet||'',url:p.url,src:'Web',found:p.found||'',approved:today0});
+    });
+    return cur;
+  },'Calendar: approve '+items.map(function(p){return webTicker(p)+' '+p.type;}).join(', ').slice(0,200))
+  .then(function(next){APPROVED=next;items.forEach(function(p){delete PD_SEL[p.id];});PD_EDIT=null;
+      renderPending();render();pdBusy(false,items.length+' approved');note(items.length+' date'+(items.length>1?'s':'')+' approved');},
+    function(e){pdBusy(false,'Save failed: '+e.message);note('Approve failed','err');});
+}
+function reject(ids){
+  if(!ids.length)return;
+  pdBusy(true,'Saving '+ids.length+' rejection'+(ids.length>1?'s':'')+'…');
+  putJSON(F_REJECTED,function(cur){cur=Array.isArray(cur)?cur:[];ids.forEach(function(id){if(cur.indexOf(id)<0)cur.push(id);});return cur;},'Calendar: reject '+ids.length+' date'+(ids.length>1?'s':''))
+  .then(function(next){REJECTED=next;ids.forEach(function(id){delete PD_SEL[id];});renderPending();render();pdBusy(false,ids.length+' rejected');},
+    function(e){pdBusy(false,'Save failed: '+e.message);note('Reject failed','err');});
+}
+$('rcal-pend').onclick=function(){PD_EDIT=null;renderPending();openSub('rcal-pd-ov');};
+$('rcal-pd-body').addEventListener('click',function(ev){
+  var t=ev.target,a;
+  if((a=t.closest('[data-pd-tog]'))){var k=a.getAttribute('data-pd-tog');PD_OPEN[k]=!PD_OPEN[k];renderPending();return;}
+  if((a=t.closest('[data-pd-app]'))){var p=pdFind(a.getAttribute('data-pd-app'));if(p)approve([p]);return;}
+  if((a=t.closest('[data-pd-rej]'))){reject([a.getAttribute('data-pd-rej')]);return;}
+  if((a=t.closest('[data-pd-ed]'))){PD_EDIT=a.getAttribute('data-pd-ed');renderPending();return;}
+  if(t.closest('[data-pd-edcancel]')){PD_EDIT=null;renderPending();return;}
+  if((a=t.closest('[data-pd-edsave]'))){
+    var q=pdFind(a.getAttribute('data-pd-edsave'));if(!q)return;
+    var f=$('pd-e-from').value,to=$('pd-e-to').value||f;
+    if(!f||to<f){$('rcal-pd-status').textContent='Check the dates: From is required and To cannot be before From.';return;}
+    var ed=Object.assign({},q,{type:$('pd-e-type').value,from:f,to:to,conf:$('pd-e-conf').value});
+    if(ed.from!==q.from||ed.to!==q.to){var w=f===to?'':windowLabel(f,to);ed.label=w;}
+    approve([ed]);return;
+  }
+});
+function windowLabel(f,t){var e={from:f,to:t},p=partOf(e),d=pd(f),M=MON[d.getMonth()]+' '+d.getFullYear();
+  return p==='early'?'Early '+M:p==='mid'?'Mid '+M:p==='late'?'Late '+M:p==='month'?M:'';}
+$('rcal-pd-body').addEventListener('change',function(ev){var c=ev.target.closest('[data-pd-sel]');if(!c)return;PD_SEL[c.getAttribute('data-pd-sel')]=c.checked;renderPending();});
+$('rcal-pd-appsel').onclick=function(){approve(pendingList().filter(function(p){return PD_SEL[p.id];}));};
+$('rcal-pd-rejsel').onclick=function(){var ids=Object.keys(PD_SEL).filter(function(k){return PD_SEL[k];});if(ids.length&&confirm('Reject '+ids.length+' date'+(ids.length>1?'s':'')+'?'))reject(ids);};
+
+/* ── RNS SCORECARDS POPUP — same layout as Ignition ── */
+function showRNS(t){t=String(t||'').toUpperCase();rnsShell(t,'<div style="padding:30px;text-align:center;color:var(--text-dim);">Loading…</div>');
+  var go=function(){rnsRender(t,recs(t).filter(function(r){return !r._stub;}));};hydrateTicker(t).then(go,go);}
+function rnsShell(t,inner){
+  var ov=$('rcal-rns-ov');
+  if(!ov){ov=document.createElement('div');ov.id='rcal-rns-ov';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9000;display:flex;align-items:center;justify-content:center;padding:30px;font-family:var(--sans,Inter,sans-serif);';
+    ov.onclick=function(ev){if(ev.target===ov)ov.style.display='none';};document.body.appendChild(ov);}
+  ov.style.display='flex';
+  ov.innerHTML='<div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:min(1400px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;" onclick="event.stopPropagation()">'
+    +'<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">'
+    +'<span style="font-weight:700;font-size:15px;color:var(--amber);">'+esc(t)+'</span>'
+    +'<span id="rcal-rns-sub" style="font-size:11px;color:var(--text-secondary);"></span>'
+    +'<button onclick="document.getElementById(\'rcal-rns-ov\').style.display=\'none\'" aria-label="Close" style="margin-left:auto;background:none;border:none;color:var(--text-secondary);font-size:16px;cursor:pointer;">✕</button>'
+    +'</div><div id="rcal-rns-body" style="overflow-y:auto;padding:10px 14px;">'+inner+'</div></div>';
+}
+function rnsBand(s){return s>=75?'var(--green)':s>=50?'var(--amber)':'var(--red)';}
+function rnsRender(t,cards){
+  rnsShell(t,'');
+  var sub=$('rcal-rns-sub'),body=$('rcal-rns-body');
+  if(!cards||!cards.length){if(sub)sub.textContent='no scorecards';body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text-dim);">No RNS scorecards for '+esc(t)+' in the Database.</div>';return;}
+  var sorted=cards.slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));});
+  if(sub)sub.textContent=(sorted[0].company||'')+' · '+sorted.length+' scorecard'+(sorted.length>1?'s':'');
+  body.innerHTML=sorted.map(function(c){
+    var col=rnsBand(+c.score||0);
+    var revs=(c.revisions||[]).slice(0,4).map(function(v){
+      var cl=/^(var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8})$/i.test(String(v.color||''))?v.color:'var(--text-primary)';
+      return '<div style="display:flex;flex-direction:column;min-width:92px;max-width:150px;">'
+        +'<span style="font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);">'+esc(v.lbl||'')+'</span>'
+        +'<span style="font-size:12px;font-weight:700;color:'+cl+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(v.val||'')+'</span>'
+        +'<span style="font-size:9px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+esc(v.sub||'')+'">'+esc(v.sub||'')+'</span></div>';
+    }).join('');
+    var revHtml=revs?'<div style="display:flex;gap:14px;margin-left:auto;padding-left:12px;">'+revs+'</div>':'';
+    var sigs=(c.signals||[]).map(function(s){
+      var ty=['red','green','amber','grey'].indexOf(s.type)>=0?s.type:'blue';
+      return '<div class="signal-tag rcal-sig" title="'+esc(s.textPlain||'')+'"><span class="stag stag-'+ty+'">'+esc(s.pill||'')+'</span><span class="signal-text">'+(s.textHTML||esc(s.textPlain||''))+'</span></div>';}).join('');
+    return '<div style="border:1px solid var(--border);border-radius:6px;margin:8px 0;overflow:hidden;">'
+      +'<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);">'
+      +'<span style="font-weight:700;font-size:20px;color:'+col+';">'+(c.score!==undefined?c.score:'—')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">/100</span>'
+      +'<div style="display:flex;flex-direction:column;">'
+      +'<span style="font-size:11px;color:var(--text-primary);font-weight:600;">'+esc(c.verdict||'')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">'+esc(c.date||'')+' · '+esc(c.rnsType||'')+(c.mode?' · '+esc(c.mode):'')+(c.index?' · '+esc(c.index):'')+'</span>'
+      +'</div>'+revHtml+'</div>'
+      +'<div style="padding:6px 12px;">'+(sigs||'<span style="font-size:10px;color:var(--text-dim);">No signals stored</span>')+'</div></div>';
+  }).join('');
+}
+
+/* ── start-up ── */
+function applyMode(){
+  $('rcal-box').classList.toggle('rc-ro',!CAN_EDIT);
+  $('rcal-add').style.display=CAN_EDIT?'':'none';
+  $('rcal-foot-edit').style.display=CAN_EDIT?'':'none';
+  pendButton();
+}
+/* state: calendar_state.json; first run migrates the Database's old copy (browser cache or database.json) */
+var stateLoaded=false;
+function loadRemote(first){
+  var st=getJSON(F_STATE).catch(function(){return undefined;});
+  var files=Promise.all([
+    getJSON(F_APPROVED).catch(function(){return null;}),
+    getJSON(F_REJECTED).catch(function(){return null;}),
+    CAN_EDIT?getJSON(F_PENDING).catch(function(){return null;}):Promise.resolve(null)
+  ]).then(function(r){APPROVED=Array.isArray(r[0])?r[0]:[];REJECTED=Array.isArray(r[1])?r[1]:[];PENDING=r[2];});
+  return Promise.all([st,files]).then(function(r){
+    var remote=r[0];
+    if(remote&&Array.isArray(remote.events)){
+      if(!saving&&!dirty){S=normalise(remote);cache();}   /* never drop edits still waiting to save */
+      stateLoaded=true;
+    }else if(remote===null&&first){            /* no state file yet: migrate */
+      var mig=loadCache();
+      var legacy=OWN_LEGACY;try{if(!legacy&&PARENT&&PARENT.__rcalLegacy)legacy=PARENT.__rcalLegacy;}catch(e){}
+      if((!mig||!mig.events.length)&&legacy&&Array.isArray(legacy.events))mig=normalise(legacy);
+      if(mig){S=mig;if(CAN_EDIT){save();note('Calendar moved to calendar/calendar_state.json');}}
+      stateLoaded=true;
+    }else if(first){var c=loadCache();if(c)S=c;}   /* offline: last cached copy */
+    syncFromCards();render();
+  });
+}
+
+(function init(){
+  var c=loadCache();if(c)S=c;
+  applyMode();render();
+  loadCards().then(function(){return loadRemote(true);}).then(function(){
+    if(PENDING&&CAN_EDIT&&/[?&]pending\b/.test(location.search)){renderPending();openSub('rcal-pd-ov');}
+  });
+})();
+})();
+</script>
+</body>
+</html>
