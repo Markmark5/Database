@@ -15,7 +15,7 @@ Reads (if present):
   approved_events.json  events already approved (skipped unless changed)
   rejected.json         ids you rejected (never re-staged)
 """
-import asyncio, csv, hashlib, json, re, sys
+import asyncio, csv, hashlib, json, os, re, sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -39,11 +39,13 @@ MONTHS = {m: i for i, names in enumerate([
     ("september", "sept", "sep"), ("october", "oct"), ("november", "nov"),
     ("december", "dec")], start=1) for m in names}
 MON = r"(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept|sep|oct|nov|dec)"
-RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?\s*(?:of\s+)?{MON}\.?,?(?:\s+(\d{{4}}))?\b", re.I)
-RE_MDY = re.compile(rf"\b{MON}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b,?(?:\s+(\d{{4}}))?", re.I)
-RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4})\b")
+RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?\s*(?:of\s+)?{MON}\.?,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?\b", re.I)
+RE_MDY = re.compile(rf"\b{MON}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?", re.I)
+RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4}|\d{2})(?![\d.])")
+RE_ISO = re.compile(r"\b(20\d\d)-(\d{2})-(\d{2})\b")
 RE_WIN = re.compile(rf"\b(early|beginning of|mid|middle of|late|end of|towards the end of)?[\s-]*{MON}\.?\s+(\d{{4}})\b", re.I)
 RE_YEAR_LINE = re.compile(r"^(20\d\d)$")
+RE_DATEISH = re.compile(rf"\b20\d\d-\d\d-\d\d\b|\b\d{{1,2}}\s*(?:st|nd|rd|th)?\s+{MON}\b|\b{MON}\s+20\d\d\b", re.I)
 RE_PERIOD_REF = re.compile(r"\b(to|ending|ended|end(?:ed)? on|as at|until|through|period)\s*$", re.I)
 
 WINDOWS = {"early": (1, 10), "beginning of": (1, 10), "mid": (11, 20), "middle of": (11, 20),
@@ -62,9 +64,13 @@ def safe_date(y, m, d):
 
 # ---------------------------------------------------------------- events
 RE_AGM = re.compile(r"annual general meeting|\bagm\b", re.I)
-RE_RES = re.compile(r"results|interim report|half[- ]?year(?:ly)? report|year[- ]end report|\binterims\b|\bprelim", re.I)
+RE_RES = re.compile(r"results|interim report|half[- ]?year(?:ly)? report|year[- ]end report|\binterims\b|\bprelim|"
+                    r"\binterim (?:presentation|announcement|statement)", re.I)
 RE_TU = re.compile(r"trading (?:update|statement|report)|pre[- ]close|post[- ]close|business update|"
                    r"interim management statement|\bq[1-4]\b|\bquarter", re.I)
+# never kept, even if the line also says "results" (dividends, CMDs, conferences, year-ends)
+RE_EXCLUDE = re.compile(r"dividend|ex[- ]div|record date|payment date|capital markets?|investor day|"
+                        r"conference(?! call)|seminar|webinar|site visit|annual report", re.I)
 RE_PROV = re.compile(r"provisional|\btbc\b|to be confirmed|indicative|subject to change|expected|\(p\)", re.I)
 RE_UPCOMING = re.compile(r"\b(upcoming|forthcoming|future events|key dates|next events?)\b", re.I)
 RE_PAST = re.compile(r"\b(past events|previous events|previous dates|past dates|historical|recent past events|archive)\b", re.I)
@@ -72,13 +78,19 @@ RE_PAST = re.compile(r"\b(past events|previous events|previous dates|past dates|
 def classify(text):
     """Return our event type, or None if not a results / TU / AGM line."""
     t = text.lower()
+    if RE_EXCLUDE.search(t) and not re.search(r"results|trading|\bagm\b|annual general", t):
+        return None
+    if re.search(r"capital markets?|investor day|conference(?! call)|seminar|webinar|site visit", t):
+        return None
+    if re.search(r"notice of (?:the )?(?:agm|annual general)|agm notice|publication|posting of", t):
+        return None                      # AGM notice / annual report posting, not the event
     if RE_AGM.search(t):
         return "AGM"
     strong_tu = re.search(r"trading (?:update|statement|report)|pre[- ]close|post[- ]close|business update", t)
     if RE_RES.search(t) and not strong_tu:
-        if re.search(r"half|interim|\bh1\b|six months", t):
+        if re.search(r"half|interim|\bh1\b|\b1h(?:\d\d)?\b|\bhy\b|six months", t):
             return "H1 results"
-        if re.search(r"full[- ]year|final|prelim|annual results|year[- ]end|\bfy", t):
+        if re.search(r"full[- ]year|final|prelim|annual results|year[- ]end|\bfy|twelve months|12 months", t):
             return "FY results"
         return "Other"
     if RE_TU.search(t):
@@ -96,10 +108,17 @@ def classify(text):
 # ---------------------------------------------------------------- page → lines
 def page_lines(html):
     soup = BeautifulSoup(html, "lxml")
-    for tag in soup(["script", "style", "noscript", "svg", "nav", "footer", "header", "form"]):
+    for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
-    for el in soup.find_all(attrs={"class": re.compile(r"cookie|consent|gdpr", re.I)}):
-        el.decompose()
+    # ASP.NET pages wrap everything in <form>, and some sites put "cookie" in the
+    # <body> class - so only strip nav/footer/header/cookie blocks that are small
+    for el in soup.find_all(["nav", "footer", "header"]) + \
+              soup.find_all(attrs={"class": re.compile(r"cookie|consent|gdpr", re.I)}) + \
+              soup.find_all(attrs={"id": re.compile(r"cookie|consent|gdpr", re.I)}):
+        if el.decomposed or el.name in ("html", "body", "main", "form"):
+            continue
+        if len(el.get_text(" ", strip=True)) < 2500 and not RE_DATEISH.search(el.get_text(" ")):
+            el.decompose()
     for tr in soup.find_all("tr"):   # keep a table row on one line
         cells = [c.get_text(" ", strip=True) for c in tr.find_all(["td", "th"])]
         tr.replace_with(soup.new_string("\n" + " | ".join(c for c in cells if c) + "\n"))
@@ -109,7 +128,7 @@ def page_lines(html):
     out, i = [], 0
     while i < len(lines):
         a = lines[i]; b = lines[i + 1] if i + 1 < len(lines) else ""
-        if re.fullmatch(r"\d{1,2}", a) and re.fullmatch(MON + r"\.?(\s+\d{4})?", b, re.I):
+        if re.fullmatch(r"\d{1,2}", a) and re.fullmatch(MON + r"\.?(\s+'?(\d{4}|\d{2}))?", b, re.I):
             out.append(f"{a} {b}"); i += 2; continue
         if re.fullmatch(MON + r"\.?", a, re.I) and re.fullmatch(r"\d{1,2}\s*(st|nd|rd|th)?", b, re.I):
             out.append(f"{re.sub(r'[^0-9]', '', b)} {a}"); i += 2; continue
@@ -124,19 +143,26 @@ def find_dates(line):
     taken = []
     def free(s, e):
         return all(e <= a or s >= b for a, b in taken)
-    for rx, order in ((RE_NUM, "num"), (RE_DMY, "dmy"), (RE_MDY, "mdy")):
+    for rx, order in ((RE_ISO, "iso"), (RE_NUM, "num"), (RE_DMY, "dmy"), (RE_MDY, "mdy")):
         for m in rx.finditer(line):
             if not free(*m.span()):
                 continue
-            if order == "num":
-                d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            if order == "iso":
+                y, mo, d = m.group(1), int(m.group(2)), int(m.group(3))
+            elif order == "num":
+                d, mo, y = int(m.group(1)), int(m.group(2)), m.group(3)
             elif order == "dmy":
                 d, mo, y = int(m.group(1)), MONTHS[m.group(2).lower()], m.group(3)
             else:
                 mo, d, y = MONTHS[m.group(1).lower()], int(m.group(2)), m.group(3)
-            yearless = y is None
-            yield ("exact", d, mo, None if yearless else int(y), m.span())
             taken.append(m.span())
+            if not 1 <= mo <= 12:
+                continue
+            if y is not None:
+                y = int(y); y = 2000 + y if y < 100 else y
+                if not 2020 <= y <= 2035:        # old or odd year ("22 Oct 2019"): drop, never roll forward
+                    continue
+            yield ("exact", d, mo, y, m.span())
     for m in RE_WIN.finditer(line):
         if not free(*m.span()):
             continue
@@ -144,11 +170,26 @@ def find_dates(line):
         yield ("window", q, MONTHS[m.group(2).lower()], int(m.group(3)), m.span())
         taken.append(m.span())
 
+RE_BOILER = re.compile(r"^(?:(?:\d{1,2}[:.]\d{2}\s*(?:am|pm)?(?:\s*(?:gmt|bst|uk|utc|cet))?|"
+                       r"add to [a-z ]*calendar|add to microsoft outlook|date|dates|title|event|events|time|location|venue|details|type|description|"
+                       r"reminder alert|add to (?:my )?calendar|add to outlook|outlook link|outlook|ical|google|"
+                       r"google calendar|yahoo calendar|download|days before event|webcast|more info|read more|"
+                       r"view|register|add event|save|share)\s*\|?\s*)+$", re.I)
+
+def is_year_line(lines, j):
+    return 0 <= j < len(lines) and bool(RE_YEAR_LINE.match(lines[j]))
+
+def in_tab_bar(lines, j):
+    """Year lines stacked together (2026 / 2025 / 2024) are a tab bar, not a heading."""
+    return is_year_line(lines, j - 1) or is_year_line(lines, j + 1)
+
 def nearby_year(lines, i):
-    for k in range(1, 7):
-        for j in (i - k, i + k):
-            if 0 <= j < len(lines) and RE_YEAR_LINE.match(lines[j]):
-                return int(lines[j])
+    """Year for a yearless date: an adjacent year line ("14 Oct" / "2026"), else the
+    nearest year heading above, else a year line a little way below."""
+    ok = lambda j: is_year_line(lines, j) and not in_tab_bar(lines, j)
+    for j in [i + 1, i - 1] + list(range(i - 2, i - 16, -1)) + list(range(i + 2, i + 7)):
+        if ok(j):
+            return int(lines[j])
     return None
 
 def residue(line):
@@ -159,36 +200,79 @@ def residue(line):
 def has_words(text):
     return len(re.findall(r"[A-Za-z]", residue(text))) >= 3
 
-def neighbour_label(lines, i):
-    """Label normally follows the date; skip pure date/year lines. Fall back
-    to the preceding line only when the next labelled line is another date."""
-    for j in range(i + 1, min(i + 5, len(lines))):
-        if not has_words(lines[j]):
+def event_dates(line):
+    """Dates in a line that are not period references ("quarter ending 30 Sept")."""
+    return [d for d in find_dates(line) if not RE_PERIOD_REF.search(line[max(0, d[4][0] - 30):d[4][0]])]
+
+def is_label(line):
+    return has_words(line) and not RE_BOILER.match(line.strip())
+
+def _md(line):
+    return {(d[2], d[1]) for d in event_dates(line)}
+
+def _scan(lines, i, js):
+    """First real label line in js; stop at the next dated row. Repeats of this row's
+    own date ("Oct 5 2026" / "Oct 5" / "2026") are skipped, not treated as a new row."""
+    own = _md(lines[i])
+    for j in js:
+        if event_dates(lines[j]):
+            if not has_words(lines[j]) and _md(lines[j]) <= own:
+                continue
+            return None            # reached the next dated row first
+        if is_label(lines[j]):
+            return lines[j]
+    return None
+
+def label_below(lines, i):
+    return _scan(lines, i, range(i + 1, min(i + 6, len(lines))))
+
+def label_above(lines, i):
+    return _scan(lines, i, range(i - 1, max(i - 5, -1), -1))
+
+def page_layout(lines):
+    """For date-only rows: is the event label above or below the date? Majority vote."""
+    up = down = 0
+    for i, l in enumerate(lines):
+        if not event_dates(l) or is_label(l):
             continue
-        if list(find_dates(lines[j])):
-            break                  # next dated row reached: label must be above
-        return lines[j], classify(lines[j])
-    for j in range(i - 1, max(i - 3, -1), -1):
-        if not has_words(lines[j]):
-            continue
-        if list(find_dates(lines[j])):
-            break
-        return lines[j], classify(lines[j])
-    return "", None
+        a, b = label_above(lines, i), label_below(lines, i)
+        ca, cb = bool(a and classify(a)), bool(b and classify(b))
+        if ca and not cb and a is not None:
+            up += 1
+        elif cb and not ca and b is not None:
+            down += 1
+    return "above" if up > down else "below"
+
+def neighbour_label(lines, i, layout="below"):
+    first, second = (label_above, label_below) if layout == "above" else (label_below, label_above)
+    text = first(lines, i) or second(lines, i) or ""
+    return text, (classify(text) if text else None)
 
 def extract(lines):
     events, zone = [], None
+    layout = page_layout(lines)
+    # footnote such as "*subject to change" / "All future dates are indicative" covers the whole table
+    page_prov = any(len(l) < 150 and RE_PROV.search(l) and (l.startswith("*") or re.search(r"\bdates?\b", l, re.I))
+                    for l in lines)
+    tab_year, tab_last = None, None      # year tab bar (2026 / 2025 / 2024) above a yearless table
     for i, line in enumerate(lines):
         if len(line) < 60 and RE_PAST.search(line):
             zone = "past"
         elif len(line) < 60 and RE_UPCOMING.search(line):
             zone = "upcoming"
-        for kind, a, mo, y, span in find_dates(line):
-            if RE_PERIOD_REF.search(line[max(0, span[0] - 30):span[0]]):
-                continue                 # "nine months to 30 September" = period, not event date
+        if is_year_line(lines, i) and is_year_line(lines, i + 1) and not is_year_line(lines, i - 1):
+            tab_year, tab_last = int(line), None
+        # period references ("nine months to 30 September") are skipped by event_dates
+        for kind, a, mo, y, span in event_dates(line):
             conf = "confirmed"
-            if y is None:  # yearless: needs an upcoming heading or a nearby year line
+            if y is None:  # yearless: needs a nearby year line, a year tab bar or an upcoming heading
                 y = nearby_year(lines, i)
+                if y is None and tab_year and kind == "exact":
+                    # first tab's table only: rows run newest-first, so stop when the order breaks
+                    if tab_last is None or (mo, a) <= tab_last:
+                        y, tab_last = tab_year, (mo, a)
+                    else:
+                        tab_year = None
                 if y is None:
                     if zone != "upcoming":
                         continue
@@ -206,16 +290,21 @@ def extract(lines):
                 conf = "provisional"
             if d1 < TODAY or d0 > HORIZON:
                 continue
+            if kind == "window" and d1 <= TODAY + timedelta(days=2):
+                continue                 # "September 2026" seen on 29 Sep: stale, the real date was set by RNS
             # event text: same line minus the date, else neighbours
-            text = (line[:span[0]] + " " + line[span[1]:]).strip(" |-–:")
+            text = (line[:span[0]] + " " + line[span[1]:])
+            text = re.sub(r"\b(mon|tues|wednes|thurs|fri|satur|sun)day\b,?", " ", text, flags=re.I).strip(" |-–:,")
             if has_words(text):          # label on the same line: judge that alone
                 etype = classify(text)
             else:                        # label on a neighbouring line
-                text, etype = neighbour_label(lines, i)
+                text, etype = neighbour_label(lines, i, layout)
             if not etype:
                 continue
-            if conf == "confirmed" and RE_PROV.search(line + " " + text):
+            if conf == "confirmed" and (page_prov or RE_PROV.search(line + " " + text)):
                 conf = "provisional"
+            text = " | ".join(c for c in (c.strip() for c in text.split("|"))
+                              if c and not RE_BOILER.match(c) and not re.match(r"(download|google|yahoo|outlook)\b", c, re.I))
             events.append({"type": etype, "from": d0.isoformat(), "to": d1.isoformat(),
                            "label": label, "conf": conf,
                            "event": re.sub(r"\s+", " ", text)[:90],
@@ -268,6 +357,39 @@ async def fetch_browser(browser, url):
     finally:
         await page.close()
 
+async def browser_pass(p, sources, results, idxs, method, **launch):
+    proxy = os.environ.get("HTTPS_PROXY")   # only set when run behind a proxy
+    try:
+        browser = await p.chromium.launch(proxy={"server": proxy} if proxy else None, **launch)
+    except Exception as ex:
+        print(f"{method}: launch failed - {ex}", file=sys.stderr)
+        return
+    bsem = asyncio.Semaphore(BROWSER_CONCURRENCY)
+    async def run(i):
+        async with bsem:
+            src = sources[i]
+            u = src["alt_url"] or src["url"]
+            status, html = await fetch_browser(browser, u)
+            lines = page_lines(html) if status and status < 400 else []
+            if is_challenge(lines):
+                status, lines = 403, []
+            n = count_dates(lines)
+            old = results[i]
+            better = (n > old["n_dates"] or (old["status"] or 0) >= 400 or old["status"] is None
+                      or len(" ".join(lines)) > len(" ".join(old["lines"])) + 500)
+            if better:
+                results[i] = {"fetched": u, "method": method, "status": status,
+                              "html": html, "lines": lines, "n_dates": n}
+    await asyncio.gather(*(run(i) for i in idxs))
+    await browser.close()
+
+RE_CHALLENGE = re.compile(r"attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
+                          r"checking your browser|access denied|request unsuccessful\. incapsula", re.I)
+
+def is_challenge(lines):
+    """Bot-protection page served with a 200 (Cloudflare, Incapsula, Akamai)."""
+    return len(" ".join(lines)) < 3000 and any(RE_CHALLENGE.search(l) for l in lines[:40])
+
 def needs_browser(status, html, lines, n_dates):
     if status is None or status in (401, 403, 429) or status >= 500:
         return True
@@ -284,6 +406,8 @@ async def process(src, client, sem):
         for u in urls:
             status, html = await fetch_http(client, u)
             lines = page_lines(html) if status and status < 400 else []
+            if is_challenge(lines):
+                status, lines = 403, []
             rec = {"fetched": u, "method": "http", "status": status, "html": html, "lines": lines,
                    "n_dates": count_dates(lines)}
             if best is None or rec["n_dates"] > best["n_dates"]:
@@ -301,6 +425,8 @@ def event_id(url, e):
     return hashlib.sha1(f"{url}|{e['type']}|{e['from']}|{e['to']}".encode()).hexdigest()[:12]
 
 async def main():
+    import shutil
+    shutil.rmtree(HERE / "debug", ignore_errors=True)
     sources = [r for r in csv.DictReader(open(HERE / "sources.csv")) if r.get("active", "1") != "0"]
     approved = load_json("approved_events.json", [])
     rejected = set(load_json("rejected.json", []))
@@ -309,32 +435,26 @@ async def main():
     async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True, timeout=25) as client:
         results = await asyncio.gather(*(process(s, client, sem) for s in sources))
 
-    # browser fallback for JS / blocked / empty pages
+    # browser fallback for JS / blocked / empty pages: bundled Chromium first, then
+    # real Google Chrome (installed on GitHub runners) for whatever is still blocked
     retry = [i for i, r in enumerate(results)
              if needs_browser(r["status"], r["html"], r["lines"], r["n_dates"])]
     if retry:
         try:
             from playwright.async_api import async_playwright
-            bsem = asyncio.Semaphore(BROWSER_CONCURRENCY)
             async with async_playwright() as p:
-                browser = await p.chromium.launch()
-                async def run(i):
-                    async with bsem:
-                        src = sources[i]
-                        u = src["alt_url"] or src["url"]
-                        status, html = await fetch_browser(browser, u)
-                        lines = page_lines(html) if status and status < 400 else []
-                        n = count_dates(lines)
-                        if n > results[i]["n_dates"] or (results[i]["status"] or 0) >= 400 or results[i]["status"] is None:
-                            results[i] = {"fetched": u, "method": "browser", "status": status,
-                                          "html": html, "lines": lines, "n_dates": n}
-                await asyncio.gather(*(run(i) for i in retry))
-                await browser.close()
+                await browser_pass(p, sources, results, retry, "browser",
+                                   args=["--disable-blink-features=AutomationControlled", "--disable-http2"])
+                still = [i for i in retry if results[i]["status"] is None or results[i]["status"] in (401, 403, 429)]
+                if still:
+                    await browser_pass(p, sources, results, still, "chrome", channel="chrome",
+                                       args=["--disable-blink-features=AutomationControlled", "--disable-http2"])
         except ImportError:
             print("playwright not installed - browser fallback skipped", file=sys.stderr)
 
     pending, report = [], []
     approved_keys = {(a.get("url"), a.get("type"), a.get("from"), a.get("to")) for a in approved}
+    approved_ids = {a.get("id") for a in approved}   # original scraped id, kept even if Mark edited the date
     for src, r in zip(sources, results):
         events = extract(r["lines"]) if r["lines"] else []
         st = r["status"]
@@ -342,25 +462,33 @@ async def main():
             outcome = "BLOCKED"
         elif st is None or st >= 400:
             outcome = "ERROR"
-        elif len(" ".join(r["lines"])) < 1500:
-            outcome = "UNREADABLE"
         elif events:
             outcome = "CLEAN"
+        elif len(" ".join(r["lines"])) < 1500:
+            outcome = "UNREADABLE"
         else:
             outcome = "EMPTY"
         kept = 0
         for e in events:
             key = (src["url"], e["type"], e["from"], e["to"])
             eid = event_id(src["url"], e)
-            if key in approved_keys or eid in rejected:
+            if key in approved_keys or eid in approved_ids or eid in rejected:
                 continue
+            # same source + type within 60 days = the same event moved (not next year's one)
             prior = [a for a in approved if a.get("url") == src["url"] and a.get("type") == e["type"]
-                     and a.get("to", "") >= TODAY.isoformat()]
+                     and a.get("to", "") >= TODAY.isoformat() and a.get("from")
+                     and abs((date.fromisoformat(a["from"]) - date.fromisoformat(e["from"])).days) <= 60]
             e.update({"id": eid, "epic": src["epic"], "company": src["company"], "url": src["url"],
                       "src": "Web", "status": "changed" if prior else "new",
                       "was": f"{prior[0]['from']}" if prior else "",
                       "found": TODAY.isoformat()})
             pending.append(e); kept += 1
+        if outcome != "CLEAN":
+            dbg = HERE / "debug"; dbg.mkdir(exist_ok=True)
+            name = re.sub(r"[^A-Za-z0-9]+", "_", src["company"])[:40]
+            (dbg / f"{outcome}_{name}.txt").write_text(
+                f"{src['url']}\nhttp {st} via {r['method']}\n\n" +
+                ("\n".join(r["lines"]) if r["lines"] else str(r["html"])[:3000]))
         report.append({"epic": src["epic"], "company": src["company"], "url": src["url"],
                        "fetched": r["fetched"], "method": r["method"], "http": st,
                        "text_chars": len(" ".join(r["lines"])), "dates_on_page": r["n_dates"],

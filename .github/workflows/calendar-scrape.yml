@@ -32,10 +32,12 @@ jobs:
         run: python calendar/scrape.py
 
       - name: Commit results
+        if: always()
         run: |
           git config user.name  "calendar-bot"
           git config user.email "calendar-bot@users.noreply.github.com"
-          git add -A calendar/pending_events.json calendar/scrape_report.json calendar/scrape_report.md calendar/debug
-          git diff --staged --quiet || git commit -m "Calendar scrape $(date -u +%F)"
-          git pull --rebase --autostash
+          git add -A calendar
+          git diff --staged --quiet && exit 0
+          git commit -m "Calendar scrape $(date -u +%F)"
+          git pull --rebase -X theirs
           git push
