@@ -1,25 +1,23 @@
 # Calendar scrape - 2026-09-29
 
-**138 sources · 120 events staged for approval**
+**138 sources · 125 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 70 | read OK, upcoming events found |
-| EMPTY | 37 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 21 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 6 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| CLEAN | 73 | read OK, upcoming events found |
+| EMPTY | 34 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 20 | page loaded but little text (JS-rendered even in browser) |
+| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
 - Amcomri Group (?) - http 200, browser - https://amcomrigroup.com/investor-relations
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
-- discoverIE (DSCV) - http 200, browser - https://discoverieplc.com/investors/financial-calendar/default.aspx
 - Fevara (?) - http 200, http - https://fevara.com/investors/financial-calendar/
 - Focusrite (TUNE) - http 200, browser - https://focusriteplc.com/investors/company-documents/
 - Hercules (HERC) - http 200, browser - https://hercules-construction.co.uk/share-information/
 - Winking Works (?) - http 200, http - https://investor.winkingworks.com/financial-calendar
-- BAE Systems (BA.) - http 200, browser - https://investors.baesystems.com/financial-calendar
 - Plus500 (PLUS) - http 200, browser - https://investors.plus500.com/Shareholder#financial-calendar
 - Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
@@ -27,13 +25,12 @@
 - Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
-- Babcock (BAB) - http 200, browser - https://www.babcockinternational.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
 - FRP Advisory (FRP) - http 200, browser - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
-- James Fisher (FSJ) - http 200, browser - https://www.james-fisher.com/investors/results-centre/financial-calendar/
+- James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
@@ -68,7 +65,6 @@
 - Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
 - Speedy Hire (SDY) - http 200, http - https://www.speedyhire.com/investors/financial-calendar/
-- SThree (STEM) - http 200, browser - https://www.sthree.com/en-gb/investor-centre/financial-highlights/#calendar
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
@@ -76,16 +72,17 @@
 
 ## BLOCKED
 
-- Princes Group (?) - http 401, browser - https://princesgroupinvestors.com/financial-calendar/
-- Avon Technologies (AVON) - http 403, browser - https://www.avon-technologiesplc.com/investors/financial-calendar/
-- Currys (CURY) - http 403, browser - https://www.currysplc.com/investors/financial-calendar/
-- Informa (INF) - http 403, browser - https://www.informa.com/investors/financial-calendar/
-- Knights (KGH) - http 403, browser - https://www.knightsplc.com/company/investors/financial-calendar/
-- Next 15 (NFG) - http 403, browser - https://www.next15.com/investors/financial-calendar/
+- BAE Systems (BA.) - http 403, chrome - https://investors.baesystems.com/financial-calendar
+- Princes Group (?) - http 401, chrome - https://princesgroupinvestors.com/financial-calendar/
+- Time Finance (TIME) - http 429, chrome - https://timefinance.com/financial-results-calendar/
+- Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
+- Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
+- Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
+- Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
+- Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
 
 ## ERROR
 
-- Brickability (BRCK) - http None, browser - https://brickabilitygroupplc.com/investors/financial-timetable
-- Time Finance (TIME) - http None, browser - https://timefinance.com/financial-results-calendar/
-- Wise (WISE) - http None, browser - https://wise.com/owners/
-- Admiral (ADM) - http None, browser - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
+- Brickability (BRCK) - http None, chrome - https://brickabilitygroupplc.com/investors/financial-timetable
+- Wise (WISE) - http None, chrome - https://wise.com/owners/
+- Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar

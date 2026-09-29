@@ -1,6 +1,6 @@
 https://wise.com/owners/
-http None via browser
+http None via chrome
 
-TimeoutError: Page.goto: Timeout 40000ms exceeded.
+Error: Page.goto: net::ERR_HTTP2_PROTOCOL_ERROR at https://wise.com/owners/
 Call log:
   - navigating to "https://wise.com/owners/", waiting until "domcontentloaded"
