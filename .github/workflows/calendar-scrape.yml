@@ -1,0 +1,42 @@
+name: Calendar scrape
+
+on:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  schedule:
+    - cron: "30 5 * * 1-5"    # 05:30 UTC, weekdays
+
+permissions:
+  contents: write
+
+concurrency:
+  group: calendar-scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          pip install httpx beautifulsoup4 lxml playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Scrape
+        run: python calendar/scrape.py
+
+      - name: Commit results
+        run: |
+          git config user.name  "calendar-bot"
+          git config user.email "calendar-bot@users.noreply.github.com"
+          git add calendar/pending_events.json calendar/scrape_report.json calendar/scrape_report.md
+          git diff --staged --quiet || git commit -m "Calendar scrape $(date -u +%F)"
+          git pull --rebase --autostash
+          git push
