@@ -211,8 +211,8 @@ def _md(line):
     return {(d[2], d[1]) for d in event_dates(line)}
 
 def _scan(lines, i, js):
-    """First real label line in js; stop at the next dated row. Repeats of this row's
-    own date ("Oct 5 2026" / "Oct 5" / "2026") are skipped, not treated as a new row."""
+    """Index of the first real label line in js; stop at the next dated row. Repeats of
+    this row's own date ("Oct 5 2026" / "Oct 5" / "2026") are skipped, not a new row."""
     own = _md(lines[i])
     for j in js:
         if event_dates(lines[j]):
@@ -220,14 +220,22 @@ def _scan(lines, i, js):
                 continue
             return None            # reached the next dated row first
         if is_label(lines[j]):
-            return lines[j]
+            return j
     return None
 
-def label_below(lines, i):
+def _below(lines, i):
     return _scan(lines, i, range(i + 1, min(i + 6, len(lines))))
 
-def label_above(lines, i):
+def _above(lines, i):
     return _scan(lines, i, range(i - 1, max(i - 5, -1), -1))
+
+def label_below(lines, i):
+    j = _below(lines, i)
+    return lines[j] if j is not None else None
+
+def label_above(lines, i):
+    j = _above(lines, i)
+    return lines[j] if j is not None else None
 
 def page_layout(lines):
     """For date-only rows: is the event label above or below the date? Majority vote."""
@@ -243,9 +251,26 @@ def page_layout(lines):
             down += 1
     return "above" if up > down else "below"
 
+def _owned(lines, j, i):
+    """True if label line j belongs to another dated row (a date on its far side from i)."""
+    rng = range(j - 1, max(j - 4, -1), -1) if j < i else range(j + 1, min(j + 4, len(lines)))
+    for m in rng:
+        if event_dates(lines[m]) and not has_words(lines[m]):
+            return True
+        if is_label(lines[m]):
+            return False
+    return False
+
 def neighbour_label(lines, i, layout="below"):
-    first, second = (label_above, label_below) if layout == "above" else (label_below, label_above)
-    text = first(lines, i) or second(lines, i) or ""
+    """Label on the page's usual side; the other side only if no other date owns that label
+    (else a date with no label, e.g. "30 September 2026" year end, steals its neighbour's)."""
+    first, second = (_above, _below) if layout == "above" else (_below, _above)
+    j = first(lines, i)
+    if j is None:
+        j = second(lines, i)
+        if j is not None and _owned(lines, j, i):
+            j = None
+    text = lines[j] if j is not None else ""
     return text, (classify(text) if text else None)
 
 def extract(lines):
