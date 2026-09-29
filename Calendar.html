@@ -175,6 +175,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
         <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
         <button class="rc-btn rc-pend" id="rcal-pend" style="display:none" title="Dates found on company websites, awaiting your approval">Pending</button>
         <button class="rc-btn rc-add" id="rcal-add" style="display:none">＋ Add date</button>
+        <button class="rc-btn" id="rcal-popout" style="display:none" title="Open the calendar in its own window">↗ New window</button>
         <button class="rc-x" id="rcal-close" aria-label="Close calendar" style="display:none">✕</button>
       </div>
     </div>
@@ -633,6 +634,9 @@ function stats(){
 /* ── open / close (embedded in the Database) ── */
 function close(){try{if(PARENT&&typeof PARENT.rcalClose==='function')PARENT.rcalClose();}catch(e){}}
 if(EMBED){document.body.classList.add('rc-embed');$('rcal-close').style.display='';$('rcal-close').onclick=close;
+  /* same page in its own window; the Database's overlay closes */
+  $('rcal-popout').style.display='';
+  $('rcal-popout').onclick=function(){var w=window.open(location.href.replace(/[?#].*$/,''),'rnscal');if(w){try{w.focus();}catch(e){}close();}else note('Pop-up blocked: allow pop-ups for this site','err');};
   $('rcal-ov').addEventListener('click',function(e){if(e.target===$('rcal-ov'))close();});}
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape')return;
