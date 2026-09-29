@@ -41,10 +41,11 @@ MONTHS = {m: i for i, names in enumerate([
 MON = r"(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept|sep|oct|nov|dec)"
 RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?\s*(?:of\s+)?{MON}\.?,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?\b", re.I)
 RE_MDY = re.compile(rf"\b{MON}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?", re.I)
-RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4})\b")
+RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4}|\d{2})(?![\d.])")
+RE_ISO = re.compile(r"\b(20\d\d)-(\d{2})-(\d{2})\b")
 RE_WIN = re.compile(rf"\b(early|beginning of|mid|middle of|late|end of|towards the end of)?[\s-]*{MON}\.?\s+(\d{{4}})\b", re.I)
 RE_YEAR_LINE = re.compile(r"^(20\d\d)$")
-RE_DATEISH = re.compile(rf"\b\d{{1,2}}\s*(?:st|nd|rd|th)?\s+{MON}\b|\b{MON}\s+20\d\d\b", re.I)
+RE_DATEISH = re.compile(rf"\b20\d\d-\d\d-\d\d\b|\b\d{{1,2}}\s*(?:st|nd|rd|th)?\s+{MON}\b|\b{MON}\s+20\d\d\b", re.I)
 RE_PERIOD_REF = re.compile(r"\b(to|ending|ended|end(?:ed)? on|as at|until|through|period)\s*$", re.I)
 
 WINDOWS = {"early": (1, 10), "beginning of": (1, 10), "mid": (11, 20), "middle of": (11, 20),
@@ -142,17 +143,21 @@ def find_dates(line):
     taken = []
     def free(s, e):
         return all(e <= a or s >= b for a, b in taken)
-    for rx, order in ((RE_NUM, "num"), (RE_DMY, "dmy"), (RE_MDY, "mdy")):
+    for rx, order in ((RE_ISO, "iso"), (RE_NUM, "num"), (RE_DMY, "dmy"), (RE_MDY, "mdy")):
         for m in rx.finditer(line):
             if not free(*m.span()):
                 continue
-            if order == "num":
-                d, mo, y = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            if order == "iso":
+                y, mo, d = m.group(1), int(m.group(2)), int(m.group(3))
+            elif order == "num":
+                d, mo, y = int(m.group(1)), int(m.group(2)), m.group(3)
             elif order == "dmy":
                 d, mo, y = int(m.group(1)), MONTHS[m.group(2).lower()], m.group(3)
             else:
                 mo, d, y = MONTHS[m.group(1).lower()], int(m.group(2)), m.group(3)
             taken.append(m.span())
+            if not 1 <= mo <= 12:
+                continue
             if y is not None:
                 y = int(y); y = 2000 + y if y < 100 else y
                 if not 2020 <= y <= 2035:        # old or odd year ("22 Oct 2019"): drop, never roll forward
@@ -165,7 +170,8 @@ def find_dates(line):
         yield ("window", q, MONTHS[m.group(2).lower()], int(m.group(3)), m.span())
         taken.append(m.span())
 
-RE_BOILER = re.compile(r"^(?:(?:date|dates|title|event|events|time|location|venue|details|type|description|"
+RE_BOILER = re.compile(r"^(?:(?:\d{1,2}[:.]\d{2}\s*(?:am|pm)?(?:\s*(?:gmt|bst|uk|utc|cet))?|"
+                       r"add to [a-z ]*calendar|add to microsoft outlook|date|dates|title|event|events|time|location|venue|details|type|description|"
                        r"reminder alert|add to (?:my )?calendar|add to outlook|outlook link|outlook|ical|google|"
                        r"google calendar|yahoo calendar|download|days before event|webcast|more info|read more|"
                        r"view|register|add event|save|share)\s*\|?\s*)+$", re.I)
@@ -349,6 +355,39 @@ async def fetch_browser(browser, url):
     finally:
         await page.close()
 
+async def browser_pass(p, sources, results, idxs, method, **launch):
+    proxy = os.environ.get("HTTPS_PROXY")   # only set when run behind a proxy
+    try:
+        browser = await p.chromium.launch(proxy={"server": proxy} if proxy else None, **launch)
+    except Exception as ex:
+        print(f"{method}: launch failed - {ex}", file=sys.stderr)
+        return
+    bsem = asyncio.Semaphore(BROWSER_CONCURRENCY)
+    async def run(i):
+        async with bsem:
+            src = sources[i]
+            u = src["alt_url"] or src["url"]
+            status, html = await fetch_browser(browser, u)
+            lines = page_lines(html) if status and status < 400 else []
+            if is_challenge(lines):
+                status, lines = 403, []
+            n = count_dates(lines)
+            old = results[i]
+            better = (n > old["n_dates"] or (old["status"] or 0) >= 400 or old["status"] is None
+                      or len(" ".join(lines)) > len(" ".join(old["lines"])) + 500)
+            if better:
+                results[i] = {"fetched": u, "method": method, "status": status,
+                              "html": html, "lines": lines, "n_dates": n}
+    await asyncio.gather(*(run(i) for i in idxs))
+    await browser.close()
+
+RE_CHALLENGE = re.compile(r"attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
+                          r"checking your browser|access denied|request unsuccessful\. incapsula", re.I)
+
+def is_challenge(lines):
+    """Bot-protection page served with a 200 (Cloudflare, Incapsula, Akamai)."""
+    return len(" ".join(lines)) < 3000 and any(RE_CHALLENGE.search(l) for l in lines[:40])
+
 def needs_browser(status, html, lines, n_dates):
     if status is None or status in (401, 403, 429) or status >= 500:
         return True
@@ -365,6 +404,8 @@ async def process(src, client, sem):
         for u in urls:
             status, html = await fetch_http(client, u)
             lines = page_lines(html) if status and status < 400 else []
+            if is_challenge(lines):
+                status, lines = 403, []
             rec = {"fetched": u, "method": "http", "status": status, "html": html, "lines": lines,
                    "n_dates": count_dates(lines)}
             if best is None or rec["n_dates"] > best["n_dates"]:
@@ -392,33 +433,20 @@ async def main():
     async with httpx.AsyncClient(headers=HEADERS, follow_redirects=True, timeout=25) as client:
         results = await asyncio.gather(*(process(s, client, sem) for s in sources))
 
-    # browser fallback for JS / blocked / empty pages
+    # browser fallback for JS / blocked / empty pages: bundled Chromium first, then
+    # real Google Chrome (installed on GitHub runners) for whatever is still blocked
     retry = [i for i, r in enumerate(results)
              if needs_browser(r["status"], r["html"], r["lines"], r["n_dates"])]
     if retry:
         try:
             from playwright.async_api import async_playwright
-            bsem = asyncio.Semaphore(BROWSER_CONCURRENCY)
             async with async_playwright() as p:
-                proxy = os.environ.get("HTTPS_PROXY")   # only set when run behind a proxy
-                browser = await p.chromium.launch(
-                    args=["--disable-blink-features=AutomationControlled", "--disable-http2"],
-                    proxy={"server": proxy} if proxy else None)
-                async def run(i):
-                    async with bsem:
-                        src = sources[i]
-                        u = src["alt_url"] or src["url"]
-                        status, html = await fetch_browser(browser, u)
-                        lines = page_lines(html) if status and status < 400 else []
-                        n = count_dates(lines)
-                        old = results[i]
-                        better = (n > old["n_dates"] or (old["status"] or 0) >= 400 or old["status"] is None
-                                  or len(" ".join(lines)) > len(" ".join(old["lines"])) + 500)
-                        if better:
-                            results[i] = {"fetched": u, "method": "browser", "status": status,
-                                          "html": html, "lines": lines, "n_dates": n}
-                await asyncio.gather(*(run(i) for i in retry))
-                await browser.close()
+                await browser_pass(p, sources, results, retry, "browser",
+                                   args=["--disable-blink-features=AutomationControlled", "--disable-http2"])
+                still = [i for i in retry if results[i]["status"] is None or results[i]["status"] in (401, 403, 429)]
+                if still:
+                    await browser_pass(p, sources, results, still, "chrome", channel="chrome",
+                                       args=["--disable-blink-features=AutomationControlled"])
         except ImportError:
             print("playwright not installed - browser fallback skipped", file=sys.stderr)
 
