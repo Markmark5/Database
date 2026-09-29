@@ -86,6 +86,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .rc-ro .rc-beat{cursor:default}
 .rc-sc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6a6a78;min-width:0}
 .rc-pill{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-weight:700;font-size:9px;line-height:1;color:#0d0d16;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.18);flex-shrink:0}
+.rc-pill[data-rc-rns]{cursor:pointer}.rc-pill[data-rc-rns]:hover{box-shadow:0 0 0 2px #1f6fd1}
 .rc-p-g{background:#00c814}
 .rc-p-a{background:#ffc400}
 .rc-p-r{background:#e02525}
@@ -608,13 +609,13 @@ function row(e,isPast,T,alt){
   if(fl.hyp1)mk+='<span class="rc-ring rc-r1" title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
   if(fl.hyp2)mk+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical (last card)">🔬</span>';
   if(fl.acc)mk+='<span title="Full-year growth accelerating vs prior year (last card)">🚀</span>';
-  var sc;
+  var sc,tkA=' data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards"';
   if(isPast){
     var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
     var pv=bef.length?bef[bef.length-1]:null,nw=aft.length?aft[0]:null;
-    sc='<span class="rc-pill '+band(pv&&pv.score)+'">'+(pv?pv.score:'—')+'</span> → '+(nw?'<span class="rc-pill '+band(nw.score)+'">'+nw.score+'</span>':'<span title="Import the new scorecard to record the result">awaiting</span>');
+    sc='<span class="rc-pill '+band(pv&&pv.score)+'"'+tkA+'>'+(pv?pv.score:'—')+'</span> → '+(nw?'<span class="rc-pill '+band(nw.score)+'"'+tkA+'>'+nw.score+'</span>':'<span title="Import the new scorecard to record the result">awaiting</span>');
   }else{
-    sc='<span class="rc-pill '+band(L&&L.score)+'">'+(L?L.score:'—')+'</span><span class="rc-vd" title="'+esc(L?(L.verdict||'')+' · '+(L.date||''):'No scorecard yet')+'">'+esc(L?(L.verdict||L.date):(cardsReady?'no card':'…'))+'</span>';
+    sc='<span class="rc-pill '+band(L&&L.score)+'"'+tkA+'>'+(L?L.score:'—')+'</span><span class="rc-vd" title="'+esc(L?(L.verdict||'')+' · '+(L.date||''):'No scorecard yet')+'">'+esc(L?(L.verdict||L.date):(cardsReady?'no card':'…'))+'</span>';
   }
   var co=e.company||(L&&L.company)||'';
   var web=e.web?'<span class="rc-web" title="Found on the company website'+(e.web.url?': '+esc(e.web.url):'')+'">WEB</span>':'';
