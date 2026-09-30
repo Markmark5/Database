@@ -1,18 +1,19 @@
 # Calendar scrape - 2026-09-30
 
-**139 sources · 22 events staged for approval**
+**139 sources · 17 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 71 | read OK, upcoming events found |
-| EMPTY | 36 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 21 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| EMPTY | 37 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 19 | page loaded but little text (JS-rendered even in browser) |
+| BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
 - Amcomri Group (AMCO) - http 200, browser - https://amcomrigroup.com/investor-relations
+- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
 - Focusrite (TUNE) - http 200, browser - https://focusriteplc.com/investors/company-documents/
@@ -51,13 +52,11 @@
 
 ## UNREADABLE
 
-- Cake Box (CBOX) - http 202, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - Eurocell (ECEL) - http 200, http - https://investors.eurocell.co.uk/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
-- NIOX (NIOX) - http 202, http - https://investors.niox.com/investors/financial-calendar/
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
@@ -83,6 +82,7 @@
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 
 ## ERROR
 
@@ -92,4 +92,5 @@
 
 ## Approved events not re-verified tonight
 
-- NIOX H1 results 2026-10-21
+- Peel Hunt Pre-H1 TU 2026-10-01
+- Peel Hunt H1 results 2026-11-18
