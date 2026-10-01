@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RNS Calendar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
 <!--
   RNS CALENDAR — standalone page, also embedded by Database_v2.html (Calendar button).
   Reads:  database.json (scorecards + cal-data; the parent page's copy when embedded)
@@ -168,8 +168,11 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .mg-dn{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:#55556a;margin-bottom:4px}
 .mg-dn b{font-size:15px;color:#1d1d24}.mg-dn .mg-td{font-size:10px;color:#8a8a98}
 .mg-dn .mg-td.rc-soon{color:#b07800;font-weight:700}
-.mg-d.mg-past{background:#f6f6f8}.mg-d.mg-past .mg-chip{opacity:.55}
-.mg-d.mg-out{opacity:.4}
+.mg-d.mg-past{background:#f6f6f8;position:relative;overflow:hidden}
+/* days gone: a big hand-drawn red X (clicks still reach the tickers underneath) */
+.mg-d.mg-past::after{content:"X";position:absolute;left:0;right:0;top:50%;transform:translateY(-46%) rotate(-4deg);text-align:center;
+  font-family:'Permanent Marker','Segoe Print','Bradley Hand',cursive;font-size:104px;line-height:1;color:#d81e1e;opacity:.72;pointer-events:none}.mg-d.mg-past .mg-chip{opacity:.55}
+.mg-d.mg-out>*{opacity:.4}
 .mg-d.mg-today{box-shadow:inset 0 0 0 2px #1f9d55}.mg-d.mg-today .mg-dn b{background:#8ee68e;padding:0 6px;border-radius:3px}
 .mg-d.mg-hol{background:repeating-linear-gradient(45deg,#f3f3f5,#f3f3f5 6px,#ececf0 6px,#ececf0 12px)}
 .mg-chip{display:flex;align-items:center;gap:4px;font-size:11px;padding:2px 4px;border-radius:3px;margin-bottom:2px;border-left:3px solid #c9c9d2;background:#f7f7fa;white-space:nowrap;overflow:hidden;cursor:pointer}
