@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RNS Calendar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
 <!--
   RNS CALENDAR — standalone page, also embedded by Database_v2.html (Calendar button).
   Reads:  database.json (scorecards + cal-data; the parent page's copy when embedded)
@@ -154,6 +154,49 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .toast{background:#1d1d24;color:#fff;font-size:12px;padding:8px 12px;border-radius:4px;box-shadow:0 4px 14px #0004}
 .toast.err{background:#b42323}
 
+.rc-view .rc-btn{min-width:62px}
+/* month grid */
+.mg-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 14px;border-bottom:1px solid #e3e3e8;font-size:12px;color:#55556a}
+.mg-nav b{font-size:14px;color:#1d1d24}
+.mg-nav .mg-hint{margin-left:auto;font-size:11px;color:#8a8a98}
+.mg-dow,.mg-wk{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.mg-dow{background:#fafafb;border-bottom:1px solid #e3e3e8}
+.mg-dow div{padding:6px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7a7a88}
+.mg-wk{border-bottom:1px solid #e3e3e8}
+.mg-d{min-height:118px;border-right:1px solid #eeeef2;padding:5px 6px 6px;min-width:0}
+.mg-d:nth-child(5){border-right:none}
+.mg-dn{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:#55556a;margin-bottom:4px}
+.mg-dn b{font-size:15px;color:#1d1d24}.mg-dn .mg-td{font-size:10px;color:#8a8a98}
+.mg-dn .mg-td.rc-soon{color:#b07800;font-weight:700}
+.mg-d.mg-past{background:#f6f6f8;position:relative;overflow:hidden}
+/* days gone: a big hand-drawn red X (clicks still reach the tickers underneath) */
+.mg-d.mg-past::after{content:"X";position:absolute;left:0;right:0;top:50%;transform:translateY(-46%) rotate(-4deg);text-align:center;
+  font-family:'Permanent Marker','Segoe Print','Bradley Hand',cursive;font-size:104px;line-height:1;color:#d81e1e;opacity:.72;pointer-events:none}.mg-d.mg-past .mg-chip{opacity:.55}
+.mg-d.mg-out>*{opacity:.4}
+.mg-d.mg-today{box-shadow:inset 0 0 0 2px #1f9d55}.mg-d.mg-today .mg-dn b{background:#8ee68e;padding:0 6px;border-radius:3px}
+.mg-d.mg-hol{background:repeating-linear-gradient(45deg,#f3f3f5,#f3f3f5 6px,#ececf0 6px,#ececf0 12px)}
+.mg-chip{display:flex;align-items:center;gap:4px;font-size:11px;padding:2px 4px;border-radius:3px;margin-bottom:2px;border-left:3px solid #c9c9d2;background:#f7f7fa;white-space:nowrap;overflow:hidden;cursor:pointer}
+.mg-chip:hover{background:#e3f2ff}
+.rc-ro .mg-chip{cursor:default}
+.mg-chip .mg-k{font-weight:700;cursor:pointer}.mg-chip .mg-k:hover{color:#1f6fd1;text-decoration:underline}
+.mg-chip .mg-ty{color:#6a6a78;font-size:10px;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mg-chip.mg-res{border-left-color:#1f6fd1}.mg-chip.mg-tu{border-left-color:#e0a000}.mg-chip.mg-agm{border-left-color:#8a5cd6}
+.mg-chip.mg-star{background:#fbd3e4}.mg-chip.mg-star:hover{background:#f8c4da}
+.mg-chip.mg-prov .mg-k{color:#b07800}
+.mg-chip .rc-pill{width:16px;height:16px;font-size:7.5px;border-width:1px;cursor:pointer}
+.mg-chip .rc-web{margin-left:0;font-size:8px;padding:0 2px}
+.mg-mk{margin-left:auto;display:flex;gap:1px;align-items:center;font-size:11px;flex-shrink:0;padding-left:3px}
+.mg-mk .mg-bt{font-size:9px;font-weight:700;color:#0b7a36;background:#e2f5e9;border:1px solid #9fd8b4;border-radius:2px;padding:0 3px;line-height:13px}
+.mg-mk .rc-ring{width:15px;height:15px;font-size:8.5px}
+.mg-more{font-size:10px;color:#1f6fd1;font-weight:600;padding:1px 4px;cursor:pointer;background:none;border:none;font-family:inherit}
+.mg-more:hover{text-decoration:underline}
+.mg-win{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:5px 8px;background:#fffaf0;border-top:1px dashed #e8d6a8;font-size:11px}
+.mg-win .mg-lab{font-weight:700;color:#8a5a00;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.mg-win .mg-w{cursor:pointer}.mg-win .mg-w b:hover{color:#1f6fd1;text-decoration:underline}
+.mg-win .mg-w.mg-star b{color:#d6005f}
+.mg-win .mg-w span{color:#6a6a78}
+.rc-wk.rc-flash b{background:#ffd98a}
+@media (max-width:760px){.mg-d{min-height:80px;padding:3px}.mg-chip .mg-ty,.mg-mk{display:none}}
 @media (max-width:760px){
   .rc-row{grid-template-columns:70px minmax(0,1fr) 64px 28px}.rc-row .rc-ev{grid-column:2/4}.rc-row .rc-mk,.rc-row .rc-days{display:none}
   .pd-row{grid-template-columns:22px minmax(0,1fr)}.pd-row>div:nth-child(n+3){grid-column:2}.pd-act{justify-content:flex-start}
@@ -167,6 +210,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
     <div class="rc-head">
       <div class="rc-title" id="rcal-title">🗓 RNS calendar<small id="rcal-today"></small></div>
       <div class="rc-bar">
+        <div class="rc-seg rc-view" id="rcal-view"><button class="rc-btn rc-on" data-v="list">☰ List</button><button class="rc-btn" data-v="month">▦ Month</button></div>
         <div class="rc-seg" id="rcal-rng">
           <button class="rc-btn" data-r="7">7d</button><button class="rc-btn" data-r="14">14d</button><button class="rc-btn" data-r="21">21d</button><button class="rc-btn rc-on" data-r="30">30d</button><button class="rc-btn" data-r="90">90d</button><button class="rc-btn" data-r="9999">All</button>
         </div>
@@ -186,6 +230,11 @@ body.rc-embed{background:rgba(0,0,0,.6)}
       <span>📈 H1 ahead of seasonal</span><span><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical</span><span>🔥 H2 accelerating</span><span><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical</span><span>📈🔥 double</span><span>🚀 full-year acceleration</span>
       <span><span class="rc-web">WEB</span> date from company website</span>
       <span>Click a ticker for its scorecards</span>
+    </div>
+    <div class="mg-nav" id="rcal-mnav" style="display:none">
+      <button class="rc-btn" id="rcal-mprev" aria-label="Previous 30 days">◀</button><b id="rcal-mtitle"></b><button class="rc-btn" id="rcal-mnext" aria-label="Next 30 days">▶</button>
+      <button class="rc-btn" id="rcal-mtoday">Today</button>
+      <span class="mg-hint">Weekdays only · click a ticker for its scorecards · “+ more” opens that day in the list</span>
     </div>
     <div id="rcal-list"><div class="rc-empty">Loading calendar…</div></div>
     <div class="rc-foot">
@@ -568,6 +617,8 @@ function render(){
   var T=today(),t0=iso(T);
   $('rcal-today').textContent='Today '+T.getDate()+' '+MON[T.getMonth()]+' '+T.getFullYear();
   var EV=allEvents();
+  $('rcal-mnav').style.display=VIEW==='month'?'':'none';$('rcal-rng').style.display=VIEW==='month'?'none':'';
+  if(VIEW==='month'){renderMonth(EV);return;}
   if(FNEW&&EV.length){renderNew();return;}
   var list=$('rcal-list');
   var horizon=iso(new Date(T.getTime()+RNG*864e5)),pastFrom=iso(new Date(T.getTime()-21*864e5));
@@ -589,11 +640,80 @@ function render(){
   up.forEach(function(e){
     var k=grpKey(e);
     if(k!==last){var g=grpLabel(e);
-      h+='<div class="rc-wk"><b>'+esc(g.t)+'</b>'+(g.s?'<span>'+esc(g.s)+'</span>':'')+'</div>';last=k;alt=false;}
+      h+='<div class="rc-wk"'+(partOf(e)==='exact'?' data-day="'+e.from+'"':'')+'><b>'+esc(g.t)+'</b>'+(g.s?'<span>'+esc(g.s)+'</span>':'')+'</div>';last=k;alt=false;}
     h+=row(e,false,T,alt);alt=!alt;
   });
   if(!past.length&&!up.length)h='<div class="rc-empty">No events match these filters.</div>';
   list.innerHTML=h;stats();
+}
+/* compact markers for the month grid (same rules as the list) */
+function marksHtml(tk){
+  var L=latest(tk),fl=flags(L),h='';
+  if(beatState(tk).on)h+='<span class="mg-bt" title="Ahead of forecasts at last update">▲</span>';
+  var dbl=doubleOf(L);
+  if(dbl)h+='<span title="Double: H1 ahead earlier, H2 accelerating now">📈🔥</span>';
+  else{if(fl.h1)h+='<span title="H1 ahead of seasonal">📈</span>';if(fl.h2)h+='<span title="H2 accelerating">🔥</span>';}
+  if(fl.hyp1)h+='<span class="rc-ring rc-r1" title="H1 ahead, hypothetical">🔬</span>';
+  if(fl.hyp2)h+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical">🔬</span>';
+  if(fl.acc)h+='<span title="Full-year acceleration">🚀</span>';
+  return h?'<span class="mg-mk">'+h+'</span>':'';
+}
+var SHORT={'H1 results':'H1 res','FY results':'FY res','Pre-H1 TU':'H1 TU','Pre-FY TU':'FY TU','Trading update':'TU'};
+function evCls(t){return /results/i.test(t)?'mg-res':t==='AGM'?'mg-agm':t==='Other'?'':'mg-tu';}
+function chip(e){
+  var L=latest(e.ticker),sc=L?L.score:null;
+  return '<div class="mg-chip '+evCls(e.type)+(S.stars[e.ticker]?' mg-star':'')+(e.conf!=='confirmed'?' mg-prov':'')+'" data-rc-id="'+esc(e.id)+'" title="'+esc((e.company||(L&&L.company)||'')+' · '+(e.event||e.type)+' · '+confLbl(e.conf))+'">'
+    +'<span class="rc-pill '+band(sc)+'" data-rc-rns="'+esc(e.ticker)+'">'+(sc!=null?sc:'–')+'</span>'
+    +'<span class="mg-k" data-rc-rns="'+esc(e.ticker)+'">'+esc(e.ticker)+'</span>'
+    +'<span class="mg-ty">'+esc(SHORT[e.type]||e.type)+'</span>'
+    +(e.web?'<span class="rc-web">WEB</span>':'')+marksHtml(e.ticker)+'</div>';
+}
+/* ── month grid: 30 days, weekdays only, month windows in a strip under each week ── */
+var VIEW='list',MOFF=0,MAXCHIP=5;
+function renderMonth(EV){
+  var T=today(),t0=iso(T),start=new Date(T.getTime());start.setDate(start.getDate()+MOFF*30);
+  var end=new Date(start.getTime());end.setDate(end.getDate()+29);
+  var s0=iso(start),e0=iso(end);
+  $('rcal-mtitle').textContent=(MOFF===0?'Next 30 days · ':'')+start.getDate()+' '+MON[start.getMonth()]+' – '+end.getDate()+' '+MON[end.getMonth()]+' '+end.getFullYear();
+  var nw=FNEW?newList():null;
+  var ev=EV.filter(function(e){return passes(e)&&(!nw||nw.indexOf(e)>=0)&&e.to>=s0&&e.from<=e0;});
+  var ex={},wins=[];
+  ev.forEach(function(e){if(e.from===e.to)(ex[e.from]=ex[e.from]||[]).push(e);else wins.push(e);});
+  var mon=new Date(start.getTime());mon.setDate(mon.getDate()-((mon.getDay()+6)%7));
+  var h='<div class="mg-dow"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>',firstWk=true;
+  for(var w=new Date(mon.getTime());w<=end;w.setDate(w.getDate()+7)){
+    h+='<div class="mg-wk">';
+    var fri=new Date(w.getTime());fri.setDate(fri.getDate()+4);
+    for(var i=0;i<5;i++){
+      var d=new Date(w.getTime());d.setDate(d.getDate()+i);var k=iso(d);
+      var out=k<s0||k>e0,past=k<t0,isT=k===t0,days=tdays(T,k);
+      var list=(ex[k]||[]).slice().sort(function(a,b){return (S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||((latest(b.ticker)||{}).score||0)-((latest(a.ticker)||{}).score||0)||a.ticker.localeCompare(b.ticker);});
+      h+='<div class="mg-d'+(past?' mg-past':'')+(isT?' mg-today':'')+(out?' mg-out':'')+(HOLS[k]?' mg-hol':'')+'">'
+        +'<div class="mg-dn"><b>'+d.getDate()+(d.getDate()===1||i===0?' '+MON[d.getMonth()]:'')+'</b><span class="mg-td'+(!past&&!isT&&days<=5?' rc-soon':'')+'">'
+        +(HOLS[k]?'Bank holiday':past?'':isT?'today':days+' td')+'</span></div>';
+      list.slice(0,MAXCHIP).forEach(function(e){h+=chip(e);});
+      if(list.length>MAXCHIP)h+='<button class="mg-more" data-mg-day="'+k+'">+'+(list.length-MAXCHIP)+' more</button>';
+      h+='</div>';
+    }
+    /* windows sit under the week they start in (or the first week if they began earlier) */
+    var wf=iso(w),wt=iso(fri);
+    var wl=wins.filter(function(e){return (e.from>=wf&&e.from<=wt)||(firstWk&&e.from<wf);})
+      .sort(function(a,b){return sortKey(a).localeCompare(sortKey(b))||a.ticker.localeCompare(b.ticker);});
+    if(wl.length){
+      var labs=[];wl.forEach(function(e){var l=partOf(e)==='month'?shortWin(e)+' (date TBC)':shortWin(e);if(labs.indexOf(l)<0)labs.push(l);});
+      h+='<div class="mg-win"><span class="mg-lab">'+esc(labs.join(' / '))+' window</span>'
+        +wl.map(function(e){return '<span class="mg-w'+(S.stars[e.ticker]?' mg-star':'')+'" data-rc-id="'+esc(e.id)+'" title="'+esc((e.event||e.type)+' · '+(e.label||shortWin(e))+' · '+confLbl(e.conf))+'"><b data-rc-rns="'+esc(e.ticker)+'">'+esc(e.ticker)+'</b> <span>'+esc(SHORT[e.type]||e.type)+'</span></span>';}).join('')+'</div>';
+    }
+    firstWk=false;
+    h+='</div>';
+  }
+  if(!ev.length)h+='<div class="rc-empty">No dates in these 30 days'+(FSTAR||FBEAT||FQ||FNEW?' match these filters':'')+'.</div>';
+  $('rcal-list').innerHTML=h;stats();
+}
+function setView(v){
+  VIEW=v;try{localStorage.setItem('rnscal_view',v);}catch(e){}
+  document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-v')===v);});
+  render();
 }
 function row(e,isPast,T,alt){
   var L=latest(e.ticker),bs=beatState(e.ticker),star=!!S.stars[e.ticker],fl=flags(L);
@@ -652,6 +772,7 @@ window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();ren
 /* ── list interactions ── */
 $('rcal-list').addEventListener('click',function(ev){
   var tk=ev.target.closest('[data-rc-rns]');if(tk){showRNS(tk.getAttribute('data-rc-rns'));return;}
+  var more=ev.target.closest('[data-mg-day]');if(more){openDay(more.getAttribute('data-mg-day'));return;}
   if(!CAN_EDIT)return;
   var s=ev.target.closest('[data-rc-star]');
   if(s){var k=s.getAttribute('data-rc-star');if(S.stars[k])delete S.stars[k];else S.stars[k]=true;save();render();return;}
@@ -659,11 +780,23 @@ $('rcal-list').addEventListener('click',function(ev){
   if(b){var t=b.getAttribute('data-rc-beat'),L=latest(t),cur=beatState(t).on,auto=!!(L&&L.calData&&L.calData.beat),nv=!cur;
     if(nv===auto)delete S.beatOv[t];else S.beatOv[t]={v:nv,since:L?String(L.date||''):''};
     save();render();note(t+(nv?' marked ▲ beat':' ▲ beat removed'));return;}
-  var r=ev.target.closest('.rc-row');if(!r)return;
+  var r=ev.target.closest('.rc-row,.mg-chip,.mg-w');if(!r)return;
   var id=r.getAttribute('data-rc-id');
   if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);
 });
 $('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&CAN_EDIT&&ev.target.classList.contains('rc-row')){var id=ev.target.getAttribute('data-rc-id');if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);}});
+/* "+N more": that day in the list view */
+function openDay(day){
+  RNG=9999;document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.toggle('rc-on',x.getAttribute('data-r')==='9999');});
+  FNEW=false;$('rcal-fnew').classList.remove('rc-on');setView('list');
+  var hd=document.querySelector('#rcal-list [data-day="'+day+'"]');
+  if(hd){hd.scrollIntoView({block:'start'});hd.classList.add('rc-flash');setTimeout(function(){hd.classList.remove('rc-flash');},1500);}
+}
+document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.onclick=function(){setView(b.getAttribute('data-v'));};});
+$('rcal-mprev').onclick=function(){MOFF--;render();};
+$('rcal-mnext').onclick=function(){MOFF++;render();};
+$('rcal-mtoday').onclick=function(){MOFF=0;render();};
+try{if(localStorage.getItem('rnscal_view')==='month'){VIEW='month';document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-v')==='month');});}}catch(e){}
 document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
 $('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);render();};
 $('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);render();};
