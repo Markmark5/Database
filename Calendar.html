@@ -355,12 +355,13 @@ function pushState(){
 
 /* ── scorecards: the Database's copy when embedded, else database.json ── */
 var OWN_CARDS=[],OWN_LEGACY=null,cardsReady=false;
-function allCards(){
-  try{if(PARENT&&Array.isArray(PARENT.ALL)&&PARENT.ALL.length)return PARENT.ALL;}catch(e){}
-  return OWN_CARDS;
+function parentCards(){
+  try{if(PARENT&&typeof PARENT.rcalCards==='function'){var a=PARENT.rcalCards();if(Array.isArray(a)&&a.length)return a;}}catch(e){}
+  return null;
 }
+function allCards(){return parentCards()||OWN_CARDS;}
 function loadCards(){
-  try{if(PARENT&&Array.isArray(PARENT.ALL)&&PARENT.ALL.length){cardsReady=true;return Promise.resolve();}}catch(e){}
+  if(parentCards()){cardsReady=true;return Promise.resolve();}
   syncMsg('· loading scorecards…');
   var rel=/^https?:/.test(location.protocol)?fetch('database.json?t='+Date.now()):Promise.reject();
   return rel.then(function(r){if(!r.ok)throw 0;return r.json();})
