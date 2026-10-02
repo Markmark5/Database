@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-10-01T08:45:29.364Z",
-    "savedAtLabel": "01 Oct 2026 09:45",
+    "savedAt": "2026-10-02T06:35:57.809Z",
+    "savedAtLabel": "02 Oct 2026 07:35",
     "source": "github-sync"
   },
   "scorecards": [
@@ -56979,220 +56979,6 @@
       "entryPrice": 73.5
     },
     {
-      "id": "MCB_2026_04_01",
-      "ticker": "MCB",
-      "score": 51,
-      "company": "McBride PLC",
-      "verdict": "Constructive / Modest Upgrades",
-      "date": "2026-04-01",
-      "rnsType": "Acquisition + Update",
-      "mode": "pre-FY",
-      "index": "FTSE Small Cap",
-      "signals": [
-        {
-          "pill": "M&A",
-          "type": "green",
-          "textHTML": "Eurotab acqn — 3.1x post-synergy EV/EBITDA, EPS accretive FY27",
-          "textPlain": "Eurotab acqn — 3.1x post-synergy EV/EBITDA, EPS accretive FY27"
-        },
-        {
-          "pill": "MARGIN",
-          "type": "green",
-          "textHTML": "+0.5pp Group EBITDA margin; moves toward 10% CMD target",
-          "textPlain": "+0.5pp Group EBITDA margin; moves toward 10% CMD target"
-        },
-        {
-          "pill": "COSTS",
-          "type": "amber",
-          "textHTML": "Middle East petrochemical/energy cost pressures in H2; surcharges actioned",
-          "textPlain": "Middle East petrochemical/energy cost pressures in H2; surcharges actioned"
-        },
-        {
-          "pill": "FX",
-          "type": "red",
-          "textHTML": "FX Rule 1 applied (−6 pts) · est. &gt;30% EUR · GBP headwind",
-          "textPlain": "FX Rule 1 applied (−6 pts) · est. >30% EUR · GBP headwind"
-        },
-        {
-          "pill": "H2 BURDEN",
-          "type": "red",
-          "textHTML": "H2 EPS 12.3p required vs historical avg 7.6p (+62%)",
-          "textPlain": "H2 EPS 12.3p required vs historical avg 7.6p (+62%)"
-        }
-      ],
-      "revisions": [
-        {
-          "lbl": "FY1 EPS",
-          "val": "Hold/−5%",
-          "sub": "22.8p → 21.5–22.8p",
-          "color": "var(--amber)"
-        },
-        {
-          "lbl": "FY2 EPS",
-          "val": "+5–9%",
-          "sub": "23.8p → 25–26p (Eurotab)",
-          "color": "var(--green)"
-        },
-        {
-          "lbl": "FY1 Revenue",
-          "val": "±2%",
-          "sub": "£933m — no new guidance",
-          "color": "var(--amber)"
-        },
-        {
-          "lbl": "Target Price",
-          "val": "Hold/↑",
-          "sub": "204p cons → 210–220p",
-          "color": "var(--green)"
-        }
-      ],
-      "sparkStats": [
-        {
-          "lbl": "EPS Start",
-          "val": "21.5p",
-          "style": ""
-        },
-        {
-          "lbl": "EPS Now",
-          "val": "22.8p",
-          "style": ""
-        },
-        {
-          "lbl": "Net Δ",
-          "val": "+6.0%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "4-wk",
-          "val": "FLAT",
-          "style": "color:var(--amber)"
-        },
-        {
-          "lbl": "Rev Δ",
-          "val": "−2.0%",
-          "style": "color:var(--red)"
-        },
-        {
-          "lbl": "TP",
-          "val": "204p",
-          "style": ""
-        }
-      ],
-      "sparkLabel": "EPS Consensus Trend",
-      "h1Inds": [
-        {
-          "lbl": "REV",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "accelInds": [
-        {
-          "lbl": "REV",
-          "mark": "✓",
-          "dev": "",
-          "state": "pos"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "✓",
-          "dev": "",
-          "state": "pos"
-        }
-      ],
-      "importedAt": "2026-04-02T07:40:21.804Z",
-      "source": "html-dom",
-      "sparkData": [
-        {
-          "d": "18 May 25",
-          "eps": 21.5,
-          "price": 183
-        },
-        {
-          "d": "14 Jun 25",
-          "eps": 21.5,
-          "price": 183
-        },
-        {
-          "d": "19 Jul 25",
-          "eps": 21.4,
-          "price": 183
-        },
-        {
-          "d": "23 Aug 25",
-          "eps": 21.4,
-          "price": 183
-        },
-        {
-          "d": "20 Sep 25",
-          "eps": 21.8,
-          "price": 183
-        },
-        {
-          "d": "27 Sep 25",
-          "eps": 21.7,
-          "price": 183
-        },
-        {
-          "d": "18 Oct 25",
-          "eps": 22,
-          "price": 196
-        },
-        {
-          "d": "08 Nov 25",
-          "eps": 22,
-          "price": 196
-        },
-        {
-          "d": "22 Nov 25",
-          "eps": 22,
-          "price": 199
-        },
-        {
-          "d": "27 Dec 25",
-          "eps": 22,
-          "price": 199
-        },
-        {
-          "d": "24 Jan 26",
-          "eps": 22.9,
-          "price": 199
-        },
-        {
-          "d": "07 Feb 26",
-          "eps": 22.9,
-          "price": 199
-        },
-        {
-          "d": "28 Feb 26",
-          "eps": 22.8,
-          "price": 204
-        },
-        {
-          "d": "07 Mar 26",
-          "eps": 22.8,
-          "price": 204
-        },
-        {
-          "d": "21 Mar 26",
-          "eps": 22.8,
-          "price": 204
-        },
-        {
-          "d": "28 Mar 26",
-          "eps": 22.8,
-          "price": 204
-        }
-      ]
-    },
-    {
       "id": "MCB_2026_06_12",
       "ticker": "MCB",
       "score": 38,
@@ -81841,221 +81627,6 @@
       "entryPrice": 89.5
     },
     {
-      "id": "SDY_2026_04_01",
-      "ticker": "SDY",
-      "score": 21,
-      "company": "Speedy Hire PLC",
-      "verdict": "Negative / Material Downgrades",
-      "date": "2026-04-01",
-      "rnsType": "Pre-FY Update",
-      "mode": "pre-FY",
-      "index": "FTSE Small Cap",
-      "signals": [
-        {
-          "pill": "PW",
-          "type": "red",
-          "textHTML": "EBITDA c.£90m vs consensus £106.8m (−15.7%) — explicit downgrade",
-          "textPlain": "EBITDA c.£90m vs consensus £106.8m (−15.7%) — explicit downgrade"
-        },
-        {
-          "pill": "EPS BRIDGE",
-          "type": "red",
-          "textHTML": "Interest cover 1.8x — guided EBITDA implies PBT loss; EPS turns negative",
-          "textPlain": "Interest cover 1.8x — guided EBITDA implies PBT loss; EPS turns negative"
-        },
-        {
-          "pill": "LEVERAGE",
-          "type": "red",
-          "textHTML": "ND/FCF 25.7x — non-linear EPS downside on revenue miss",
-          "textPlain": "ND/FCF 25.7x — non-linear EPS downside on revenue miss"
-        },
-        {
-          "pill": "FY27",
-          "type": "amber",
-          "textHTML": "ProService £50–55m revenue; accretive language — FY27 optionality",
-          "textPlain": "ProService £50–55m revenue; accretive language — FY27 optionality"
-        },
-        {
-          "pill": "DELAY",
-          "type": "grey",
-          "textHTML": "Customer-led hire delays framed as near-term recoverable",
-          "textPlain": "Customer-led hire delays framed as near-term recoverable"
-        }
-      ],
-      "revisions": [
-        {
-          "lbl": "FY1 EPS",
-          "val": "To Loss",
-          "sub": "2.3p → −1 to −3p est.",
-          "color": "var(--red)"
-        },
-        {
-          "lbl": "FY2 EPS",
-          "val": "Cut",
-          "sub": "5.4p → 3.5–4.5p est.",
-          "color": "var(--red)"
-        },
-        {
-          "lbl": "FY1 Revenue",
-          "val": "−3–8%",
-          "sub": "£443.6m — conditions worsened",
-          "color": "var(--red)"
-        },
-        {
-          "lbl": "Target Price",
-          "val": "Cut",
-          "sub": "55p cons (stale) → 30–40p",
-          "color": "var(--red)"
-        }
-      ],
-      "sparkStats": [
-        {
-          "lbl": "EPS Start",
-          "val": "1.8p",
-          "style": ""
-        },
-        {
-          "lbl": "EPS Now",
-          "val": "2.3p",
-          "style": ""
-        },
-        {
-          "lbl": "Net Δ",
-          "val": "+27.8%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "4-wk",
-          "val": "FLAT",
-          "style": "color:var(--amber)"
-        },
-        {
-          "lbl": "Rev Δ",
-          "val": "+3.2%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "TP",
-          "val": "55p",
-          "style": ""
-        }
-      ],
-      "sparkLabel": "EPS Consensus Trend",
-      "h1Inds": [
-        {
-          "lbl": "REV",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "accelInds": [
-        {
-          "lbl": "REV",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "importedAt": "2026-04-02T07:40:21.805Z",
-      "source": "html-dom",
-      "sparkData": [
-        {
-          "d": "18 May 25",
-          "eps": 1.8,
-          "price": 44
-        },
-        {
-          "d": "24 May 25",
-          "eps": 1.8,
-          "price": 44
-        },
-        {
-          "d": "08 Jun 25",
-          "eps": 1.8,
-          "price": 45
-        },
-        {
-          "d": "22 Jun 25",
-          "eps": 2.6,
-          "price": 46
-        },
-        {
-          "d": "05 Jul 25",
-          "eps": 2.6,
-          "price": 47
-        },
-        {
-          "d": "05 Aug 25",
-          "eps": 2.6,
-          "price": 47
-        },
-        {
-          "d": "06 Sep 25",
-          "eps": 2.5,
-          "price": 47
-        },
-        {
-          "d": "04 Oct 25",
-          "eps": 2.5,
-          "price": 47
-        },
-        {
-          "d": "18 Oct 25",
-          "eps": 2.6,
-          "price": 55
-        },
-        {
-          "d": "01 Nov 25",
-          "eps": 2.6,
-          "price": 55
-        },
-        {
-          "d": "29 Nov 25",
-          "eps": 2.3,
-          "price": 55
-        },
-        {
-          "d": "06 Dec 25",
-          "eps": 2.4,
-          "price": 54
-        },
-        {
-          "d": "03 Jan 26",
-          "eps": 2.4,
-          "price": 54
-        },
-        {
-          "d": "31 Jan 26",
-          "eps": 2.4,
-          "price": 54
-        },
-        {
-          "d": "28 Feb 26",
-          "eps": 2.3,
-          "price": 55
-        },
-        {
-          "d": "28 Mar 26",
-          "eps": 2.3,
-          "price": 55
-        }
-      ],
-      "entryPrice": 22.65
-    },
-    {
       "id": "SDY_2026_06_17",
       "ticker": "SDY",
       "score": 11,
@@ -87247,235 +86818,6 @@
         }
       ],
       "entryPrice": 79.5
-    },
-    {
-      "id": "SSE_2026_04_01",
-      "ticker": "SSE",
-      "score": 58,
-      "company": "SSE PLC",
-      "verdict": "Neutral / Hold & Wait",
-      "date": "2026-04-01",
-      "rnsType": "Pre-FY Update",
-      "mode": "pre-FY",
-      "index": "FTSE 100",
-      "signals": [
-        {
-          "pill": "BEAT",
-          "type": "green",
-          "textHTML": "EPS 147–152p guidance — consensus 149.7p in range ✓",
-          "textPlain": "EPS 147–152p guidance — consensus 149.7p in range ✓"
-        },
-        {
-          "pill": "CAPEX",
-          "type": "green",
-          "textHTML": "Networks capex +60% YoY — 5/11 major projects under construction",
-          "textPlain": "Networks capex +60% YoY — 5/11 major projects under construction"
-        },
-        {
-          "pill": "REG",
-          "type": "green",
-          "textHTML": "RIIO-T3 Final Determination accepted — FY27+ de-risked",
-          "textPlain": "RIIO-T3 Final Determination accepted — FY27+ de-risked"
-        },
-        {
-          "pill": "NEUTRAL",
-          "type": "amber",
-          "textHTML": "FY26 EPS guided −7% vs prior year actual; price at consensus TP",
-          "textPlain": "FY26 EPS guided −7% vs prior year actual; price at consensus TP"
-        },
-        {
-          "pill": "DRIFT",
-          "type": "red",
-          "textHTML": "EPS consensus −5.5% over 12m; re-rating ahead of estimates",
-          "textPlain": "EPS consensus −5.5% over 12m; re-rating ahead of estimates"
-        }
-      ],
-      "revisions": [
-        {
-          "lbl": "FY1 EPS",
-          "val": "Hold",
-          "sub": "149.7p → ~149p (in-line)",
-          "color": "var(--amber)"
-        },
-        {
-          "lbl": "FY2 EPS",
-          "val": "+1–3%",
-          "sub": "182.1p → 183–187p (RIIO-T3)",
-          "color": "var(--green)"
-        },
-        {
-          "lbl": "FY1 Revenue",
-          "val": "Hold",
-          "sub": "£10,233m — no guidance",
-          "color": "var(--amber)"
-        },
-        {
-          "lbl": "Target Price",
-          "val": "+Hold/↑",
-          "sub": "£26.60 cons → £27–28e",
-          "color": "var(--green)"
-        }
-      ],
-      "sparkStats": [
-        {
-          "lbl": "EPS Start",
-          "val": "158p",
-          "style": ""
-        },
-        {
-          "lbl": "EPS Now",
-          "val": "150p",
-          "style": ""
-        },
-        {
-          "lbl": "Net Δ",
-          "val": "−5.5%",
-          "style": "color:var(--red)"
-        },
-        {
-          "lbl": "4-wk",
-          "val": "RISING",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "Rev Δ",
-          "val": "+2.1%",
-          "style": "color:var(--green)"
-        },
-        {
-          "lbl": "TP",
-          "val": "£26.60",
-          "style": ""
-        }
-      ],
-      "sparkLabel": "EPS Consensus Trend",
-      "h1Inds": [
-        {
-          "lbl": "REV",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "accelInds": [
-        {
-          "lbl": "REV",
-          "mark": "✓",
-          "dev": "",
-          "state": "pos"
-        },
-        {
-          "lbl": "EPS",
-          "mark": "—",
-          "dev": "",
-          "state": "na"
-        }
-      ],
-      "importedAt": "2026-04-02T07:40:21.804Z",
-      "source": "html-dom",
-      "sparkData": [
-        {
-          "d": "18 May 25",
-          "eps": 158.4,
-          "price": 2060
-        },
-        {
-          "d": "24 May 25",
-          "eps": 157.2,
-          "price": 2070
-        },
-        {
-          "d": "08 Jun 25",
-          "eps": 156.5,
-          "price": 2080
-        },
-        {
-          "d": "14 Jun 25",
-          "eps": 155.9,
-          "price": 2084
-        },
-        {
-          "d": "05 Jul 25",
-          "eps": 155.6,
-          "price": 2112
-        },
-        {
-          "d": "26 Jul 25",
-          "eps": 154.6,
-          "price": 2169
-        },
-        {
-          "d": "05 Aug 25",
-          "eps": 154.5,
-          "price": 2194
-        },
-        {
-          "d": "06 Sep 25",
-          "eps": 153.9,
-          "price": 2220
-        },
-        {
-          "d": "13 Sep 25",
-          "eps": 154.9,
-          "price": 2211
-        },
-        {
-          "d": "18 Oct 25",
-          "eps": 154.2,
-          "price": 2233
-        },
-        {
-          "d": "15 Nov 25",
-          "eps": 152,
-          "price": 2298
-        },
-        {
-          "d": "22 Nov 25",
-          "eps": 150.2,
-          "price": 2390
-        },
-        {
-          "d": "29 Nov 25",
-          "eps": 149.5,
-          "price": 2416
-        },
-        {
-          "d": "13 Dec 25",
-          "eps": 149.7,
-          "price": 2443
-        },
-        {
-          "d": "10 Jan 26",
-          "eps": 151.3,
-          "price": 2450
-        },
-        {
-          "d": "24 Jan 26",
-          "eps": 149.8,
-          "price": 2516
-        },
-        {
-          "d": "21 Feb 26",
-          "eps": 149.6,
-          "price": 2522
-        },
-        {
-          "d": "20 Mar 26",
-          "eps": 149.5,
-          "price": 2582
-        },
-        {
-          "d": "28 Mar 26",
-          "eps": 149.7,
-          "price": 2660
-        }
-      ]
     },
     {
       "id": "SSIT_2026_06_09",
@@ -161229,6 +160571,580 @@
         ]
       },
       "entryPrice": 99.15
+    },
+    {
+      "id": "JDW_2026_10_02",
+      "ticker": "JDW",
+      "score": 53,
+      "company": "Wetherspoon (JD) PLC",
+      "verdict": "Hold and wait",
+      "date": "2026-10-02",
+      "rnsType": "FY Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "MISS",
+          "type": "red",
+          "textHTML": "FY26 PBT before separately disclosed items <span class=\"val-fl\">£58.6m</span>, down 28.0% and 6.7% below £62.8m consensus; diluted EPS 39.8p vs 42.0p as operating margin fell to 5.37% from 6.88%",
+          "textPlain": "FY26 PBT before separately disclosed items £58.6m, down 28.0% and 6.7% below £62.8m consensus; diluted EPS 39.8p vs 42.0p as operating margin fell to 5.37% from 6.88%"
+        },
+        {
+          "pill": "GUIDE",
+          "type": "amber",
+          "textHTML": "FY27 PBT guided in line with market expectations; company-compiled consensus <span class=\"val-fl\">£74m</span> sits 1.6% under the £75.2m forecast and needs 26% growth on the FY26 base of £58.6m",
+          "textPlain": "FY27 PBT guided in line with market expectations; company-compiled consensus £74m sits 1.6% under the £75.2m forecast and needs 26% growth on the FY26 base of £58.6m"
+        },
+        {
+          "pill": "TRADING",
+          "type": "green",
+          "textHTML": "Like-for-like sales up <span class=\"val-fl\">8.6%</span> in the nine weeks to 27 September against 4.2% for FY26, helped by exceptional weather the chairman says will inevitably revert to the norm",
+          "textPlain": "Like-for-like sales up 8.6% in the nine weeks to 27 September against 4.2% for FY26, helped by exceptional weather the chairman says will inevitably revert to the norm"
+        },
+        {
+          "pill": "COSTS",
+          "type": "red",
+          "textHTML": "Costs rose 5.3% against sales up 5.2%: wages up £46m, repairs up £31m and business rates up £9m, while social security costs jumped to £74.9m from £55.6m in the year",
+          "textPlain": "Costs rose 5.3% against sales up 5.2%: wages up £46m, repairs up £31m and business rates up £9m, while social security costs jumped to £74.9m from £55.6m in the year"
+        },
+        {
+          "pill": "CASH",
+          "type": "amber",
+          "textHTML": "Free cash flow £100.1m includes a £33.5m working capital benefit; net debt £715.8m excluding leases, 6.2% of shares bought back for £46.0m and dividend held at 12.0p",
+          "textPlain": "Free cash flow £100.1m includes a £33.5m working capital benefit; net debt £715.8m excluding leases, 6.2% of shares bought back for £46.0m and dividend held at 12.0p"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−5.2%",
+          "sub": "cons 42.0p→39.8p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "50.1p→49–51p",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+0.6%",
+          "sub": "cons £2,224m→£2,238m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+1–2%",
+          "sub": "£2,327m→£2,350–2,373m",
+          "color": "var(--green)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "−7.1%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "+0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+4.2%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · Mar–Sep 26",
+      "sparkSVG": "<svg id=\"spark-JDW\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-JDW\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-10-02T06:35:24.842Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 51.4,
+          "price": 705
+        },
+        {
+          "d": "06 Mar",
+          "eps": 51.4,
+          "price": 692
+        },
+        {
+          "d": "13 Mar",
+          "eps": 51.4,
+          "price": 653
+        },
+        {
+          "d": "20 Mar",
+          "eps": 51.4,
+          "price": 621
+        },
+        {
+          "d": "27 Mar",
+          "eps": 48,
+          "price": 589
+        },
+        {
+          "d": "03 Apr",
+          "eps": 47.8,
+          "price": 598
+        },
+        {
+          "d": "10 Apr",
+          "eps": 47.4,
+          "price": 629
+        },
+        {
+          "d": "17 Apr",
+          "eps": 47.4,
+          "price": 619.5
+        },
+        {
+          "d": "24 Apr",
+          "eps": 47,
+          "price": 605.5
+        },
+        {
+          "d": "08 May",
+          "eps": 46,
+          "price": 600
+        },
+        {
+          "d": "15 May",
+          "eps": 45.4,
+          "price": 605
+        },
+        {
+          "d": "22 May",
+          "eps": 45.4,
+          "price": 610
+        },
+        {
+          "d": "02 Jun",
+          "eps": 45.4,
+          "price": 620
+        },
+        {
+          "d": "05 Jun",
+          "eps": 45.4,
+          "price": 616.5
+        },
+        {
+          "d": "12 Jun",
+          "eps": 45.4,
+          "price": 657
+        },
+        {
+          "d": "19 Jun",
+          "eps": 45.2,
+          "price": 680
+        },
+        {
+          "d": "26 Jun",
+          "eps": 45.2,
+          "price": 704
+        },
+        {
+          "d": "03 Jul",
+          "eps": 45.2,
+          "price": 718.5
+        },
+        {
+          "d": "10 Jul",
+          "eps": 45.2,
+          "price": 717
+        },
+        {
+          "d": "17 Jul",
+          "eps": 45.2,
+          "price": 742
+        },
+        {
+          "d": "24 Jul",
+          "eps": 42.6,
+          "price": 698.5
+        },
+        {
+          "d": "31 Jul",
+          "eps": 42,
+          "price": 773
+        },
+        {
+          "d": "07 Aug",
+          "eps": 42,
+          "price": 810
+        },
+        {
+          "d": "14 Aug",
+          "eps": 42,
+          "price": 824.5
+        },
+        {
+          "d": "21 Aug",
+          "eps": 42,
+          "price": 824.5
+        },
+        {
+          "d": "28 Aug",
+          "eps": 42,
+          "price": 854
+        },
+        {
+          "d": "07 Sep",
+          "eps": 42,
+          "price": 819
+        },
+        {
+          "d": "11 Sep",
+          "eps": 42,
+          "price": 782.5
+        },
+        {
+          "d": "18 Sep",
+          "eps": 42,
+          "price": 801.5
+        },
+        {
+          "d": "25 Sep",
+          "eps": 42,
+          "price": 807
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "Q1 trading update",
+            "type": "Q1",
+            "from": "2026-11-04",
+            "to": "2026-11-04",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      },
+      "entryPrice": 814
+    },
+    {
+      "id": "IGG_2026_10_02",
+      "ticker": "IGG",
+      "score": 22,
+      "company": "IG Group Holdings PLC",
+      "verdict": "Downgrades probable",
+      "date": "2026-10-02",
+      "rnsType": "Pre-FY Update",
+      "mode": "Q2",
+      "index": "FTSE 100",
+      "signals": [
+        {
+          "pill": "⛔ WARNING",
+          "type": "red",
+          "textHTML": "2026 total revenue growth now expected in a mid-single-digit range after Q3 revenue fell about 14% to <span class=\"val-fl\">£240m</span>; EBITDA margin guided to low-40s against 46.1% in consensus",
+          "textPlain": "2026 total revenue growth now expected in a mid-single-digit range after Q3 revenue fell about 14% to £240m; EBITDA margin guided to low-40s against 46.1% in consensus"
+        },
+        {
+          "pill": "RETENTION",
+          "type": "red",
+          "textHTML": "OTC revenue retention fell to about <span class=\"val-fl\">70%</span> in Q3 against an 80% average since H2 2025, cutting OTC net trading revenue 18% to £155m with more short-term variability flagged",
+          "textPlain": "OTC revenue retention fell to about 70% in Q3 against an 80% average since H2 2025, cutting OTC net trading revenue 18% to £155m with more short-term variability flagged"
+        },
+        {
+          "pill": "CUSTOMERS",
+          "type": "green",
+          "textHTML": "Underlying demand held up: organic first trades rose over 25%, organic active customers around 17% and OTC customer income about 8%, so the shortfall is retention-led",
+          "textPlain": "Underlying demand held up: organic first trades rose over 25%, organic active customers around 17% and OTC customer income about 8%, so the shortfall is retention-led"
+        },
+        {
+          "pill": "UNDERDOG",
+          "type": "green",
+          "textHTML": "Underdog Q3 net revenue more than doubled to about $105m ahead of a Q4 that made over a third of its 2025 revenue; the deal and related costs remain contingent on closing",
+          "textPlain": "Underdog Q3 net revenue more than doubled to about $105m ahead of a Q4 that made over a third of its 2025 revenue; the deal and related costs remain contingent on closing"
+        },
+        {
+          "pill": "OUTLOOK",
+          "type": "amber",
+          "textHTML": "Board remains confident of medium-term guidance beyond 2026; non-recurring redomicile and restructuring costs about £30m in 2026, with fuller Q3 detail due on 22 October",
+          "textPlain": "Board remains confident of medium-term guidance beyond 2026; non-recurring redomicile and restructuring costs about £30m in 2026, with fuller Q3 detail due on 22 October"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "−5–10%",
+          "sub": "131.8p→119–125p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "−2–5%",
+          "sub": "137.0p→130–134p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "−3–6%",
+          "sub": "£1,257m→£1,182–1,220m",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "−1–3%",
+          "sub": "£1,523m→£1,478–1,508m",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "+5.6%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "−0.2%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "−2.4%",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "EPS fc vs price · Mar–Sep 26",
+      "sparkSVG": "<svg id=\"spark-IGG\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-IGG\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-10-02T06:35:24.843Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 117.7,
+          "price": 1335
+        },
+        {
+          "d": "06 Mar",
+          "eps": 109,
+          "price": 1351
+        },
+        {
+          "d": "13 Mar",
+          "eps": 100.6,
+          "price": 1357
+        },
+        {
+          "d": "20 Mar",
+          "eps": 100.6,
+          "price": 1445
+        },
+        {
+          "d": "27 Mar",
+          "eps": 111.2,
+          "price": 1431
+        },
+        {
+          "d": "03 Apr",
+          "eps": 111.2,
+          "price": 1444
+        },
+        {
+          "d": "10 Apr",
+          "eps": 111.2,
+          "price": 1478.5
+        },
+        {
+          "d": "17 Apr",
+          "eps": 111.2,
+          "price": 1513
+        },
+        {
+          "d": "24 Apr",
+          "eps": 122,
+          "price": 1518.5
+        },
+        {
+          "d": "08 May",
+          "eps": 122,
+          "price": 1539
+        },
+        {
+          "d": "15 May",
+          "eps": 111.5,
+          "price": 1538
+        },
+        {
+          "d": "22 May",
+          "eps": 124.7,
+          "price": 1837
+        },
+        {
+          "d": "02 Jun",
+          "eps": 124.7,
+          "price": 1821
+        },
+        {
+          "d": "05 Jun",
+          "eps": 124.7,
+          "price": 1843
+        },
+        {
+          "d": "12 Jun",
+          "eps": 124.7,
+          "price": 1913
+        },
+        {
+          "d": "19 Jun",
+          "eps": 124.8,
+          "price": 1900
+        },
+        {
+          "d": "26 Jun",
+          "eps": 124.8,
+          "price": 1858
+        },
+        {
+          "d": "03 Jul",
+          "eps": 124.8,
+          "price": 1842
+        },
+        {
+          "d": "10 Jul",
+          "eps": 125.2,
+          "price": 1802
+        },
+        {
+          "d": "17 Jul",
+          "eps": 125.2,
+          "price": 1773
+        },
+        {
+          "d": "24 Jul",
+          "eps": 125.2,
+          "price": 1701
+        },
+        {
+          "d": "31 Jul",
+          "eps": 125.1,
+          "price": 1706
+        },
+        {
+          "d": "07 Aug",
+          "eps": 124.4,
+          "price": 1312
+        },
+        {
+          "d": "14 Aug",
+          "eps": 124.4,
+          "price": 1332
+        },
+        {
+          "d": "21 Aug",
+          "eps": 125.3,
+          "price": 1302
+        },
+        {
+          "d": "28 Aug",
+          "eps": 131.8,
+          "price": 1394
+        },
+        {
+          "d": "07 Sep",
+          "eps": 131.8,
+          "price": 1361
+        },
+        {
+          "d": "11 Sep",
+          "eps": 131.8,
+          "price": 1331
+        },
+        {
+          "d": "18 Sep",
+          "eps": 131.8,
+          "price": 1343
+        },
+        {
+          "d": "25 Sep",
+          "eps": 131.8,
+          "price": 1317
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "Q3 trading detail and strategy update",
+            "type": "Q3",
+            "from": "2026-10-22",
+            "to": "2026-10-22",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      },
+      "entryPrice": 1329
     }
   ],
   "scorecardIndex": [
@@ -161467,19 +161383,6 @@
       "entryPrice": 49,
       "importedAt": "2026-08-19T06:46:25.722Z",
       "arc": null
-    },
-    {
-      "id": "ANP_2026_03_30",
-      "ticker": "ANP",
-      "company": "Anpario",
-      "score": 63,
-      "verdict": "MODEST UPGRADES",
-      "date": "2026-03-30",
-      "rnsType": "FY Results",
-      "mode": "pre-FY",
-      "index": "AIM",
-      "importedAt": "2026-03-31T12:57:20.565Z",
-      "arc": "2026-03"
     },
     {
       "id": "ANP_2026_06_18",
@@ -161744,19 +161647,6 @@
       "entryPrice": 1048,
       "importedAt": "2026-06-22T06:46:53.450Z",
       "arc": null
-    },
-    {
-      "id": "BAG_2026_03_30",
-      "ticker": "BAG",
-      "company": "AG Barr",
-      "score": 61,
-      "verdict": "MODEST UPGRADES",
-      "date": "2026-03-30",
-      "rnsType": "FY Results",
-      "mode": "pre-FY",
-      "index": "FTSE 250",
-      "importedAt": "2026-03-31T12:57:20.565Z",
-      "arc": "2026-03"
     },
     {
       "id": "BAG_2026_08_04",
@@ -162674,20 +162564,6 @@
       "entryPrice": 458,
       "importedAt": "2026-07-01T08:50:20.409Z",
       "arc": null
-    },
-    {
-      "id": "CML_2026_03_31_2",
-      "ticker": "CML",
-      "company": "CML Microsystems PLC",
-      "score": 28,
-      "verdict": "Cautious / Cuts Probable",
-      "date": "2026-03-31",
-      "rnsType": "Pre-FY Update",
-      "mode": "Pre-FY",
-      "index": "AIM All-Share",
-      "entryPrice": 225,
-      "importedAt": "2026-04-01T07:51:42.401Z",
-      "arc": "2026-03"
     },
     {
       "id": "CML_2026_06_17",
@@ -163802,19 +163678,6 @@
       "entryPrice": 280,
       "importedAt": "2026-08-04T06:44:24.050Z",
       "arc": null
-    },
-    {
-      "id": "FUTR_2026_03_30",
-      "ticker": "FUTR",
-      "company": "Future plc",
-      "score": 35,
-      "verdict": "CAUTIOUS / CUTS",
-      "date": "2026-03-30",
-      "rnsType": "Pre-H1 Update",
-      "mode": "pre-H1",
-      "index": "LSE",
-      "importedAt": "2026-03-31T12:57:20.566Z",
-      "arc": "2026-03"
     },
     {
       "id": "FUTR_2026_05_14",
@@ -164949,19 +164812,6 @@
       "arc": null
     },
     {
-      "id": "JDG_2026_03_30",
-      "ticker": "JDG",
-      "company": "Judges Scientific",
-      "score": 55,
-      "verdict": "NEUTRAL / HOLD",
-      "date": "2026-03-30",
-      "rnsType": "FY Results",
-      "mode": "pre-FY",
-      "index": "AIM",
-      "importedAt": "2026-03-31T12:57:20.565Z",
-      "arc": "2026-03"
-    },
-    {
       "id": "JDG_2026_07_23",
       "ticker": "JDG",
       "company": "Judges Scientific PLC",
@@ -165016,19 +164866,6 @@
       "entryPrice": 1298,
       "importedAt": "2026-07-08T09:16:41.743Z",
       "arc": null
-    },
-    {
-      "id": "JHD_2026_03_30",
-      "ticker": "JHD",
-      "company": "James Halstead",
-      "score": 52,
-      "verdict": "NEUTRAL / HOLD",
-      "date": "2026-03-30",
-      "rnsType": "H1 Results",
-      "mode": "pre-H1",
-      "index": "FTSE 250",
-      "importedAt": "2026-03-31T12:57:20.565Z",
-      "arc": "2026-03"
     },
     {
       "id": "JHD_2026_07_22",
@@ -165378,20 +165215,6 @@
       "arc": null
     },
     {
-      "id": "LIT_2026_03_30",
-      "ticker": "LIT",
-      "company": "Lithium Australia",
-      "score": 8,
-      "verdict": "NEGATIVE / SUSPENDED",
-      "date": "2026-03-30",
-      "rnsType": "H1 Results",
-      "mode": "pre-H1",
-      "index": "AIM",
-      "entryPrice": 6.22,
-      "importedAt": "2026-03-31T12:57:20.566Z",
-      "arc": "2026-03"
-    },
-    {
       "id": "LSEG_2026_04_23",
       "ticker": "LSEG",
       "company": "London Stock Exchange Group PLC",
@@ -165612,7 +165435,7 @@
       "mode": "pre-FY",
       "index": "FTSE Small Cap",
       "importedAt": "2026-04-02T07:40:21.804Z",
-      "arc": null
+      "arc": "2026-04"
     },
     {
       "id": "MCB_2026_06_12",
@@ -166575,20 +166398,6 @@
       "arc": null
     },
     {
-      "id": "PEEL_2026_03_30",
-      "ticker": "PEEL",
-      "company": "Peel Hunt",
-      "score": 82,
-      "verdict": "UPGRADE CYCLE",
-      "date": "2026-03-30",
-      "rnsType": "Pre-FY Update",
-      "mode": "pre-FY",
-      "index": "AIM",
-      "entryPrice": 104.5,
-      "importedAt": "2026-03-31T12:57:20.565Z",
-      "arc": "2026-03"
-    },
-    {
       "id": "PEEL_2026_06_15",
       "ticker": "PEEL",
       "company": "Peel Hunt Limited",
@@ -166755,20 +166564,6 @@
       "entryPrice": 507,
       "importedAt": "2026-06-10T06:39:57.053Z",
       "arc": null
-    },
-    {
-      "id": "POS_2026_03_30",
-      "ticker": "POS",
-      "company": "Plexus Holdings",
-      "score": 22,
-      "verdict": "SEVERE CUTS",
-      "date": "2026-03-30",
-      "rnsType": "H1 Results",
-      "mode": "pre-H1",
-      "index": "AIM",
-      "entryPrice": 4.6,
-      "importedAt": "2026-03-31T12:57:20.566Z",
-      "arc": "2026-03"
     },
     {
       "id": "PRN_2026_05_14",
@@ -167226,19 +167021,6 @@
       "arc": null
     },
     {
-      "id": "RNWH_2026_03_31",
-      "ticker": "RNWH",
-      "company": "Renew Holdings PLC",
-      "score": 62,
-      "verdict": "Neutral / Hold & Wait",
-      "date": "2026-03-31",
-      "rnsType": "Pre-H1 Update",
-      "mode": "Pre-H1",
-      "index": "AIM UK 50",
-      "importedAt": "2026-04-01T07:51:42.401Z",
-      "arc": "2026-03"
-    },
-    {
       "id": "RNWH_2026_05_12",
       "ticker": "RNWH",
       "company": "Renew Holdings PLC",
@@ -167613,7 +167395,7 @@
       "index": "FTSE Small Cap",
       "entryPrice": 22.65,
       "importedAt": "2026-04-02T07:40:21.805Z",
-      "arc": null
+      "arc": "2026-04"
     },
     {
       "id": "SDY_2026_06_17",
@@ -167669,19 +167451,6 @@
       "entryPrice": 34.475,
       "importedAt": "2026-08-05T06:45:35.828Z",
       "arc": null
-    },
-    {
-      "id": "SFR_2026_03_30",
-      "ticker": "SFR",
-      "company": "Severfield",
-      "score": 38,
-      "verdict": "CAUTIOUS / CUTS",
-      "date": "2026-03-30",
-      "rnsType": "Pre-FY Update",
-      "mode": "pre-FY",
-      "index": "LSE",
-      "importedAt": "2026-03-31T12:57:20.566Z",
-      "arc": "2026-03"
     },
     {
       "id": "SFR_2026_07_29",
@@ -168014,7 +167783,7 @@
       "mode": "pre-FY",
       "index": "FTSE 100",
       "importedAt": "2026-04-02T07:40:21.804Z",
-      "arc": null
+      "arc": "2026-04"
     },
     {
       "id": "SSIT_2026_06_09",
@@ -168567,19 +168336,6 @@
       "arc": null
     },
     {
-      "id": "TMO_2026_03_30",
-      "ticker": "TMO",
-      "company": "Time Out Group PLC",
-      "score": 38,
-      "verdict": "Cautious",
-      "date": "2026-03-30",
-      "rnsType": "H1 Results",
-      "mode": "Pre-H1",
-      "index": "AIM ALL-SHARE",
-      "importedAt": "2026-03-31T13:22:50.604Z",
-      "arc": "2026-03"
-    },
-    {
       "id": "TPFG_2026_05_28",
       "ticker": "TPFG",
       "company": "Property Franchise Group (The) PLC",
@@ -168634,19 +168390,6 @@
       "entryPrice": 541,
       "importedAt": "2026-08-04T06:44:24.079Z",
       "arc": null
-    },
-    {
-      "id": "TPT_2026_03_31_2",
-      "ticker": "TPT",
-      "company": "Topps Tiles PLC",
-      "score": 31,
-      "verdict": "Cautious / Cuts Probable",
-      "date": "2026-03-31",
-      "rnsType": "Pre-H1 Update",
-      "mode": "Pre-H1",
-      "index": "FTSE Small Cap",
-      "importedAt": "2026-04-01T07:51:42.401Z",
-      "arc": "2026-03"
     },
     {
       "id": "TPT_2026_05_19",
@@ -172527,6 +172270,263 @@
       "arc": null
     },
     {
+      "id": "TPT_2026_10_01",
+      "ticker": "TPT",
+      "company": "Topps Tiles PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-10-01",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "FTSE Small Cap",
+      "entryPrice": 34.35,
+      "importedAt": "2026-10-01T06:58:38.358Z",
+      "arc": null
+    },
+    {
+      "id": "RGG_2026_10_01",
+      "ticker": "RGG",
+      "company": "RentGuarantor Holdings PLC",
+      "score": 97,
+      "verdict": "Upgrade likely",
+      "date": "2026-10-01",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 95.5,
+      "importedAt": "2026-10-01T06:58:38.367Z",
+      "arc": null
+    },
+    {
+      "id": "PEEL_2026_10_01",
+      "ticker": "PEEL",
+      "company": "Peel Hunt Ltd",
+      "score": 82,
+      "verdict": "Upgrade likely",
+      "date": "2026-10-01",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 90.5,
+      "importedAt": "2026-10-01T06:58:38.369Z",
+      "arc": null
+    },
+    {
+      "id": "RNWH_2026_10_01",
+      "ticker": "RNWH",
+      "company": "Renew Holdings PLC",
+      "score": 62,
+      "verdict": "Modest / mixed",
+      "date": "2026-10-01",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM UK 50",
+      "entryPrice": 942,
+      "importedAt": "2026-10-01T06:58:38.369Z",
+      "arc": null
+    },
+    {
+      "id": "SSE_2026_10_01",
+      "ticker": "SSE",
+      "company": "SSE PLC",
+      "score": 58,
+      "verdict": "Hold and wait",
+      "date": "2026-10-01",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "FTSE 100",
+      "entryPrice": 2491,
+      "importedAt": "2026-10-01T06:58:38.369Z",
+      "arc": null
+    },
+    {
+      "id": "PZC_2026_10_01",
+      "ticker": "PZC",
+      "company": "PZ Cussons PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-10-01",
+      "rnsType": "AGM",
+      "mode": "Q4",
+      "index": "FTSE Small Cap",
+      "entryPrice": 99.15,
+      "importedAt": "2026-10-01T06:58:38.370Z",
+      "arc": null
+    },
+    {
+      "id": "ANP_2026_03_30",
+      "ticker": "ANP",
+      "company": "Anpario",
+      "score": 63,
+      "verdict": "MODEST UPGRADES",
+      "date": "2026-03-30",
+      "rnsType": "FY Results",
+      "mode": "pre-FY",
+      "index": "AIM",
+      "importedAt": "2026-03-31T12:57:20.565Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "BAG_2026_03_30",
+      "ticker": "BAG",
+      "company": "AG Barr",
+      "score": 61,
+      "verdict": "MODEST UPGRADES",
+      "date": "2026-03-30",
+      "rnsType": "FY Results",
+      "mode": "pre-FY",
+      "index": "FTSE 250",
+      "importedAt": "2026-03-31T12:57:20.565Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "CML_2026_03_31_2",
+      "ticker": "CML",
+      "company": "CML Microsystems PLC",
+      "score": 28,
+      "verdict": "Cautious / Cuts Probable",
+      "date": "2026-03-31",
+      "rnsType": "Pre-FY Update",
+      "mode": "Pre-FY",
+      "index": "AIM All-Share",
+      "entryPrice": 225,
+      "importedAt": "2026-04-01T07:51:42.401Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "FUTR_2026_03_30",
+      "ticker": "FUTR",
+      "company": "Future plc",
+      "score": 35,
+      "verdict": "CAUTIOUS / CUTS",
+      "date": "2026-03-30",
+      "rnsType": "Pre-H1 Update",
+      "mode": "pre-H1",
+      "index": "LSE",
+      "importedAt": "2026-03-31T12:57:20.566Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "JDG_2026_03_30",
+      "ticker": "JDG",
+      "company": "Judges Scientific",
+      "score": 55,
+      "verdict": "NEUTRAL / HOLD",
+      "date": "2026-03-30",
+      "rnsType": "FY Results",
+      "mode": "pre-FY",
+      "index": "AIM",
+      "importedAt": "2026-03-31T12:57:20.565Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "JHD_2026_03_30",
+      "ticker": "JHD",
+      "company": "James Halstead",
+      "score": 52,
+      "verdict": "NEUTRAL / HOLD",
+      "date": "2026-03-30",
+      "rnsType": "H1 Results",
+      "mode": "pre-H1",
+      "index": "FTSE 250",
+      "importedAt": "2026-03-31T12:57:20.565Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "LIT_2026_03_30",
+      "ticker": "LIT",
+      "company": "Lithium Australia",
+      "score": 8,
+      "verdict": "NEGATIVE / SUSPENDED",
+      "date": "2026-03-30",
+      "rnsType": "H1 Results",
+      "mode": "pre-H1",
+      "index": "AIM",
+      "entryPrice": 6.22,
+      "importedAt": "2026-03-31T12:57:20.566Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "PEEL_2026_03_30",
+      "ticker": "PEEL",
+      "company": "Peel Hunt",
+      "score": 82,
+      "verdict": "UPGRADE CYCLE",
+      "date": "2026-03-30",
+      "rnsType": "Pre-FY Update",
+      "mode": "pre-FY",
+      "index": "AIM",
+      "entryPrice": 104.5,
+      "importedAt": "2026-03-31T12:57:20.565Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "POS_2026_03_30",
+      "ticker": "POS",
+      "company": "Plexus Holdings",
+      "score": 22,
+      "verdict": "SEVERE CUTS",
+      "date": "2026-03-30",
+      "rnsType": "H1 Results",
+      "mode": "pre-H1",
+      "index": "AIM",
+      "entryPrice": 4.6,
+      "importedAt": "2026-03-31T12:57:20.566Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "RNWH_2026_03_31",
+      "ticker": "RNWH",
+      "company": "Renew Holdings PLC",
+      "score": 62,
+      "verdict": "Neutral / Hold & Wait",
+      "date": "2026-03-31",
+      "rnsType": "Pre-H1 Update",
+      "mode": "Pre-H1",
+      "index": "AIM UK 50",
+      "importedAt": "2026-04-01T07:51:42.401Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "SFR_2026_03_30",
+      "ticker": "SFR",
+      "company": "Severfield",
+      "score": 38,
+      "verdict": "CAUTIOUS / CUTS",
+      "date": "2026-03-30",
+      "rnsType": "Pre-FY Update",
+      "mode": "pre-FY",
+      "index": "LSE",
+      "importedAt": "2026-03-31T12:57:20.566Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "TMO_2026_03_30",
+      "ticker": "TMO",
+      "company": "Time Out Group PLC",
+      "score": 38,
+      "verdict": "Cautious",
+      "date": "2026-03-30",
+      "rnsType": "H1 Results",
+      "mode": "Pre-H1",
+      "index": "AIM ALL-SHARE",
+      "importedAt": "2026-03-31T13:22:50.604Z",
+      "arc": "2026-03"
+    },
+    {
+      "id": "TPT_2026_03_31_2",
+      "ticker": "TPT",
+      "company": "Topps Tiles PLC",
+      "score": 31,
+      "verdict": "Cautious / Cuts Probable",
+      "date": "2026-03-31",
+      "rnsType": "Pre-H1 Update",
+      "mode": "Pre-H1",
+      "index": "FTSE Small Cap",
+      "importedAt": "2026-04-01T07:51:42.401Z",
+      "arc": "2026-03"
+    },
+    {
       "id": "BIG_2026_03_29",
       "ticker": "BIG",
       "company": "Big Technologies plc",
@@ -173814,87 +173814,31 @@
       "arc": "2026-03"
     },
     {
-      "id": "TPT_2026_10_01",
-      "ticker": "TPT",
-      "company": "Topps Tiles PLC",
-      "score": 56,
+      "id": "JDW_2026_10_02",
+      "ticker": "JDW",
+      "company": "Wetherspoon (JD) PLC",
+      "score": 53,
       "verdict": "Hold and wait",
-      "date": "2026-10-01",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "FTSE Small Cap",
-      "entryPrice": 34.35,
-      "importedAt": "2026-10-01T06:58:38.358Z",
-      "arc": null
-    },
-    {
-      "id": "RGG_2026_10_01",
-      "ticker": "RGG",
-      "company": "RentGuarantor Holdings PLC",
-      "score": 97,
-      "verdict": "Upgrade likely",
-      "date": "2026-10-01",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 95.5,
-      "importedAt": "2026-10-01T06:58:38.367Z",
-      "arc": null
-    },
-    {
-      "id": "PEEL_2026_10_01",
-      "ticker": "PEEL",
-      "company": "Peel Hunt Ltd",
-      "score": 82,
-      "verdict": "Upgrade likely",
-      "date": "2026-10-01",
-      "rnsType": "Pre-H1 TU",
+      "date": "2026-10-02",
+      "rnsType": "FY Results",
       "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 90.5,
-      "importedAt": "2026-10-01T06:58:38.369Z",
+      "index": "FTSE 250",
+      "entryPrice": 814,
+      "importedAt": "2026-10-02T06:35:24.842Z",
       "arc": null
     },
     {
-      "id": "RNWH_2026_10_01",
-      "ticker": "RNWH",
-      "company": "Renew Holdings PLC",
-      "score": 62,
-      "verdict": "Modest / mixed",
-      "date": "2026-10-01",
-      "rnsType": "Pre-FY TU",
+      "id": "IGG_2026_10_02",
+      "ticker": "IGG",
+      "company": "IG Group Holdings PLC",
+      "score": 22,
+      "verdict": "Downgrades probable",
+      "date": "2026-10-02",
+      "rnsType": "Pre-FY Update",
       "mode": "Q2",
-      "index": "AIM UK 50",
-      "entryPrice": 942,
-      "importedAt": "2026-10-01T06:58:38.369Z",
-      "arc": null
-    },
-    {
-      "id": "SSE_2026_10_01",
-      "ticker": "SSE",
-      "company": "SSE PLC",
-      "score": 58,
-      "verdict": "Hold and wait",
-      "date": "2026-10-01",
-      "rnsType": "Pre-H1 TU",
-      "mode": "Q4",
       "index": "FTSE 100",
-      "entryPrice": 2491,
-      "importedAt": "2026-10-01T06:58:38.369Z",
-      "arc": null
-    },
-    {
-      "id": "PZC_2026_10_01",
-      "ticker": "PZC",
-      "company": "PZ Cussons PLC",
-      "score": 56,
-      "verdict": "Hold and wait",
-      "date": "2026-10-01",
-      "rnsType": "AGM",
-      "mode": "Q4",
-      "index": "FTSE Small Cap",
-      "entryPrice": 99.15,
-      "importedAt": "2026-10-01T06:58:38.370Z",
+      "entryPrice": 1329,
+      "importedAt": "2026-10-02T06:35:24.843Z",
       "arc": null
     }
   ],
@@ -329568,5 +329512,1250 @@
   "liveDataTs": "1 Oct · 09:38 · 1111 tickers",
   "h1Cache": "",
   "h1CacheMeta": "",
-  "fcCache": ""
+  "fcCache": "",
+  "rnsCalendar": {
+    "events": [
+      {
+        "id": "emufqu1rrltk8",
+        "ticker": "FAN",
+        "company": "Volution Group plc",
+        "type": "FY results",
+        "event": "FY results",
+        "from": "2026-10-08",
+        "to": "2026-10-08",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-23",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rriaf7",
+        "ticker": "GNC",
+        "company": "",
+        "type": "FY results",
+        "event": "FY results",
+        "from": "2026-10-08",
+        "to": "2026-10-08",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rri1i4",
+        "ticker": "BOWL",
+        "company": "Hollywood Bowl Group PLC",
+        "type": "Pre-FY TU",
+        "event": "FY trading update",
+        "from": "2026-10-08",
+        "to": "2026-10-08",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-05-27",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rrpfo1",
+        "ticker": "HAS",
+        "company": "Hays PLC",
+        "type": "Q1",
+        "event": "Q1 FY27 trading update",
+        "from": "2026-10-12",
+        "to": "2026-10-12",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-08-20",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rrc3er",
+        "ticker": "BYIT",
+        "company": "Bytes Technology Group PLC",
+        "type": "H1 results",
+        "event": "H1 FY27 results",
+        "from": "2026-10-13",
+        "to": "2026-10-13",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-09-17",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rrct93",
+        "ticker": "RWA",
+        "company": "Robert Walters PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-14",
+        "to": "2026-10-14",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-30",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rshouw",
+        "ticker": "DSCV",
+        "company": "discoverIE Group plc",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-14",
+        "to": "2026-10-14",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-24",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsg09g",
+        "ticker": "SSIT",
+        "company": "Seraphim Space Investment Trust PLC",
+        "type": "FY results",
+        "event": "FY results",
+        "from": "2026-10-15",
+        "to": "2026-10-15",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-06-09",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rs5dl1",
+        "ticker": "TPK",
+        "company": "Travis Perkins PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-15",
+        "to": "2026-10-15",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-08-04",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rs88ur",
+        "ticker": "BNZL",
+        "company": "Bunzl plc",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-09-01",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rscedv",
+        "ticker": "SDG",
+        "company": "Sanderson Design Group PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-10-21",
+        "to": "2026-10-21",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-08-07",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsc0r5",
+        "ticker": "RSW",
+        "company": "Renishaw PLC",
+        "type": "Q1",
+        "event": "Q1 trading update",
+        "from": "2026-10-22",
+        "to": "2026-10-22",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-09-23",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsfj21",
+        "ticker": "AJB",
+        "company": "AJ Bell plc",
+        "type": "Pre-FY TU",
+        "event": "FY trading update",
+        "from": "2026-10-22",
+        "to": "2026-10-22",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-23",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rs2ig1",
+        "ticker": "ATG",
+        "company": "Auction Technology Group PLC",
+        "type": "Pre-FY TU",
+        "event": "FY26 pre-close trading update",
+        "from": "2026-10-22",
+        "to": "2026-10-22",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-05-14",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rs8utk",
+        "ticker": "REL",
+        "company": "RELX PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-22",
+        "to": "2026-10-22",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-23",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsb39a",
+        "ticker": "LUCE",
+        "company": "Luceco plc",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-27",
+        "to": "2026-10-27",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-09-22",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsr9q7",
+        "ticker": "ALU",
+        "company": "Alumasc Group PLC",
+        "type": "AGM",
+        "event": "AGM trading update",
+        "from": "2026-10-27",
+        "to": "2026-10-27",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-09-15",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsh62n",
+        "ticker": "RWS",
+        "company": "RWS Holdings plc",
+        "type": "Pre-FY TU",
+        "event": "FY trading update",
+        "from": "2026-10-27",
+        "to": "2026-10-27",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-06-11",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rsh1vs",
+        "ticker": "ELM",
+        "company": "Elementis PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-28",
+        "to": "2026-10-28",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-07-30",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtepl5",
+        "ticker": "SFOR",
+        "company": "S4 Capital PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-10-28",
+        "to": "2026-10-28",
+        "label": "",
+        "conf": "confirmed",
+        "src": "Mark",
+        "rns": "2026-08-05",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtjg3s",
+        "ticker": "MOTR",
+        "company": "Motorpoint Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-01",
+        "to": "2026-10-10",
+        "label": "Early Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-09-02",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rt5qqj",
+        "ticker": "HDD",
+        "company": "Hardide PLC",
+        "type": "Pre-FY TU",
+        "event": "FY trading update",
+        "from": "2026-10-11",
+        "to": "2026-10-20",
+        "label": "Mid Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-22",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtdz6k",
+        "ticker": "BKS",
+        "company": "Beeks Financial Cloud Group PLC",
+        "type": "Trading update",
+        "event": "Trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-15",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rth130",
+        "ticker": "QTX",
+        "company": "Quartix Technologies plc",
+        "type": "Trading update",
+        "event": "Trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-27",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtcuv2",
+        "ticker": "VLX",
+        "company": "Volex plc · Electronic & Electrical Equipment",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-08-25",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtrtqe",
+        "ticker": "TSTL",
+        "company": "Tristel PLC",
+        "type": "FY results",
+        "event": "FY results",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-22",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtwit5",
+        "ticker": "BMY",
+        "company": "Bloomsbury Publishing PLC",
+        "type": "H1 results",
+        "event": "H1 results",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-15",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtpdeh",
+        "ticker": "BOOM",
+        "company": "AudioBoom Group PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-15",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtqlh8",
+        "ticker": "CLBS",
+        "company": "Celebrus Technologies plc",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-07-14",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtpons",
+        "ticker": "WIX",
+        "company": "Wickes Group Plc",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "Mark",
+        "rns": "2026-09-15",
+        "manual": true,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rtv4ym",
+        "ticker": "BWY",
+        "company": "Bellway PLC",
+        "type": "FY results",
+        "event": "Full year results",
+        "from": "2026-10-13",
+        "to": "2026-10-13",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-11",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ruz51b",
+        "ticker": "VTU",
+        "company": "Vertu Motors PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-10-14",
+        "to": "2026-10-14",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-27",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rug9bl",
+        "ticker": "G4M",
+        "company": "Gear4music (Holdings) PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-08",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ru0sgy",
+        "ticker": "HFD",
+        "company": "Halfords Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "HY27 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-21",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-27",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ruxpy7",
+        "ticker": "REVB",
+        "company": "Revolution Beauty Group PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-10-27",
+        "to": "2026-10-27",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-17",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ru518f",
+        "ticker": "CCR",
+        "company": "C&C Group PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-10-28",
+        "to": "2026-10-28",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-11",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ruhyve",
+        "ticker": "BRCK",
+        "company": "BRCK Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "provisional",
+        "src": "RNS",
+        "rns": "2026-09-15",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rudud0",
+        "ticker": "SYS1",
+        "company": "System1 Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-10-21",
+        "to": "2026-10-31",
+        "label": "Late Oct 2026",
+        "conf": "implied",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1ru68wq",
+        "ticker": "ULTP",
+        "company": "Ultimate Products PLC",
+        "type": "FY results",
+        "event": "Full year results",
+        "from": "2026-10-01",
+        "to": "2026-10-31",
+        "label": "Oct 2026",
+        "conf": "implied",
+        "src": "Broker note",
+        "rns": "2026-08-19",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1run06v",
+        "ticker": "IWG",
+        "company": "International Workplace Group PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-11-03",
+        "to": "2026-11-03",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-11",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvdcp3",
+        "ticker": "TRN",
+        "company": "Trainline PLC",
+        "type": "H1 results",
+        "event": "H1 FY27 results",
+        "from": "2026-11-04",
+        "to": "2026-11-04",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-11",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvzhw3",
+        "ticker": "BTRW",
+        "company": "Barratt Redrow PLC",
+        "type": "AGM",
+        "event": "AGM and trading update",
+        "from": "2026-11-04",
+        "to": "2026-11-04",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-16",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvxa5z",
+        "ticker": "ASC",
+        "company": "ASOS PLC",
+        "type": "FY results",
+        "event": "FY26 results",
+        "from": "2026-11-05",
+        "to": "2026-11-05",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rv1v8e",
+        "ticker": "KNOS",
+        "company": "Kainos Group Ltd",
+        "type": "H1 results",
+        "event": "H1 FY27 results",
+        "from": "2026-11-09",
+        "to": "2026-11-09",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-18",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rv3wqo",
+        "ticker": "DIA",
+        "company": "Dialight PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-11-10",
+        "to": "2026-11-10",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-01",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rv6xyj",
+        "ticker": "WOSG",
+        "company": "Watches of Switzerland Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 trading update",
+        "from": "2026-11-10",
+        "to": "2026-11-10",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-03",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rv6a6s",
+        "ticker": "FRP",
+        "company": "FRP Advisory Group PLC",
+        "type": "Pre-H1 TU",
+        "event": "H1 FY27 trading update",
+        "from": "2026-11-11",
+        "to": "2026-11-20",
+        "label": "Mid Nov 2026",
+        "conf": "implied",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rv9627",
+        "ticker": "HLMA",
+        "company": "Halma PLC",
+        "type": "H1 results",
+        "event": "H1 results",
+        "from": "2026-11-19",
+        "to": "2026-11-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvzaod",
+        "ticker": "BAB",
+        "company": "Babcock International Group PLC",
+        "type": "H1 results",
+        "event": "HY27 results",
+        "from": "2026-11-19",
+        "to": "2026-11-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-16",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvvsq7",
+        "ticker": "INVP",
+        "company": "Investec PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-11-19",
+        "to": "2026-11-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-18",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rvjqq9",
+        "ticker": "TRCS",
+        "company": "Tracsis PLC",
+        "type": "FY results",
+        "event": "FY26 results",
+        "from": "2026-11-19",
+        "to": "2026-11-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-08-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rwt4vw",
+        "ticker": "JD.",
+        "company": "JD Sports Fashion PLC",
+        "type": "Q3",
+        "event": "Q3 trading statement",
+        "from": "2026-11-19",
+        "to": "2026-11-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-23",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rwpvp8",
+        "ticker": "AO.",
+        "company": "AO World PLC",
+        "type": "H1 results",
+        "event": "H1 results",
+        "from": "2026-11-24",
+        "to": "2026-11-24",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rwboji",
+        "ticker": "KGF",
+        "company": "Kingfisher PLC",
+        "type": "Q3",
+        "event": "Q3 trading update",
+        "from": "2026-11-24",
+        "to": "2026-11-24",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-22",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rwn3a4",
+        "ticker": "OTB",
+        "company": "On The Beach Group PLC",
+        "type": "FY results",
+        "event": "FY26 results",
+        "from": "2026-12-01",
+        "to": "2026-12-01",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-24",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emufqu1rwqwer",
+        "ticker": "CURY",
+        "company": "Currys plc",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-12-17",
+        "to": "2026-12-17",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-07-02",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emug1ppcqsgru",
+        "ticker": "SCT",
+        "company": "Softcat PLC",
+        "type": "FY results",
+        "event": "FY26 preliminary results",
+        "from": "2026-10-14",
+        "to": "2026-10-14",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-17",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emuglm7je4uso",
+        "ticker": "UU.",
+        "company": "United Utilities Group PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-11-12",
+        "to": "2026-11-12",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-25",
+        "manual": false,
+        "note": ""
+      },
+      {
+        "id": "emul6n0bh2eh7",
+        "ticker": "CCT",
+        "company": "Character Group (The) PLC",
+        "type": "FY results",
+        "event": "Audited annual results FY26",
+        "from": "2026-12-01",
+        "to": "2026-12-31",
+        "label": "Dec 2026",
+        "conf": "implied",
+        "src": "RNS",
+        "rns": "2026-09-28",
+        "manual": false,
+        "note": "",
+        "added": 1790596021086
+      },
+      {
+        "ticker": "TRI",
+        "type": "Pre-H1 TU",
+        "event": "Pre-H1 TU",
+        "company": "Trifast plc",
+        "from": "2026-10-20",
+        "to": "2026-10-20",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "note": "",
+        "manual": true,
+        "id": "emulaw6cyhg9w",
+        "rns": "",
+        "userAdded": true
+      },
+      {
+        "id": "emumdi1a0t4kb",
+        "ticker": "ZIG",
+        "company": "Zigup PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-12-02",
+        "to": "2026-12-02",
+        "label": "",
+        "conf": "provisional",
+        "src": "RNS",
+        "rns": "2026-09-29",
+        "manual": false,
+        "note": "",
+        "added": 1790668012537
+      },
+      {
+        "id": "emumdi1a1qgss",
+        "ticker": "SNWS",
+        "company": "Smiths News PLC",
+        "type": "FY results",
+        "event": "FY2026 results",
+        "from": "2026-11-04",
+        "to": "2026-11-04",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-29",
+        "manual": false,
+        "note": "",
+        "added": 1790668012537
+      },
+      {
+        "id": "emunp0z5vqimh",
+        "ticker": "GNC",
+        "company": "Greencore Group PLC",
+        "type": "FY results",
+        "event": "FY26 results",
+        "from": "2026-12-01",
+        "to": "2026-12-01",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-29",
+        "manual": false,
+        "note": "",
+        "added": 1790747838211
+      },
+      {
+        "ticker": "TSTL",
+        "type": "FY results",
+        "event": "FY results",
+        "company": "Tristel plc",
+        "from": "2026-10-19",
+        "to": "2026-10-19",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "note": "",
+        "manual": true,
+        "id": "emunrtmnvrl45",
+        "rns": "",
+        "userAdded": true,
+        "added": 1790752534267
+      },
+      {
+        "id": "emunuyum147nl",
+        "ticker": "MRK",
+        "company": "Marks Electrical Group PLC",
+        "type": "H1 results",
+        "event": "Interim results",
+        "from": "2026-11-01",
+        "to": "2026-11-30",
+        "label": "Nov 2026",
+        "conf": "provisional",
+        "src": "RNS",
+        "rns": "2026-09-30",
+        "manual": false,
+        "note": "",
+        "added": 1790757816697
+      },
+      {
+        "id": "emunuyum1e19n",
+        "ticker": "FUTR",
+        "company": "Future PLC",
+        "type": "FY results",
+        "event": "Full-year results",
+        "from": "2026-12-03",
+        "to": "2026-12-03",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-09-30",
+        "manual": false,
+        "note": "",
+        "added": 1790757816697
+      },
+      {
+        "id": "emup6nufb9svn",
+        "ticker": "PEEL",
+        "company": "Peel Hunt Ltd",
+        "type": "H1 results",
+        "event": "Half year results",
+        "from": "2026-11-18",
+        "to": "2026-11-18",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-01",
+        "manual": false,
+        "note": "",
+        "added": 1790837924807
+      },
+      {
+        "id": "emup6nufb0ovs",
+        "ticker": "RNWH",
+        "company": "Renew Holdings PLC",
+        "type": "FY results",
+        "event": "Preliminary results",
+        "from": "2026-11-24",
+        "to": "2026-11-24",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-01",
+        "manual": false,
+        "note": "",
+        "added": 1790837924807
+      },
+      {
+        "id": "emup6nufbs1jj",
+        "ticker": "SSE",
+        "company": "SSE PLC",
+        "type": "H1 results",
+        "event": "Half-year results",
+        "from": "2026-11-18",
+        "to": "2026-11-18",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-01",
+        "manual": false,
+        "note": "",
+        "added": 1790837924807
+      },
+      {
+        "id": "emup6nufc3y3w",
+        "ticker": "PZC",
+        "company": "PZ Cussons PLC",
+        "type": "H1 results",
+        "event": "H1 FY27 results",
+        "from": "2027-02-10",
+        "to": "2027-02-10",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-01",
+        "manual": false,
+        "note": "",
+        "added": 1790837924808
+      },
+      {
+        "id": "emuqla0czfly6",
+        "ticker": "JDW",
+        "company": "Wetherspoon (JD) PLC",
+        "type": "Q1",
+        "event": "Q1 trading update",
+        "from": "2026-11-04",
+        "to": "2026-11-04",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-02",
+        "manual": false,
+        "note": "",
+        "added": 1790922939732
+      },
+      {
+        "id": "emuqla0d0l13i",
+        "ticker": "IGG",
+        "company": "IG Group Holdings PLC",
+        "type": "Q3",
+        "event": "Q3 trading detail and strategy update",
+        "from": "2026-10-22",
+        "to": "2026-10-22",
+        "label": "",
+        "conf": "confirmed",
+        "src": "RNS",
+        "rns": "2026-10-02",
+        "manual": false,
+        "note": "",
+        "added": 1790922939732
+      }
+    ],
+    "stars": {
+      "MOTR": true,
+      "FAN": true,
+      "GNC": true,
+      "BYIT": true,
+      "DSCV": true,
+      "HDD": true,
+      "BNZL": true,
+      "HFD": true,
+      "RSW": true,
+      "ATG": true,
+      "LUCE": true,
+      "SYS1": true,
+      "ELM": true,
+      "ZIG": true,
+      "VTU": true
+    },
+    "beatOv": {
+      "MOTR": {
+        "v": true,
+        "since": "2026-09-02"
+      },
+      "BOWL": {
+        "v": true,
+        "since": "2026-05-27"
+      },
+      "FAN": {
+        "v": true,
+        "since": "2026-07-23"
+      },
+      "BYIT": {
+        "v": true,
+        "since": "2026-09-17"
+      },
+      "DSCV": {
+        "v": true,
+        "since": "2026-07-24"
+      },
+      "HDD": {
+        "v": true,
+        "since": "2026-07-22"
+      },
+      "BNZL": {
+        "v": true,
+        "since": "2026-09-01"
+      },
+      "HFD": {
+        "v": true,
+        "since": "2026-08-27"
+      },
+      "RSW": {
+        "v": true,
+        "since": "2026-09-23"
+      },
+      "ATG": {
+        "v": true,
+        "since": "2026-05-14"
+      },
+      "LUCE": {
+        "v": true,
+        "since": "2026-09-22"
+      },
+      "ELM": {
+        "v": true,
+        "since": "2026-07-30"
+      },
+      "SYS1": {
+        "v": true,
+        "since": "2026-09-24"
+      },
+      "KGF": {
+        "v": true,
+        "since": "2026-09-22"
+      }
+    },
+    "synced": {
+      "SCT_2026_09_17": 1,
+      "TND_2026_09_25_2": 1,
+      "BGO_2026_09_25": 1,
+      "UU__2026_09_25": 1,
+      "ONDO_2026_09_25": 1,
+      "AEX_2026_09_25": 1,
+      "RBN_2026_09_25": 1,
+      "SSTY_2026_09_25": 1,
+      "GEM_2026_09_25": 1,
+      "WVIA_2026_09_28": 1,
+      "CKT_2026_09_28": 1,
+      "TLW_2026_09_28": 1,
+      "SHR_2026_09_28": 1,
+      "HUD_2026_09_28": 1,
+      "GEMR_2026_09_28": 1,
+      "MET_2026_09_28": 1,
+      "CTG_2026_09_28": 1,
+      "TST_2026_09_28": 1,
+      "RCN_2026_09_28": 1,
+      "4BB_2026_09_28": 1,
+      "LIKE_2026_09_28": 1,
+      "CCT_2026_09_28": 1,
+      "ZIG_2026_09_29": 1,
+      "ALTN_2026_09_29": 1,
+      "SNWS_2026_09_29": 1,
+      "EBQ_2026_09_29": 1,
+      "WIL_2026_09_29": 1,
+      "MTEC_2026_09_29": 1,
+      "BMS_2026_09_29": 1,
+      "BAG_2026_09_29": 1,
+      "CARD_2026_09_29": 1,
+      "NIOX_2026_09_29": 1,
+      "ZOO_2026_09_29": 1,
+      "BILN_2026_09_29": 1,
+      "SUS_2026_09_29": 1,
+      "CBG_2026_09_29": 1,
+      "MEX_2026_09_29": 1,
+      "GENI_2026_09_29": 1,
+      "TGP_2026_09_29": 1,
+      "GNC_2026_09_29": 1,
+      "SAGA_2026_09_30": 1,
+      "MRK_2026_09_30": 1,
+      "EVPL_2026_09_30": 1,
+      "FVA_2026_09_30": 1,
+      "NAH_2026_09_30": 1,
+      "AVG_2026_09_30": 1,
+      "SEEN_2026_09_30": 1,
+      "PINE_2026_09_30": 1,
+      "SKL_2026_09_30": 1,
+      "CODE_2026_09_30": 1,
+      "FUTR_2026_09_30": 1,
+      "CIZ_2026_09_30": 1,
+      "WPHO_2026_09_30": 1,
+      "MAI_2026_09_30": 1,
+      "LORD_2026_09_30": 1,
+      "WATR_2026_09_30": 1,
+      "AVAP_2026_09_30": 1,
+      "SPSY_2026_09_30": 1,
+      "AVCT_2026_09_30": 1,
+      "SUN_2026_09_30": 1,
+      "NCYT_2026_09_30": 1,
+      "TPT_2026_10_01": 1,
+      "RGG_2026_10_01": 1,
+      "PEEL_2026_10_01": 1,
+      "RNWH_2026_10_01": 1,
+      "SSE_2026_10_01": 1,
+      "PZC_2026_10_01": 1,
+      "JDW_2026_10_02": 1,
+      "IGG_2026_10_02": 1
+    }
+  }
 }
