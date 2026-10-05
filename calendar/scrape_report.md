@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-10-02
+# Calendar scrape - 2026-10-05
 
-**139 sources · 18 events staged for approval**
+**139 sources · 27 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 73 | read OK, upcoming events found |
-| EMPTY | 37 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 74 | read OK, upcoming events found |
+| EMPTY | 35 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 18 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
@@ -25,7 +25,6 @@
 - Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
-- Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Elementis (ELM) - http 200, http - https://www.elementis.com/investors/investor-information/financial-calendar/
 - Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
@@ -47,7 +46,6 @@
 - Tribal Group (TRB) - http 200, http - https://www.tribalgroup.com/investors/announcements
 - Volex (VLX) - http 200, http - https://www.volex.com/investors
 - Wilmington (WIL) - http 200, http - https://www.wilmingtonplc.com/investors/financial-calendar/
-- XPS Pensions (XPS) - http 200, http - https://www.xpsgroup.com/investors/shareholder-information/investor-calendar/
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
 
 ## UNREADABLE
@@ -81,9 +79,14 @@
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 
 ## ERROR
 
 - Brickability (BRCK) - http None, chrome - https://brickabilitygroupplc.com/investors/financial-timetable
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
+
+## Approved events not re-verified tonight
+
+- Peel Hunt H1 results 2026-11-18
