@@ -1,11 +1,11 @@
-# Calendar scrape - 2026-10-05
+# Calendar scrape - 2026-10-06
 
-**139 sources · 27 events staged for approval**
+**139 sources · 21 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 74 | read OK, upcoming events found |
-| EMPTY | 35 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 73 | read OK, upcoming events found |
+| EMPTY | 36 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 18 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
@@ -47,6 +47,7 @@
 - Volex (VLX) - http 200, http - https://www.volex.com/investors
 - Wilmington (WIL) - http 200, http - https://www.wilmingtonplc.com/investors/financial-calendar/
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 
 ## UNREADABLE
 
