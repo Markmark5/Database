@@ -1,6 +1,6 @@
 {
  "version": 1,
- "saved": "2026-10-06T07:44:14.859Z",
+ "saved": "2026-10-06T07:57:29.047Z",
  "events": [
   {
    "id": "emufqu1rrltk8",
@@ -389,6 +389,21 @@
    "conf": "provisional",
    "src": "Mark",
    "rns": "2026-07-22",
+   "manual": true,
+   "note": ""
+  },
+  {
+   "id": "emufqu1rtwit5",
+   "ticker": "BMY",
+   "company": "Bloomsbury Publishing PLC",
+   "type": "H1 results",
+   "event": "H1 results",
+   "from": "2026-10-21",
+   "to": "2026-10-31",
+   "label": "Late Oct 2026",
+   "conf": "provisional",
+   "src": "Mark",
+   "rns": "2026-07-15",
    "manual": true,
    "note": ""
   },
@@ -1100,7 +1115,7 @@
    "added": 1791180338808
   },
   {
-   "id": "emuwdhl4cdb3c",
+   "id": "emuwdylwpsdlw",
    "ticker": "QTX",
    "company": "Quartix Technologies plc",
    "type": "FY results",
@@ -1113,10 +1128,10 @@
    "rns": "2026-10-05",
    "manual": false,
    "note": "",
-   "added": 1791272653356
+   "added": 1791273447530
   },
   {
-   "id": "emuwdhl4cvjre",
+   "id": "emuwdylwqvm8w",
    "ticker": "ENSI",
    "company": "EnSilica plc",
    "type": "AGM",
@@ -1129,10 +1144,10 @@
    "rns": "2026-10-05",
    "manual": false,
    "note": "",
-   "added": 1791272653356
+   "added": 1791273447530
   },
   {
-   "id": "emuwdhl4cne9w",
+   "id": "emuwdylwqkuj3",
    "ticker": "ENSI",
    "company": "EnSilica plc",
    "type": "Pre-H1 TU",
@@ -1145,7 +1160,55 @@
    "rns": "2026-10-05",
    "manual": false,
    "note": "",
-   "added": 1791272653356
+   "added": 1791273447530
+  },
+  {
+   "id": "emuwdylwqhnph",
+   "ticker": "INF",
+   "company": "Informa PLC",
+   "type": "FY results",
+   "event": "Full year results",
+   "from": "2027-03-01",
+   "to": "2027-03-31",
+   "label": "Mar 2027",
+   "conf": "implied",
+   "src": "RNS",
+   "rns": "2026-10-06",
+   "manual": false,
+   "note": "",
+   "added": 1791273447531
+  },
+  {
+   "id": "emuwdylwr83aq",
+   "ticker": "TEP",
+   "company": "Telecom Plus PLC",
+   "type": "H1 results",
+   "event": "First half results",
+   "from": "2026-11-24",
+   "to": "2026-11-24",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-10-06",
+   "manual": false,
+   "note": "",
+   "added": 1791273447531
+  },
+  {
+   "id": "emuwdylwrwb6t",
+   "ticker": "CLBS",
+   "company": "Celebrus Technologies PLC",
+   "type": "H1 results",
+   "event": "Half year results",
+   "from": "2026-12-08",
+   "to": "2026-12-08",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-10-06",
+   "manual": false,
+   "note": "",
+   "added": 1791273447531
   }
  ],
  "stars": {
@@ -1295,6 +1358,11 @@
   "JDW_2026_10_02": 1,
   "IGG_2026_10_02": 1,
   "QTX_2026_10_05": 1,
-  "ENSI_2026_10_05": 1
+  "ENSI_2026_10_05": 1,
+  "CKN_2026_10_06": 1,
+  "INF_2026_10_06": 1,
+  "TEP_2026_10_06": 1,
+  "SNX_2026_10_06": 1,
+  "CLBS_2026_10_06": 1
  }
 }
