@@ -1,6 +1,6 @@
 {
  "version": 1,
- "saved": "2026-10-05T07:07:02.026Z",
+ "saved": "2026-10-06T07:44:14.859Z",
  "events": [
   {
    "id": "emufqu1rrltk8",
@@ -1098,6 +1098,54 @@
    "rns": "",
    "userAdded": true,
    "added": 1791180338808
+  },
+  {
+   "id": "emuwdhl4cdb3c",
+   "ticker": "QTX",
+   "company": "Quartix Technologies plc",
+   "type": "FY results",
+   "event": "FY26 results",
+   "from": "2027-03-01",
+   "to": "2027-03-31",
+   "label": "Mar 2027",
+   "conf": "implied",
+   "src": "Broker note",
+   "rns": "2026-10-05",
+   "manual": false,
+   "note": "",
+   "added": 1791272653356
+  },
+  {
+   "id": "emuwdhl4cvjre",
+   "ticker": "ENSI",
+   "company": "EnSilica plc",
+   "type": "AGM",
+   "event": "AGM",
+   "from": "2026-10-30",
+   "to": "2026-10-30",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-10-05",
+   "manual": false,
+   "note": "",
+   "added": 1791272653356
+  },
+  {
+   "id": "emuwdhl4cne9w",
+   "ticker": "ENSI",
+   "company": "EnSilica plc",
+   "type": "Pre-H1 TU",
+   "event": "H1 trading update",
+   "from": "2027-01-01",
+   "to": "2027-01-31",
+   "label": "Jan 2027",
+   "conf": "implied",
+   "src": "Broker note",
+   "rns": "2026-10-05",
+   "manual": false,
+   "note": "",
+   "added": 1791272653356
   }
  ],
  "stars": {
@@ -1245,6 +1293,8 @@
   "SSE_2026_10_01": 1,
   "PZC_2026_10_01": 1,
   "JDW_2026_10_02": 1,
-  "IGG_2026_10_02": 1
+  "IGG_2026_10_02": 1,
+  "QTX_2026_10_05": 1,
+  "ENSI_2026_10_05": 1
  }
 }
