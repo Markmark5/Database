@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-10-07T06:37:16.288Z",
-    "savedAtLabel": "07 Oct 2026 07:37",
+    "savedAt": "2026-10-07T11:46:28.256Z",
+    "savedAtLabel": "07 Oct 2026 12:46",
     "source": "github-sync"
   },
   "scorecards": [
@@ -164670,6 +164670,288 @@
         "events": []
       },
       "entryPrice": 101.75
+    },
+    {
+      "id": "PNN_2026_10_07",
+      "ticker": "PNN",
+      "score": 6,
+      "company": "Pennon Group PLC",
+      "verdict": "Dilutive raise",
+      "date": "2026-10-07",
+      "rnsType": "PRE-H1 TU",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "RIGHTS ISSUE",
+          "type": "red",
+          "textHTML": "7 for 15 rights issue at 250p raises c.£550m, a 35.5% discount to the 387.73p ex-rights price; share count rises 46.7%, cutting FY28 consensus EPS by c.22–28%",
+          "textPlain": "7 for 15 rights issue at 250p raises c.£550m, a 35.5% discount to the 387.73p ex-rights price; share count rises 46.7%, cutting FY28 consensus EPS by c.22–28%"
+        },
+        {
+          "pill": "DIVIDEND",
+          "type": "red",
+          "textHTML": "FY27 dividend rebased to c.£125m from £138m, about 18p per share vs 30.2p consensus; a c.30% underlying cut after the bonus factor, then growing with CPIH",
+          "textPlain": "FY27 dividend rebased to c.£125m from £138m, about 18p per share vs 30.2p consensus; a c.30% underlying cut after the bonus factor, then growing with CPIH"
+        },
+        {
+          "pill": "IN LINE",
+          "type": "amber",
+          "textHTML": "FY27 outlook unchanged with underlying EBITDA up 5–10%, but non-underlying costs of c.£55–58m include a £33m desalination impairment and £12.9m of fines",
+          "textPlain": "FY27 outlook unchanged with underlying EBITDA up 5–10%, but non-underlying costs of c.£55–58m include a £33m desalination impairment and £12.9m of fines"
+        },
+        {
+          "pill": "OPERATIONS",
+          "type": "red",
+          "textHTML": "ODI penalties of c.£58m expected to continue to 2030 with a 50% reduction targeted; efficiencies will be reinvested and the 4-star EPA goal is now very challenging",
+          "textPlain": "ODI penalties of c.£58m expected to continue to 2030 with a 50% reduction targeted; efficiencies will be reinvested and the 4-star EPA goal is now very challenging"
+        },
+        {
+          "pill": "RCV GROWTH",
+          "type": "green",
+          "textHTML": "AMP8 investment lifted by c.£1bn to £3.6bn, raising RCV growth to over 40% from 34%; Ofwat draft allows £230m of cost change, 76% of the request, final by 15 Dec",
+          "textPlain": "AMP8 investment lifted by c.£1bn to £3.6bn, raising RCV growth to over 40% from 34%; Ofwat draft allows £230m of cost change, 76% of the request, final by 15 Dec"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "−16–20%",
+          "sub": "30.2p→24.2–25.4p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "−22–28%",
+          "sub": "33.5p→24.1–26.1p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£1,373m held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "~flat",
+          "sub": "£1,440m held",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "+5.6%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "+0.1%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "−3.5%",
+          "style": "color:var(--red)"
+        }
+      ],
+      "sparkLabel": "FY27 EPS consensus vs price",
+      "sparkSVG": "<svg id=\"spark-PNN\" viewBox=\"0 0 480 56\" style=\"width:100%;height:56px;display:block\"></svg><div class=\"spark-tt\" id=\"tt-PNN\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-10-07T11:46:18.932Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 29.1,
+          "price": 595
+        },
+        {
+          "d": "06 Mar",
+          "eps": 29.1,
+          "price": 547.5
+        },
+        {
+          "d": "13 Mar",
+          "eps": 28.6,
+          "price": 547
+        },
+        {
+          "d": "20 Mar",
+          "eps": 28.6,
+          "price": 512.5
+        },
+        {
+          "d": "27 Mar",
+          "eps": 28.6,
+          "price": 520
+        },
+        {
+          "d": "03 Apr",
+          "eps": 28.6,
+          "price": 554.5
+        },
+        {
+          "d": "10 Apr",
+          "eps": 28.6,
+          "price": 568
+        },
+        {
+          "d": "17 Apr",
+          "eps": 28.4,
+          "price": 541.5
+        },
+        {
+          "d": "24 Apr",
+          "eps": 28.4,
+          "price": 529
+        },
+        {
+          "d": "08 May",
+          "eps": 28.4,
+          "price": 526
+        },
+        {
+          "d": "15 May",
+          "eps": 28.4,
+          "price": 533.5
+        },
+        {
+          "d": "22 May",
+          "eps": 28.4,
+          "price": 519.5
+        },
+        {
+          "d": "02 Jun",
+          "eps": 28.3,
+          "price": 503.5
+        },
+        {
+          "d": "05 Jun",
+          "eps": 28.3,
+          "price": 513
+        },
+        {
+          "d": "12 Jun",
+          "eps": 29.3,
+          "price": 476
+        },
+        {
+          "d": "19 Jun",
+          "eps": 30,
+          "price": 463.4
+        },
+        {
+          "d": "26 Jun",
+          "eps": 30.2,
+          "price": 466
+        },
+        {
+          "d": "03 Jul",
+          "eps": 28.6,
+          "price": 474.8
+        },
+        {
+          "d": "10 Jul",
+          "eps": 28.5,
+          "price": 470
+        },
+        {
+          "d": "17 Jul",
+          "eps": 28.4,
+          "price": 487.8
+        },
+        {
+          "d": "24 Jul",
+          "eps": 28.5,
+          "price": 463.6
+        },
+        {
+          "d": "31 Jul",
+          "eps": 28.5,
+          "price": 464.6
+        },
+        {
+          "d": "07 Aug",
+          "eps": 29.3,
+          "price": 464.4
+        },
+        {
+          "d": "14 Aug",
+          "eps": 30.8,
+          "price": 467.8
+        },
+        {
+          "d": "21 Aug",
+          "eps": 30.8,
+          "price": 458.2
+        },
+        {
+          "d": "28 Aug",
+          "eps": 30.3,
+          "price": 474.4
+        },
+        {
+          "d": "07 Sep",
+          "eps": 30.3,
+          "price": 461.4
+        },
+        {
+          "d": "11 Sep",
+          "eps": 30.3,
+          "price": 449.4
+        },
+        {
+          "d": "18 Sep",
+          "eps": 30.3,
+          "price": 451.2
+        },
+        {
+          "d": "25 Sep",
+          "eps": 30.3,
+          "price": 450.8
+        },
+        {
+          "d": "02 Oct",
+          "eps": 30.2,
+          "price": 443.6
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 457.8
     }
   ],
   "scorecardIndex": [
@@ -177546,6 +177828,20 @@
       "index": "FTSE Small Cap",
       "entryPrice": 101.75,
       "importedAt": "2026-10-07T06:36:32.977Z",
+      "arc": null
+    },
+    {
+      "id": "PNN_2026_10_07",
+      "ticker": "PNN",
+      "company": "Pennon Group PLC",
+      "score": 6,
+      "verdict": "Dilutive raise",
+      "date": "2026-10-07",
+      "rnsType": "PRE-H1 TU",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "entryPrice": 457.8,
+      "importedAt": "2026-10-07T11:46:18.932Z",
       "arc": null
     }
   ],
