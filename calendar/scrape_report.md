@@ -1,28 +1,28 @@
-# Calendar scrape - 2026-10-06
+# Calendar scrape - 2026-10-07
 
-**139 sources · 21 events staged for approval**
+**140 sources · 20 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 73 | read OK, upcoming events found |
-| EMPTY | 36 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 18 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 72 | read OK, upcoming events found |
+| EMPTY | 35 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 21 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
 - Amcomri Group (AMCO) - http 200, browser - https://amcomrigroup.com/investor-relations
-- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
 - Focusrite (TUNE) - http 200, browser - https://focusriteplc.com/investors/company-documents/
+- Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
 - Hercules (HERC) - http 200, browser - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
 - Plus500 (PLUS) - http 200, browser - https://investors.plus500.com/Shareholder#financial-calendar
 - Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
-- Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
+- Oxford Metrics (OMG) - http 200, browser - https://oxfordmetrics.com/financials
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
@@ -47,15 +47,16 @@
 - Volex (VLX) - http 200, http - https://www.volex.com/investors
 - Wilmington (WIL) - http 200, http - https://www.wilmingtonplc.com/investors/financial-calendar/
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
-- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 
 ## UNREADABLE
 
+- Cake Box (CBOX) - http 202, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - Eurocell (ECEL) - http 200, http - https://investors.eurocell.co.uk/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
+- NIOX (NIOX) - http 202, http - https://investors.niox.com/investors/financial-calendar/
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
@@ -69,6 +70,7 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
+- Bridgepoint (BPT) - http 200, http - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 
 ## BLOCKED
 
@@ -79,8 +81,8 @@
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
+- MHA (MHA) - http 403, chrome - https://www.mha.co.uk/investors/investor-information/financial-calendar
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
-- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 
 ## ERROR
 
@@ -90,4 +92,6 @@
 
 ## Approved events not re-verified tonight
 
-- Peel Hunt H1 results 2026-11-18
+- NIOX H1 results 2026-10-21
+- MHA Trading update 2026-11-01
+- MHA H1 results 2026-12-01
