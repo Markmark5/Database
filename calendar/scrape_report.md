@@ -1,12 +1,12 @@
-# Calendar scrape - 2026-10-07
+# Calendar scrape - 2026-10-08
 
-**140 sources · 18 events staged for approval**
+**140 sources · 16 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 75 | read OK, upcoming events found |
-| EMPTY | 35 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 19 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 73 | read OK, upcoming events found |
+| EMPTY | 36 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 20 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
@@ -35,6 +35,7 @@
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
+- Ramsdens (RFX) - http 200, http - https://www.ramsdensplc.com/investor-relations/financial-calendar
 - Restore (RST) - http 200, browser - https://www.restoreplc.com/investors/financial-calendar/
 - Rolls-Royce (RR.) - http 200, http - https://www.rolls-royce.com/investors/financial-calendar.aspx
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
@@ -65,6 +66,7 @@
 - Personal Group (PGH) - http 200, browser - https://www.personalgroup.com/financial-calendar
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
+- Volution (FAN) - http 200, http - https://www.volutiongroupplc.com/investors/financial-calendar
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
