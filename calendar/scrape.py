@@ -407,7 +407,7 @@ async def browser_pass(p, sources, results, idxs, method, **launch):
             u = src["alt_url"] or src["url"]
             status, html = await fetch_browser(browser, u)
             lines = page_lines(html) if status and status < 400 else []
-            if is_challenge(lines):
+            if is_challenge(lines) or is_challenge_html(html):
                 status, lines = 403, []
             n = count_dates(lines)
             old = results[i]
@@ -419,12 +419,16 @@ async def browser_pass(p, sources, results, idxs, method, **launch):
     await asyncio.gather(*(run(i) for i in idxs))
     await browser.close()
 
-RE_CHALLENGE = re.compile(r"challenge validation|attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
+RE_CHALLENGE = re.compile(r"challenge validation|sgcaptcha|attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
                           r"checking your browser|access denied|request unsuccessful\. incapsula", re.I)
 
 def is_challenge(lines):
     """Bot-protection page served with a 200 (Cloudflare, Incapsula, Akamai)."""
     return len(" ".join(lines)) < 3000 and any(RE_CHALLENGE.search(l) for l in lines[:40])
+
+def is_challenge_html(html):
+    """SiteGround's captcha is a bare meta-refresh with no text at all."""
+    return isinstance(html, str) and len(html) < 3000 and "sgcaptcha" in html
 
 def needs_browser(status, html, lines, n_dates):
     if status is None or status in (401, 403, 429) or status >= 500:
@@ -442,7 +446,7 @@ async def process(src, client, sem):
         for u in urls:
             status, html = await fetch_http(client, u)
             lines = page_lines(html) if status and status < 400 else []
-            if is_challenge(lines):
+            if is_challenge(lines) or is_challenge_html(html):
                 status, lines = 403, []
             rec = {"fetched": u, "method": "http", "status": status, "html": html, "lines": lines,
                    "n_dates": count_dates(lines)}
@@ -500,8 +504,8 @@ async def main():
             outcome = "ERROR"
         elif events:
             outcome = "CLEAN"
-        elif len(" ".join(r["lines"])) < 1500:
-            outcome = "UNREADABLE"
+        elif len(" ".join(r["lines"])) < 1500 and not r["n_dates"]:
+            outcome = "UNREADABLE"          # short page with no dates at all (a short page with dates = EMPTY)
         else:
             outcome = "EMPTY"
         kept = 0
