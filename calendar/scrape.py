@@ -357,7 +357,7 @@ async def fetch_http(client, url):
 async def fetch_browser(browser, url):
     page = await browser.new_page(user_agent=UA, locale="en-GB")
     try:
-        resp = await page.goto(url, wait_until="domcontentloaded", timeout=40000)
+        resp = await page.goto(url, wait_until="domcontentloaded", timeout=60000)
         try:
             await page.wait_for_load_state("networkidle", timeout=15000)
         except Exception:
@@ -371,6 +371,17 @@ async def fetch_browser(browser, url):
                 pass
         await page.wait_for_timeout(2000)
         html = await page.content()
+        # self-clearing bot checks ("Challenge Validation", "Just a moment...") reload the page
+        # after a few seconds: wait once, then read again
+        if is_challenge(page_lines(html)):
+            await page.wait_for_timeout(12000)
+            try:
+                await page.wait_for_load_state("networkidle", timeout=15000)
+            except Exception:
+                pass
+            html = await page.content()
+            if not is_challenge(page_lines(html)):
+                return 200, html + "".join(["\n" + await fr.content() for fr in page.frames[1:]])
         for fr in page.frames[1:]:        # Investis / Euroland widgets live in iframes
             try:
                 html += "\n" + await fr.content()
@@ -408,7 +419,7 @@ async def browser_pass(p, sources, results, idxs, method, **launch):
     await asyncio.gather(*(run(i) for i in idxs))
     await browser.close()
 
-RE_CHALLENGE = re.compile(r"attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
+RE_CHALLENGE = re.compile(r"challenge validation|attention required!? \| cloudflare|sorry, you have been blocked|^just a moment\.\.\.$|"
                           r"checking your browser|access denied|request unsuccessful\. incapsula", re.I)
 
 def is_challenge(lines):
