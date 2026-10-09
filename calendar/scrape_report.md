@@ -1,28 +1,27 @@
 # Calendar scrape - 2026-10-09
 
-**141 sources · 18 events staged for approval**
+**142 sources · 21 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 74 | read OK, upcoming events found |
 | EMPTY | 35 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 20 | page loaded but little text (JS-rendered even in browser) |
+| UNREADABLE | 21 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
 - Amcomri Group (AMCO) - http 200, browser - https://amcomrigroup.com/investor-relations
-- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
 - Focusrite (TUNE) - http 200, browser - https://focusriteplc.com/investors/company-documents/
 - Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
 - Hercules (HERC) - http 200, browser - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
-- Plus500 (PLUS) - http 200, browser - https://investors.plus500.com/Shareholder#financial-calendar
 - Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
+- Oxford Metrics (OMG) - http 200, browser - https://oxfordmetrics.com/financials
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
@@ -47,14 +46,17 @@
 - Volex (VLX) - http 200, http - https://www.volex.com/investors
 - Wilmington (WIL) - http 200, http - https://www.wilmingtonplc.com/investors/financial-calendar/
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 
 ## UNREADABLE
 
+- Cake Box (CBOX) - http 202, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - Eurocell (ECEL) - http 200, http - https://investors.eurocell.co.uk/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
+- NIOX (NIOX) - http 202, http - https://investors.niox.com/investors/financial-calendar/
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
@@ -69,7 +71,6 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Bridgepoint (BPT) - http 200, http - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 
 ## BLOCKED
 
@@ -87,4 +88,8 @@
 - Brickability (BRCK) - http None, chrome - https://brickabilitygroupplc.com/investors/financial-timetable
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
-- Computacentre (CCC) - http None, chrome - https://investors.computacenter.com/events/
+- Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+
+## Approved events not re-verified tonight
+
+- NIOX H1 results 2026-10-21
