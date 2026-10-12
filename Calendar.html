@@ -57,6 +57,8 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .rc-wk{display:flex;align-items:center;gap:10px;background:#f0f0f0;font-size:11px;color:#555}
 .rc-wk b{background:#8ee68e;color:#123;font-size:14px;font-weight:700;padding:5px 12px;display:inline-block}
 .rc-wk.rc-pastwk b{background:#c9c9d2;color:#44444f}
+.rc-wk.rc-pastwk{cursor:pointer;user-select:none}.rc-wk.rc-pastwk:hover{background:#e6e6ea}
+.rc-wk.rc-pastwk .rc-tog{margin-left:auto;margin-right:12px;font-size:11px;color:#1f6fd1;font-weight:600}
 .rc-row{display:grid;grid-template-columns:96px 150px minmax(0,1fr) 104px 150px 64px 28px;gap:12px;align-items:center;padding:6px 14px;background:#fff;cursor:pointer;font-size:12.5px}
 .rc-row.rc-alt{background:#fff}
 .rc-row:hover{background:#e3f2ff}
@@ -585,7 +587,8 @@ function grpLabel(e){
 }
 
 /* ── render ── */
-var RNG=30,FSTAR=false,FBEAT=false,FQ='',FNEW=false;
+var RNG=30,FSTAR=false,FBEAT=false,FQ='',FNEW=false,PASTOPEN=false;
+try{PASTOPEN=localStorage.getItem('rnscal_pastopen')==='1';}catch(e){}
 /* when a date was added/moved (older scorecard dates fall back to their RNS date) */
 function addedAt(e){if(e.added)return +e.added;if(!e.manual&&e.rns){var t=Date.parse(String(e.rns).slice(0,10)+'T12:00:00');return isNaN(t)?0:t;}return 0;}
 function passes(e){
@@ -635,7 +638,11 @@ function render(){
   var up=ev.filter(function(e){return e.to>=t0;}).sort(function(a,b){
     return sortKey(a).localeCompare(sortKey(b))||RANK[partOf(a)]-RANK[partOf(b)]||(S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||a.ticker.localeCompare(b.ticker);});
   var h='',alt=false;
-  if(past.length){h+='<div class="rc-wk rc-pastwk"><b>Recently reported</b><span>last 21 days</span></div>';past.forEach(function(e){h+=row(e,true,T,alt);alt=!alt;});}
+  /* recently reported: folded away by default (remembered per browser), click the band to open */
+  if(past.length){
+    h+='<div class="rc-wk rc-pastwk" id="rcal-pasttog" role="button" tabindex="0" aria-expanded="'+PASTOPEN+'"><b>'+(PASTOPEN?'▾':'▸')+' Recently reported</b><span>'+past.length+' in the last 21 days</span><span class="rc-tog">'+(PASTOPEN?'Hide':'Show')+'</span></div>';
+    if(PASTOPEN)past.forEach(function(e){h+=row(e,true,T,alt);alt=!alt;});
+  }
   var last='';
   up.forEach(function(e){
     var k=grpKey(e);
@@ -770,7 +777,9 @@ document.addEventListener('keydown',function(e){
 window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();render();loadRemote(false);};
 
 /* ── list interactions ── */
+function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastopen',PASTOPEN?'1':'0');}catch(e){}render();}
 $('rcal-list').addEventListener('click',function(ev){
+  if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
   var tk=ev.target.closest('[data-rc-rns]');if(tk){showRNS(tk.getAttribute('data-rc-rns'));return;}
   var more=ev.target.closest('[data-mg-day]');if(more){openDay(more.getAttribute('data-mg-day'));return;}
   if(!CAN_EDIT)return;
@@ -784,6 +793,7 @@ $('rcal-list').addEventListener('click',function(ev){
   var id=r.getAttribute('data-rc-id');
   if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);
 });
+$('rcal-list').addEventListener('keydown',function(ev){if((ev.key==='Enter'||ev.key===' ')&&ev.target.id==='rcal-pasttog'){ev.preventDefault();togglePast();return;}});
 $('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&CAN_EDIT&&ev.target.classList.contains('rc-row')){var id=ev.target.getAttribute('data-rc-id');if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);}});
 /* "+N more": that day in the list view */
 function openDay(day){
