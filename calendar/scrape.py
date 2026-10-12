@@ -237,19 +237,37 @@ def label_above(lines, i):
     j = _above(lines, i)
     return lines[j] if j is not None else None
 
-def page_layout(lines):
+def _vote(lines, idxs):
     """For date-only rows: is the event label above or below the date? Majority vote."""
     up = down = 0
-    for i, l in enumerate(lines):
-        if not event_dates(l) or is_label(l):
-            continue
+    for i in idxs:
         a, b = label_above(lines, i), label_below(lines, i)
         ca, cb = bool(a and classify(a)), bool(b and classify(b))
-        if ca and not cb and a is not None:
+        if ca and not cb:
             up += 1
-        elif cb and not ca and b is not None:
+        elif cb and not ca:
             down += 1
-    return "above" if up > down else "below"
+    return "above" if up > down else "below" if down > up else None
+
+def date_rows(lines):
+    return [i for i, l in enumerate(lines) if event_dates(l) and not is_label(l)]
+
+def page_layout(lines):
+    return _vote(lines, date_rows(lines)) or "below"
+
+def block_layouts(lines):
+    """Pages can mix styles (Greencore: a label-first table plus a date-first 'Upcoming' list),
+    so vote again within each run of nearby date rows; a run with no clear vote uses the page's."""
+    rows, out, run = date_rows(lines), {}, []
+    for i in rows + [None]:
+        if run and (i is None or i - run[-1] > 4):
+            v = _vote(lines, run)
+            if v:
+                out.update({k: v for k in run})
+            run = []
+        if i is not None:
+            run.append(i)
+    return out
 
 def _owned(lines, j, i):
     """True if label line j belongs to another dated row (a date on its far side from i)."""
@@ -276,6 +294,7 @@ def neighbour_label(lines, i, layout="below"):
 def extract(lines):
     events, zone = [], None
     layout = page_layout(lines)
+    blocks = block_layouts(lines)
     # footnote such as "*subject to change" / "All future dates are indicative" covers the whole table
     page_prov = any(len(l) < 150 and RE_PROV.search(l) and (l.startswith("*") or re.search(r"\bdates?\b", l, re.I))
                     for l in lines)
@@ -323,7 +342,7 @@ def extract(lines):
             if has_words(text):          # label on the same line: judge that alone
                 etype = classify(text)
             else:                        # label on a neighbouring line
-                text, etype = neighbour_label(lines, i, layout)
+                text, etype = neighbour_label(lines, i, blocks.get(i, layout))
             if not etype:
                 continue
             if conf == "confirmed" and (page_prov or RE_PROV.search(line + " " + text)):
