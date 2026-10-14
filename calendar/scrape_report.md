@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-10-13
+# Calendar scrape - 2026-10-14
 
-**143 sources · 25 events staged for approval**
+**143 sources · 26 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 80 | read OK, upcoming events found |
+| CLEAN | 79 | read OK, upcoming events found |
 | EMPTY | 51 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
@@ -48,7 +48,6 @@
 - Personal Group (PGH) - http 200, browser - https://www.personalgroup.com/financial-calendar
 - Ramsdens (RFX) - http 200, http - https://www.ramsdensplc.com/investor-relations/financial-calendar
 - Restore (RST) - http 200, browser - https://www.restoreplc.com/investors/financial-calendar/
-- Rolls-Royce (RR.) - http 200, http - https://www.rolls-royce.com/investors/financial-calendar.aspx
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
 - Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
@@ -63,6 +62,7 @@
 - Wilmington (WIL) - http 200, http - https://www.wilmingtonplc.com/investors/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
+- Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 
 ## BLOCKED
 
@@ -74,6 +74,7 @@
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
+- Rolls-Royce (RR.) - http 403, chrome - https://www.rolls-royce.com/investors/financial-calendar.aspx
 
 ## ERROR
 
