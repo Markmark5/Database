@@ -7669,7 +7669,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-prev .ppf{font-size:9px;color:#4a9eff;margin-top:6px}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
 #pp-ov.on{display:flex}
-#pp-mod{width:min(980px,100%);background:#0f0f15;border:1px solid #3a3a50;border-radius:8px;padding:14px 18px 12px;
+#pp-mod{width:min(980px,100%);max-height:94vh;overflow-y:auto;background:#0f0f15;border:1px solid #3a3a50;border-radius:8px;padding:14px 18px 12px;
   font-family:var(--mono,Inter,sans-serif);color:#f2f2f8;box-shadow:0 20px 60px #000}
 #pp-mod .pmh{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
 #pp-mod .pmt{font-size:20px;font-weight:700;letter-spacing:-.02em}
@@ -7679,6 +7679,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pmx{cursor:pointer;color:#6a6a85;font-size:16px;margin-left:12px}
 #pp-mod .pmx:hover{color:#fff}
 #pp-mod .pmf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10px;color:#6a6a85;margin-top:8px}
+#pp-mod .pmk{margin-top:14px;border-top:1px solid #2a2a38;padding-top:10px}
+#pp-mod .pmkh{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab5;margin-bottom:8px}
 #pp-mod .pmf a{color:#4a9eff;cursor:pointer;text-decoration:none}
 </style>
 <div id="pp-prev"></div>
@@ -7690,6 +7692,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
    Every other ticker: weekly closes straight from uploadZone.rows4 (already loaded, nothing stored). */
 (function(){
   if(typeof window.DriftChart!=='object')return;
+  var PPFC={};
   var DC=window.DriftChart, BASE='https://markmark5.github.io/Drift/', CACHE={}, HT=null, HIDE=null, CUR=null;
   var DIRC={up:['#00d97e','Turning up'],down:['#ff4757','Turning down'],watch:['#ffb347','Stable — watch']};
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -7704,6 +7707,14 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       return (/^\$/.test(v)||/¢$/.test(v))?'USD':'GBX';}
     return null;
   }
+  /* RNS Scorecard scores for the badges (cards in memory; older months sit in archive/) */
+  function scoresFor(tk){
+    if(typeof ALL==='undefined'||!Array.isArray(ALL))return [];
+    return ALL.filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.score!==undefined&&r.score!==null&&r.date;})
+      .map(function(r){return {d:String(r.date).slice(0,10),s:+r.score,t:r.rnsType||''};})
+      .filter(function(b){return !isNaN(b.s);});
+  }
+  var SCLEG='<span style="display:inline-flex;align-items:center;gap:4px;margin-left:10px"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#ffc400;border:1px solid #fff"></i>RNS score</span>';
   function driftOf(tk){var M=window.DRIFTMAP;return M&&M[tk]?M[tk]:null;}
   /* resolves to {d:chartData, tail, drift} or null */
   function getData(tk){
@@ -7733,9 +7744,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       if(!x){prev.style.display='none';return;}
       var marked=!x.snap;
       prev.innerHTML='<div class="pph"><span><b>'+esc(tk)+'</b> · '+(marked?'price vs Text + G':'weekly price')+'</span>'+(marked?dirTag(x.drift):'')+'</div>'+
-        '<div class="ppc"></div>'+(marked?'<div class="pp-leg">'+DC.legend('dark')+'</div>':'')+
+        '<div class="ppc"></div>'+((marked||scoresFor(tk).length)?'<div class="pp-leg">'+(marked?DC.legend('dark'):'')+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="ppf">Click ticker for full chart</div>';
-      DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:x.tail});
+      var sc=scoresFor(tk);
+      DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:x.tail,scores:sc,scoreLane:x.snap?null:'bottom'});
       var r=el.getBoundingClientRect(), left=Math.min(r.left,window.innerWidth-392), top=r.bottom+6;
       prev.style.left=Math.max(6,left)+'px'; prev.style.display='block';
       if(top+prev.offsetHeight>window.innerHeight-6)top=Math.max(6,r.top-prev.offsetHeight-6);
@@ -7756,9 +7768,34 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints')+'</span>'+
         '<span class="pmd">'+(x.snap?'':dirTag(x.drift))+'</span><span class="pmx" title="Close (Esc)">✕</span></div>'+
-        '<div class="pmb"></div>'+(x.snap?'':'<div class="pp-leg" style="font-size:10px">'+DC.legend('dark')+'</div>')+
-        '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>';
-      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail});
+        '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
+        '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
+        '<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
+      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
+      /* EPS forecasts panel, on the price chart's date axis */
+      if(DC.epsPanel&&window.PP_EPS){   /* EPS strip parked as a future idea: set window.PP_EPS=1 to show it */
+        var all=x.d.px.concat(x.tail||[]);
+        /* year-end rolls from the Broker Charts detector (pinned to the results date) when it lines up week for week */
+        var ep=DC.parseEps(rows4(),tk), rolls;
+        try{ if(typeof fcFetchFromExtractor==='function'&&typeof fcComputeRollovers==='function'){
+          var fr0=fcFetchFromExtractor(tk);
+          if(fr0&&fr0.length===ep.length){var fl=fcComputeRollovers(fr0,tk);rolls=[];fl.forEach(function(f,i){if(f)rolls.push(i);});}
+        }}catch(_){rolls=undefined;}
+        DC.epsPanel(mod.querySelector('.pme'),ep,{size:'modal',style:window.PP_EPS_STYLE||'area',rolls:rolls,
+          x0:Date.parse(all[0][0]+'T00:00:00Z'),x1:Date.parse(all[all.length-1][0]+'T00:00:00Z')});
+        var pe=mod.querySelector('.pme');
+        if(pe.innerHTML)pe.insertAdjacentHTML('beforeend','<div class="pp-leg" style="font-size:10px;display:flex;gap:14px;margin-top:2px">'+
+          '<span style="color:#d9a066">\u25ac this year\u2019s EPS forecast</span><span style="color:#c07ef7">- - next year\u2019s</span>'+
+          '<span>follows one financial year across the results roll \u00b7 moves of 3%+ labelled</span></div>');
+      }
+      /* Broker charts, exactly as the Broker Charts section draws them */
+      try{
+        if(typeof fcRenderInto==='function'&&typeof fcFetchFromExtractor==='function'){
+          var fr=fcFetchFromExtractor(tk);
+          if(fr&&fr.length){fcStockData[tk]=fr;fcRenderInto('pp-fc',tk,'overview','ppfc-',PPFC);}
+          else mod.querySelector('.pmk').style.display='none';
+        } else mod.querySelector('.pmk').style.display='none';
+      }catch(err){mod.querySelector('.pmk').style.display='none';}
       mod.querySelector('.pmx').onclick=closeModal;
       var o=mod.querySelector('.pmo'); if(o)o.onclick=function(){
         window.open(BASE+x.drift.url+'?t='+Date.now(),'d_'+tk,'width=1500,height=950,scrollbars=yes');};
