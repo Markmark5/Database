@@ -7594,22 +7594,88 @@ function ghPull() {
 }
 
 // ── AUTO-LOAD on page open (silent if no token / no file yet) ──
+/* Start-up loading panel: centre of the screen, so a slow phone download never looks frozen */
+function ghLoadBox(state,title,sub){
+  var o=document.getElementById('gh-loadbox');
+  if(!o){
+    o=document.createElement('div');o.id='gh-loadbox';
+    o.innerHTML='<div class="glb-card"><div class="glb-spin"></div><div class="glb-t"></div><div class="glb-s"></div>'+
+      '<div class="glb-bar"><i></i></div><button class="glb-x" onclick="ghLoadBox(\'hide\')">OK</button></div>';
+    var st=document.createElement('style');
+    st.textContent='#gh-loadbox{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;'+
+      'background:rgba(0,0,0,.55);transition:opacity .35s}'+
+      '#gh-loadbox.fade{opacity:0}'+
+      '#gh-loadbox .glb-card{background:#14141c;border:1px solid #3a3a50;border-radius:12px;padding:26px 30px 22px;'+
+      'width:min(420px,calc(100% - 32px));text-align:center;font-family:Inter,system-ui,sans-serif;box-shadow:0 20px 60px #000c}'+
+      '#gh-loadbox .glb-spin{width:38px;height:38px;margin:0 auto 14px;border-radius:50%;border:3px solid #2a2a38;'+
+      'border-top-color:#4a9eff;animation:glbspin .9s linear infinite}'+
+      '#gh-loadbox.ok .glb-spin{animation:none;border-color:#00d97e;position:relative}'+
+      '#gh-loadbox.ok .glb-spin:after{content:"✓";position:absolute;inset:0;line-height:32px;color:#00d97e;font-size:20px;font-weight:700}'+
+      '#gh-loadbox.err .glb-spin{animation:none;border-color:#ffb347}'+
+      '#gh-loadbox .glb-t{font-size:18px;font-weight:700;color:#f2f2f8;margin-bottom:6px}'+
+      '#gh-loadbox .glb-s{font-size:12.5px;color:#9a9ab5;line-height:1.5;min-height:18px}'+
+      '#gh-loadbox .glb-bar{height:4px;background:#2a2a38;border-radius:2px;margin:14px 0 2px;overflow:hidden}'+
+      '#gh-loadbox .glb-bar i{display:block;height:100%;width:0;background:#4a9eff;transition:width .2s}'+
+      '#gh-loadbox.ok .glb-bar i{background:#00d97e;width:100%}'+
+      '#gh-loadbox .glb-x{display:none;margin-top:14px;font:600 12px Inter,sans-serif;padding:7px 20px;border-radius:6px;'+
+      'background:#ffffff10;color:#f2f2f8;border:1px solid #3a3a50;cursor:pointer}'+
+      '#gh-loadbox.err .glb-x{display:inline-block}'+
+      '@keyframes glbspin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(st);document.body.appendChild(o);
+  }
+  if(state==='hide'){o.classList.add('fade');setTimeout(function(){o.style.display='none';},350);return;}
+  o.style.display='flex';o.classList.remove('fade','ok','err');if(state==='ok'||state==='err')o.classList.add(state);
+  if(title!=null)o.querySelector('.glb-t').textContent=title;
+  if(sub!=null)o.querySelector('.glb-s').textContent=sub;
+  return o;
+}
+function ghLoadPct(p){var o=document.getElementById('gh-loadbox');if(o)o.querySelector('.glb-bar i').style.width=Math.max(3,Math.min(100,p))+'%';}
+
 function ghAutoLoad() {
-  // Only auto-pull if we have a token (signals user has set up sync)
-  if (!ghGetToken()) return;
-  // Fetch silently — update nav button on success
+  // Always load the latest data on opening. Without a token this device can't push,
+  // so loading is view-only and can't overwrite anything on GitHub.
+  var viewOnly = !ghGetToken();
+  ghLoadBox('busy','Loading latest data…','Fetching your database from GitHub — about 15 MB, so a few seconds on a phone.');
+  ghLoadPct(3);
   fetch(GH_RAW + '?t=' + Date.now())
-    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(r) {
+      if (!r.ok) throw new Error('GitHub answered ' + r.status);
+      /* stream it so the bar and the MB count move while it downloads */
+      if (!r.body || !r.body.getReader || !window.TextDecoder) return r.json();
+      var total = +r.headers.get('Content-Length') || 0, got = 0, reader = r.body.getReader(), chunks = [];
+      function pump() {
+        return reader.read().then(function(x) {
+          if (x.done) {
+            var all = new Uint8Array(got), off = 0;
+            chunks.forEach(function(c){ all.set(c, off); off += c.length; });
+            return JSON.parse(new TextDecoder('utf-8').decode(all));
+          }
+          chunks.push(x.value); got += x.value.length;
+          var mb = (got / 1048576).toFixed(1);
+          ghLoadBox(null, null, 'Downloaded ' + mb + ' MB' + (total ? ' of ' + (total / 1048576).toFixed(1) + ' MB' : '') + '…');
+          ghLoadPct(total ? got / total * 90 : Math.min(90, got / 160000));
+          return pump();
+        });
+      }
+      return pump();
+    })
     .then(function(backup) {
-      if (!backup || !backup._meta) return;
-      dbRestoreApply(backup);
-      if (typeof liveRestoreCache === 'function') liveRestoreCache();
+      if (!backup || !backup._meta) throw new Error('the file wasn’t a valid database backup');
+      ghLoadBox(null, 'Updating…', 'Putting the latest scorecards and data in place.'); ghLoadPct(95);
+      /* let the panel repaint before the heavy restore */
+      return new Promise(function(res){ setTimeout(function(){
+        dbRestoreApply(backup);
+        if (typeof liveRestoreCache === 'function') liveRestoreCache();
+        res(backup); }, 30); });
+    })
+    .then(function(backup) {
       var btn = document.getElementById('gh-sync-btn');
       if (btn) btn.textContent = '☁ Synced';
-      toast('☁ Loaded latest data from GitHub', 'ok', 3000);
+      ghLoadBox('ok', 'Up to date', 'Saved ' + (backup._meta.savedAtLabel || backup._meta.savedAt || '') + (viewOnly ? ' · view only on this device' : ''));
+      setTimeout(function(){ ghLoadBox('hide'); }, 1300);
     })
-    .catch(function() {
-      // Silent fail on auto-load — user can manually pull
+    .catch(function(e) {
+      ghLoadBox('err', 'Couldn’t load the latest data', 'Showing the copy last saved on this device (' + (e && e.message ? e.message : 'network error') + '). Try the GitHub → Pull button later.');
     });
 }
 
