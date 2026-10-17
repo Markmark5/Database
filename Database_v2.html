@@ -7648,11 +7648,150 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     .then(function(r){return r.json();})
     .then(function(j){
       MAP={}; j.tickers.forEach(function(t){if(t.kind!=='sector')MAP[t.ticker.toUpperCase()]=t;});
+      window.DRIFTMAP=MAP;
       paint();
       new MutationObserver(function(){clearTimeout(TIMER);TIMER=setTimeout(paint,120);})
         .observe(document.body,{childList:true,subtree:true});
     })
     .catch(function(){});
+})();
+</script>
+<script src="https://markmark5.github.io/Drift/chart.js"></script>
+<style>
+/* PRICE POPUP - additive, safe to delete (with the script below) */
+.pp-on{cursor:zoom-in}
+#pp-prev{position:fixed;z-index:9000;width:380px;background:#111;border:1px solid #2a2a38;border-radius:6px;
+  box-shadow:0 10px 36px #000c;padding:9px 10px 8px;display:none;font-family:var(--mono,Inter,sans-serif)}
+#pp-prev .pph{display:flex;justify-content:space-between;align-items:baseline;font-size:10px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;color:#9a9ab5;margin-bottom:6px}
+#pp-prev .pph b{color:#f2f2f8}
+.pp-leg{font-size:9px;color:#6a6a85;margin-top:5px}
+#pp-prev .ppf{font-size:9px;color:#4a9eff;margin-top:6px}
+#pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
+#pp-ov.on{display:flex}
+#pp-mod{width:min(980px,100%);background:#0f0f15;border:1px solid #3a3a50;border-radius:8px;padding:14px 18px 12px;
+  font-family:var(--mono,Inter,sans-serif);color:#f2f2f8;box-shadow:0 20px 60px #000}
+#pp-mod .pmh{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+#pp-mod .pmt{font-size:20px;font-weight:700;letter-spacing:-.02em}
+#pp-mod .pmc{font-size:12px;color:#9a9ab5}
+#pp-mod .pms{font-size:10px;color:#6a6a85;text-transform:uppercase;letter-spacing:.06em}
+#pp-mod .pmd{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+#pp-mod .pmx{cursor:pointer;color:#6a6a85;font-size:16px;margin-left:12px}
+#pp-mod .pmx:hover{color:#fff}
+#pp-mod .pmf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10px;color:#6a6a85;margin-top:8px}
+#pp-mod .pmf a{color:#4a9eff;cursor:pointer;text-decoration:none}
+</style>
+<div id="pp-prev"></div>
+<div id="pp-ov"><div id="pp-mod"></div></div>
+<script>
+/* PRICE POPUP - additive, safe to delete.
+   Hover a ticker (0.4s) = preview; click/tap = full chart.
+   Drift tickers with a chart file: frozen Alpha Vantage history + Text/G marks + rows4 tail.
+   Every other ticker: weekly closes straight from uploadZone.rows4 (already loaded, nothing stored). */
+(function(){
+  if(typeof window.DriftChart!=='object')return;
+  var DC=window.DriftChart, BASE='https://markmark5.github.io/Drift/', CACHE={}, HT=null, HIDE=null, CUR=null;
+  var DIRC={up:['#00d97e','Turning up'],down:['#ff4757','Turning down'],watch:['#ffb347','Stable — watch']};
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fd(iso){var p=String(iso||'').split('-');return p.length===3?(+p[2]+' '+MON[+p[1]-1]+' '+p[0]):'';}
+  function rows4(){return (typeof exState!=='undefined'&&exState.rows4)||[];}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  /* currency of a rows4-only ticker = unit of its latest close (field 7) */
+  function ccyOf(tk){
+    var r=rows4(), re=new RegExp('(?:^|;)'+tk.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+',([^;]+)');
+    for(var i=r.length-1;i>=0;i--){var m=String(r[i].Snapshot||'').match(re); if(!m)continue;
+      var v=(m[1].split(',')[5]||'').trim(); if(!v)continue;
+      return (/^\$/.test(v)||/¢$/.test(v))?'USD':'GBX';}
+    return null;
+  }
+  function driftOf(tk){var M=window.DRIFTMAP;return M&&M[tk]?M[tk]:null;}
+  /* resolves to {d:chartData, tail, drift} or null */
+  function getData(tk){
+    if(CACHE[tk])return CACHE[tk];
+    var t=driftOf(tk), p;
+    if(t&&t.chart){
+      p=fetch(BASE+t.chart).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+        if(DC.validate(d).length)throw 0;
+        return {d:d,tail:DC.parseTail(rows4(),tk,d.ccy,d.px[d.px.length-1][0]),drift:t};
+      }).catch(function(){return snap(tk,t);});
+    } else p=Promise.resolve(snap(tk,t));
+    CACHE[tk]=p; return p;
+  }
+  function snap(tk,t){
+    var c=ccyOf(tk); if(!c)return null;
+    var px=DC.parseTail(rows4(),tk,c,null); if(px.length<2)return null;
+    return {d:{ticker:tk,v:'rows4',ccy:c,px:px,marks:[]},tail:[],drift:t,snap:true};
+  }
+  function hasAny(tk){return !!(driftOf(tk)&&driftOf(tk).chart)||!!ccyOf(tk);}
+  function dirTag(t){if(!t)return '';var c=DIRC[t.direction]||DIRC.watch;
+    var f=typeof t.fired==='number'?t.fired+'/'+(t.fired_of||3):'';
+    return '<span style="color:'+c[0]+'">'+c[1]+(f?' · '+f:'')+'</span>';}
+  var prev=document.getElementById('pp-prev'), ov=document.getElementById('pp-ov'), mod=document.getElementById('pp-mod');
+  function showPrev(el,tk){
+    getData(tk).then(function(x){
+      if(CUR!==el)return;
+      if(!x){prev.style.display='none';return;}
+      var marked=!x.snap;
+      prev.innerHTML='<div class="pph"><span><b>'+esc(tk)+'</b> · '+(marked?'price vs Text + G':'weekly price')+'</span>'+(marked?dirTag(x.drift):'')+'</div>'+
+        '<div class="ppc"></div>'+(marked?'<div class="pp-leg">'+DC.legend('dark')+'</div>':'')+
+        '<div class="ppf">Click ticker for full chart</div>';
+      DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:x.tail});
+      var r=el.getBoundingClientRect(), left=Math.min(r.left,window.innerWidth-392), top=r.bottom+6;
+      prev.style.left=Math.max(6,left)+'px'; prev.style.display='block';
+      if(top+prev.offsetHeight>window.innerHeight-6)top=Math.max(6,r.top-prev.offsetHeight-6);
+      prev.style.top=top+'px';
+    });
+  }
+  function hidePrev(){clearTimeout(HT);CUR=null;prev.style.display='none';}
+  function openModal(tk,el){
+    hidePrev();
+    getData(tk).then(function(x){
+      if(!x)return;
+      var row=el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
+      var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
+      var last=x.d.px[x.d.px.length-1][0], foot;
+      if(x.snap) foot='Weekly closes from ShareScope snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
+      else foot='Weekly closes to '+fd(last)+' · frozen at build '+fd(x.drift.build_date||String(x.d.v).slice(0,10))+
+        (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
+      mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
+        '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints')+'</span>'+
+        '<span class="pmd">'+(x.snap?'':dirTag(x.drift))+'</span><span class="pmx" title="Close (Esc)">✕</span></div>'+
+        '<div class="pmb"></div>'+(x.snap?'':'<div class="pp-leg" style="font-size:10px">'+DC.legend('dark')+'</div>')+
+        '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>';
+      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail});
+      mod.querySelector('.pmx').onclick=closeModal;
+      var o=mod.querySelector('.pmo'); if(o)o.onclick=function(){
+        window.open(BASE+x.drift.url+'?t='+Date.now(),'d_'+tk,'width=1500,height=950,scrollbars=yes');};
+      ov.classList.add('on');
+    });
+  }
+  function closeModal(){ov.classList.remove('on');var t=document.getElementById('dc-tip');if(t)t.style.display='none';}
+  ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('on'))closeModal();});
+  function tkOf(el){return (el.textContent||'').trim().toUpperCase();}
+  document.addEventListener('mouseover',function(e){
+    var el=e.target.closest&&e.target.closest('.ticker-sym');
+    if(!el)return;
+    var tk=tkOf(el); if(!hasAny(tk))return;
+    el.classList.add('pp-on');
+    if(CUR===el){clearTimeout(HIDE);return;}
+    clearTimeout(HT);clearTimeout(HIDE);CUR=el;
+    HT=setTimeout(function(){showPrev(el,tk);},400);
+  });
+  document.addEventListener('mouseout',function(e){
+    var el=e.target.closest&&e.target.closest('.ticker-sym');
+    if(!el||el!==CUR)return;
+    if(e.relatedTarget&&(el.contains(e.relatedTarget)||prev.contains(e.relatedTarget)))return;
+    clearTimeout(HIDE);HIDE=setTimeout(hidePrev,150);
+  });
+  prev.addEventListener('mouseenter',function(){clearTimeout(HIDE);});
+  prev.addEventListener('mouseleave',function(){clearTimeout(HIDE);HIDE=setTimeout(hidePrev,150);});
+  /* click/tap the ticker: chart instead of expanding the row (rest of the row still expands) */
+  document.addEventListener('click',function(e){
+    var el=e.target.closest&&e.target.closest('.ticker-sym');
+    if(!el)return; var tk=tkOf(el); if(!hasAny(tk))return;
+    e.stopPropagation();e.preventDefault();openModal(tk,el);
+  },true);
 })();
 </script>
 <div id="h1calc-float">
