@@ -7808,11 +7808,12 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   /* resolves to {d:chartData, tail, drift} or null */
   function getData(tk){
     if(CACHE[tk])return CACHE[tk];
-    var t=driftOf(tk), p;
-    if(t&&t.chart){
-      p=fetch(BASE+t.chart).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+    var t=driftOf(tk), L=liteOf(tk), p, path=(t&&t.chart)?t.chart:(L&&L.chart?L.chart:null);
+    /* full Drift build first, then Drift-lite, then plain weekly snapshots */
+    if(path){
+      p=fetch(BASE+path).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
         if(DC.validate(d).length)throw 0;
-        return {d:d,tail:DC.parseTail(rows4(),tk,d.ccy,d.px[d.px.length-1][0]),drift:t};
+        return {d:d,tail:DC.parseTail(rows4(),tk,d.ccy,d.px[d.px.length-1][0]),drift:t,lite:!(t&&t.chart)};
       }).catch(function(){return snap(tk,t);});
     } else p=Promise.resolve(snap(tk,t));
     CACHE[tk]=p; return p;
@@ -7822,7 +7823,25 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     var px=DC.parseTail(rows4(),tk,c,null); if(px.length<2)return null;
     return {d:{ticker:tk,v:'rows4',ccy:c,px:px,marks:[]},tail:[],drift:t,snap:true};
   }
-  function hasAny(tk){return !!(driftOf(tk)&&driftOf(tk).chart)||!!ccyOf(tk);}
+  function hasAny(tk){return !!(driftOf(tk)&&driftOf(tk).chart)||!!(liteOf(tk)&&liteOf(tk).chart)||!!ccyOf(tk);}
+  function liteOf(tk){var M=window.LITEMAP;return M&&M[tk]?M[tk]:null;}
+  /* ── auto-refresh: Database stays open for days, so re-read the two small chart lists in the
+     background (every 30 min, when the tab comes back into view, and when a hovered ticker has
+     no chart yet). A ticker whose chart version changed is dropped from the cache and re-fetched. ── */
+  var IDXT=0;
+  function chartKey(tk){var t=driftOf(tk),L=liteOf(tk);return (t&&t.chart)||(L&&L.chart)||'';}
+  function refreshIdx(){
+    IDXT=Date.now();
+    var before={};Object.keys(CACHE).forEach(function(k){before[k]=chartKey(k);});
+    var a=fetch(BASE+'drift-index.json?t='+Date.now()).then(function(r){return r.ok?r.json():null;}).then(function(j){
+      if(!j||!j.tickers)return;var M={};j.tickers.forEach(function(x){if(x.kind!=='sector')M[String(x.ticker).toUpperCase()]=x;});window.DRIFTMAP=M;}).catch(function(){});
+    var b=fetch(BASE+'lite-index.json?t='+Date.now()).then(function(r){return r.ok?r.json():null;}).then(function(j){
+      if(!j||!j.tickers)return;var M={};j.tickers.forEach(function(x){M[String(x.ticker).toUpperCase()]=x;});window.LITEMAP=M;}).catch(function(){});
+    return Promise.all([a,b]).then(function(){Object.keys(before).forEach(function(k){if(chartKey(k)!==before[k])delete CACHE[k];});});
+  }
+  refreshIdx();
+  setInterval(refreshIdx,30*60000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden&&Date.now()-IDXT>10*60000)refreshIdx();});
   function dirTag(t){if(!t)return '';var c=DIRC[t.direction]||DIRC.watch;
     var f=typeof t.fired==='number'?t.fired+'/'+(t.fired_of||3):'';
     return '<span style="color:'+c[0]+'">'+c[1]+(f?' · '+f:'')+'</span>';}
@@ -7832,7 +7851,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       if(CUR!==el)return;
       if(!x){prev.style.display='none';return;}
       var marked=!x.snap;
-      prev.innerHTML='<div class="pph"><span><b>'+esc(tk)+'</b> · '+(marked?'price vs Text + G':'weekly price')+'</span>'+(marked?dirTag(x.drift):'')+'</div>'+
+      prev.innerHTML='<div class="pph"><span><b>'+esc(tk)+'</b> · '+(marked?'price vs Text + G'+(x.lite?' \u00b7 Drift-lite':''):'weekly price')+'</span>'+(marked&&!x.lite?dirTag(x.drift):'')+'</div>'+
         '<div class="ppc"></div>'+((marked||scoresFor(tk).length)?'<div class="pp-leg">'+(marked?DC.legend('dark'):'')+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="ppf">Click ticker for full chart</div>';
       var sc=scoresFor(tk);
@@ -7852,10 +7871,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
       var last=x.d.px[x.d.px.length-1][0], foot;
       if(x.snap) foot='Weekly closes from ShareScope snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
-      else foot='Weekly closes to '+fd(last)+' · frozen at build '+fd(x.drift.build_date||String(x.d.v).slice(0,10))+
+      else foot=(x.lite?'Drift-lite · ':'')+'Weekly closes to '+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
         (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
-        '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints')+'</span>'+
+        '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
         '<span class="pmd">'+(x.snap?'':dirTag(x.drift))+'</span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
@@ -7898,7 +7917,9 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   document.addEventListener('mouseover',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
     if(!el)return;
-    var tk=tkOf(el); if(!hasAny(tk))return;
+    var tk=tkOf(el);
+    if(!chartKey(tk)&&Date.now()-IDXT>5*60000)refreshIdx();
+    if(!hasAny(tk))return;
     el.classList.add('pp-on');
     if(CUR===el){clearTimeout(HIDE);return;}
     clearTimeout(HT);clearTimeout(HIDE);CUR=el;
