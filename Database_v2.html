@@ -7852,8 +7852,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-dl{display:flex;gap:9px;margin:0 0 9px;font-size:12.3px;line-height:1.42;color:#e8e8f0}
 #pp-mod .ppl-ic{font-weight:700;width:12px;flex:none;text-align:center}
 #pp-mod .ppl-sp{display:block;color:#6a6a82;font-size:11px;margin-top:1px}
-#pp-mod .ppl-tag{display:flex;gap:8px;margin-bottom:7px;font-size:12px;line-height:1.38}
-#pp-mod .ppl-pl{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.04em;border:1px solid;border-radius:4px;padding:1px 5px;height:15px;margin-top:1px;min-width:56px;text-align:center}
+#pp-mod .ppl-tag{display:flex;align-items:flex-start;gap:10px;margin-bottom:7px;font-size:12px;line-height:1.38}
+#pp-mod .ppl-pl{flex:0 0 104px;width:104px;min-width:104px;box-sizing:border-box;text-align:center;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 #pp-mod .ppl-tt{color:#c9c6d8}
 #pp-mod .ppl-none{color:#6a6a82;font-size:12px}
 #pp-mod .ppl-new{color:#ffb020;font-size:11px;margin:-2px 0 8px}
@@ -7950,7 +7950,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     if(card){var cd=String(card.date).slice(0,10),star=cd===rns?'⭐ ':'';
       tagsHead='<b>Scorecard tags<small>'+star+esc(card.rnsType||'')+' · '+pplDate(cd)+'</small></b><span class="ppl-sc">'+esc(card.score)+'</span>';
       tags=(card.signals||[]).map(function(sg){var c=PPL_TAG[sg.type]||'#9a9ab5';
-        return '<div class="ppl-tag"><span class="ppl-pl" style="color:'+c+';border-color:'+c+'66">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
+        return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
         '<div class="ppl-none">No tags on this scorecard</div>';
     } else {tagsHead='<b>Scorecard tags</b><span></span>';tags='<div class="ppl-none">No scorecard for '+pplDate(rns)+'</div>';}
     boxes+='<div class="ppl-bx"><div class="ppl-bh">'+tagsHead+'</div>'+note+tags+'</div>';
