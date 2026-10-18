@@ -8010,7 +8010,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
         latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
-      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom',star:(x.d.disc&&x.d.disc.rns)||null});
+      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
       /* EPS forecasts panel, on the price chart's date axis */
       if(DC.epsPanel&&window.PP_EPS){   /* EPS strip parked as a future idea: set window.PP_EPS=1 to show it */
         var all=x.d.px.concat(x.tail||[]);
