@@ -7837,6 +7837,27 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pmk{margin-top:14px;border-top:1px solid #2a2a38;padding-top:10px}
 #pp-mod .pmkh{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab5;margin-bottom:8px}
 #pp-mod .pmf a{color:#4a9eff;cursor:pointer;text-decoration:none}
+/* LATEST RNS BOXES - Disclosure + Scorecard tags under the chart (additive) */
+#pp-mod .ppl-bar{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #23232e;margin-top:14px;padding-top:12px}
+#pp-mod .ppl-bar h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9a9ab5;margin:0;font-weight:700}
+#pp-mod .ppl-bar span{color:#5a5a72;font-size:11px}
+#pp-mod .ppl-two{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;margin-top:10px}
+#pp-mod .ppl-two.one{grid-template-columns:1fr}
+#pp-mod .ppl-bx{background:#15151d;border:1px solid #262633;border-radius:9px;padding:12px 13px}
+#pp-mod .ppl-bh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+#pp-mod .ppl-bh b{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#c9c6d8}
+#pp-mod .ppl-bh small{color:#9a9ab5;font-size:10.5px;margin-left:6px;letter-spacing:0;text-transform:none}
+#pp-mod .ppl-bh span{color:#5a5a72;font-size:11px;text-align:right}
+#pp-mod .ppl-sc{background:#f5c542;color:#111;font-weight:700;font-size:11px;border-radius:10px;padding:1px 8px}
+#pp-mod .ppl-dl{display:flex;gap:9px;margin:0 0 9px;font-size:12.3px;line-height:1.42;color:#e8e8f0}
+#pp-mod .ppl-ic{font-weight:700;width:12px;flex:none;text-align:center}
+#pp-mod .ppl-sp{display:block;color:#6a6a82;font-size:11px;margin-top:1px}
+#pp-mod .ppl-tag{display:flex;gap:8px;margin-bottom:7px;font-size:12px;line-height:1.38}
+#pp-mod .ppl-pl{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.04em;border:1px solid;border-radius:4px;padding:1px 5px;height:15px;margin-top:1px;min-width:56px;text-align:center}
+#pp-mod .ppl-tt{color:#c9c6d8}
+#pp-mod .ppl-none{color:#6a6a82;font-size:12px}
+#pp-mod .ppl-new{color:#ffb020;font-size:11px;margin:-2px 0 8px}
+@media(max-width:760px){#pp-mod .ppl-two{grid-template-columns:1fr}}
 </style>
 <div id="pp-prev"></div>
 <div id="pp-ov"><div id="pp-mod"></div></div>
@@ -7891,6 +7912,50 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   }
   function hasAny(tk){return !!(driftOf(tk)&&driftOf(tk).chart)||!!(liteOf(tk)&&liteOf(tk).chart)||!!ccyOf(tk);}
   function liteOf(tk){var M=window.LITEMAP;return M&&M[tk]?M[tk]:null;}
+  /* ── Latest RNS boxes: Disclosure (from the chart file's disc) + Scorecard tags (live from ALL) ── */
+  var PPL_IC={'Went quiet':'⊘','Number to words':'⊘','Anchor softened':'⊘','Next-year view dropped':'⊘','Split withheld':'⊘',
+    'Skipped update':'⊘','Target dropped':'✕','Pushed out':'→','Restated':'↺','Demoted':'↓','Wording vs number':'~',
+    'New caution':'⚠','Back / new':'↑'};
+  var PPL_COL={red:'#ff4757',amber:'#ffb020',grey:'#9a9ab5',green:'#00d97e'};
+  var PPL_TAG={green:'#00d97e',amber:'#ffb020',red:'#ff4757'};
+  function pplIcon(type){if(PPL_IC[type])return PPL_IC[type];var k=Object.keys(PPL_IC).filter(function(n){return String(type||'').toLowerCase().indexOf(n.toLowerCase())===0;})[0];return k?PPL_IC[k]:'•';}
+  function pplDate(iso){var p=String(iso||'').split('-');return p.length===3?(+p[2]+' '+MON[+p[1]-1]+' '+p[0].slice(2)):esc(iso);}
+  function pplScore(s){return s>0?'+'+s:(s<0?'−'+Math.abs(s):'0');}
+  function latestBoxes(tk,x){
+    if(x.snap)return '';
+    var disc=x.d.disc||null, marks=x.d.marks||[];
+    var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;})
+      .sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
+    var newest=cards.length?cards[cards.length-1]:null;
+    var rns=disc?disc.rns:(marks.length?marks[marks.length-1].d:null);
+    if(!rns&&!newest)return '';
+    var mk=null;for(var i=marks.length-1;i>=0;i--){if(marks[i].d===rns){mk=marks[i];break;}}
+    var doc=(disc&&disc.doc)||(mk&&mk.doc)||'';
+    var h='<div class="ppl-bar"><h3>⭐ Latest RNS · '+esc(doc)+(doc?' · ':'')+pplDate(rns)+'</h3>'+
+      (mk?'<span>Text '+pplScore(mk.s)+' · '+(mk.g==='flat'?'flat':(mk.g==='RAISE'?'▲ raise':'▼ cut'))+'</span>':'')+'</div>';
+    var boxes='';
+    if(disc){
+      var lines=(disc.lines||[]).map(function(l){var c=PPL_COL[l.sev]||PPL_COL.grey;
+        return '<div class="ppl-dl"><span class="ppl-ic" style="color:'+c+'">'+pplIcon(l.type)+'</span><div><b style="color:'+c+'">'+esc(l.type)+'</b> '+esc(l.text)+
+          (l.span?'<span class="ppl-sp">'+esc(l.span)+'</span>':'')+'</div></div>';}).join('');
+      if(!lines)lines='<div class="ppl-none">No disclosure change vs '+esc(disc.vs||'the previous RNS')+'</div>';
+      boxes+='<div class="ppl-bx"><div class="ppl-bh"><b>Disclosure<small>⭐ '+esc(doc)+' · '+pplDate(rns)+'</small></b><span>'+esc(disc.vs?'vs '+disc.vs:'')+'</span></div>'+lines+'</div>';
+    }
+    /* tags: the scorecard on the disclosure's RNS date; a newer one wins, without the star */
+    var card=null,note='';
+    for(var j=cards.length-1;j>=0;j--){if(String(cards[j].date).slice(0,10)===rns){card=cards[j];break;}}
+    if(newest&&String(newest.date).slice(0,10)>String(rns||'')){card=newest;
+      note=disc?'<div class="ppl-new">Newer RNS '+pplDate(String(newest.date).slice(0,10))+' — disclosure updates tomorrow</div>':'';}
+    var tagsHead,tags;
+    if(card){var cd=String(card.date).slice(0,10),star=cd===rns?'⭐ ':'';
+      tagsHead='<b>Scorecard tags<small>'+star+esc(card.rnsType||'')+' · '+pplDate(cd)+'</small></b><span class="ppl-sc">'+esc(card.score)+'</span>';
+      tags=(card.signals||[]).map(function(sg){var c=PPL_TAG[sg.type]||'#9a9ab5';
+        return '<div class="ppl-tag"><span class="ppl-pl" style="color:'+c+';border-color:'+c+'66">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
+        '<div class="ppl-none">No tags on this scorecard</div>';
+    } else {tagsHead='<b>Scorecard tags</b><span></span>';tags='<div class="ppl-none">No scorecard for '+pplDate(rns)+'</div>';}
+    boxes+='<div class="ppl-bx"><div class="ppl-bh">'+tagsHead+'</div>'+note+tags+'</div>';
+    return h+'<div class="ppl-two'+(disc?'':' one')+'">'+boxes+'</div>';
+  }
   /* ── auto-refresh: Database stays open for days, so re-read the two small chart lists in the
      background (every 30 min, when the tab comes back into view, and when a hovered ticker has
      no chart yet). A ticker whose chart version changed is dropped from the cache and re-fetched. ── */
@@ -7944,8 +8009,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         '<span class="pmd">'+(x.snap?'':dirTag(x.drift))+'</span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
-        '<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
-      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
+        latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
+      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom',star:(x.d.disc&&x.d.disc.rns)||null});
       /* EPS forecasts panel, on the price chart's date axis */
       if(DC.epsPanel&&window.PP_EPS){   /* EPS strip parked as a future idea: set window.PP_EPS=1 to show it */
         var all=x.d.px.concat(x.tail||[]);
@@ -7966,7 +8031,9 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       try{
         if(typeof fcRenderInto==='function'&&typeof fcFetchFromExtractor==='function'){
           var fr=fcFetchFromExtractor(tk);
-          if(fr&&fr.length){fcStockData[tk]=fr;fcRenderInto('pp-fc',tk,'overview','ppfc-',PPFC);}
+          if(fr&&fr.length){fcStockData[tk]=fr;fcRenderInto('pp-fc',tk,'overview','ppfc-',PPFC);
+            /* popup only: drop the four-tile row (Revenue · EPS · Target · Net direction); the boxes above replace it */
+            var pf=document.getElementById('pp-fc'),sb=pf&&pf.firstElementChild;if(sb&&!sb.querySelector('canvas'))sb.remove();}
           else mod.querySelector('.pmk').style.display='none';
         } else mod.querySelector('.pmk').style.display='none';
       }catch(err){mod.querySelector('.pmk').style.display='none';}
