@@ -7937,7 +7937,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
       var last=x.d.px[x.d.px.length-1][0], foot;
       if(x.snap) foot='Weekly closes from ShareScope snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
-      else foot=(x.lite?'Drift-lite · ':'')+'Weekly closes to '+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
+      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'ShareScope weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
         (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
