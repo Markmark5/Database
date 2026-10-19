@@ -7833,6 +7833,11 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pmd{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 #pp-mod .pmx{cursor:pointer;color:#6a6a85;font-size:16px;margin-left:12px}
 #pp-mod .pmx:hover{color:#fff}
+/* 1Y / 3Y / 5Y range buttons above the popup chart */
+#pp-mod .pmr{display:flex;gap:4px;justify-content:flex-end;margin:-2px 0 4px}
+#pp-mod .pmr button{background:#15151d;border:1px solid #2a2a38;color:#9a9ab5;font:700 10px var(--mono,Inter,sans-serif);letter-spacing:.06em;padding:3px 10px;border-radius:4px;cursor:pointer}
+#pp-mod .pmr button:hover{color:#fff}
+#pp-mod .pmr button.on{color:#fff;border-color:#4a9eff;background:#16233a}
 #pp-mod .pmf{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:10px;color:#6a6a85;margin-top:8px}
 #pp-mod .pmk{margin-top:14px;border-top:1px solid #2a2a38;padding-top:10px}
 #pp-mod .pmkh{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a9ab5;margin-bottom:8px}
@@ -8007,10 +8012,27 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
         '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
-        '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
+        '<div class="pmr"></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
         latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
-      DC.render(mod.querySelector('.pmb'),x.d,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
+      /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
+      var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
+      var lastIso=(x.tail&&x.tail.length?x.tail[x.tail.length-1][0]:allPx[allPx.length-1][0]);
+      var spanYrs=(Date.parse(lastIso)-Date.parse(allPx[0][0]))/(365.25*864e5);
+      function drawRange(yrs){
+        var px=allPx;
+        if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
+          var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
+        var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
+        [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
+      }
+      if(spanYrs>1.3){
+        pmr.innerHTML=[1,3,5].map(function(y){return '<button data-y="'+y+'">'+y+'Y</button>';}).join('');
+        pmr.onclick=function(ev){var b=ev.target.closest&&ev.target.closest('button');if(!b)return;
+          window.PP_YRS=+b.getAttribute('data-y');drawRange(window.PP_YRS);};
+        drawRange(window.PP_YRS||5);
+      } else { pmr.style.display='none'; drawRange(0); }
       /* EPS forecasts panel, on the price chart's date axis */
       if(DC.epsPanel&&window.PP_EPS){   /* EPS strip parked as a future idea: set window.PP_EPS=1 to show it */
         var all=x.d.px.concat(x.tail||[]);
