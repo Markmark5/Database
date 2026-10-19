@@ -1,11 +1,11 @@
-# Calendar scrape - 2026-10-16
+# Calendar scrape - 2026-10-19
 
-**143 sources · 21 events staged for approval**
+**143 sources · 23 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 78 | read OK, upcoming events found |
-| EMPTY | 53 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 79 | read OK, upcoming events found |
+| EMPTY | 52 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
@@ -27,7 +27,6 @@
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
-- RHI Magnesita (RHIM) - http 200, http - https://ir.rhimagnesita.com/investors-old/events-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
