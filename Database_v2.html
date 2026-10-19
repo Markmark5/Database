@@ -7895,12 +7895,12 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   /* resolves to {d:chartData, tail, drift} or null */
   function getData(tk){
     if(CACHE[tk])return CACHE[tk];
-    var t=driftOf(tk), L=liteOf(tk), p, path=(t&&t.chart)?t.chart:(L&&L.chart?L.chart:null);
+    var t=driftOf(tk), L=liteOf(tk), p, path=(L&&L.chart)?L.chart:null;   /* Drift-lite only: Drift dashboards are separate */
     /* full Drift build first, then Drift-lite, then plain weekly snapshots */
     if(path){
       p=fetch(BASE+path).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
         if(DC.validate(d).length)throw 0;
-        return {d:d,tail:DC.parseTail(rows4(),tk,d.ccy,d.px[d.px.length-1][0]),drift:t,lite:!(t&&t.chart)};
+        return {d:d,tail:DC.parseTail(rows4(),tk,d.ccy,d.px[d.px.length-1][0]),drift:t,lite:true};
       }).catch(function(){return snap(tk,t);});
     } else p=Promise.resolve(snap(tk,t));
     CACHE[tk]=p; return p;
@@ -7910,7 +7910,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     var px=DC.parseTail(rows4(),tk,c,null); if(px.length<2)return null;
     return {d:{ticker:tk,v:'rows4',ccy:c,px:px,marks:[]},tail:[],drift:t,snap:true};
   }
-  function hasAny(tk){return !!(driftOf(tk)&&driftOf(tk).chart)||!!(liteOf(tk)&&liteOf(tk).chart)||!!ccyOf(tk);}
+  function hasAny(tk){return !!(liteOf(tk)&&liteOf(tk).chart)||!!ccyOf(tk);}
   function liteOf(tk){var M=window.LITEMAP;return M&&M[tk]?M[tk]:null;}
   /* ── Latest RNS boxes: Disclosure (from the chart file's disc) + Scorecard tags (live from ALL) ── */
   var PPL_IC={'Went quiet':'⊘','Number to words':'⊘','Anchor softened':'⊘','Next-year view dropped':'⊘','Split withheld':'⊘',
@@ -7960,7 +7960,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
      background (every 30 min, when the tab comes back into view, and when a hovered ticker has
      no chart yet). A ticker whose chart version changed is dropped from the cache and re-fetched. ── */
   var IDXT=0;
-  function chartKey(tk){var t=driftOf(tk),L=liteOf(tk);return (t&&t.chart)||(L&&L.chart)||'';}
+  function chartKey(tk){var L=liteOf(tk);return (L&&L.chart)||'';}
   function refreshIdx(){
     IDXT=Date.now();
     var before={};Object.keys(CACHE).forEach(function(k){before[k]=chartKey(k);});
@@ -8006,7 +8006,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
-        '<span class="pmd">'+(x.snap?'':dirTag(x.drift))+'</span><span class="pmx" title="Close (Esc)">✕</span></div>'+
+        '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
         latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
