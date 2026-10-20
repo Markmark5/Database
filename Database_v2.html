@@ -8027,6 +8027,9 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     for(var j=cards.length-1;j>=0;j--){if(String(cards[j].date).slice(0,10)===rns){card=cards[j];break;}}
     if(newest&&String(newest.date).slice(0,10)>String(rns||'')){card=newest;
       note=disc?'<div class="ppl-new">Newer RNS '+pplDate(String(newest.date).slice(0,10))+' — disclosure updates tomorrow</div>':'';}
+    /* no scorecard for the disclosure's RNS (e.g. a bidder's offer document): show the latest earlier one */
+    if(!card&&newest){card=newest;
+      note='<div class="ppl-new" style="color:#9a9ab5">No scorecard for '+pplDate(rns)+' — showing the latest, '+pplDate(String(newest.date).slice(0,10))+'</div>';}
     var tagsHead,tags;
     if(card){var cd=String(card.date).slice(0,10),star=cd===rns?'⭐ ':'';
       tagsHead='<b>Scorecard tags<small>'+star+esc(card.rnsType||'')+' · '+pplDate(cd)+'</small></b><span class="ppl-sc">'+esc(card.score)+'</span>';
