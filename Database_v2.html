@@ -7862,6 +7862,16 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-tt{color:#c9c6d8}
 #pp-mod .ppl-none{color:#6a6a82;font-size:12px}
 #pp-mod .ppl-new{color:#ffb020;font-size:11px;margin:-2px 0 8px}
+#pp-mod .ppl-ss{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 0 9px;margin:0 0 10px;border-bottom:1px solid #23232e;font-size:12.3px;color:#e8e8f0}
+#pp-mod .ppl-ch{white-space:nowrap;cursor:default;border-bottom:1px dotted transparent}
+#pp-mod .ppl-ch:hover{border-bottom-color:#5a5a72}
+#pp-mod .ppl-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1;vertical-align:-3px}
+#pp-mod .ppl-ring.r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
+#pp-mod .ppl-ring.r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
+#pp-mod .ppl-two.one{grid-template-columns:minmax(0,600px)}
+#ppl-tip{position:fixed;pointer-events:none;z-index:100000;display:none;max-width:300px;padding:7px 9px;border-radius:4px;font:11px/1.45 Inter,system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.35);background:#1b1b25;color:#f2f2f8;border:1px solid #3a3a50}
+#ppl-tip .q{margin-top:4px;opacity:.85;font-style:italic}
+#ppl-tip .s{margin-top:4px;color:#8a8aa5}
 @media(max-width:760px){#pp-mod .ppl-two{grid-template-columns:1fr}}
 </style>
 <div id="pp-prev"></div>
@@ -7926,12 +7936,77 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   function pplIcon(type){if(PPL_IC[type])return PPL_IC[type];var k=Object.keys(PPL_IC).filter(function(n){return String(type||'').toLowerCase().indexOf(n.toLowerCase())===0;})[0];return k?PPL_IC[k]:'•';}
   function pplDate(iso){var p=String(iso||'').split('-');return p.length===3?(+p[2]+' '+MON[+p[1]-1]+' '+p[0].slice(2)):esc(iso);}
   function pplScore(s){return s>0?'+'+s:(s<0?'−'+Math.abs(s):'0');}
+  /* ── Signal strip (top of Scorecard tags): the calendar's icons, read from the same scorecard —
+     ▲ ahead of forecasts (calData, quote on hover) · 📈/📉 vs seasonal and 🔥 H2 (h1Inds) ·
+     🔬 hypothetical (blue ring H1, orange ring H2) · 📈🔥 double · 🚀 FC Growth Acc (accelInds) ── */
+  function sigPP(d){d=String(d||'').replace(/−/g,'-');if(/%/.test(d))return null;var m=d.match(/([+-]?\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):null;}
+  function sigH1Before(cards,card){
+    var cd=String(card.date).slice(0,10),lim=new Date(cd+'T00:00:00Z');lim.setUTCDate(lim.getUTCDate()-273);lim=lim.toISOString().slice(0,10);
+    for(var j=cards.length-1;j>=0;j--){var c=cards[j],d=String(c.date||'').slice(0,10);if(d>=cd||d<lim)continue;
+      var ii=(c.h1Inds||[]);for(var k=0;k<ii.length;k++){var i=ii[k];if(/H2/i.test(i.lbl||''))continue;
+        var hyp=/🔬/.test((i.mark||'')+(i.dev||'')),v=sigPP(i.dev);
+        if((!hyp&&i.state==='pos')||(hyp&&v!==null&&v>=1.5))return {c:c,i:i};}}
+    return null;
+  }
+  function pplSignals(card,cards){
+    if(!card)return '';
+    var out=[],src='<div class="s">'+esc(card.rnsType||'')+' · '+pplDate(String(card.date).slice(0,10))+'</div>';
+    var chip=function(icon,label,col,tip){return '<span class="ppl-ch" data-ppl-tip="'+esc(tip)+'">'+icon+' '+(col?'<b style="color:'+col+'">'+label+'</b>':label)+'</span>';};
+    var cal=card.calData||{};
+    if(cal.beat)out.push(chip('▲','Ahead of forecasts',PPL_COL.green,'<b>Ahead of forecasts at this update</b>'+(cal.beatPhrase?'<div class="q">“'+esc(cal.beatPhrase)+'”</div>':'')+src));
+    var t=String(card.rnsType||'').toUpperCase(),per=/\bQ1\b/.test(t)?'Q1':(/\bQ3\b/.test(t)?'YTD':'H1');
+    (card.h1Inds||[]).forEach(function(i){
+      var v=sigPP(i.dev);if(v===null)return;
+      var lbl=String(i.lbl||'').toUpperCase().replace(/🔬/g,''),h2=/H2/.test(lbl),name=/^REV/.test(lbl)?'Rev':'EPS';
+      var hyp=/🔬/.test((i.mark||'')+(i.dev||'')+(i.lbl||''));
+      var num=(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'pp',icon='',col=PPL_COL.grey,word,text;
+      if(h2){text='H2 '+name+' '+num;
+        if(v>0){icon='🔥';col=PPL_COL.green;word='H2 '+name.toLowerCase()+' growth accelerating vs last H2';
+          var e=cal.double===false?null:sigH1Before(cards,card);
+          if(e){icon='📈🔥';word='Double: H1 ahead earlier ('+esc(e.c.rnsType||'')+' '+pplDate(String(e.c.date).slice(0,10))+', '+esc(e.i.lbl||'')+' '+esc(e.i.dev||'')+'), '+word;}}
+        else{col=v<=-10?PPL_COL.red:(v<=-3?PPL_COL.amber:PPL_COL.grey);word='H2 '+name.toLowerCase()+' growth slower than last H2';}
+      } else {text=per+' '+name+' '+num;
+        if(Math.abs(v)<2)word=per+' '+name.toLowerCase()+' in line with seasonal';
+        else if(v>0){icon='📈';col=PPL_COL.green;word=per+' '+name.toLowerCase()+' ahead of seasonal';}
+        else{icon='📉';col=v<=-5?PPL_COL.red:PPL_COL.amber;word=per+' '+name.toLowerCase()+' behind seasonal';}
+      }
+      if(hyp){icon='<span class="ppl-ring '+(h2?'r2':'r1')+'">🔬</span>';word+=' — hypothetical';}
+      out.push(chip(icon,text,col,'<b>'+word+'</b><div>'+num+(h2?' vs last H2 growth':' vs the company’s usual seasonal share')+'</div>'+src));
+    });
+    var acc=(card.accelInds||[]).filter(function(i){return i.state==='pos';}).map(function(i){return /^REV/i.test(i.lbl||'')?'Rev':'EPS';});
+    if(acc.length)out.push(chip('🚀','FC Growth Acc '+acc.join('/'),'','<b>FC Growth Acc</b><div>Forecast growth this year faster than last year’s growth ('+acc.join(', ')+')</div>'+src));
+    return out.length?'<div class="ppl-ss">'+out.join('')+'</div>':'';
+  }
+  (function(){
+    var tip=null;
+    document.addEventListener('mousemove',function(e){
+      var c=e.target&&e.target.closest?e.target.closest('[data-ppl-tip]'):null;
+      if(!c){if(tip)tip.style.display='none';return;}
+      if(!tip){tip=document.createElement('div');tip.id='ppl-tip';document.body.appendChild(tip);}
+      tip.innerHTML=c.getAttribute('data-ppl-tip');tip.style.display='block';
+      var x=e.clientX+14,y=e.clientY+14,w=tip.offsetWidth,h=tip.offsetHeight;
+      if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;
+      tip.style.left=x+'px';tip.style.top=y+'px';
+    });
+    var hide=function(){if(tip)tip.style.display='none';};
+    ['mousedown','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,hide,true);});
+    window.addEventListener('scroll',hide,true);
+  })();
   function latestBoxes(tk,x){
-    if(x.snap)return '';
-    var disc=x.d.disc||null, marks=x.d.marks||[];
+    var disc=x.snap?null:(x.d.disc||null), marks=x.snap?[]:(x.d.marks||[]);
     var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;})
       .sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
     var newest=cards.length?cards[cards.length-1]:null;
+    if(x.snap){   /* no chart yet: the latest scorecard's tags box only */
+      if(!newest)return '';
+      var nd=String(newest.date).slice(0,10);
+      var ntags=(newest.signals||[]).map(function(sg){
+        return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
+        '<div class="ppl-none">No tags on this scorecard</div>';
+      return '<div class="ppl-bar"><h3>Latest scorecard · '+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</h3></div><div class="ppl-two one">'+
+        '<div class="ppl-bx"><div class="ppl-bh"><b>Scorecard tags<small>'+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</small></b><span class="ppl-sc">'+esc(newest.score)+'</span></div>'+
+        pplSignals(newest,cards)+ntags+'</div></div>';
+    }
     var rns=disc?disc.rns:(marks.length?marks[marks.length-1].d:null);
     if(!rns&&!newest)return '';
     var mk=null;for(var i=marks.length-1;i>=0;i--){if(marks[i].d===rns){mk=marks[i];break;}}
@@ -7958,7 +8033,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
         '<div class="ppl-none">No tags on this scorecard</div>';
     } else {tagsHead='<b>Scorecard tags</b><span></span>';tags='<div class="ppl-none">No scorecard for '+pplDate(rns)+'</div>';}
-    boxes+='<div class="ppl-bx"><div class="ppl-bh">'+tagsHead+'</div>'+note+tags+'</div>';
+    boxes+='<div class="ppl-bx"><div class="ppl-bh">'+tagsHead+'</div>'+note+pplSignals(card,cards)+tags+'</div>';
     return h+'<div class="ppl-two'+(disc?'':' one')+'">'+boxes+'</div>';
   }
   /* ── auto-refresh: Database stays open for days, so re-read the two small chart lists in the
