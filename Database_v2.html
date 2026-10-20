@@ -7865,6 +7865,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-ss{display:flex;flex-wrap:wrap;gap:6px 14px;padding:0 0 9px;margin:0 0 10px;border-bottom:1px solid #23232e;font-size:12.3px;color:#e8e8f0}
 #pp-mod .ppl-ch{white-space:nowrap;cursor:default;border-bottom:1px dotted transparent}
 #pp-mod .ppl-ch:hover{border-bottom-color:#5a5a72}
+#pp-mod .ppl-x{color:#ff4757;font-weight:700}
 #pp-mod .ppl-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1;vertical-align:-3px}
 #pp-mod .ppl-ring.r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
 #pp-mod .ppl-ring.r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
@@ -7964,11 +7965,11 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         if(v>0){icon='🔥';col=PPL_COL.green;word='H2 '+name.toLowerCase()+' growth accelerating vs last H2';
           var e=cal.double===false?null:sigH1Before(cards,card);
           if(e){icon='📈🔥';word='Double: H1 ahead earlier ('+esc(e.c.rnsType||'')+' '+pplDate(String(e.c.date).slice(0,10))+', '+esc(e.i.lbl||'')+' '+esc(e.i.dev||'')+'), '+word;}}
-        else{col=v<=-10?PPL_COL.red:(v<=-3?PPL_COL.amber:PPL_COL.grey);word='H2 '+name.toLowerCase()+' growth slower than last H2';}
+        else{col=v<=-10?PPL_COL.red:(v<=-3?PPL_COL.amber:PPL_COL.grey);if(i.state==='neg'||v<=-3)icon='<span class="ppl-x">✕</span>';word='H2 '+name.toLowerCase()+' growth slower than last H2';}
       } else {text=per+' '+name+' '+num;
         if(Math.abs(v)<2)word=per+' '+name.toLowerCase()+' in line with seasonal';
         else if(v>0){icon='📈';col=PPL_COL.green;word=per+' '+name.toLowerCase()+' ahead of seasonal';}
-        else{icon='📉';col=v<=-5?PPL_COL.red:PPL_COL.amber;word=per+' '+name.toLowerCase()+' behind seasonal';}
+        else{icon='<span class="ppl-x">✕</span>';col=v<=-5?PPL_COL.red:PPL_COL.amber;word=per+' '+name.toLowerCase()+' behind seasonal';}
       }
       if(hyp){icon='<span class="ppl-ring '+(h2?'r2':'r1')+'">🔬</span>';word+=' — hypothetical';}
       out.push(chip(icon,text,col,'<b>'+word+'</b><div>'+num+(h2?' vs last H2 growth':' vs the company’s usual seasonal share')+'</div>'+src));
