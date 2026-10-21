@@ -8169,7 +8169,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   prev.addEventListener('mouseenter',function(){clearTimeout(HIDE);});
   prev.addEventListener('mouseleave',function(){clearTimeout(HIDE);HIDE=setTimeout(hidePrev,150);});
   /* click/tap the ticker: chart instead of expanding the row (rest of the row still expands) */
-  window.PPGET=getData;   /* used by the Cycles popup */
+  window.PPGET=getData; window.PPSCORES=scoresFor;   /* used by the Cycles popup */
   document.addEventListener('click',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
     if(!el)return; var tk=tkOf(el); if(!hasAny(tk))return;
@@ -8607,7 +8607,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-n{color:#9a9ab5}
 .cyc-pill{margin-left:auto;font-size:11px;font-weight:700;border:1px solid;border-radius:10px;padding:1px 9px}
 .cyc-sub{color:#9a9ab5;font-size:11.5px;margin:4px 0}
-.cyc-ch{min-height:110px}
+.cyc-ch{min-height:110px;position:relative}
 .cyc-none{color:#6a6a85;font-size:12px;padding:10px 0 8px;font-style:italic}
 </style>
 <div id="cyc-ov" onclick="if(event.target===this)cycClose()"><div class="cyc-pop">
@@ -8653,33 +8653,38 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       document.getElementById('cyc-note').innerHTML=(bad?'<b style="color:#ffb020">'+bad+' of 6 sheets did not load</b> · ':'')+
         'Live from the ShareScope sheets · mid-week regimes are provisional until Friday\'s close · '+
         '<span style="color:#9a9ab5">— 10w</span> <span style="color:#4a9eff">— 20w</span> <span style="color:#c77dff">— 40w</span> · '+
-        'sorted by 20w strength, charted first · click a ticker for its full chart';
+        'sorted by 20w strength, charted first · hover a print for its quote · click a ticker for its full chart';
       draw();
     }).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
   }
   function lite(tk){var M=window.LITEMAP;return !!(M&&M[tk]&&M[tk].chart);}
   function ma(px,j,w){if(j<w-1)return null;var s=0;for(var k=j-w+1;k<=j;k++)s+=px[k][1];return s/w;}
-  function svg(x){
-    var px=(x.d.px||[]).concat(x.tail||[]).filter(function(a){return a&&a[1]>0;});
-    if(px.length<12)return '<div class="cyc-none">Not enough weekly prices for a chart</div>';
-    var s0=Math.max(0,px.length-130),W=1100,H=250,L=8,R=54,Tp=10,B=22;
-    var P=px.slice(s0).map(function(a){return a[1];}),lo=Math.min.apply(null,P),hi=Math.max.apply(null,P),pad=(hi-lo)*.06||1;lo-=pad;hi+=pad;
-    function X(i){return L+(i-s0)/Math.max(1,px.length-1-s0)*(W-L-R);} function Y(p){return Tp+(hi-p)/(hi-lo)*(H-Tp-B);}
-    var o='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  /* same chart as the ticker click (DriftChart: 5 years, Text + G prints with the hover quotes, score badges),
+     plus the 10/20/40-week MA lines laid under the price line */
+  function chart(el,tk,x){
+    var DC=window.DriftChart;
+    if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
+    var sc=window.PPSCORES?window.PPSCORES(tk):[];
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:x.tail,scores:sc,scoreLane:x.snap?null:'bottom'});
+    var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
+    var px=(x.d.px||[]).concat(x.tail||[]);
+    if(!line||px.length<12)return;
+    /* the price line's own points give the chart's date/price scale */
+    var P=line.getAttribute('points').trim().split(/\s+/).map(function(s){return s.split(',').map(Number);}), dp=x.d.px;
+    if(P.length!==dp.length||P.length<2)return;
+    var t=function(iso){return Date.parse(iso+'T00:00:00Z');}, n=P.length-1;
+    var ax=(P[n][0]-P[0][0])/((t(dp[n][0])-t(dp[0][0]))||1), bx=P[0][0]-ax*t(dp[0][0]);
+    var j=0;for(var k=1;k<=n;k++)if(Math.abs(dp[k][1]-dp[0][1])>Math.abs(dp[j][1]-dp[0][1]))j=k;
+    if(!j)return;
+    var ay=(P[j][1]-P[0][1])/(dp[j][1]-dp[0][1]), by=P[0][1]-ay*dp[0][1], NS='http://www.w3.org/2000/svg';
+    var area=svg.querySelector('polygon');
     [[10,'#9a9ab5',0.6],[20,'#4a9eff',0.8],[40,'#c77dff',1.1]].forEach(function(z){var pts=[];
-      for(var i=s0;i<px.length;i++){var v=ma(px,i,z[0]);if(v!=null)pts.push(X(i).toFixed(1)+','+Y(v).toFixed(1));}
-      if(pts.length>1)o+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+z[1]+'" stroke-width="'+z[2]+'" opacity=".9"/>';});
-    o+='<polyline points="'+px.slice(s0).map(function(a,k){return X(s0+k).toFixed(1)+','+Y(a[1]).toFixed(1);}).join(' ')+'" fill="none" stroke="#e8e8f0" stroke-width="1.6"/>';
-    var day={};
-    (x.d.marks||[]).forEach(function(m){if(!m||!m.d||day[m.d])return;day[m.d]=1;
-      var i=-1;for(var k=0;k<px.length;k++)if(px[k][0]>=m.d){i=k;break;} if(i<0)i=px.length-1; if(i<s0)return;
-      var cx=X(i).toFixed(1),cy=Y(px[i][1]),s=+m.s||0,g=m.g||'',tip=esc(m.d+' '+(m.doc||'')+' · Text '+(s>0?'+':'')+s+' · G '+g);
-      if(g=='RAISE'||g=='CUT'){var up=g=='RAISE';o+='<polygon points="'+cx+','+(up?cy-9:cy+9)+' '+(cx-6)+','+(up?cy+4:cy-4)+' '+(+cx+6)+','+(up?cy+4:cy-4)+'" fill="'+(up?'#00d97e':'#ff4757')+'" stroke="#0d0d16"><title>'+tip+'</title></polygon>';}
-      else if(!s)o+='<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#15151d" stroke="#c9c6d8" stroke-width="1.2"><title>'+tip+'</title></circle>';
-      else o+='<circle cx="'+cx+'" cy="'+cy+'" r="5.5" fill="'+(s>0?'#00d97e':'#ff4757')+'" stroke="#0d0d16"><title>'+tip+'</title></circle>';});
-    for(var i=Math.max(1,s0);i<px.length;i++)if(String(px[i][0]).slice(5,7)=='01'&&String(px[i-1][0]).slice(5,7)!='01')
-      o+='<text x="'+X(i)+'" y="'+(H-6)+'" font-size="10" fill="#6a6a85">'+String(px[i][0]).slice(0,4)+'</text>';
-    return o+'<text x="'+(W-R+4)+'" y="'+(Tp+8)+'" font-size="10" fill="#6a6a85">'+(hi-pad).toFixed(1)+'</text><text x="'+(W-R+4)+'" y="'+(H-B)+'" font-size="10" fill="#6a6a85">'+(lo+pad).toFixed(1)+'</text></svg>';
+      for(var i=0;i<px.length;i++){var v=ma(px,i,z[0]);if(v!=null)pts.push((ax*t(px[i][0])+bx).toFixed(1)+','+(ay*v+by).toFixed(1));}
+      if(pts.length<2)return;
+      var pl=document.createElementNS(NS,'polyline');
+      pl.setAttribute('points',pts.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke',z[1]);
+      pl.setAttribute('stroke-width',z[2]);pl.setAttribute('opacity','.9');pl.style.pointerEvents='none';
+      svg.insertBefore(pl,area||line);});
   }
   function pc(v){return v==null?'–':(v>0?'+':'')+v.toFixed(2)+'%';}
   function ar(v){return '<b style="color:'+(v>0?'#00d97e':'#ff4757')+'">'+(v>0?'↑':'↓')+'</b>';}
@@ -8701,7 +8706,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(IO)IO.disconnect();
     IO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;IO.unobserve(el);
       var get=window.PPGET; if(!get){el.innerHTML='<div class="cyc-none">Chart unavailable</div>';return;}
-      get(el.dataset.t).then(function(x){el.innerHTML=x?svg(x):'<div class="cyc-none">No weekly prices stored yet</div>';})
+      get(el.dataset.t).then(function(x){chart(el,el.dataset.t,x);})
         .catch(function(){el.innerHTML='<div class="cyc-none">Chart unavailable</div>';});});},{root:box,rootMargin:'600px'});
     box.querySelectorAll('.cyc-ch').forEach(function(el){IO.observe(el);});
   }
