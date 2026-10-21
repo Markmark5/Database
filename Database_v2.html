@@ -1232,7 +1232,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
     <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
     <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
     <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
-    <button class="db-actbtn" onclick="cycOpen()" style="background:#00140a;color:#00d97e;border:1px solid #00d97e55;" title="Cycles: 10/20/40-week moving-average regimes, live"><span class="bi">&#128690;</span>Cycles</button>
+    <button class="db-actbtn" onclick="cycOpen()" style="background:#00140a;color:#00d97e;border:1px solid #00d97e55;" title="Cycles: 10/20/40-week moving-average regimes, live"><span class="bi" style="font-size:18px">&#128690;</span>Cycles</button>
     <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/PwaQPjo3LcFvGWqWAHXDjw','_blank','noopener')" style="background:#001a1a;color:#2ad4c8;border:1px solid #2ad4c855;" title="Morning sweep (opens in a new tab)"><span class="bi">&#129529;</span>Sweep</button>
   </div>
 </nav>
@@ -8621,7 +8621,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
   var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
   var COL={'BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
-  var D=null, T=0, cur='BULL', chartsOnly=false, q='', IO=null;
+  var D=null, T=0, cur='BULL', chartsOnly=false, q='', IO=null, sortBy='tg';
   function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function csv(t){var R=[],r=[],f='',i=0,Q=false;
@@ -8653,7 +8653,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       document.getElementById('cyc-note').innerHTML=(bad?'<b style="color:#ffb020">'+bad+' of 6 sheets did not load</b> · ':'')+
         'Live from the ShareScope sheets · mid-week regimes are provisional until Friday\'s close · '+
         '<span style="color:#9a9ab5">— 10w</span> <span style="color:#4a9eff">— 20w</span> <span style="color:#c77dff">— 40w</span> · '+
-        'sorted by 20w strength, charted first · hover a print for its quote · click a ticker for its full chart';
+        'hover a print for its quote · click a ticker for its full chart';
       draw();
     }).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
   }
@@ -8688,15 +8688,26 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   }
   function pc(v){return v==null?'–':(v>0?'+':'')+v.toFixed(2)+'%';}
   function ar(v){return '<b style="color:'+(v>0?'#00d97e':'#ff4757')+'">'+(v>0?'↑':'↓')+'</b>';}
+  /* Text + G over the last 12 months, from lite-index "tg" ("date,Text,G;…"): each print = Text + G (+1 RAISE / -1 CUT) */
+  function tg12(tk){var M=window.LITEMAP, s=M&&M[tk]&&M[tk].tg; if(!s)return null;
+    var c=new Date(Date.now()-365*864e5).toISOString().slice(0,10), sum=0, n=0;
+    s.split(';').forEach(function(p){var a=p.split(',');if(a[0]>=c){sum+=(+a[1]||0)+(+a[2]||0);n++;}});
+    return n?{s:sum,n:n}:null;}
   function list(){return D.filter(function(d){return d.r==cur&&(!chartsOnly||lite(d.t))&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
-    .sort(function(a,b){return (lite(b.t)-lite(a.t))||(b.m[1]-a.m[1]);});}
+    .sort(function(a,b){
+      if(sortBy=='tg'){var x=tg12(a.t), y=tg12(b.t);   /* scored tickers first, best 12-month Text + G first */
+        if(!!y-!!x)return !!y-!!x; if(x&&y&&y.s!==x.s)return y.s-x.s;}
+      return (lite(b.t)-lite(a.t))||(b.m[1]-a.m[1]);});}
+  function tgTag(tk){var g=tg12(tk); if(!g)return '';
+    return ' · <b style="color:'+(g.s>0?'#00d97e':g.s<0?'#ff4757':'#9a9ab5')+'">Text + G 12m '+(g.s>0?'+':'')+g.s+'</b> ('+g.n+' print'+(g.n>1?'s':'')+')';}
   function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
     '<span class="cyc-pill" style="color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
     '<div class="cyc-sub">10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
-    ' · price '+esc(d.p)+' '+pc(d.d)+' today'+(d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+'</div>'+
+    ' · price '+esc(d.p)+' '+pc(d.d)+' today'+(d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t)+'</div>'+
     '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
   function bar(){return ORDER.map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
-    '<label><input type="checkbox" id="cyc-co"> Charted only</label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
+    '<label><input type="checkbox" id="cyc-co"> Charted only</label>'+
+    '<label>Sort <select id="cyc-sort" class="cyc-q" style="width:auto"><option value="tg">Text + G, last 12 months</option><option value="ma">20w MA strength</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
   function draw(){
     if(!D)return; var L=list();
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
@@ -8716,6 +8727,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
       document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
+      document.getElementById('cyc-sort').onchange=function(){sortBy=this.value;draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
