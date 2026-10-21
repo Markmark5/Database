@@ -1232,6 +1232,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
     <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
     <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
     <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
+    <button class="db-actbtn" onclick="cycOpen()" style="background:#00140a;color:#00d97e;border:1px solid #00d97e55;" title="Cycles: 10/20/40-week moving-average regimes, live"><span class="bi">&#128260;</span>Cycles</button>
     <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/PwaQPjo3LcFvGWqWAHXDjw','_blank','noopener')" style="background:#001a1a;color:#2ad4c8;border:1px solid #2ad4c855;" title="Morning sweep (opens in a new tab)"><span class="bi">&#129529;</span>Sweep</button>
   </div>
 </nav>
@@ -8168,6 +8169,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   prev.addEventListener('mouseenter',function(){clearTimeout(HIDE);});
   prev.addEventListener('mouseleave',function(){clearTimeout(HIDE);HIDE=setTimeout(hidePrev,150);});
   /* click/tap the ticker: chart instead of expanding the row (rest of the row still expands) */
+  window.PPGET=getData;   /* used by the Cycles popup */
   document.addEventListener('click',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
     if(!el)return; var tk=tkOf(el); if(!hasAny(tk))return;
@@ -8580,6 +8582,145 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 })();
 </script>
 <!-- ═══ END RNS CALENDAR ═══ -->
+
+
+<!-- ── CYCLES: 10/20/40-week MA regimes, live from the 6 ShareScope sheets (data/cycles_urls.json) ── -->
+<style>
+#cyc-ov{position:fixed;inset:0;z-index:8500;background:#000c;display:none;align-items:flex-start;justify-content:center;padding:28px 16px}
+#cyc-ov.on{display:flex}
+.cyc-pop{background:#0a0a0a;border:1px solid #3a3a50;border-radius:10px;width:min(1180px,100%);max-height:calc(100vh - 56px);display:flex;flex-direction:column}
+.cyc-top{padding:14px 18px 10px;border-bottom:1px solid #2a2a38}
+.cyc-top h2{margin:0 0 10px;font-size:16px;display:flex;align-items:center;gap:8px;color:#f2f2f8}
+.cyc-x{margin-left:auto;cursor:pointer;color:#9a9ab5;font-size:16px}
+.cyc-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cyc-btn{background:#111;color:var(--c);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);border-radius:16px;padding:5px 12px;font:600 12px Inter,sans-serif;cursor:pointer}
+.cyc-btn i{font-style:normal;color:#9a9ab5;font-weight:500;margin-left:4px}
+.cyc-btn.on{background:color-mix(in srgb,var(--c) 18%,#000);border-color:var(--c)}
+.cyc-bar label{color:#9a9ab5;font-size:12px;margin-left:8px;display:flex;align-items:center;gap:4px}
+.cyc-q{background:#111;border:1px solid #2a2a38;color:#f2f2f8;border-radius:6px;padding:5px 9px;font-size:12px;width:170px}
+.cyc-cnt{color:#6a6a85;font-size:12px;margin-left:auto}
+.cyc-note{color:#6a6a85;font-size:11.5px;margin:8px 0 0}
+#cyc-list{overflow:auto;padding:0 18px 12px}
+.cyc-card{background:#0f0f15;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px 6px;margin:10px 0}
+.cyc-h{display:flex;gap:10px;align-items:baseline}
+.cyc-h .ticker-sym{font-size:17px;font-weight:700;color:#f2f2f8;cursor:pointer}
+.cyc-n{color:#9a9ab5}
+.cyc-pill{margin-left:auto;font-size:11px;font-weight:700;border:1px solid;border-radius:10px;padding:1px 9px}
+.cyc-sub{color:#9a9ab5;font-size:11.5px;margin:4px 0}
+.cyc-ch{min-height:110px}
+.cyc-none{color:#6a6a85;font-size:12px;padding:10px 0 8px;font-style:italic}
+</style>
+<div id="cyc-ov" onclick="if(event.target===this)cycClose()"><div class="cyc-pop">
+  <div class="cyc-top"><h2>&#128260; Cycles <span style="font-size:12px;font-weight:400;color:#6a6a85">10 / 20 / 40-week moving averages, each vs last week</span><span class="cyc-x" onclick="cycClose()">&#10005;</span></h2>
+    <div class="cyc-bar" id="cyc-bar"></div>
+    <div class="cyc-note" id="cyc-note"></div></div>
+  <div id="cyc-list"></div>
+</div></div>
+<script>
+(function(){
+  var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
+  var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
+  var COL={'BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
+  var D=null, T=0, cur='BULL', chartsOnly=false, q='', IO=null;
+  function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function csv(t){var R=[],r=[],f='',i=0,Q=false;
+    for(;i<t.length;i++){var c=t[i];
+      if(Q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++;}else Q=false;}else f+=c;}
+      else if(c=='"')Q=true; else if(c==','){r.push(f);f='';}
+      else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;r.push(f);R.push(r);r=[];f='';}
+      else f+=c;}
+    if(f||r.length){r.push(f);R.push(r);}return R;}
+  function num(s){s=String(s||'').trim().replace(/,/g,'');if(!s)return null;var v=parseFloat(s.replace(/^[££$]/,'').replace(/[p¢%]$/,''));return isNaN(v)?null:v;}
+  /* regime from the three weekly %chg columns: up = above last week's value */
+  function reg(m){var u=m.map(function(v){return v>0;});
+    if(u[1]&&u[2])return u[0]?'BULL':'PULLBACK BULL'; if(u[1])return 'EARLY BULL'; if(u[2])return 'EARLY BEAR';
+    return u[0]?'PULLBACK BEAR':'BEAR';}
+  function load(){
+    T=Date.now();
+    document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
+    return fetch(URLS+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(urls){
+      return Promise.all(urls.filter(Boolean).map(function(u){
+        return fetch(u+(u.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});}));
+    }).then(function(txts){
+      var seen={},out=[],bad=0;
+      txts.forEach(function(t){if(!t){bad++;return;}
+        csv(t).slice(1).forEach(function(x){   /* columns by position: A TIDM, B Name, I Price, J % from Close, K-M 10/20/40 %chg 1w, N 30w %chg 4w */
+          var tk=String(x[0]||'').trim().toUpperCase(); if(!tk||tk.indexOf('#')>=0||seen[tk])return;   /* "#1" = old/delisted line */
+          var m=[num(x[10]),num(x[11]),num(x[12])]; if(m.some(function(v){return v===null;}))return;
+          seen[tk]=1; out.push({t:tk,n:x[1]||'',p:String(x[8]||'').trim(),d:num(x[9]),m:m,m30:num(x[13]),r:reg(m)});});});
+      D=out;
+      document.getElementById('cyc-note').innerHTML=(bad?'<b style="color:#ffb020">'+bad+' of 6 sheets did not load</b> · ':'')+
+        'Live from the ShareScope sheets · mid-week regimes are provisional until Friday\'s close · '+
+        '<span style="color:#9a9ab5">— 10w</span> <span style="color:#4a9eff">— 20w</span> <span style="color:#c77dff">— 40w</span> · '+
+        'sorted by 20w strength, charted first · click a ticker for its full chart';
+      draw();
+    }).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
+  }
+  function lite(tk){var M=window.LITEMAP;return !!(M&&M[tk]&&M[tk].chart);}
+  function ma(px,j,w){if(j<w-1)return null;var s=0;for(var k=j-w+1;k<=j;k++)s+=px[k][1];return s/w;}
+  function svg(x){
+    var px=(x.d.px||[]).concat(x.tail||[]).filter(function(a){return a&&a[1]>0;});
+    if(px.length<12)return '<div class="cyc-none">Not enough weekly prices for a chart</div>';
+    var s0=Math.max(0,px.length-130),W=1100,H=250,L=8,R=54,Tp=10,B=22;
+    var P=px.slice(s0).map(function(a){return a[1];}),lo=Math.min.apply(null,P),hi=Math.max.apply(null,P),pad=(hi-lo)*.06||1;lo-=pad;hi+=pad;
+    function X(i){return L+(i-s0)/Math.max(1,px.length-1-s0)*(W-L-R);} function Y(p){return Tp+(hi-p)/(hi-lo)*(H-Tp-B);}
+    var o='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+    [[10,'#9a9ab5',1.2],[20,'#4a9eff',1.5],[40,'#c77dff',2]].forEach(function(z){var pts=[];
+      for(var i=s0;i<px.length;i++){var v=ma(px,i,z[0]);if(v!=null)pts.push(X(i).toFixed(1)+','+Y(v).toFixed(1));}
+      if(pts.length>1)o+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+z[1]+'" stroke-width="'+z[2]+'" opacity=".9"/>';});
+    o+='<polyline points="'+px.slice(s0).map(function(a,k){return X(s0+k).toFixed(1)+','+Y(a[1]).toFixed(1);}).join(' ')+'" fill="none" stroke="#e8e8f0" stroke-width="1.6"/>';
+    var day={};
+    (x.d.marks||[]).forEach(function(m){if(!m||!m.d||day[m.d])return;day[m.d]=1;
+      var i=-1;for(var k=0;k<px.length;k++)if(px[k][0]>=m.d){i=k;break;} if(i<0)i=px.length-1; if(i<s0)return;
+      var cx=X(i).toFixed(1),cy=Y(px[i][1]),s=+m.s||0,g=m.g||'',tip=esc(m.d+' '+(m.doc||'')+' · Text '+(s>0?'+':'')+s+' · G '+g);
+      if(g=='RAISE'||g=='CUT'){var up=g=='RAISE';o+='<polygon points="'+cx+','+(up?cy-9:cy+9)+' '+(cx-6)+','+(up?cy+4:cy-4)+' '+(+cx+6)+','+(up?cy+4:cy-4)+'" fill="'+(up?'#00d97e':'#ff4757')+'" stroke="#0d0d16"><title>'+tip+'</title></polygon>';}
+      else if(!s)o+='<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#15151d" stroke="#c9c6d8" stroke-width="1.2"><title>'+tip+'</title></circle>';
+      else o+='<circle cx="'+cx+'" cy="'+cy+'" r="5.5" fill="'+(s>0?'#00d97e':'#ff4757')+'" stroke="#0d0d16"><title>'+tip+'</title></circle>';});
+    for(var i=Math.max(1,s0);i<px.length;i++)if(String(px[i][0]).slice(5,7)=='01'&&String(px[i-1][0]).slice(5,7)!='01')
+      o+='<text x="'+X(i)+'" y="'+(H-6)+'" font-size="10" fill="#6a6a85">'+String(px[i][0]).slice(0,4)+'</text>';
+    return o+'<text x="'+(W-R+4)+'" y="'+(Tp+8)+'" font-size="10" fill="#6a6a85">'+(hi-pad).toFixed(1)+'</text><text x="'+(W-R+4)+'" y="'+(H-B)+'" font-size="10" fill="#6a6a85">'+(lo+pad).toFixed(1)+'</text></svg>';
+  }
+  function pc(v){return v==null?'–':(v>0?'+':'')+v.toFixed(2)+'%';}
+  function ar(v){return '<b style="color:'+(v>0?'#00d97e':'#ff4757')+'">'+(v>0?'↑':'↓')+'</b>';}
+  function list(){return D.filter(function(d){return d.r==cur&&(!chartsOnly||lite(d.t))&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
+    .sort(function(a,b){return (lite(b.t)-lite(a.t))||(b.m[1]-a.m[1]);});}
+  function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
+    '<span class="cyc-pill" style="color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
+    '<div class="cyc-sub">10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
+    ' · price '+esc(d.p)+' '+pc(d.d)+' today'+(d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+'</div>'+
+    '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
+  function bar(){return ORDER.map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
+    '<label><input type="checkbox" id="cyc-co"> Charted only</label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
+  function draw(){
+    if(!D)return; var L=list();
+    document.getElementById('cyc-cnt').textContent=L.length+' tickers';
+    document.querySelectorAll('.cyc-btn').forEach(function(b){var r=b.dataset.r;
+      b.querySelector('i').textContent=D.filter(function(d){return d.r==r&&(!chartsOnly||lite(d.t));}).length;b.classList.toggle('on',r==cur);});
+    var box=document.getElementById('cyc-list'); box.innerHTML=L.map(card).join(''); box.scrollTop=0;
+    if(IO)IO.disconnect();
+    IO=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;IO.unobserve(el);
+      var get=window.PPGET; if(!get){el.innerHTML='<div class="cyc-none">Chart unavailable</div>';return;}
+      get(el.dataset.t).then(function(x){el.innerHTML=x?svg(x):'<div class="cyc-none">No weekly prices stored yet</div>';})
+        .catch(function(){el.innerHTML='<div class="cyc-none">Chart unavailable</div>';});});},{root:box,rootMargin:'600px'});
+    box.querySelectorAll('.cyc-ch').forEach(function(el){IO.observe(el);});
+  }
+  var built=false;
+  window.cycOpen=function(){
+    if(!built){built=true;
+      var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
+      b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
+      document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
+      document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
+    document.getElementById('cyc-ov').classList.add('on');
+    if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
+  };
+  window.cycClose=function(){document.getElementById('cyc-ov').classList.remove('on');};
+  window.addEventListener('keydown',function(e){
+    var pp=document.getElementById('pp-ov');
+    if(e.key==='Escape'&&document.getElementById('cyc-ov').classList.contains('on')&&!(pp&&pp.classList.contains('on')))cycClose();},true);   /* capture on window: runs before the chart modal's own Escape closes it */
+})();
+</script>
 
 </body>
 </html>
