@@ -8600,6 +8600,13 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-btn.on{background:color-mix(in srgb,var(--c) 18%,#000);border-color:var(--c)}
 .cyc-bar label{color:#9a9ab5;font-size:12px;margin-left:8px;display:flex;align-items:center;gap:4px}
 .cyc-q{background:#111;border:1px solid #2a2a38;color:#f2f2f8;border-radius:6px;padding:5px 9px;font-size:12px;width:170px}
+/* Filter dropdown: amber when it's a plain sort, green / red / amber glow when a bullish / bearish / New Signals filter is on */
+.cyc-bar label.cyc-flt{color:#ffb020;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px;gap:6px}
+.cyc-flt select{border-color:#ffb02088;background:#1a1405;color:#ffd27a;font-weight:600;font-size:13px;padding:6px 10px;cursor:pointer}
+.cyc-flt select.f-bull{border-color:#00d97e;background:#00140a;color:#00d97e;box-shadow:0 0 0 2px #00d97e33}
+.cyc-flt select.f-bear{border-color:#ff4757;background:#1a0508;color:#ff8c7a;box-shadow:0 0 0 2px #ff475733}
+.cyc-flt select.f-new{border-color:#ffb020;box-shadow:0 0 0 2px #ffb02044}
+.cyc-flt select option{background:#111;color:#f2f2f8;font-weight:400}
 .cyc-cnt{color:#6a6a85;font-size:12px;margin-left:auto}
 .cyc-note{color:#6a6a85;font-size:11.5px;margin:8px 0 0}
 #cyc-list{overflow:auto;padding:0 18px 12px}
@@ -8607,7 +8614,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-h{display:flex;gap:10px;align-items:baseline}
 .cyc-h .ticker-sym{font-size:17px;font-weight:700;color:#f2f2f8;cursor:pointer}
 .cyc-n{color:#9a9ab5}
-.cyc-pill{margin-left:auto;font-size:11px;font-weight:700;border:1px solid;border-radius:10px;padding:1px 9px}
+.cyc-pill{margin-left:auto;font-size:12px;font-weight:700;border:1px solid;border-radius:10px;padding:1px 8px;line-height:16px;align-self:center;white-space:nowrap}
 .cyc-sub{color:#9a9ab5;font-size:11.5px;margin:4px 0}
 .cyc-ch{min-height:110px;position:relative}
 .cyc-none{color:#6a6a85;font-size:12px;padding:10px 0 8px;font-style:italic}
@@ -8688,6 +8695,11 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       pl.setAttribute('stroke-width',z[2]);pl.setAttribute('opacity','.9');pl.style.pointerEvents='none';
       svg.insertBefore(pl,area||line);});
   }
+  /* today's price and % move from the sheet, beside the regime pill */
+  function hdrPrice(d){if(!d.p)return '';
+    var c=d.d>0?'#00d97e':d.d<0?'#ff4757':'#9a9ab5', m=d.d==null?'':Math.abs(d.d).toFixed(2)+'%', a=d.d>0?'▲':d.d<0?'▼':'', s=d.d>0?'+':d.d<0?'−':'';
+    return '<span style="margin-left:auto;white-space:nowrap;align-self:center;border:1px solid '+c+'66;border-radius:10px;padding:1px 8px;line-height:16px;color:#e8e8f0;font-size:12px">'+
+      esc(d.p)+'<span style="color:'+c+';margin-left:10px">'+a+' '+m+'</span></span>';}
   function pc(v){return v==null?'–':(v>0?'+':'')+v.toFixed(2)+'%';}
   function ar(v){return '<b style="color:'+(v>0?'#00d97e':'#ff4757')+'">'+(v>0?'↑':'↓')+'</b>';}
   /* Text + G over the last 12 months, from lite-index "tg" ("date,Text,G;…"): each print = Text + G (+1 RAISE / -1 CUT) */
@@ -8744,15 +8756,15 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       (l.ec&&!l.e?' · <span style="color:#00d97e">early signal '+l.ecd+'</span> (flat since)':'');
     return o;}
   function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
-    '<span class="cyc-pill" style="color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
+    hdrPrice(d)+'<span class="cyc-pill" style="'+(d.p?'margin-left:0;':'')+'color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
     '<div class="cyc-sub">10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
-    ' · price '+esc(d.p)+' '+pc(d.d)+' today'+(d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t)+'</div>'+
+    (d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t)+'</div>'+
     '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
   function bar(){return ['ALL'].concat(ORDER).map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
     '<label><input type="checkbox" id="cyc-co"> Charted only</label>'+
     /* one dropdown: the two plain sorts show every ticker; each filter shows its newest trigger first */
-    '<label>Show <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
-    '<option value="tg" selected>Text + G, last 12 months</option><option value="ma">20w MA strength</option>'+
+    '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
+    '<option value="tg">Text + G, last 12 months</option><option value="ma">20w MA strength</option>'+
     '<option disabled style="color:#00d97e;font-weight:700">── Bullish ──</option>'+
     '<option value="early">Early Tone Signal</option><option value="g30">30w MA falling + green last print</option>'+
     '<option value="ac">▲ straight after a ▼</option><option value="f12">First ▲ in 12 months</option>'+
@@ -8782,8 +8794,10 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
       document.getElementById('cyc-show').onchange=function(){var v=this.value;
         if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
+        this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
+    var f=document.getElementById('cyc-show'); f.value='d3'; f.onchange();   /* always opens on New Signals, across all regimes */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
   };
