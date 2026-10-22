@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-10-21
+# Calendar scrape - 2026-10-22
 
-**143 sources · 24 events staged for approval**
+**143 sources · 30 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 79 | read OK, upcoming events found |
-| EMPTY | 52 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| EMPTY | 51 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| BLOCKED | 9 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
@@ -25,6 +25,7 @@
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - Eurocell (ECEL) - http 200, http - https://investors.eurocell.co.uk/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
+- NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
@@ -35,8 +36,6 @@
 - Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
-- Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
-- FRP Advisory (FRP) - http 200, browser - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
@@ -50,6 +49,7 @@
 - Restore (RST) - http 200, browser - https://www.restoreplc.com/investors/financial-calendar/
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
+- SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
 - Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
@@ -57,7 +57,6 @@
 - Pebble Group (PEBB) - http 200, http - https://www.thepebblegroup.com/investors/financial-calendar/
 - Travis Perkins (TPK) - http 200, http - https://www.travisperkinsplc.co.uk/investors/financial-calendar/
 - Tribal Group (TRB) - http 200, http - https://www.tribalgroup.com/investors/announcements
-- Volution (FAN) - http 200, http - https://www.volutiongroupplc.com/investors/financial-calendar
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
@@ -72,6 +71,7 @@
 - Time Finance (TIME) - http 429, chrome - https://timefinance.com/financial-results-calendar/
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
+- FRP Advisory (FRP) - http 403, chrome - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
