@@ -8696,22 +8696,50 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   /* newest print day from "tg": red = Text < 0 or CUT, green = Text > 0 or RAISE with Text >= 0 (several prints on one day count once);
      e = one of that day's prints is an early signal (first step up in tone) */
   function lastPr(tk){var M=window.LITEMAP, s=M&&M[tk]&&M[tk].tg; if(!s)return null;
-    var P=s.split(';').map(function(p){return p.split(',');}), d=P[P.length-1][0], red=0, grn=0, e=0, up=0;
-    P.forEach(function(a){if(a[0]!==d)return;var t=+a[1]||0,g=+a[2]||0;if(t<0||g<0)red=1;else if(t>0||g>0)grn=1;if(a[3]=='1')e=1;if(g>0)up=1;});
-    return {d:d,c:red?'r':grn?'g':'',e:e,up:up};}
+    var P=s.split(';').map(function(p){return p.split(',');});
+    function day(d){var red=0,grn=0,e=0,up=0,dn=0;
+      P.forEach(function(a){if(a[0]!==d)return;var t=+a[1]||0,g=+a[2]||0;if(t<0||g<0)red=1;else if(t>0||g>0)grn=1;if(a[3]=='1')e=1;if(g>0)up=1;if(g<0)dn=1;});
+      return {d:d,c:red?'r':grn?'g':'',e:e,up:up,dn:dn};}
+    var L=day(P[P.length-1][0]), prev=P.filter(function(a){return a[0]<L.d;});
+    L.pc=prev.length?day(prev[prev.length-1][0]).c:'';   /* colour of the print day before the newest */
+    var gs=prev.filter(function(a){return +a[2]!=0;}), c12=new Date(Date.parse(L.d)-365*864e5).toISOString().slice(0,10);
+    L.ac=L.up&&gs.length>0&&+gs[gs.length-1][2]<0;   /* ▲ straight after a ▼ (last guidance change before it was a cut) */
+    L.f12=L.up&&!prev.some(function(a){return a[0]>=c12&&+a[2]>0;});   /* first ▲ in the 12 months before it */
+    var cd=P.map(function(a){return a[0];}).filter(function(d,i,A){return A.indexOf(d)==i;}).reverse()
+      .map(day).filter(function(x){return x.c;})[0];
+    L.ec=!!(cd&&cd.e); L.ecd=cd?cd.d:'';   /* newest coloured print (flat ones skipped) is an early signal; its date */
+    L.ca=L.dn&&gs.length>0&&+gs[gs.length-1][2]>0;   /* ▼ straight after a ▲ (last guidance change before it was a raise) */
+    return L;}
+  function d3(){var t=new Date(),n=0;   /* start of the last 3 trading days, today included (weekends skipped) */
+    while(true){if(t.getDay()%6)n++;if(n==3)break;t.setDate(t.getDate()-1);}
+    return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
+  function down30(d){return d.m30!=null&&d.m30<0;}
   function pass(d){if(show=='all')return true; var l=lastPr(d.t); if(!l)return false;
-    if(show=='early')return !!(l.e||l.up);   /* early signal or a green ▲ guidance raise */
-    if(show=='g30')return d.m30!=null&&d.m30<0&&l.c=='g';
+    if(show=='early')return l.ec;
+    if(show=='ac')return !!l.ac;
+    if(show=='f12')return !!l.f12;
+    if(show=='d3')return !!l.c&&l.d>=d3();
+    if(show=='turn')return down30(d)&&l.c=='g'&&l.pc=='r';   /* reversal: newest print green straight after a red one, 30w MA falling */
+    if(show=='g30')return down30(d)&&l.c=='g';
+    /* bearish mirrors */
+    if(show=='ca')return !!l.ca;
+    if(show=='r30')return up30(d)&&l.c=='r';   /* warning in an uptrend: 30w MA rising, red last print */
+    if(show=='sd')return up30(d)&&l.c=='r'&&l.pc=='g';   /* first step down: red straight after green, 30w MA rising */
     return true;}
+  function up30(d){return d.m30!=null&&d.m30>0;}
   function base(d){return (!chartsOnly||lite(d.t))&&pass(d);}
   function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){
-      if(sortBy=='tg'){var x=tg12(a.t), y=tg12(b.t);   /* scored tickers first, best 12-month Text + G first */
-        if(!!y-!!x)return !!y-!!x; if(x&&y&&y.s!==x.s)return y.s-x.s;}
+      if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
+        var xd=x&&(show=='early'?x.ecd:x.d), yd=y&&(show=='early'?y.ecd:y.d);
+        if(xd&&yd&&xd!==yd)return xd<yd?1:-1;}
+      if(sortBy=='tg'||sortBy=='tgb'){var x=tg12(a.t), y=tg12(b.t);   /* scored tickers first, best (or for tgb worst) 12-month Text + G first */
+        if(!!y-!!x)return !!y-!!x; if(x&&y&&y.s!==x.s)return sortBy=='tg'?y.s-x.s:x.s-y.s;}
       return (lite(b.t)-lite(a.t))||(b.m[1]-a.m[1]);});}
   function tgTag(tk){var g=tg12(tk), l=lastPr(tk), o='';
     if(g)o+=' · <b style="color:'+(g.s>0?'#00d97e':g.s<0?'#ff4757':'#9a9ab5')+'">Text + G 12m '+(g.s>0?'+':'')+g.s+'</b> ('+g.n+' print'+(g.n>1?'s':'')+')';
-    if(l)o+=' · last print <span style="color:'+(l.c=='g'?'#00d97e':l.c=='r'?'#ff4757':'#9a9ab5')+'">'+l.d+(l.up?' ▲ raise':'')+(l.e?' early signal':'')+'</span>';
+    if(l)o+=' · last print <span style="color:'+(l.c=='g'?'#00d97e':l.c=='r'?'#ff4757':'#9a9ab5')+'">'+l.d+(l.up?' ▲ raise':'')+(l.dn?' ▼ cut':'')+(l.e?' early signal':'')+'</span>'+
+      (l.ec&&!l.e?' · <span style="color:#00d97e">early signal '+l.ecd+'</span> (flat since)':'');
     return o;}
   function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
     '<span class="cyc-pill" style="color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
@@ -8720,8 +8748,17 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
   function bar(){return ['ALL'].concat(ORDER).map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
     '<label><input type="checkbox" id="cyc-co"> Charted only</label>'+
-    '<label>Sort <select id="cyc-sort" class="cyc-q" style="width:auto"><option value="tg">Text + G, last 12 months</option><option value="ma">20w MA strength</option></select></label>'+
-    '<label>Show <select id="cyc-show" class="cyc-q" style="width:auto"><option value="all">All tickers</option><option value="early">Newest print = early signal or ▲ raise</option><option value="g30">30w MA falling + green last print</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
+    /* one dropdown: the two plain sorts show every ticker; each filter shows its newest trigger first */
+    '<label>Show <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
+    '<option value="tg" selected>Text + G, last 12 months</option><option value="ma">20w MA strength</option>'+
+    '<option disabled style="color:#00d97e;font-weight:700">── Bullish ──</option>'+
+    '<option value="early">Early signal</option><option value="g30">30w MA falling + green last print</option>'+
+    '<option value="ac">▲ straight after a ▼</option><option value="f12">First ▲ in 12 months</option>'+
+    '<option value="turn">Reversal: green after red, 30w MA falling</option>'+
+    '<option disabled style="color:#ff4757;font-weight:700">── Bearish ──</option>'+
+    '<option value="tgb">Text + G, last 12 months (most bearish first)</option>'+
+    '<option value="ca">▼ straight after a ▲</option><option value="r30">30w MA rising + red last print</option>'+
+    '<option value="sd">First step down: red after green, 30w MA rising</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
   function draw(){
     if(!D)return; var L=list();
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
@@ -8741,8 +8778,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
       document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
-      document.getElementById('cyc-sort').onchange=function(){sortBy=this.value;draw();};
-      document.getElementById('cyc-show').onchange=function(){show=this.value;if(show!='all')cur='ALL';draw();};   /* a filter starts across all regimes */
+      document.getElementById('cyc-show').onchange=function(){var v=this.value;
+        if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
+        draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
