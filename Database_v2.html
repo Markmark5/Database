@@ -8797,7 +8797,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
         this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
-    var f=document.getElementById('cyc-show'); f.value='d3'; f.onchange();   /* always opens on New Signals, across all regimes */
+    var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
   };
