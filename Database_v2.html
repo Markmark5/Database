@@ -7838,6 +7838,9 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pmx:hover{color:#fff}
 /* 1Y / 3Y / 5Y range buttons above the popup chart */
 #pp-mod .pmr{display:flex;gap:4px;justify-content:flex-end;margin:-2px 0 4px}
+#pp-mod .pmrow{display:flex;align-items:center;gap:10px}
+#pp-mod .pmrow .pmr{margin-left:auto}
+#pp-mod .pmp{display:flex;align-items:center;gap:8px;margin:-4px 0 4px;font-family:Inter,'Segoe UI',sans-serif}
 #pp-mod .pmr button{background:#15151d;border:1px solid #2a2a38;color:#9a9ab5;font:700 10px var(--mono,Inter,sans-serif);letter-spacing:.06em;padding:3px 10px;border-radius:4px;cursor:pointer}
 #pp-mod .pmr button:hover{color:#fff}
 #pp-mod .pmr button.on{color:#fff;border-color:#4a9eff;background:#16233a}
@@ -8094,11 +8097,14 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
         '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
-        '<div class="pmr"></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
+        '<div class="pmrow"><div class="pmp"></div><div class="pmr"></div></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
         latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
       /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
       var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
+      /* today's price + Cycles regime under the ticker, from the live sheets */
+      var pmp=mod.querySelector('.pmp');
+      if(window.CYCPILLS)CYCPILLS(tk).then(function(h){if(pmp.isConnected)pmp.innerHTML=h;}).catch(function(){});
       var lastIso=(x.tail&&x.tail.length?x.tail[x.tail.length-1][0]:allPx[allPx.length-1][0]);
       var spanYrs=(Date.parse(lastIso)-Date.parse(allPx[0][0]))/(365.25*864e5);
       function drawRange(yrs){
@@ -8645,10 +8651,11 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function reg(m){var u=m.map(function(v){return v>0;});
     if(u[1]&&u[2])return u[0]?'BULL':'PULLBACK BULL'; if(u[1])return 'EARLY BULL'; if(u[2])return 'EARLY BEAR';
     return u[0]?'PULLBACK BEAR':'BEAR';}
-  function load(){
-    T=Date.now();
-    document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
-    return fetch(URLS+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(urls){
+  /* the 6 sheets as rows {t,n,p,d,m,m30,r}; one fetch at a time, shared by Cycles and the ticker-click chart */
+  var FR=null, BAD=0;
+  function fetchRows(){
+    if(FR)return FR;
+    FR=fetch(URLS+'?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(urls){
       return Promise.all(urls.filter(Boolean).map(function(u){
         return fetch(u+(u.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});}));
     }).then(function(txts){
@@ -8658,13 +8665,25 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
           var tk=String(x[0]||'').trim().toUpperCase(); if(!tk||tk.indexOf('#')>=0||seen[tk])return;   /* "#1" = old/delisted line */
           var m=[num(x[10]),num(x[11]),num(x[12])]; if(m.some(function(v){return v===null;}))return;
           seen[tk]=1; out.push({t:tk,n:x[1]||'',p:String(x[8]||'').trim(),d:num(x[9]),m:m,m30:num(x[13]),r:reg(m)});});});
-      D=out;
+      D=out; T=Date.now(); BAD=bad; return bad;
+    });
+    FR.then(function(){FR=null;},function(){FR=null;});
+    return FR;}
+  /* today's price and regime pills for the ticker-click chart (sheets re-read after 15 min) */
+  window.CYCPILLS=function(tk){
+    return (D&&Date.now()-T<15*60000?Promise.resolve():fetchRows()).then(function(){
+      var d=D&&D.filter(function(r){return r.t==tk;})[0]; if(!d)return '';
+      return hdrPrice(d).replace('margin-left:auto;','')+'<span class="cyc-pill" style="margin-left:0;color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span>';});};
+  function load(){
+    document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
+    return fetchRows().then(note).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
+  }
+  function note(bad){
       document.getElementById('cyc-note').innerHTML=(bad?'<b style="color:#ffb020">'+bad+' of 6 sheets did not load</b> · ':'')+
         'Live from the ShareScope sheets · mid-week regimes are provisional until Friday\'s close · '+
         '<span style="color:#9a9ab5">— 10w</span> <span style="color:#4a9eff">— 20w</span> <span style="color:#c77dff">— 40w</span> · '+
         'hover a print for its quote · click a ticker for its full chart';
       draw();
-    }).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
   }
   function lite(tk){var M=window.LITEMAP;return !!(M&&M[tk]&&M[tk].chart);}
   function ma(px,j,w){if(j<w-1)return null;var s=0;for(var k=j-w+1;k<=j;k++)s+=px[k][1];return s/w;}
@@ -8800,7 +8819,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
-    if(!D||Date.now()-T>15*60000)load(); else draw();   /* sheets refresh during the day: re-read after 15 min */
+    if(!D||Date.now()-T>15*60000)load(); else note(BAD);   /* sheets refresh during the day: re-read after 15 min */
   };
   window.cycClose=function(){document.getElementById('cyc-ov').classList.remove('on');};
   window.addEventListener('keydown',function(e){
