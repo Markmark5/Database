@@ -188,7 +188,7 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .band-chk input:checked ~ .band-chk-lbl{color:var(--text-primary);}
 .band-cnt{font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;}
 .rev-chk:has(input:checked){background:var(--surface3);box-shadow:inset 2px 0 0 var(--rc);}
-.rev-arr{font-family:var(--mono);font-size:10px;width:6px;text-align:center;flex-shrink:0;}
+.rev-arr{font-family:var(--mono);font-size:10px;width:12px;text-align:center;flex-shrink:0;}
 .sb-clr{width:100%;margin-top:5px;padding:4px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--text-dim);border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all .15s;}
 .sb-clr:hover{color:var(--text-secondary);border-color:var(--border-bright);}
 .sb-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);}
@@ -1377,6 +1377,14 @@ body.sig-wide .cell-ticker{justify-content:center;}
             <div style="display:flex;flex-direction:column;gap:2px;">
               <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-rev-up" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green)">▲</span><span class="band-chk-lbl">Upgrade +2%+</span><span class="band-cnt" id="cnt-rev-up">0</span></label>
               <label class="band-chk rev-chk" style="--rc:var(--red)"><input type="checkbox" id="f-rev-dn" onchange="applyFilters()"><span class="rev-arr" style="color:var(--red)">▼</span><span class="band-chk-lbl">Downgrade −2%+</span><span class="band-cnt" id="cnt-rev-dn">0</span></label>
+            </div>
+          </div>
+          <div class="sb-sec">
+            <div class="sb-lbl" title="From the H1 Tracking column; ticking more than one shows any match">H1 Tracking</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-h1-ahead" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green)">✓</span><span class="band-chk-lbl">H1 ahead</span><span class="band-cnt" id="cnt-h1-ahead">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:#4da3ff"><input type="checkbox" id="f-h1-hyp" onchange="applyFilters()"><span class="rev-arr">🔬</span><span class="band-chk-lbl">Hypothetical</span><span class="band-cnt" id="cnt-h1-hyp">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--amber)"><input type="checkbox" id="f-h1-fire" onchange="applyFilters()"><span class="rev-arr">🔥</span><span class="band-chk-lbl">Strong 2nd half</span><span class="band-cnt" id="cnt-h1-fire">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -3113,6 +3121,7 @@ function applyFilters(){
   const fTo=document.getElementById('f-to').value;
   const fUp=document.getElementById('f-rev-up').checked;
   const fDn=document.getElementById('f-rev-dn').checked;
+  const fH1=['ahead','hyp','fire'].filter(function(k){return document.getElementById('f-h1-'+k).checked;});
   const sort=document.getElementById('sort-sel').value;
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
@@ -3125,6 +3134,7 @@ function applyFilters(){
     if(fFrom&&r.date<fFrom)return false;
     if(fTo&&r.date>fTo)return false;
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
+    if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
     return true;
   });
   FILTERED.sort(function(a,c){
@@ -3142,7 +3152,7 @@ function applyFilters(){
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn'].forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-type').value='';
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
@@ -3330,6 +3340,18 @@ function updateBandCounts(){
   document.getElementById('cnt-red').textContent=ALL.filter(function(r){return r.score<50;}).length;
   document.getElementById('cnt-rev-up').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.up>=2;}).length;
   document.getElementById('cnt-rev-dn').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.dn<=-2;}).length;
+  ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
+}
+/* H1 Tracking marks: ✓ ahead (not hypothetical, not H2) · 🔬 hypothetical · 🔥 strong H2 */
+function h1Flags(r){
+  const f={ahead:false,hyp:false,fire:false};
+  (r.h1Inds||[]).forEach(function(i){
+    const all=(i.lbl||'')+(i.mark||'')+(i.dev||''),hyp=/🔬/.test(all),h2=/H2/i.test(i.lbl||'');
+    if(hyp)f.hyp=true;
+    if(/🔥/.test(i.mark||'')||(h2&&i.state==='pos'&&!hyp))f.fire=true;
+    if(!hyp&&!h2&&/[✓✔]/.test(i.mark||''))f.ahead=true;
+  });
+  return f;
 }
 /* Revision % from free text: "+2-3%", "−10–15%", "hold/-2%", "+3% to +8%" → signed number (range midpoint) */
 function revPct(s){
