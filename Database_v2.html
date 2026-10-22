@@ -187,8 +187,6 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .band-chk-lbl{font-family:var(--mono);font-size:10px;color:var(--text-secondary);}
 .band-chk input:checked ~ .band-chk-lbl{color:var(--text-primary);}
 .band-cnt{font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;}
-.rev-chk:has(input:checked){background:var(--surface3);box-shadow:inset 2px 0 0 var(--rc);}
-.rev-arr{font-family:var(--mono);font-size:10px;width:6px;text-align:center;flex-shrink:0;}
 .sb-clr{width:100%;margin-top:5px;padding:4px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--text-dim);border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all .15s;}
 .sb-clr:hover{color:var(--text-secondary);border-color:var(--border-bright);}
 .sb-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);}
@@ -1370,13 +1368,6 @@ body.sig-wide .cell-ticker{justify-content:center;}
               <label class="band-chk"><input type="checkbox" checked id="f-green" onchange="applyFilters()"><span class="band-dot" style="background:var(--green)"></span><span class="band-chk-lbl">Upgrade ≥75</span><span class="band-cnt" id="cnt-green">0</span></label>
               <label class="band-chk"><input type="checkbox" checked id="f-amber" onchange="applyFilters()"><span class="band-dot" style="background:var(--amber)"></span><span class="band-chk-lbl">Mixed 50–74</span><span class="band-cnt" id="cnt-amber">0</span></label>
               <label class="band-chk"><input type="checkbox" checked id="f-red" onchange="applyFilters()"><span class="band-dot" style="background:var(--red)"></span><span class="band-chk-lbl">Cut ≤49</span><span class="band-cnt" id="cnt-red">0</span></label>
-            </div>
-          </div>
-          <div class="sb-sec">
-            <div class="sb-lbl" title="Any EPS or Revenue revision on the scorecard; ranges use the midpoint">EPS / Rev Revisions</div>
-            <div style="display:flex;flex-direction:column;gap:2px;">
-              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-rev-up" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green)">▲</span><span class="band-chk-lbl">Upgrade +2%+</span><span class="band-cnt" id="cnt-rev-up">0</span></label>
-              <label class="band-chk rev-chk" style="--rc:var(--red)"><input type="checkbox" id="f-rev-dn" onchange="applyFilters()"><span class="rev-arr" style="color:var(--red)">▼</span><span class="band-chk-lbl">Downgrade −2%+</span><span class="band-cnt" id="cnt-rev-dn">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -3111,8 +3102,6 @@ function applyFilters(){
   const fT=document.getElementById('f-type').value;
   const fFrom=document.getElementById('f-from').value;
   const fTo=document.getElementById('f-to').value;
-  const fUp=document.getElementById('f-rev-up').checked;
-  const fDn=document.getElementById('f-rev-dn').checked;
   const sort=document.getElementById('sort-sel').value;
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
@@ -3124,7 +3113,6 @@ function applyFilters(){
     if(fT&&rnsTypeCategory(r.rnsType)!==fT)return false;
     if(fFrom&&r.date<fFrom)return false;
     if(fTo&&r.date>fTo)return false;
-    if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
     return true;
   });
   FILTERED.sort(function(a,c){
@@ -3142,7 +3130,6 @@ function applyFilters(){
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn'].forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-type').value='';
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
@@ -3328,30 +3315,6 @@ function updateBandCounts(){
   document.getElementById('cnt-green').textContent=ALL.filter(function(r){return r.score>=75;}).length;
   document.getElementById('cnt-amber').textContent=ALL.filter(function(r){return r.score>=50&&r.score<75;}).length;
   document.getElementById('cnt-red').textContent=ALL.filter(function(r){return r.score<50;}).length;
-  document.getElementById('cnt-rev-up').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.up>=2;}).length;
-  document.getElementById('cnt-rev-dn').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.dn<=-2;}).length;
-}
-/* Revision % from free text: "+2-3%", "−10–15%", "hold/-2%", "+3% to +8%" → signed number (range midpoint) */
-function revPct(s){
-  s=String(s||'').replace(/[−—]/g,'-');
-  const re=/([+-])?\s*(\d+(?:\.\d+)?)\s*(%)?(?:\s*(?:–|-|to)\s*([+-])?\s*(\d+(?:\.\d+)?)\s*%)?/g;let m;
-  while((m=re.exec(s))){
-    if(!m[3]&&m[5]==null)continue;
-    const sg=m[1]==='-'?-1:1,a=sg*+m[2];
-    if(m[5]==null)return a;
-    return (a+(m[4]?(m[4]==='-'?-1:1):sg)*+m[5])/2;
-  }
-  return null;
-}
-/* Largest up / down EPS or Revenue revision on a record (null if none parseable) */
-function revRange(r){
-  let up=-Infinity,dn=Infinity,any=false;
-  (r.revisions||[]).forEach(function(v){
-    if(!/eps|rev/i.test(v.lbl||''))return;
-    let p=revPct(v.val);if(p==null&&!/%/.test(v.val||''))p=revPct(v.sub);
-    if(p==null)return;any=true;if(p>up)up=p;if(p<dn)dn=p;
-  });
-  return any?{up:up,dn:dn}:null;
 }
 function updateSidebar(){
   document.getElementById('st-total').textContent=ALL.length;
