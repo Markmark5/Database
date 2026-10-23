@@ -8209,7 +8209,6 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var sc=scoresFor(tk);
       var plt=window.CYCTAIL?CYCTAIL(tk,x):x.tail;
       DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:plt,scores:sc,scoreLane:x.snap?null:'bottom'});
-      if(window.CYCDOT)CYCDOT(prev.querySelector('.ppc'),plt);
       var r=el.getBoundingClientRect(), left=Math.min(r.left,window.innerWidth-392), top=r.bottom+6;
       prev.style.left=Math.max(6,left)+'px'; prev.style.display='block';
       if(top+prev.offsetHeight>window.innerHeight-6)top=Math.max(6,r.top-prev.offsetHeight-6);
@@ -8247,8 +8246,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
-        if(window.CYCDOT)CYCDOT(pmb,lt); curY=yrs;
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb);
+        curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
       if(spanYrs>1.3){
@@ -8820,15 +8819,14 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!lv.length)return tail;
     if(lv[0][1]/lp[1]>5||lp[1]/lv[0][1]>5)return tail;   /* unit mismatch guard */
     var out=tail.concat(lv); out.live=true; return out;};
-  /* hollow dot on the live point, with the time the sheets were read */
-  window.CYCDOT=function(el,tail){
-    if(!tail||!tail.live)return; var svg=el.querySelector('svg'), pl=svg&&svg.querySelector('polyline[stroke-dasharray="3 3"]'); if(!pl)return;
-    var pts=pl.getAttribute('points').trim().split(/\s+/), e=pts[pts.length-1].split(','), vb=svg.viewBox.baseVal, NS='http://www.w3.org/2000/svg';
-    var c=document.createElementNS(NS,'circle'), t=document.createElementNS(NS,'title'), tm=new Date(T);
-    c.setAttribute('cx',e[0]);c.setAttribute('cy',e[1]);c.setAttribute('r',Math.max(2.5,vb.height*0.012));
-    c.setAttribute('fill','#0f0f15');c.setAttribute('stroke','#f2f2f8');c.setAttribute('stroke-width',Math.max(1,vb.height*0.004));
-    t.textContent='Live price, read '+String(tm.getHours()).padStart(2,'0')+':'+String(tm.getMinutes()).padStart(2,'0');
-    c.appendChild(t);svg.appendChild(c);};
+  /* nudge the right-hand price labels a few units right so the live point doesn't touch them (viewBox widened by the same, <1%) */
+  window.CYCLBL=function(el){
+    var svg=el.querySelector('svg'); if(!svg)return;
+    var ex=0; [].forEach.call(svg.querySelectorAll('polyline'),function(p){var d=p.getAttribute('stroke-dasharray');if(d&&d!='3 3')return;   /* price line + dotted tail */
+      ex=Math.max(ex,+p.getAttribute('points').trim().split(/\s+/).pop().split(',')[0]);});
+    if(!ex)return; var vb=svg.viewBox.baseVal, n=8;
+    [].forEach.call(svg.querySelectorAll('text'),function(tx){var x=+tx.getAttribute('x');if(x>ex)tx.setAttribute('x',x+n);});
+    svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+(vb.width+n)+' '+vb.height);};
   function load(){
     document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
     return fetchRows().then(note).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
@@ -8849,8 +8847,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
     var sc=window.PPSCORES?window.PPSCORES(tk):[];
     var lt=window.CYCTAIL(tk,x);
-    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'});
-    window.CYCDOT(el,lt);
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el);
     var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
     var px=(x.d.px||[]).concat(x.tail||[]);
     if(!line||px.length<12)return;
