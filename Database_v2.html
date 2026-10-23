@@ -1179,6 +1179,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .nr-div.t3{color:var(--text-secondary);border-left-color:var(--border)}
 .nr-btn{font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px dashed var(--amber);cursor:pointer;margin-right:6px}
 .nr-btn.on{background:var(--amber);color:#000}
+body.sig-wide .row:has(.nr-stamp) .signals{padding-right:72px}
 .section-divider{display:none}
 .drift-strip{display:inline-flex;align-items:center;gap:10px;padding:5px 14px;cursor:pointer;
   border-top:1px solid #ffffff10;border-right:1px solid #ffffff10;border-radius:0 0 4px 0;
@@ -1432,7 +1433,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
               <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>≤49</div>
             </div>
             <div style="display:flex;align-items:center;gap:5px;">
-              <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="var on=document.body.classList.toggle('sig-wide');this.textContent=on?'◀ NORMAL VIEW':'▶ FULL TEXT VIEW'">▶ FULL TEXT VIEW</button>
+              <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
               <button id="nr-btn" class="nr-btn" style="display:none;" onclick="nrToggle()" title="Show only today's scorecards and today's RNS">NEW TODAY <span id="nr-cnt"></span></button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
@@ -1955,7 +1956,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
   <div class="db-fullscreen-inner" style="width:92vw;max-width:92vw;height:90vh;">
     <div class="db-fullscreen-bar">
       <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;">RNS Scorecards · 20 most recent</span>
-      <button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button>
+      <span style="display:flex;gap:6px;"><button class="db-expand-btn" id="sigwide-btn-fs" onclick="sigWideToggle()" style="font-size:12px;">▶ Full text view</button><button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button></span>
     </div>
     <div class="db-fullscreen-content" id="rns-fs-content" style="overflow-y:auto;height:calc(90vh - 44px);"></div>
   </div>
@@ -2358,6 +2359,7 @@ function expandSection(id){
     return;
   }
   if(id==='rns-fs'){
+    sigWideLabel();
     const c=document.getElementById('rns-fs-content');
     c.style.padding='14px';
     c.style.overflowY='auto';
@@ -3097,7 +3099,7 @@ function buildRow(rec){
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
   const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
-  return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'+nrBadge(rec)
+  return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
     +'<div class="cell-ticker"><div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
     +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?rec.entryPrice+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
@@ -3109,7 +3111,7 @@ function buildRow(rec){
     +'<div class="cell"><div class="revisions">'+(revHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No data</span>')+'</div></div>'
     +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+((rec.sparkData&&rec.sparkData.length>1)?'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>':(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>'))+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
     +'<div class="h1-ind-cell">'+h1Html+'</div>'
-    +'<div class="h1-ind-cell">'+accelHtml+'</div>'
+    +'<div class="h1-ind-cell">'+accelHtml+'</div>'+nrBadge(rec)
     +'</div></div>';
 }
 
@@ -3213,6 +3215,11 @@ function nrDivider(t,prev){
 }
 function nrToggle(){NEW_ONLY=!NEW_ONLY;document.getElementById('nr-btn').classList.toggle('on',NEW_ONLY);applyFilters();}
 document.addEventListener('DOMContentLoaded',nrLoad);
+/* Full text / normal view: one body class, shared by the list and the 20-most-recent popup */
+function sigWideLabel(){var on=document.body.classList.contains('sig-wide');
+  var a=document.getElementById('sigwide-btn'),b=document.getElementById('sigwide-btn-fs');
+  if(a)a.textContent=on?'◀ NORMAL VIEW':'▶ FULL TEXT VIEW';if(b)b.textContent=on?'◀ Normal view':'▶ Full text view';}
+function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel();}
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
