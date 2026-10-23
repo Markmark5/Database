@@ -8747,6 +8747,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-flt select.f-bull{border-color:#00d97e;background:#00140a;color:#00d97e;box-shadow:0 0 0 2px #00d97e33}
 .cyc-flt select.f-bear{border-color:#ff4757;background:#1a0508;color:#ff8c7a;box-shadow:0 0 0 2px #ff475733}
 .cyc-flt select.f-new{border-color:#ffb020;box-shadow:0 0 0 2px #ffb02044}
+.cyc-flt select.f-st{border-color:#4a9eff;background:#07111f;color:#8cc4ff;box-shadow:0 0 0 2px #4a9eff33}
 .cyc-flt select option{background:#111;color:#f2f2f8;font-weight:400}
 .cyc-cnt{color:#6a6a85;font-size:12px;margin-left:auto}
 .cyc-note{color:#6a6a85;font-size:11.5px;margin:8px 0 0}
@@ -8771,7 +8772,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
   var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
   var COL={'ALL':'#c8c8d8','BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
-  var D=null, T=0, cur='BULL', chartsOnly=false, q='', IO=null, sortBy='tg', show='all';
+  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all';
   function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function csv(t){var R=[],r=[],f='',i=0,Q=false;
@@ -8880,7 +8881,14 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!j)return;
     var ay=(P[j][1]-P[0][1])/(dp[j][1]-dp[0][1]), by=P[0][1]-ay*dp[0][1], NS='http://www.w3.org/2000/svg';
     var area=svg.querySelector('polygon');
-    [[10,'#9a9ab5',0.6],[20,'#4a9eff',0.8],[40,'#c77dff',1.1]].forEach(function(z){var pts=[];
+    /* Stage Analysis: the current base band as dotted top and bottom lines from where the base began */
+    var g=/^st/.test(show)&&stg(tk), bb=g&&g.b;
+    if(bb){var bx0=ax*t(bb[0])+bx, bx1=P[n][0];
+      [bb[1],bb[2]].forEach(function(v){var y=(ay*v+by).toFixed(1), l=document.createElementNS(NS,'line');
+        l.setAttribute('x1',bx0.toFixed(1));l.setAttribute('x2',bx1.toFixed(1));l.setAttribute('y1',y);l.setAttribute('y2',y);
+        l.setAttribute('stroke','#c9c6d8');l.setAttribute('stroke-dasharray','4 3');l.setAttribute('opacity','.7');l.setAttribute('stroke-width','.8');
+        l.style.pointerEvents='none';svg.insertBefore(l,area||line);});}
+    [[10,'#9a9ab5',0.4],[20,'#4a9eff',0.55],[40,'#c77dff',0.75]].forEach(function(z){var pts=[];
       for(var i=0;i<px.length;i++){var v=ma(px,i,z[0]);if(v!=null)pts.push((ax*t(px[i][0])+bx).toFixed(1)+','+(ay*v+by).toFixed(1));}
       if(pts.length<2)return;
       var pl=document.createElementNS(NS,'polyline');
@@ -8921,7 +8929,20 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     while(true){if(t.getDay()%6)n++;if(n==3)break;t.setDate(t.getDate()-1);}
     return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
   function down30(d){return d.m30!=null&&d.m30<0;}
-  function pass(d){if(show=='all')return true; var l=lastPr(d.t); if(!l)return false;
+  /* weekly stage from lite-index "stg" ("stage|week it began|from|flags", stage_rules.md), charted tickers only */
+  var STN={1:'Basing',2:'Advancing',3:'Topping',4:'Declining'}, STC={1:'#4a9eff',2:'#00d97e',3:'#ffb020',4:'#ff4757'};
+  function stg(tk){var M=window.LITEMAP, s=M&&M[tk]&&M[tk].stg; if(!s)return null; var a=s.split('|');
+    var b=a[4]?a[4].split(','):null;
+    return a[0]?{s:+a[0],d:a[1]||'',f:+a[2]||0,fl:a[3]?a[3].split(','):[],b:b&&b.length==3?[b[0],+b[1],+b[2]]:null}:null;}
+  function stFlag(f){if(f=='41e')return '4→1 early'; if(f=='e2')return 'early Stage 2'; if(f=='w23')return '2→3 watch'; if(f=='r34')return '3→4 risk';
+    if(f=='t')return 'early turn'; if(f[0]=='p')return '→ '+f[1]+' pending (wk '+f.slice(2)+' of 3)'; return '';}
+  window.CYCSTAGE=function(tk){var g=stg(tk); if(!g)return '';
+    var fl=g.fl.map(stFlag).filter(Boolean);
+    return '<span class="cyc-pill" style="margin-left:0;color:'+STC[g.s]+';border-color:'+STC[g.s]+'66" title="'+
+      (g.f?'Stage '+g.f+' → '+g.s+' week of '+g.d:'Stage '+g.s)+'">Stage '+g.s+' · '+STN[g.s]+(fl.length?' · '+fl.join(' · '):'')+'</span>';};
+  function pass(d){if(show=='all')return true;
+    if(/^st[1-4]$/.test(show)){var g=stg(d.t);return !!g&&g.s==+show[2];}
+    var l=lastPr(d.t); if(!l)return false;
     if(show=='early')return l.ec;
     if(show=='ac')return !!l.ac;
     if(show=='f12')return !!l.f12;
@@ -8937,7 +8958,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function base(d){return (!chartsOnly||lite(d.t))&&pass(d);}
   function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){
-      if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
+      if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
+        if(p&&r&&p.d!==r.d)return p.d<r.d?1:-1;}
+      else if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
         var xd=x&&(show=='early'?x.ecd:x.d), yd=y&&(show=='early'?y.ecd:y.d);
         if(xd&&yd&&xd!==yd)return xd<yd?1:-1;}
       if(sortBy=='tg'||sortBy=='tgb'){var x=tg12(a.t), y=tg12(b.t);   /* scored tickers first, best (or for tgb worst) 12-month Text + G first */
@@ -8948,13 +8971,16 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(l)o+=' · last print <span style="color:'+(l.c=='g'?'#00d97e':l.c=='r'?'#ff4757':'#9a9ab5')+'">'+l.d+(l.up?' ▲ raise':'')+(l.dn?' ▼ cut':'')+(l.e?' early signal':'')+'</span>'+
       (l.ec&&!l.e?' · <span style="color:#00d97e">early signal '+l.ecd+'</span> (flat since)':'');
     return o;}
+  function stSince(tk){var g=stg(tk); return g&&g.f?' · <span style="color:'+STC[g.s]+'">stage '+g.f+'→'+g.s+' week of '+g.d+'</span>':'';}
   function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
-    hdrPrice(d)+'<span class="cyc-pill" style="'+(d.p?'margin-left:0;':'')+'color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
-    '<div class="cyc-sub">10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
-    (d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t)+'</div>'+
+    hdrPrice(d)+(/^st/.test(show)?CYCSTAGE(d.t):'')+(/^st/.test(show)?'':   /* Stage Analysis cards show the stage only, not the Bull/Bear regime */
+    '<span class="cyc-pill" style="'+(d.p?'margin-left:0;':'')+'color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span>')+'</div>'+
+    '<div class="cyc-sub">'+(/^st/.test(show)?stSince(d.t).replace(/^ · /,''):   /* Stage Analysis: just the stage change */
+    '10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
+    (d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t))+'</div>'+
     '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
   function bar(){return ['ALL'].concat(ORDER).map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
-    '<label><input type="checkbox" id="cyc-co"> Charted only</label>'+
+    '<label title="Unticked: charted tickers only · ticked: every ticker in the 6 sheets"><input type="checkbox" id="cyc-co"> Whole market</label>'+
     /* one dropdown: the two plain sorts show every ticker; each filter shows its newest trigger first */
     '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
     '<option disabled style="color:#e8e8f0;font-weight:700">── Show All ──</option>'+
@@ -8966,7 +8992,10 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     '<option disabled style="color:#ff4757;font-weight:700">── Bearish ──</option>'+
     '<option value="tgb">Text + G, last 12 months (most bearish first)</option>'+
     '<option value="ca">▼ straight after a ▲</option><option value="r30">30w MA rising + red last print</option>'+
-    '<option value="sd">First step down: red after green, 30w MA rising</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
+    '<option value="sd">First step down: red after green, 30w MA rising</option>'+
+    '<option disabled style="color:#4a9eff;font-weight:700">── Stage Analysis ──</option>'+
+    '<option value="st1">Stage 1 – Basing</option><option value="st2">Stage 2 – Advancing</option>'+
+    '<option value="st3">Stage 3 – Topping</option><option value="st4">Stage 4 – Declining</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
   function draw(){
     if(!D)return; var L=list();
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
@@ -8985,12 +9014,13 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!built){built=true;
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
-      document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
+      document.getElementById('cyc-co').onchange=function(){chartsOnly=!this.checked;draw();};
       document.getElementById('cyc-show').onchange=function(){var v=this.value;
         if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
-        this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':'');
+        this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':/^st/.test(v)?' f-st':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
+    document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
     var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else note(BAD);   /* sheets refresh during the day: re-read after 15 min */
