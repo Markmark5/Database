@@ -8925,6 +8925,8 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     L.ec=!!(cd&&cd.e); L.ecd=cd?cd.d:'';   /* newest coloured print (flat ones skipped) is an early signal; its date */
     L.ca=L.dn&&gs.length>0&&+gs[gs.length-1][2]>0;   /* ▼ straight after a ▲ (last guidance change before it was a raise) */
     return L;}
+  function ago(n){var t=new Date();t.setDate(t.getDate()-n);   /* date n calendar days ago (0 = today) */
+    return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
   function d3(){var t=new Date(),n=0;   /* start of the last 3 trading days, today included (weekends skipped) */
     while(true){if(t.getDay()%6)n++;if(n==3)break;t.setDate(t.getDate()-1);}
     return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
@@ -8946,7 +8948,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(show=='early')return l.ec;
     if(show=='ac')return !!l.ac;
     if(show=='f12')return !!l.f12;
-    if(show=='d3')return !!l.c&&l.d>=d3();
+    if(/^nd\d+$/.test(show))return !!l.c&&l.d>=ago(+show.slice(2)-1);   /* New Signals: a red or green print today / last 7 / last 30 days */
     if(show=='turn')return down30(d)&&l.c=='g'&&l.pc=='r';   /* reversal: newest print green straight after a red one, 30w MA falling */
     if(show=='g30')return down30(d)&&l.c=='g';
     /* bearish mirrors */
@@ -8982,7 +8984,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function bar(){return ['ALL'].concat(ORDER).map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
     '<label title="Unticked: charted tickers only · ticked: every ticker in the 6 sheets"><input type="checkbox" id="cyc-co"> Whole market</label>'+
     /* one dropdown: the two plain sorts show every ticker; each filter shows its newest trigger first */
-    '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
+    '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="nd1">New Signals Today</option><option value="nd7">New Signals 7 days</option><option value="nd30">New Signals 30 days</option>'+
     '<option disabled style="color:#e8e8f0;font-weight:700">── Show All ──</option>'+
     '<option value="tg">Text + G, last 12 months</option><option value="ma">20w MA strength</option>'+
     '<option disabled style="color:#00d97e;font-weight:700">── Bullish ──</option>'+
@@ -9017,7 +9019,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       document.getElementById('cyc-co').onchange=function(){chartsOnly=!this.checked;draw();};
       document.getElementById('cyc-show').onchange=function(){var v=this.value;
         if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
-        this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':/^st/.test(v)?' f-st':'');
+        this.className='cyc-q'+(/^nd/.test(v)?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':/^st/.test(v)?' f-st':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
