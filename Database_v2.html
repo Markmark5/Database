@@ -3428,10 +3428,11 @@ function h1Flags(r){
 /* Revision % from free text: "+2-3%", "−10–15%", "hold/-2%", "+3% to +8%" → signed number (range midpoint) */
 function revPct(s){
   s=String(s||'').replace(/[−—]/g,'-');
+  const neg=/\b(cuts?|downgraded?|lower(ed)?)\b/i.test(s);   /* "0–5% cut", "cut 5–10%": unsigned numbers are a cut */
   const re=/([+-])?\s*(\d+(?:\.\d+)?)\s*(%)?(?:\s*(?:–|-|to)\s*([+-])?\s*(\d+(?:\.\d+)?)\s*%)?/g;let m;
   while((m=re.exec(s))){
     if(!m[3]&&m[5]==null)continue;
-    const sg=m[1]==='-'?-1:1,a=sg*+m[2];
+    const sg=m[1]==='-'?-1:m[1]==='+'?1:neg?-1:1,a=sg*+m[2];
     if(m[5]==null)return a;
     return (a+(m[4]?(m[4]==='-'?-1:1):sg)*+m[5])/2;
   }
