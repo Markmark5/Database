@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-10-22
+# Calendar scrape - 2026-10-23
 
-**143 sources · 30 events staged for approval**
+**143 sources · 16 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 79 | read OK, upcoming events found |
-| EMPTY | 51 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 75 | read OK, upcoming events found |
+| EMPTY | 53 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 9 | 401/403/429 - bot protection or login |
+| BLOCKED | 11 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
@@ -33,9 +33,11 @@
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
-- Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
+- Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
+- Crown Agents Bank (CABP) - http 200, browser - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
+- FRP Advisory (FRP) - http 200, browser - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
@@ -46,6 +48,7 @@
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
 - Personal Group (PGH) - http 200, browser - https://www.personalgroup.com/financial-calendar
 - Ramsdens (RFX) - http 200, http - https://www.ramsdensplc.com/investor-relations/financial-calendar
+- RELX (REL) - http 200, http - https://www.relx.com/investors/financial-calendar
 - Restore (RST) - http 200, browser - https://www.restoreplc.com/investors/financial-calendar/
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
@@ -60,7 +63,6 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
 - Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 
@@ -68,13 +70,15 @@
 
 - BAE Systems (BA.) - http 403, chrome - https://investors.baesystems.com/financial-calendar
 - Princes Group (PEN) - http 401, chrome - https://princesgroupinvestors.com/financial-calendar/
+- Property Franchise Group (TPFG) - http 403, chrome - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - Time Finance (TIME) - http 429, chrome - https://timefinance.com/financial-results-calendar/
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
-- FRP Advisory (FRP) - http 403, chrome - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
+- ZIGUP (ZIG) - http 403, chrome - https://zigup.com/investors/financial-calendar/
 
 ## ERROR
 
@@ -82,3 +86,7 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+
+## Approved events not re-verified tonight
+
+- Peel Hunt H1 results 2026-11-18
