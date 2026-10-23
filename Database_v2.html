@@ -8945,6 +8945,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
       (g.f?'Stage '+g.f+' → '+g.s+' week of '+g.d:'Stage '+g.s)+'">Stage '+g.s+' · '+STN[g.s]+(fl.length?' · '+fl.join(' · '):'')+'</span>';};
   function pass(d){if(show=='all')return true;
     if(/^st[1-4]$/.test(show)){var g=stg(d.t);return !!g&&g.s==+show[2];}
+    if(show=='stw'){var g=stg(d.t);return !!g&&!!g.f&&g.d>=ago(7);}   /* This week's changes: a stage change in the last 7 days */
     var l=lastPr(d.t); if(!l)return false;
     if(show=='early')return l.ec;
     if(show=='ac')return !!l.ac;
@@ -8997,7 +8998,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     '<option value="ca">▼ straight after a ▲</option><option value="r30">30w MA rising + red last print</option>'+
     '<option value="sd">First step down: red after green, 30w MA rising</option>'+
     '<option disabled style="color:#4a9eff;font-weight:700">── Stage Analysis ──</option>'+
-    '<option value="st1">Stage 1 – Basing</option><option value="st2">Stage 2 – Advancing</option>'+
+    '<option value="stw">This week’s changes</option><option value="st1">Stage 1 – Basing</option><option value="st2">Stage 2 – Advancing</option>'+
     '<option value="st3">Stage 3 – Topping</option><option value="st4">Stage 4 – Declining</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
   function draw(){
     if(!D)return; var L=list();
