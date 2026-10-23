@@ -8822,6 +8822,10 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   /* nudge the right-hand price labels a few units right so the live point doesn't touch them (viewBox widened by the same, <1%) */
   window.CYCLBL=function(el,tail,tk){
     var svg=el.querySelector('svg'); if(!svg)return;
+    /* score lines run from the score badge up to the price line only (not to the top of the chart): each starts at its small dot on the price */
+    var dots=[].filter.call(svg.querySelectorAll('circle'),function(c){return +c.getAttribute('r')<5&&c.getAttribute('fill')!='transparent';});
+    [].forEach.call(svg.querySelectorAll('line'),function(l){var x=+l.getAttribute('x1');if(x!=+l.getAttribute('x2'))return;
+      var c=dots.filter(function(c){return Math.abs(+c.getAttribute('cx')-x)<0.2;})[0]; if(c)l.setAttribute('y1',c.getAttribute('cy'));});
     var ex=0; [].forEach.call(svg.querySelectorAll('polyline'),function(p){var d=p.getAttribute('stroke-dasharray');if(d&&d!='3 3')return;   /* price line + dotted tail */
       ex=Math.max(ex,+p.getAttribute('points').trim().split(/\s+/).pop().split(',')[0]);});
     if(!ex)return; var vb=svg.viewBox.baseVal, n=8;
