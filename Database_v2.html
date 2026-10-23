@@ -8223,8 +8223,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var row=el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
       var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
       var last=x.d.px[x.d.px.length-1][0], foot;
-      if(x.snap) foot='Weekly closes from ShareScope snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
-      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'ShareScope weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
+      if(x.snap) foot='Weekly closes from weekly snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
+      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'Weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
         (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
@@ -8246,7 +8246,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb);
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk);
         curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
@@ -8820,13 +8820,29 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(lv[0][1]/lp[1]>5||lp[1]/lv[0][1]>5)return tail;   /* unit mismatch guard */
     var out=tail.concat(lv); out.live=true; return out;};
   /* nudge the right-hand price labels a few units right so the live point doesn't touch them (viewBox widened by the same, <1%) */
-  window.CYCLBL=function(el){
+  window.CYCLBL=function(el,tail,tk){
     var svg=el.querySelector('svg'); if(!svg)return;
     var ex=0; [].forEach.call(svg.querySelectorAll('polyline'),function(p){var d=p.getAttribute('stroke-dasharray');if(d&&d!='3 3')return;   /* price line + dotted tail */
       ex=Math.max(ex,+p.getAttribute('points').trim().split(/\s+/).pop().split(',')[0]);});
     if(!ex)return; var vb=svg.viewBox.baseVal, n=8;
-    [].forEach.call(svg.querySelectorAll('text'),function(tx){var x=+tx.getAttribute('x');if(x>ex)tx.setAttribute('x',x+n);});
-    svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+(vb.width+n)+' '+vb.height);};
+    [].forEach.call(svg.querySelectorAll('text'),function(tx){
+      if(/ShareScope/.test(tx.textContent)){tx.remove();return;}   /* no data-source caption on the chart */
+      var x=+tx.getAttribute('x'); if(x>ex&&!tx.getAttribute('text-anchor'))tx.setAttribute('x',x+n);});   /* price labels only (score-badge numbers are centred) */
+    svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+(vb.width+n)+' '+vb.height);
+    /* today's live price as a label in the right-hand price column, level with the live point; it replaces a high/low label it would overlap */
+    var d=tail&&tail.live&&D&&D.filter(function(r){return r.t==tk;})[0], pl=svg.querySelector('polyline[stroke-dasharray="3 3"]');
+    if(!d||!pl)return;
+    var ly=+pl.getAttribute('points').trim().split(/\s+/).pop().split(',')[1], labs=[].filter.call(svg.querySelectorAll('text'),function(tx){return !tx.getAttribute('text-anchor')&&+tx.getAttribute('x')>ex;});
+    if(!labs.length)return;
+    var fs=+labs[0].getAttribute('font-size')||12, lx=labs[0].getAttribute('x'), tm=new Date(T);
+    labs.forEach(function(tx){if(Math.abs(+tx.getAttribute('y')-fs*0.35-ly)<fs*1.1)tx.remove();});
+    var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',lx);t.setAttribute('y',(ly+fs*0.35).toFixed(1));t.setAttribute('font-size',fs);t.setAttribute('font-weight','700');
+    t.setAttribute('fill',d.d>0?'#00d97e':d.d<0?'#ff4757':'#c8c8d8');t.textContent=d.p;
+    var ti=document.createElementNS('http://www.w3.org/2000/svg','title');
+    ti.textContent='Live price '+d.p+(d.d!=null?' ('+(d.d>0?'+':'')+d.d.toFixed(2)+'% today)':'')+' · read '+String(tm.getHours()).padStart(2,'0')+':'+String(tm.getMinutes()).padStart(2,'0');
+    t.appendChild(ti);svg.appendChild(t);};
+  setTimeout(function(){if(!D)fetchRows().catch(function(){});},3000);   /* read the sheets early so the first chart opened has today's price */
   function load(){
     document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
     return fetchRows().then(note).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
@@ -8847,7 +8863,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
     var sc=window.PPSCORES?window.PPSCORES(tk):[];
     var lt=window.CYCTAIL(tk,x);
-    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el);
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk);
     var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
     var px=(x.d.px||[]).concat(x.tail||[]);
     if(!line||px.length<12)return;
