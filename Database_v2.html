@@ -291,6 +291,10 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .h1-sub-ind.pos .h1-ind-mark{color:var(--green);}
 .h1-sub-ind.neg .h1-ind-mark{color:var(--red);}
 .h1-sub-ind.na .h1-ind-mark{color:var(--text-dim);}
+.h1-sub-ind.hyp .h1-ind-lbl,.h1-sub-ind.hyp .h1-ind-mark,.h1-sub-ind.hyp .h1-ind-dev{color:var(--amber,#ffb347);}
+.h1-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1}
+.h1-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
+.h1-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
 .h1-sub-ind.pos .h1-ind-lbl{color:var(--green);}
 .h1-sub-ind.neg .h1-ind-lbl{color:var(--red);}
 .h1-sub-ind.na .h1-ind-lbl{color:var(--text-dim);}
@@ -3094,7 +3098,7 @@ function buildRow(rec){
   const sstatsHtml=(rec.sparkStats||[]).map(function(s){return '<div class="sstat"><div class="sstat-lbl">'+s.lbl+'</div><div class="sstat-val" style="'+(s.style||'')+'">'+s.val+'</div></div>';}).join('');
   const h1Inds=rec.h1Inds||[];
   const revInds=h1Inds.length>0?h1Inds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const h1Html=revInds.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
+  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark">'+mk+'</div>'+(dv?'<div class="h1-ind-dev">'+dv+'</div>':'')+'</div>';}).join('');
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
   const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');

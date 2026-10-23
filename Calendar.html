@@ -441,7 +441,7 @@ function hydrateTicker(t){
 
 function recs(tk){tk=String(tk).toUpperCase();return allCards().filter(function(r){return String(r.ticker||'').toUpperCase()===tk;}).sort(function(a,b){return String(a.date||'').localeCompare(String(b.date||''));});}
 function latest(tk){var r=recs(tk);return r.length?r[r.length-1]:null;}
-function devPP(s){var m=String(s||'').replace(/−/g,'-').match(/([+-]?\d+(?:\.\d+)?)\s*pp/);return m?parseFloat(m[1]):null;}
+function devPP(s){s=String(s||'').replace(/−/g,'-');if(/%/.test(s))return null;var m=s.match(/([+-]?\d+(?:\.\d+)?)/);return m?parseFloat(m[1]):null;}
 function flags(r){
   /* h1: H1 ✓ · hyp1: H1 🔬 ≥ +1.5pp · h2: H2 🔥 · hyp2: H2 🔬 ≥ +3pp · acc: FY accel ✓ */
   var f={h1:false,hyp1:false,h2:false,hyp2:false,acc:false};if(!r)return f;
