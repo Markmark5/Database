@@ -292,6 +292,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .h1-sub-ind.neg .h1-ind-mark{color:var(--red);}
 .h1-sub-ind.na .h1-ind-mark{color:var(--text-dim);}
 .h1-sub-ind.hyp .h1-ind-lbl,.h1-sub-ind.hyp .h1-ind-mark,.h1-sub-ind.hyp .h1-ind-dev{color:var(--amber,#ffb347);}
+.h1-ind-mark[title]:not([title=""]){cursor:help;}
 .h1-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1}
 .h1-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
 .h1-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
@@ -1402,6 +1403,16 @@ body.sig-wide .cell-ticker{justify-content:center;}
               <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-h1-ahead" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green)">✓</span><span class="band-chk-lbl">H1 ahead</span><span class="band-cnt" id="cnt-h1-ahead">0</span></label>
               <label class="band-chk rev-chk" style="--rc:#4da3ff"><input type="checkbox" id="f-h1-hyp" onchange="applyFilters()"><span class="rev-arr">🔬</span><span class="band-chk-lbl">Hypothetical</span><span class="band-cnt" id="cnt-h1-hyp">0</span></label>
               <label class="band-chk rev-chk" style="--rc:var(--amber)"><input type="checkbox" id="f-h1-fire" onchange="applyFilters()"><span class="rev-arr">🔥</span><span class="band-chk-lbl">Strong 2nd half</span><span class="band-cnt" id="cnt-h1-fire">0</span></label>
+            </div>
+          </div>
+          <div class="sb-sec">
+            <div class="sb-lbl" title="Ticking more than one shows any match; cards with no index use the same ticker's other cards">Index</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-100" onchange="applyFilters()"><span class="band-chk-lbl">FTSE 100</span><span class="band-cnt" id="cnt-ix-100">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-250" onchange="applyFilters()"><span class="band-chk-lbl">FTSE 250</span><span class="band-cnt" id="cnt-ix-250">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-sc" onchange="applyFilters()"><span class="band-chk-lbl">Small Cap</span><span class="band-cnt" id="cnt-ix-sc">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-aim" onchange="applyFilters()"><span class="band-chk-lbl">AIM</span><span class="band-cnt" id="cnt-ix-aim">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-oth" onchange="applyFilters()"><span class="band-chk-lbl">Other</span><span class="band-cnt" id="cnt-ix-oth">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -3099,10 +3110,10 @@ function buildRow(rec){
   const sstatsHtml=(rec.sparkStats||[]).map(function(s){return '<div class="sstat"><div class="sstat-lbl">'+s.lbl+'</div><div class="sstat-val" style="'+(s.style||'')+'">'+s.val+'</div></div>';}).join('');
   const h1Inds=rec.h1Inds||[];
   const revInds=h1Inds.length>0?h1Inds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}var dn='';if(st==='hyp'){var d2=String(dv||'').replace(/−/g,'-'),m2=/%/.test(d2)?null:d2.match(/([+-]?\d+(?:\.\d+)?)/),v2=m2?parseFloat(m2[1]):null;if(v2!==null&&v2<=-(h2?3:1.5))dn=' dn';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark">'+mk+'</div>'+(dv?'<div class="h1-ind-dev'+dn+'">'+dv+'</div>':'')+'</div>';}).join('');
+  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}var dn='';if(st==='hyp'){var d2=String(dv||'').replace(/−/g,'-'),m2=/%/.test(d2)?null:d2.match(/([+-]?\d+(?:\.\d+)?)/),v2=m2?parseFloat(m2[1]):null;if(v2!==null&&v2<=-(h2?3:1.5))dn=' dn';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark" title="'+h1Tip(ind,rec)+'">'+mk+'</div>'+(dv?'<div class="h1-ind-dev'+dn+'">'+dv+'</div>':'')+'</div>';}).join('');
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
+  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark" title="'+accTip(ind)+'">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
   return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
     +'<div class="cell-ticker"><div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
@@ -3142,6 +3153,8 @@ function applyFilters(){
   const fUp=document.getElementById('f-rev-up').checked;
   const fDn=document.getElementById('f-rev-dn').checked;
   const fH1=['ahead','hyp','fire'].filter(function(k){return document.getElementById('f-h1-'+k).checked;});
+  const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
+  const ixMap=fIx.length?indexMap():null;
   const sort=document.getElementById('sort-sel').value;
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
@@ -3155,6 +3168,7 @@ function applyFilters(){
     if(fTo&&r.date>fTo)return false;
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
+    if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     return true;
   });
@@ -3227,7 +3241,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-type').value='';
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
@@ -3418,7 +3432,54 @@ function updateBandCounts(){
   document.getElementById('cnt-rev-up').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.up>=2;}).length;
   document.getElementById('cnt-rev-dn').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.dn<=-2;}).length;
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
+  const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
+  IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
 }
+/* Hover text for H1 TRK / ACCEL marks */
+function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function h1Tip(ind,rec){
+  const lbl=String(ind.lbl||'').toUpperCase().replace(/🔬/g,''),h2=/H2/.test(lbl),name=/^REV/.test(lbl.trim())?'Revenue':(/EPS/.test(lbl)?'EPS':lbl.trim()||'Metric');
+  const t=String(rec.rnsType||'').toUpperCase(),per=h2?'H2':(/\bQ1\b/.test(t)?'Q1':(/\bQ3\b/.test(t)?'YTD':'H1'));
+  const mk=String(ind.mark||''),dv=String(ind.dev||'').replace(/🔬/g,'').trim(),all=(ind.lbl||'')+mk+(ind.dev||'');
+  const dvTxt=dv&&dv!=='—'?' ('+dv+(h2?' vs last H2 growth':' vs usual seasonal share')+')':'';
+  let w;
+  if(/🔥/.test(mk))w=per+' '+name+' growth accelerating vs last H2 — strong 2nd half';
+  else if(/[✓✔]/.test(mk))w=h2?per+' '+name+' growth ahead of last H2':per+' '+name+' ahead of the company’s usual seasonal share';
+  else if(/[✕✗]/.test(mk))w=h2?per+' '+name+' growth slower than last H2':per+' '+name+' behind the company’s usual seasonal share';
+  else if(/[~≈◐]/.test(mk))w=per+' '+name+' roughly in line with seasonal';
+  else if(/🔬/.test(mk))w=per+' '+name+' tracking — hypothetical estimate';
+  else if(/[◆✦◎]/.test(mk))w=per+' '+name+' — estimated reading';
+  else if(/^[—−-]?$/.test(mk))w='No '+per+' '+name+' tracking data';
+  else w=per+' '+name+': '+mk;
+  if(/🔬/.test(all)&&!/hypothetical/.test(w))w+=' — hypothetical';
+  return tipEsc(w+dvTxt);
+}
+function accTip(ind){
+  const lbl=String(ind.lbl||'').trim().toUpperCase(),name=/^REV/.test(lbl)?'revenue':lbl;
+  const mk=String(ind.mark||'');
+  let w;
+  if(/[✓✔]/.test(mk)||ind.state==='pos')w='FC Growth Acc — forecast growth % faster than last year';
+  else if(/[✕✗]/.test(mk)||ind.state==='neg')w='Forecast '+name+' growth this year slower than last year’s';
+  else w='No forecast growth acceleration signal'+(name?' ('+name+')':'');
+  return tipEsc((w+(ind.dev?' ('+ind.dev+')':'')).replace(/\s+/g,' '));
+}
+/* Index group from the free-text index field: 100 · 250 · sc (Small Cap) · aim · oth */
+const IX_KEYS=['100','250','sc','aim','oth'];
+function indexClass(ix){
+  ix=String(ix||'').toUpperCase();
+  if(/FTSE\s*100/.test(ix))return '100';
+  if(/FTSE\s*250/.test(ix))return '250';
+  if(/SMALL\s*CAP/.test(ix))return 'sc';
+  if(/\bAIM\b/.test(ix)&&!/EX-AIM|AIM→MAIN/.test(ix))return 'aim';
+  return 'oth';
+}
+/* Ticker → index group from its cards (most recent recognised index), for cards whose own index is blank or unclear */
+function indexMap(){
+  const m={};
+  ALL.slice().sort(function(a,b){return String(a.date).localeCompare(String(b.date));}).forEach(function(r){const g=indexClass(r.index);if(g!=='oth')m[r.ticker]=g;});
+  return m;
+}
+function indexGroup(r,m){const g=indexClass(r.index);return g!=='oth'?g:((m&&m[r.ticker])||'oth');}
 /* H1 Tracking marks: ✓ ahead (not hypothetical, not H2) · 🔬 hypothetical · 🔥 strong H2 */
 function h1Flags(r){
   const f={ahead:false,hyp:false,fire:false};
