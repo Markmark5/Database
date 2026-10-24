@@ -291,6 +291,12 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .h1-sub-ind.pos .h1-ind-mark{color:var(--green);}
 .h1-sub-ind.neg .h1-ind-mark{color:var(--red);}
 .h1-sub-ind.na .h1-ind-mark{color:var(--text-dim);}
+.h1-sub-ind.hyp .h1-ind-lbl,.h1-sub-ind.hyp .h1-ind-mark,.h1-sub-ind.hyp .h1-ind-dev{color:var(--amber,#ffb347);}
+.h1-ind-mark[title]:not([title=""]){cursor:help;}
+.h1-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1}
+.h1-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
+.h1-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
+.h1-sub-ind.hyp .h1-ind-dev.dn{color:var(--red,#ff4757);}
 .h1-sub-ind.pos .h1-ind-lbl{color:var(--green);}
 .h1-sub-ind.neg .h1-ind-lbl{color:var(--red);}
 .h1-sub-ind.na .h1-ind-lbl{color:var(--text-dim);}
@@ -1167,6 +1173,18 @@ body.sig-wide .cell-ticker{justify-content:center;}
   color:#fff;padding:1px 6px 3px;background-repeat:no-repeat;
   background-image:linear-gradient(90deg,#ff0a78 0%,#ff0a78 62%,#ff0a7800 100%);
   background-size:100% 45%;background-position:0 100%}
+.nr-stamp{position:absolute;left:98px;top:4px;z-index:3;pointer-events:none;width:38px;height:38px;border-radius:50%;border:1.5px dashed var(--red);color:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--mono);font-weight:800;font-size:8px;letter-spacing:.08em;line-height:1.15;transform:rotate(-12deg);opacity:.85}
+.nr-stamp.amb{border-color:var(--amber);color:var(--amber);font-size:7px}
+.nr-stamp .nr-s2{font-size:7px;font-weight:700}
+.nr-chip{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--amber);background:#ffc4001a;border:1px solid #ffc40055;border-radius:3px;padding:3px 7px;margin:4px 0;line-height:1.4;display:inline-block;max-width:100%}
+.nr-hl{display:block;font-weight:500;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nr-div{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;margin:10px 0 5px;border-left:3px solid}
+.nr-div.t1{color:var(--red);border-left-color:var(--red);background:#e025251a}
+.nr-div.t2{color:var(--amber);border-left-color:var(--amber);background:#ffc4001a}
+.nr-div.t3{color:var(--text-secondary);border-left-color:var(--border)}
+.nr-btn{font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px dashed var(--amber);cursor:pointer;margin-right:6px}
+.nr-btn.on{background:var(--amber);color:#000}
+
 .section-divider{display:none}
 .drift-strip{display:inline-flex;align-items:center;gap:10px;padding:5px 14px;cursor:pointer;
   border-top:1px solid #ffffff10;border-right:1px solid #ffffff10;border-radius:0 0 4px 0;
@@ -1388,6 +1406,16 @@ body.sig-wide .cell-ticker{justify-content:center;}
             </div>
           </div>
           <div class="sb-sec">
+            <div class="sb-lbl" title="Ticking more than one shows any match; cards with no index use the same ticker's other cards">Index</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-100" onchange="applyFilters()"><span class="band-chk-lbl">FTSE 100</span><span class="band-cnt" id="cnt-ix-100">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-250" onchange="applyFilters()"><span class="band-chk-lbl">FTSE 250</span><span class="band-cnt" id="cnt-ix-250">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-sc" onchange="applyFilters()"><span class="band-chk-lbl">Small Cap</span><span class="band-cnt" id="cnt-ix-sc">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-aim" onchange="applyFilters()"><span class="band-chk-lbl">AIM</span><span class="band-cnt" id="cnt-ix-aim">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ix-oth" onchange="applyFilters()"><span class="band-chk-lbl">Other</span><span class="band-cnt" id="cnt-ix-oth">0</span></label>
+            </div>
+          </div>
+          <div class="sb-sec">
             <div class="sb-lbl">RNS Type</div>
             <select class="sb-sel" id="f-type" onchange="applyFilters()">
               <option value="">All types</option>
@@ -1420,7 +1448,8 @@ body.sig-wide .cell-ticker{justify-content:center;}
               <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>≤49</div>
             </div>
             <div style="display:flex;align-items:center;gap:5px;">
-              <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="var on=document.body.classList.toggle('sig-wide');this.textContent=on?'◀ NORMAL VIEW':'▶ FULL TEXT VIEW'">▶ FULL TEXT VIEW</button>
+              <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
+              <button id="nr-btn" class="nr-btn" style="display:none;" onclick="nrToggle()" title="Show only today's scorecards and today's RNS">NEW TODAY <span id="nr-cnt"></span></button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
                 <option value="date-desc">Date ↓</option>
@@ -1942,7 +1971,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
   <div class="db-fullscreen-inner" style="width:92vw;max-width:92vw;height:90vh;">
     <div class="db-fullscreen-bar">
       <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;">RNS Scorecards · 20 most recent</span>
-      <button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button>
+      <span style="display:flex;gap:6px;"><button class="db-expand-btn" id="sigwide-btn-fs" onclick="sigWideToggle()" style="font-size:12px;">▶ Full text view</button><button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button></span>
     </div>
     <div class="db-fullscreen-content" id="rns-fs-content" style="overflow-y:auto;height:calc(90vh - 44px);"></div>
   </div>
@@ -2345,6 +2374,7 @@ function expandSection(id){
     return;
   }
   if(id==='rns-fs'){
+    sigWideLabel();
     const c=document.getElementById('rns-fs-content');
     c.style.padding='14px';
     c.style.overflowY='auto';
@@ -3080,13 +3110,13 @@ function buildRow(rec){
   const sstatsHtml=(rec.sparkStats||[]).map(function(s){return '<div class="sstat"><div class="sstat-lbl">'+s.lbl+'</div><div class="sstat-val" style="'+(s.style||'')+'">'+s.val+'</div></div>';}).join('');
   const h1Inds=rec.h1Inds||[];
   const revInds=h1Inds.length>0?h1Inds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const h1Html=revInds.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
+  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}var dn='';if(st==='hyp'){var d2=String(dv||'').replace(/−/g,'-'),m2=/%/.test(d2)?null:d2.match(/([+-]?\d+(?:\.\d+)?)/),v2=m2?parseFloat(m2[1]):null;if(v2!==null&&v2<=-(h2?3:1.5))dn=' dn';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark" title="'+h1Tip(ind,rec)+'">'+mk+'</div>'+(dv?'<div class="h1-ind-dev'+dn+'">'+dv+'</div>':'')+'</div>';}).join('');
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
+  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark" title="'+accTip(ind)+'">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
   return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
     +'<div class="cell-ticker"><div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
-    +'<div class="company-nm">'+(rec.company||'')+'</div>'
+    +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
     +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?rec.entryPrice+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
     +(function(){var ye=lookupYE(rec.ticker);return ye?'<div class="sc-ye">YE '+ye+'</div>':'';})()
     +'<div class="pill-row"><div class="rns-pill">'+(rec.rnsType||'RNS')+'</div><div class="mode-pill">'+(rec.mode||'')+'</div>'+(rec.calData&&rec.calData.double?'<div class="mode-pill">📈🔥 Double</div>':'')
@@ -3096,7 +3126,7 @@ function buildRow(rec){
     +'<div class="cell"><div class="revisions">'+(revHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No data</span>')+'</div></div>'
     +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+((rec.sparkData&&rec.sparkData.length>1)?'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>':(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>'))+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
     +'<div class="h1-ind-cell">'+h1Html+'</div>'
-    +'<div class="h1-ind-cell">'+accelHtml+'</div>'
+    +'<div class="h1-ind-cell">'+accelHtml+'</div>'+nrBadge(rec)
     +'</div></div>';
 }
 
@@ -3112,6 +3142,7 @@ function rnsTypeCategory(t){
   return'Other';
 }
 function applyFilters(){
+  nrIndex();
   const q=(document.getElementById('search-inp').value||'').toLowerCase();
   const fG=document.getElementById('f-green').checked;
   const fA=document.getElementById('f-amber').checked;
@@ -3122,6 +3153,8 @@ function applyFilters(){
   const fUp=document.getElementById('f-rev-up').checked;
   const fDn=document.getElementById('f-rev-dn').checked;
   const fH1=['ahead','hyp','fire'].filter(function(k){return document.getElementById('f-h1-'+k).checked;});
+  const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
+  const ixMap=fIx.length?indexMap():null;
   const sort=document.getElementById('sort-sel').value;
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
@@ -3135,9 +3168,13 @@ function applyFilters(){
     if(fTo&&r.date>fTo)return false;
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
+    if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
+    if(NEW_ONLY&&nrTier(r)>2)return false;
     return true;
   });
   FILTERED.sort(function(a,c){
+    if(nrTiersOn()){const t=nrTier(a)-nrTier(c);if(t)return t;
+      if(nrTier(a)===2){const x=nrInfo(a).time.localeCompare(nrInfo(c).time);if(x)return x;}}
     switch(sort){
       case'date-desc':{const d=c.date.localeCompare(a.date);return d||(c.score-a.score)||c.importedAt.localeCompare(a.importedAt);}
       case'date-asc':{const d=a.date.localeCompare(c.date);return d||(c.score-a.score)||a.importedAt.localeCompare(c.importedAt);}
@@ -3149,10 +3186,62 @@ function applyFilters(){
   });
   PAGE=1;renderRows();updateBandCounts();
 }
+
+/* ── NEW RNS TODAY: today's scorecards first, then today's RNS tickers with no scorecard yet
+   (their latest card, date unchanged), then the rest. Data: data/new_rns_today.json from the
+   Drift-lite morning run; it stays until the next morning run replaces it. ── */
+var NEWRNS=null,NEW_ONLY=false,NR_MAP={},NR_TIER={};
+var NR_MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+function nrLoad(){
+  var qd=(location.search.match(/[?&]nrdate=(\d{4}-\d{2}-\d{2})/)||[])[1];
+  fetch('data/new_rns_today.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();})
+    .catch(function(){return fetch('https://raw.githubusercontent.com/Markmark5/Database/main/data/new_rns_today.json?t='+Date.now()).then(function(r){return r.ok?r.json():null;});})
+    .then(function(j){if(!j||!j.date)return;if(qd)j.date=qd;NEWRNS=j;applyFilters();})
+    .catch(function(){});
+}
+function nrIndex(){
+  NR_MAP={};NR_TIER={};
+  if(!NEWRNS)return;
+  (NEWRNS.rns||[]).forEach(function(x){var k=String(x.ticker||'').toUpperCase();if(k&&!NR_MAP[k])NR_MAP[k]={time:(x.time||'').slice(0,5),type:x.type||'RNS',headline:x.headline||'',marks:x.marks||[],disc:x.disc||0};});
+  var d=NEWRNS.date,hasToday={},latest={};
+  ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase();
+    if(r.date>=d)hasToday[k]=true;
+    if(!latest[k]||r.date>latest[k].date||(r.date===latest[k].date&&(r.importedAt||'')>(latest[k].importedAt||'')))latest[k]=r;});
+  ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase();
+    NR_TIER[r.id]=r.date>=d?1:(NR_MAP[k]&&!hasToday[k]&&latest[k]===r)?2:3;});
+  var n=0;for(var id in NR_TIER)if(NR_TIER[id]<3)n++;
+  var btn=document.getElementById('nr-btn');
+  if(btn){btn.style.display=n?'':'none';document.getElementById('nr-cnt').textContent=n;}
+}
+function nrTier(r){if(NEWRNS&&!(r.id in NR_TIER))nrIndex();return NR_TIER[r.id]||3;}
+function nrInfo(r){return NR_MAP[String(r.ticker||'').toUpperCase()]||{time:'',type:'',headline:''};}
+function nrTiersOn(){var s=document.getElementById('sort-sel').value;return !!NEWRNS&&(s==='date-desc'||!s);}
+function nrDay(){var p=NEWRNS.date.split('-');return (+p[2])+' '+NR_MON[+p[1]-1];}
+function nrBadge(r){
+  if(!NEWRNS)return '';var t=nrTier(r);if(t>2)return '';
+  return t===1?'<div class="nr-stamp"><span>NEW</span><span class="nr-s2">'+nrDay()+'</span></div>'
+              :'<div class="nr-stamp amb"><span>NEW RNS</span><span class="nr-s2">'+(nrInfo(r).time||nrDay())+'</span></div>';
+}
+function nrChip(r){
+  if(!NEWRNS||nrTier(r)!==2)return '';var i=nrInfo(r);
+  return '<div class="nr-chip" title="'+i.headline.replace(/"/g,'&quot;')+'">RNS '+(i.time||nrDay())+' · '+i.type+'<span class="nr-hl">'+i.headline+'</span><span class="nr-hl">Drift: '+(i.marks.length?i.marks.join(', '):'no new mark')+(i.disc?' · disclosure '+i.disc:'')+'</span></div>';
+}
+function nrDivider(t,prev){
+  if(t===1)return '<div class="nr-div t1">'+nrDay()+' · new scorecards</div>';
+  if(t===2)return '<div class="nr-div t2">RNS '+nrDay()+' · no scorecard yet · previous card, date unchanged</div>';
+  return prev?'<div class="nr-div t3">Earlier</div>':'';
+}
+function nrToggle(){NEW_ONLY=!NEW_ONLY;document.getElementById('nr-btn').classList.toggle('on',NEW_ONLY);applyFilters();}
+document.addEventListener('DOMContentLoaded',nrLoad);
+/* Full text / normal view: one body class, shared by the list and the 20-most-recent popup */
+function sigWideLabel(){var on=document.body.classList.contains('sig-wide');
+  var a=document.getElementById('sigwide-btn'),b=document.getElementById('sigwide-btn-fs');
+  if(a)a.textContent=on?'◀ NORMAL VIEW':'▶ FULL TEXT VIEW';if(b)b.textContent=on?'◀ Normal view':'▶ Full text view';}
+function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel();}
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-type').value='';
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
@@ -3172,10 +3261,12 @@ function renderRows(){
     if(_stubs.length) arcHydrate(_stubs).then(function(){renderRows();});
   }
   const bandInfo={green:{label:'Upgrade Cycle Likely · Score ≥75',cls:'up'},amber:{label:'Mixed / Modest Impact · Score 50–74',cls:'mixed'},red:{label:'Cuts Probable · Score 0–49',cls:'down'}};
-  let html='',lastBand=null;
+  let html='',lastBand=null,lastTier=null;
+  const tiers=nrTiersOn();
   page.forEach(function(rec){
     const b=band(rec.score);
     if(b!==lastBand){html+='<div class="section-divider '+bandInfo[b].cls+'">'+bandInfo[b].label+'</div>';lastBand=b;}
+    if(tiers){const t=nrTier(rec);if(t!==lastTier){html+=nrDivider(t,lastTier);lastTier=t;}}
     html+=rec._stub?arcStubRow(rec):buildRow(rec);
   });
   container.innerHTML=html;
@@ -3341,7 +3432,54 @@ function updateBandCounts(){
   document.getElementById('cnt-rev-up').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.up>=2;}).length;
   document.getElementById('cnt-rev-dn').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.dn<=-2;}).length;
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
+  const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
+  IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
 }
+/* Hover text for H1 TRK / ACCEL marks */
+function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function h1Tip(ind,rec){
+  const lbl=String(ind.lbl||'').toUpperCase().replace(/🔬/g,''),h2=/H2/.test(lbl),name=/^REV/.test(lbl.trim())?'Revenue':(/EPS/.test(lbl)?'EPS':lbl.trim()||'Metric');
+  const t=String(rec.rnsType||'').toUpperCase(),per=h2?'H2':(/\bQ1\b/.test(t)?'Q1':(/\bQ3\b/.test(t)?'YTD':'H1'));
+  const mk=String(ind.mark||''),dv=String(ind.dev||'').replace(/🔬/g,'').trim(),all=(ind.lbl||'')+mk+(ind.dev||'');
+  const dvTxt=dv&&dv!=='—'?' ('+dv+(h2?' vs last H2 growth':' vs usual seasonal share')+')':'';
+  let w;
+  if(/🔥/.test(mk))w=per+' '+name+' growth accelerating vs last H2 — strong 2nd half';
+  else if(/[✓✔]/.test(mk))w=h2?per+' '+name+' growth ahead of last H2':per+' '+name+' ahead of the company’s usual seasonal share';
+  else if(/[✕✗]/.test(mk))w=h2?per+' '+name+' growth slower than last H2':per+' '+name+' behind the company’s usual seasonal share';
+  else if(/[~≈◐]/.test(mk))w=per+' '+name+' roughly in line with seasonal';
+  else if(/🔬/.test(mk))w=per+' '+name+' tracking — hypothetical estimate';
+  else if(/[◆✦◎]/.test(mk))w=per+' '+name+' — estimated reading';
+  else if(/^[—−-]?$/.test(mk))w='No '+per+' '+name+' tracking data';
+  else w=per+' '+name+': '+mk;
+  if(/🔬/.test(all)&&!/hypothetical/.test(w))w+=' — hypothetical';
+  return tipEsc(w+dvTxt);
+}
+function accTip(ind){
+  const lbl=String(ind.lbl||'').trim().toUpperCase(),name=/^REV/.test(lbl)?'revenue':lbl;
+  const mk=String(ind.mark||'');
+  let w;
+  if(/[✓✔]/.test(mk)||ind.state==='pos')w='FC Growth Acc — forecast growth % faster than last year';
+  else if(/[✕✗]/.test(mk)||ind.state==='neg')w='Forecast '+name+' growth this year slower than last year’s';
+  else w='No forecast growth acceleration signal'+(name?' ('+name+')':'');
+  return tipEsc((w+(ind.dev?' ('+ind.dev+')':'')).replace(/\s+/g,' '));
+}
+/* Index group from the free-text index field: 100 · 250 · sc (Small Cap) · aim · oth */
+const IX_KEYS=['100','250','sc','aim','oth'];
+function indexClass(ix){
+  ix=String(ix||'').toUpperCase();
+  if(/FTSE\s*100/.test(ix))return '100';
+  if(/FTSE\s*250/.test(ix))return '250';
+  if(/SMALL\s*CAP/.test(ix))return 'sc';
+  if(/\bAIM\b/.test(ix)&&!/EX-AIM|AIM→MAIN/.test(ix))return 'aim';
+  return 'oth';
+}
+/* Ticker → index group from its cards (most recent recognised index), for cards whose own index is blank or unclear */
+function indexMap(){
+  const m={};
+  ALL.slice().sort(function(a,b){return String(a.date).localeCompare(String(b.date));}).forEach(function(r){const g=indexClass(r.index);if(g!=='oth')m[r.ticker]=g;});
+  return m;
+}
+function indexGroup(r,m){const g=indexClass(r.index);return g!=='oth'?g:((m&&m[r.ticker])||'oth');}
 /* H1 Tracking marks: ✓ ahead (not hypothetical, not H2) · 🔬 hypothetical · 🔥 strong H2 */
 function h1Flags(r){
   const f={ahead:false,hyp:false,fire:false};
@@ -3356,10 +3494,11 @@ function h1Flags(r){
 /* Revision % from free text: "+2-3%", "−10–15%", "hold/-2%", "+3% to +8%" → signed number (range midpoint) */
 function revPct(s){
   s=String(s||'').replace(/[−—]/g,'-');
+  const neg=/\b(cuts?|downgraded?|lower(ed)?)\b/i.test(s);   /* "0–5% cut", "cut 5–10%": unsigned numbers are a cut */
   const re=/([+-])?\s*(\d+(?:\.\d+)?)\s*(%)?(?:\s*(?:–|-|to)\s*([+-])?\s*(\d+(?:\.\d+)?)\s*%)?/g;let m;
   while((m=re.exec(s))){
     if(!m[3]&&m[5]==null)continue;
-    const sg=m[1]==='-'?-1:1,a=sg*+m[2];
+    const sg=m[1]==='-'?-1:m[1]==='+'?1:neg?-1:1,a=sg*+m[2];
     if(m[5]==null)return a;
     return (a+(m[4]?(m[4]==='-'?-1:1):sg)*+m[5])/2;
   }
@@ -8135,7 +8274,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         '<div class="ppc"></div>'+((marked||scoresFor(tk).length)?'<div class="pp-leg">'+(marked?DC.legend('dark'):'')+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="ppf">Click ticker for full chart</div>';
       var sc=scoresFor(tk);
-      DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:x.tail,scores:sc,scoreLane:x.snap?null:'bottom'});
+      var plt=window.CYCTAIL?CYCTAIL(tk,x):x.tail;
+      DC.render(prev.querySelector('.ppc'),x.d,{theme:'dark',size:'preview',tail:plt,scores:sc,scoreLane:x.snap?null:'bottom'});
       var r=el.getBoundingClientRect(), left=Math.min(r.left,window.innerWidth-392), top=r.bottom+6;
       prev.style.left=Math.max(6,left)+'px'; prev.style.display='block';
       if(top+prev.offsetHeight>window.innerHeight-6)top=Math.max(6,r.top-prev.offsetHeight-6);
@@ -8150,8 +8290,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var row=el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
       var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
       var last=x.d.px[x.d.px.length-1][0], foot;
-      if(x.snap) foot='Weekly closes from ShareScope snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
-      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'ShareScope weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
+      if(x.snap) foot='Weekly closes from weekly snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
+      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'Weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
         (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
@@ -8162,8 +8302,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
       var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
       /* today's price + Cycles regime under the ticker, from the live sheets */
-      var pmp=mod.querySelector('.pmp');
-      if(window.CYCPILLS)CYCPILLS(tk).then(function(h){if(pmp.isConnected)pmp.innerHTML=h;}).catch(function(){});
+      var pmp=mod.querySelector('.pmp'), lt=window.CYCTAIL?CYCTAIL(tk,x):x.tail, curY=0;
+      if(window.CYCPILLS)CYCPILLS(tk).then(function(h){if(!pmp.isConnected)return; pmp.innerHTML=h;
+        var l2=CYCTAIL(tk,x); if(l2.live&&!lt.live){lt=l2;drawRange(curY);}   /* sheets just read: redraw with today's live point */
+      }).catch(function(){});
       var lastIso=(x.tail&&x.tail.length?x.tail[x.tail.length-1][0]:allPx[allPx.length-1][0]);
       var spanYrs=(Date.parse(lastIso)-Date.parse(allPx[0][0]))/(365.25*864e5);
       function drawRange(yrs){
@@ -8171,7 +8313,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:x.tail,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'});
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk);
+        curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
       if(spanYrs>1.3){
@@ -8671,6 +8814,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-flt select.f-bull{border-color:#00d97e;background:#00140a;color:#00d97e;box-shadow:0 0 0 2px #00d97e33}
 .cyc-flt select.f-bear{border-color:#ff4757;background:#1a0508;color:#ff8c7a;box-shadow:0 0 0 2px #ff475733}
 .cyc-flt select.f-new{border-color:#ffb020;box-shadow:0 0 0 2px #ffb02044}
+.cyc-flt select.f-st{border-color:#4a9eff;background:#07111f;color:#8cc4ff;box-shadow:0 0 0 2px #4a9eff33}
 .cyc-flt select option{background:#111;color:#f2f2f8;font-weight:400}
 .cyc-cnt{color:#6a6a85;font-size:12px;margin-left:auto}
 .cyc-note{color:#6a6a85;font-size:11.5px;margin:8px 0 0}
@@ -8695,7 +8839,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
   var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
   var COL={'ALL':'#c8c8d8','BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
-  var D=null, T=0, cur='BULL', chartsOnly=false, q='', IO=null, sortBy='tg', show='all';
+  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all';
   function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function csv(t){var R=[],r=[],f='',i=0,Q=false;
@@ -8733,6 +8877,44 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     return (D&&Date.now()-T<15*60000?Promise.resolve():fetchRows()).then(function(){
       var d=D&&D.filter(function(r){return r.t==tk;})[0]; if(!d)return '';
       return hdrPrice(d).replace('margin-left:auto;','')+'<span class="cyc-pill" style="margin-left:0;color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span>';});};
+  /* the chart's dotted tail plus today's live sheet price as its last point (in the chart's own units, via the snapshot reader) */
+  window.CYCTAIL=function(tk,x){
+    var tail=x.tail||[], d=D&&D.filter(function(r){return r.t==tk;})[0], DC=window.DriftChart;
+    if(!d||!d.p||!DC||!x.d||!x.d.px||!x.d.px.length)return tail;
+    var now=new Date(), iso=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+    var lp=tail.length?tail[tail.length-1]:x.d.px[x.d.px.length-1]; if(iso<=lp[0])return tail;
+    var raw=d.p.replace(/[£,\s]/g,''), lv=DC.parseTail([{Date:iso.slice(8)+'/'+iso.slice(5,7)+'/'+iso.slice(0,4),Snapshot:tk+',,,,,,'+raw}],tk,x.d.ccy,null);
+    if(!lv.length)return tail;
+    if(lv[0][1]/lp[1]>5||lp[1]/lv[0][1]>5)return tail;   /* unit mismatch guard */
+    var out=tail.concat(lv); out.live=true; return out;};
+  /* nudge the right-hand price labels a few units right so the live point doesn't touch them (viewBox widened by the same, <1%) */
+  window.CYCLBL=function(el,tail,tk){
+    var svg=el.querySelector('svg'); if(!svg)return;
+    /* score lines run from the score badge up to the price line only (not to the top of the chart): each starts at its small dot on the price */
+    var dots=[].filter.call(svg.querySelectorAll('circle'),function(c){return +c.getAttribute('r')<5&&c.getAttribute('fill')!='transparent';});
+    [].forEach.call(svg.querySelectorAll('line'),function(l){var x=+l.getAttribute('x1');if(x!=+l.getAttribute('x2'))return;
+      var c=dots.filter(function(c){return Math.abs(+c.getAttribute('cx')-x)<0.2;})[0]; if(c)l.setAttribute('y1',c.getAttribute('cy'));});
+    var ex=0; [].forEach.call(svg.querySelectorAll('polyline'),function(p){var d=p.getAttribute('stroke-dasharray');if(d&&d!='3 3')return;   /* price line + dotted tail */
+      ex=Math.max(ex,+p.getAttribute('points').trim().split(/\s+/).pop().split(',')[0]);});
+    if(!ex)return; var vb=svg.viewBox.baseVal, n=8;
+    [].forEach.call(svg.querySelectorAll('text'),function(tx){
+      if(/ShareScope/.test(tx.textContent)){tx.remove();return;}   /* no data-source caption on the chart */
+      var x=+tx.getAttribute('x'); if(x>ex&&!tx.getAttribute('text-anchor'))tx.setAttribute('x',x+n);});   /* price labels only (score-badge numbers are centred) */
+    svg.setAttribute('viewBox',vb.x+' '+vb.y+' '+(vb.width+n)+' '+vb.height);
+    /* today's live price as a label in the right-hand price column, level with the live point; it replaces a high/low label it would overlap */
+    var d=tail&&tail.live&&D&&D.filter(function(r){return r.t==tk;})[0], pl=svg.querySelector('polyline[stroke-dasharray="3 3"]');
+    if(!d||!pl)return;
+    var ly=+pl.getAttribute('points').trim().split(/\s+/).pop().split(',')[1], labs=[].filter.call(svg.querySelectorAll('text'),function(tx){return !tx.getAttribute('text-anchor')&&+tx.getAttribute('x')>ex;});
+    if(!labs.length)return;
+    var fs=+labs[0].getAttribute('font-size')||12, lx=labs[0].getAttribute('x'), tm=new Date(T);
+    labs.forEach(function(tx){if(Math.abs(+tx.getAttribute('y')-fs*0.35-ly)<fs*1.1)tx.remove();});
+    var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',lx);t.setAttribute('y',(ly+fs*0.35).toFixed(1));t.setAttribute('font-size',fs);t.setAttribute('font-weight','700');
+    t.setAttribute('fill',d.d>0?'#00d97e':d.d<0?'#ff4757':'#c8c8d8');t.textContent=d.p;
+    var ti=document.createElementNS('http://www.w3.org/2000/svg','title');
+    ti.textContent='Live price '+d.p+(d.d!=null?' ('+(d.d>0?'+':'')+d.d.toFixed(2)+'% today)':'')+' · read '+String(tm.getHours()).padStart(2,'0')+':'+String(tm.getMinutes()).padStart(2,'0');
+    t.appendChild(ti);svg.appendChild(t);};
+  setTimeout(function(){if(!D)fetchRows().catch(function(){});},3000);   /* read the sheets early so the first chart opened has today's price */
   function load(){
     document.getElementById('cyc-note').textContent='Loading the 6 live sheets…';
     return fetchRows().then(note).catch(function(){document.getElementById('cyc-note').innerHTML='<b style="color:#ff4757">Could not load the Cycles sheets.</b>';});
@@ -8752,7 +8934,8 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     var DC=window.DriftChart;
     if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
     var sc=window.PPSCORES?window.PPSCORES(tk):[];
-    DC.render(el,x.d,{theme:'dark',size:'modal',tail:x.tail,scores:sc,scoreLane:x.snap?null:'bottom'});
+    var lt=window.CYCTAIL(tk,x);
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk);
     var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
     var px=(x.d.px||[]).concat(x.tail||[]);
     if(!line||px.length<12)return;
@@ -8765,7 +8948,14 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!j)return;
     var ay=(P[j][1]-P[0][1])/(dp[j][1]-dp[0][1]), by=P[0][1]-ay*dp[0][1], NS='http://www.w3.org/2000/svg';
     var area=svg.querySelector('polygon');
-    [[10,'#9a9ab5',0.6],[20,'#4a9eff',0.8],[40,'#c77dff',1.1]].forEach(function(z){var pts=[];
+    /* Stage Analysis: the current base band as dotted top and bottom lines from where the base began */
+    var g=/^st/.test(show)&&stg(tk), bb=g&&g.b;
+    if(bb){var bx0=ax*t(bb[0])+bx, bx1=P[n][0];
+      [bb[1],bb[2]].forEach(function(v){var y=(ay*v+by).toFixed(1), l=document.createElementNS(NS,'line');
+        l.setAttribute('x1',bx0.toFixed(1));l.setAttribute('x2',bx1.toFixed(1));l.setAttribute('y1',y);l.setAttribute('y2',y);
+        l.setAttribute('stroke','#c9c6d8');l.setAttribute('stroke-dasharray','4 3');l.setAttribute('opacity','.7');l.setAttribute('stroke-width','.8');
+        l.style.pointerEvents='none';svg.insertBefore(l,area||line);});}
+    [[10,'#9a9ab5',0.4],[20,'#4a9eff',0.55],[40,'#c77dff',0.75]].forEach(function(z){var pts=[];
       for(var i=0;i<px.length;i++){var v=ma(px,i,z[0]);if(v!=null)pts.push((ax*t(px[i][0])+bx).toFixed(1)+','+(ay*v+by).toFixed(1));}
       if(pts.length<2)return;
       var pl=document.createElementNS(NS,'polyline');
@@ -8802,15 +8992,31 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     L.ec=!!(cd&&cd.e); L.ecd=cd?cd.d:'';   /* newest coloured print (flat ones skipped) is an early signal; its date */
     L.ca=L.dn&&gs.length>0&&+gs[gs.length-1][2]>0;   /* ▼ straight after a ▲ (last guidance change before it was a raise) */
     return L;}
+  function ago(n){var t=new Date();t.setDate(t.getDate()-n);   /* date n calendar days ago (0 = today) */
+    return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
   function d3(){var t=new Date(),n=0;   /* start of the last 3 trading days, today included (weekends skipped) */
     while(true){if(t.getDay()%6)n++;if(n==3)break;t.setDate(t.getDate()-1);}
     return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');}
   function down30(d){return d.m30!=null&&d.m30<0;}
-  function pass(d){if(show=='all')return true; var l=lastPr(d.t); if(!l)return false;
+  /* weekly stage from lite-index "stg" ("stage|week it began|from|flags", stage_rules.md), charted tickers only */
+  var STN={1:'Basing',2:'Advancing',3:'Topping',4:'Declining'}, STC={1:'#4a9eff',2:'#00d97e',3:'#ffb020',4:'#ff4757'};
+  function stg(tk){var M=window.LITEMAP, s=M&&M[tk]&&M[tk].stg; if(!s)return null; var a=s.split('|');
+    var b=a[4]?a[4].split(','):null;
+    return a[0]?{s:+a[0],d:a[1]||'',f:+a[2]||0,fl:a[3]?a[3].split(','):[],b:b&&b.length==3?[b[0],+b[1],+b[2]]:null}:null;}
+  function stFlag(f){if(f=='41e')return '4→1 early'; if(f=='e2')return 'early Stage 2'; if(f=='w23')return '2→3 watch'; if(f=='r34')return '3→4 risk';
+    if(f=='t')return 'early turn'; if(f[0]=='p')return '→ '+f[1]+' pending (wk '+f.slice(2)+' of 3)'; return '';}
+  window.CYCSTAGE=function(tk){var g=stg(tk); if(!g)return '';
+    var fl=g.fl.map(stFlag).filter(Boolean);
+    return '<span class="cyc-pill" style="margin-left:0;color:'+STC[g.s]+';border-color:'+STC[g.s]+'66" title="'+
+      (g.f?'Stage '+g.f+' → '+g.s+' week of '+g.d:'Stage '+g.s)+'">Stage '+g.s+' · '+STN[g.s]+(fl.length?' · '+fl.join(' · '):'')+'</span>';};
+  function pass(d){if(show=='all')return true;
+    if(/^st[1-4]$/.test(show)){var g=stg(d.t);return !!g&&g.s==+show[2];}
+    if(show=='stw'){var g=stg(d.t);return !!g&&!!g.f&&g.d>=ago(7);}   /* This week's changes: a stage change in the last 7 days */
+    var l=lastPr(d.t); if(!l)return false;
     if(show=='early')return l.ec;
     if(show=='ac')return !!l.ac;
     if(show=='f12')return !!l.f12;
-    if(show=='d3')return !!l.c&&l.d>=d3();
+    if(/^nd\d+$/.test(show))return !!l.c&&l.d>=ago(+show.slice(2)-1);   /* New Signals: a red or green print today / last 7 / last 30 days */
     if(show=='turn')return down30(d)&&l.c=='g'&&l.pc=='r';   /* reversal: newest print green straight after a red one, 30w MA falling */
     if(show=='g30')return down30(d)&&l.c=='g';
     /* bearish mirrors */
@@ -8822,7 +9028,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function base(d){return (!chartsOnly||lite(d.t))&&pass(d);}
   function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){
-      if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
+      if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
+        if(p&&r&&p.d!==r.d)return p.d<r.d?1:-1;}
+      else if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
         var xd=x&&(show=='early'?x.ecd:x.d), yd=y&&(show=='early'?y.ecd:y.d);
         if(xd&&yd&&xd!==yd)return xd<yd?1:-1;}
       if(sortBy=='tg'||sortBy=='tgb'){var x=tg12(a.t), y=tg12(b.t);   /* scored tickers first, best (or for tgb worst) 12-month Text + G first */
@@ -8833,15 +9041,18 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(l)o+=' · last print <span style="color:'+(l.c=='g'?'#00d97e':l.c=='r'?'#ff4757':'#9a9ab5')+'">'+l.d+(l.up?' ▲ raise':'')+(l.dn?' ▼ cut':'')+(l.e?' early signal':'')+'</span>'+
       (l.ec&&!l.e?' · <span style="color:#00d97e">early signal '+l.ecd+'</span> (flat since)':'');
     return o;}
+  function stSince(tk){var g=stg(tk); return g&&g.f?' · <span style="color:'+STC[g.s]+'">stage '+g.f+'→'+g.s+' week of '+g.d+'</span>':'';}
   function card(d){return '<div class="cyc-card"><div class="cyc-h"><span class="ticker-sym">'+esc(d.t)+'</span><span class="cyc-n">'+esc(d.n)+'</span>'+
-    hdrPrice(d)+'<span class="cyc-pill" style="'+(d.p?'margin-left:0;':'')+'color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span></div>'+
-    '<div class="cyc-sub">10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
-    (d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t)+'</div>'+
+    hdrPrice(d)+(/^st/.test(show)?CYCSTAGE(d.t):'')+(/^st/.test(show)?'':   /* Stage Analysis cards show the stage only, not the Bull/Bear regime */
+    '<span class="cyc-pill" style="'+(d.p?'margin-left:0;':'')+'color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span>')+'</div>'+
+    '<div class="cyc-sub">'+(/^st/.test(show)?stSince(d.t).replace(/^ · /,''):   /* Stage Analysis: just the stage change */
+    '10w '+ar(d.m[0])+' '+pc(d.m[0])+' · 20w '+ar(d.m[1])+' '+pc(d.m[1])+' · 40w '+ar(d.m[2])+' '+pc(d.m[2])+
+    (d.m30!=null?' · 30w '+pc(d.m30)+' over 4 wks':'')+tgTag(d.t))+'</div>'+
     '<div class="cyc-ch" data-t="'+esc(d.t)+'"></div></div>';}
   function bar(){return ['ALL'].concat(ORDER).map(function(r){return '<button class="cyc-btn" data-r="'+r+'" style="--c:'+COL[r]+'">'+title(r)+' <i></i></button>';}).join('')+
-    '<label><input type="checkbox" id="cyc-co"> Charted only</label>'+
+    '<label title="Unticked: charted tickers only · ticked: every ticker in the 6 sheets"><input type="checkbox" id="cyc-co"> Whole market</label>'+
     /* one dropdown: the two plain sorts show every ticker; each filter shows its newest trigger first */
-    '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="d3">New Signals</option>'+
+    '<label class="cyc-flt"><svg width="13" height="13" viewBox="0 0 24 24" fill="#ffb020"><path d="M3 4h18l-7 8.5V19l-4 2v-8.5z"/></svg>Filter <select id="cyc-show" class="cyc-q" style="width:auto"><option value="nd1">New Signals Today</option><option value="nd7">New Signals 7 days</option><option value="nd30">New Signals 30 days</option>'+
     '<option disabled style="color:#e8e8f0;font-weight:700">── Show All ──</option>'+
     '<option value="tg">Text + G, last 12 months</option><option value="ma">20w MA strength</option>'+
     '<option disabled style="color:#00d97e;font-weight:700">── Bullish ──</option>'+
@@ -8851,7 +9062,10 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     '<option disabled style="color:#ff4757;font-weight:700">── Bearish ──</option>'+
     '<option value="tgb">Text + G, last 12 months (most bearish first)</option>'+
     '<option value="ca">▼ straight after a ▲</option><option value="r30">30w MA rising + red last print</option>'+
-    '<option value="sd">First step down: red after green, 30w MA rising</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
+    '<option value="sd">First step down: red after green, 30w MA rising</option>'+
+    '<option disabled style="color:#4a9eff;font-weight:700">── Stage Analysis ──</option>'+
+    '<option value="stw">This week’s changes</option><option value="st1">Stage 1 – Basing</option><option value="st2">Stage 2 – Advancing</option>'+
+    '<option value="st3">Stage 3 – Topping</option><option value="st4">Stage 4 – Declining</option></select></label><input class="cyc-q" id="cyc-q" placeholder="Search ticker / name"><span class="cyc-cnt" id="cyc-cnt"></span>';}
   function draw(){
     if(!D)return; var L=list();
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
@@ -8870,12 +9084,13 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!built){built=true;
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
-      document.getElementById('cyc-co').onchange=function(){chartsOnly=this.checked;draw();};
+      document.getElementById('cyc-co').onchange=function(){chartsOnly=!this.checked;draw();};
       document.getElementById('cyc-show').onchange=function(){var v=this.value;
         if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
-        this.className='cyc-q'+(v=='d3'?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':'');
+        this.className='cyc-q'+(/^nd/.test(v)?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':/^st/.test(v)?' f-st':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
+    document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
     var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>15*60000)load(); else note(BAD);   /* sheets refresh during the day: re-read after 15 min */
