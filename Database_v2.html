@@ -2149,10 +2149,6 @@ body.sig-wide .cell-ticker{justify-content:center;}
         <input type="file" id="sync-inp" accept=".json" style="display:none;" onchange="onSyncInput(event)">
         <div class="mbox" id="sync-msg"></div>
       </div>
-      <div class="sync-sec">
-        <div class="sync-sec-t" style="color:var(--red);">Danger Zone</div>
-        <button class="xbtn xbtn-red" onclick="confirmNuke()">☢ Delete All Records</button>
-      </div>
     </div>
   </div>
 </div>
@@ -3731,7 +3727,7 @@ async function commitFile(){
   for(const r of PENDING){try{await dbPut(r);}catch(e){}}
   PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
   FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
-  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();ghAutoPush();
 }
 function onPasteInput(){const html=document.getElementById('paste-box').value;if(html.length<100)return;PENDING=parseScorecard(html);if(PENDING.length)showPreview('paste');}
 async function commitPaste(){
@@ -3740,7 +3736,7 @@ async function commitPaste(){
   for(const r of PENDING){try{await dbPut(r);}catch(e){}}
   PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
   FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
-  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();ghAutoPush();
 }
 async function commitManual(){
   const ticker=document.getElementById('m-ticker').value.trim().toUpperCase();
@@ -3751,7 +3747,7 @@ async function commitManual(){
   if(score<0||score>100){msg.className='mbox err';msg.style.display='block';msg.textContent='Score must be 0–100.';return;}
   const rec={id:genId(ticker,date),ticker,score,company:document.getElementById('m-company').value.trim(),date,rnsType:document.getElementById('m-rns-type').value,mode:document.getElementById('m-mode').value,index:document.getElementById('m-index').value.trim(),verdict:document.getElementById('m-verdict').value.trim(),signals:[],revisions:[],sparkStats:[],h1Inds:[],accelInds:[],importedAt:new Date().toISOString(),source:'manual'};
   try{await dbPut(rec);}catch(e){}
-  var idx=ALL.findIndex(function(x){return x.id===rec.id;});if(idx>=0)ALL[idx]=rec;else ALL.push(rec);FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();
+  var idx=ALL.findIndex(function(x){return x.id===rec.id;});if(idx>=0)ALL[idx]=rec;else ALL.push(rec);FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();ghAutoPush();
 }
 
 /* ── SYNC / EXPORT ── */
@@ -3806,11 +3802,6 @@ async function handleSync(file){
     toast('Sync: +'+added+' records','ok');
   }catch(e){msg.className='mbox err';msg.style.display='block';msg.textContent='Error: '+e.message;}
 }
-function confirmNuke(){
-  openConfirm({icon:'☢',t:'Delete ALL records?',s:'Permanently erases every record. Export a backup first.',okLabel:'⚠ Delete Everything',fn:async function(){
-    await dbClear();ALL=[];applyFilters();updateSidebar();renderBestWorst();closeSync();toast('All records deleted','err',4000);
-  }});
-}
 function openConfirm(opts){
   document.getElementById('conf-icon').textContent=opts.icon||'⚠';
   document.getElementById('conf-t').textContent=opts.t;
@@ -3855,7 +3846,7 @@ function epEdit(id, uid) {
 
 async function deleteRec(id){
   openConfirm({icon:'⚠',t:'Delete this record?',s:'Permanently removes the record.',fn:async function(){
-    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');
+    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');ghAutoPush();
   }});
 }
 
@@ -7464,6 +7455,7 @@ function dbRestoreApply(backup) {
   if (backup.scorecards && Array.isArray(backup.scorecards) && backup.scorecards.length) {
     // Immediately restore to memory so UI works regardless of IndexedDB
     ALL = backup.scorecards.slice();
+    GH_BASE = ALL.length;
     FILTERED = ALL.slice();
     if (status) status.textContent = 'Restoring other data…';
     dbRestoreNonScorecard(backup, log);
@@ -7718,6 +7710,23 @@ function ghBuildPayload() {
   return backup;
 }
 
+// ── AUTO-PUSH after importing scorecards (key holders only; batches imports made close together) ──
+var GH_BUSY=false, GH_AUTO_T=null, GH_BASE=0;   /* GH_BASE: scorecard count at last load/save */
+function ghAutoPush() {
+  if (!ghGetToken()) return;
+  /* safety: never auto-save an empty database or one that has lost many cards since the last load/save */
+  var n = (typeof ALL!=='undefined'&&Array.isArray(ALL)) ? ALL.length : 0;
+  if (!n || (GH_BASE && n < GH_BASE - 10)) {
+    toast('⚠ Not auto-saved: '+n+' scorecards vs '+GH_BASE+' last saved. Check, then use ☁ GitHub to save.', 'err', 8000);
+    return;
+  }
+  clearTimeout(GH_AUTO_T);
+  GH_AUTO_T = setTimeout(function(){
+    if (GH_BUSY) { ghAutoPush(); return; }
+    toast('☁ Saving changes to GitHub…', 'inf', 2500);
+    ghPush();
+  }, 8000);
+}
 // ── PUSH to GitHub ──
 function ghPush() {
   var pat = ghGetToken();
@@ -7742,6 +7751,7 @@ function ghPushLive() {
     ghSetStatus('⚠ No token — enter your PAT first', 'amber');
     return;
   }
+  GH_BUSY = true;
   ghSetStatus('Preparing data…', 'blue');
   var payload = ghBuildPayload();
   var jsonStr = JSON.stringify(payload, null, 2);
@@ -7751,6 +7761,7 @@ function ghPushLive() {
     b64 = btoa(unescape(encodeURIComponent(jsonStr)));
   } catch(e) {
     ghSetStatus('⚠ Encoding error: ' + e.message, 'red');
+    GH_BUSY = false;
     return;
   }
   ghSetStatus('Connecting to GitHub…', 'blue');
@@ -7775,7 +7786,9 @@ function ghPushLive() {
       });
     })
     .then(function(r) {
+      GH_BUSY = false;
       if (r.status === 200 || r.status === 201) {
+        GH_BASE = (payload.scorecardIndex||payload.scorecards||[]).length;
         ghSetStatus('✓ Saved to GitHub — ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), 'green');
         toast('✓ Saved to GitHub', 'ok', 3000);
         // Update nav button to show last save time
@@ -7784,11 +7797,14 @@ function ghPushLive() {
       } else {
         return r.json().then(function(e) {
           ghSetStatus('⚠ GitHub error ' + r.status + ': ' + (e.message || 'unknown'), 'red');
+          toast('⚠ GitHub save failed (' + r.status + ') — use ☁ GitHub to retry', 'err', 6000);
         });
       }
     })
     .catch(function(e) {
+      GH_BUSY = false;
       ghSetStatus('⚠ Network error: ' + e.message, 'red');
+      toast('⚠ GitHub save failed — use ☁ GitHub to retry', 'err', 6000);
     });
 }
 
@@ -8070,6 +8086,15 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-bar{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #23232e;margin-top:14px;padding-top:12px}
 #pp-mod .ppl-bar h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9a9ab5;margin:0;font-weight:700}
 #pp-mod .ppl-bar span{color:#5a5a72;font-size:11px}
+#pp-mod .ppl-bl{display:flex;align-items:baseline;gap:56px;flex-wrap:wrap;row-gap:4px}
+#pp-mod .ppl-bar .ppl-next{color:#c8c8d8;font-size:11px;letter-spacing:.02em}
+#pp-mod .ppl-bar .ppl-next .nx-l{color:#9a9ab5;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+#pp-mod .ppl-bar .ppl-next .nx-d{color:#fff;font-weight:700}
+#pp-mod .ppl-bar .ppl-next .nx-td{color:#ffb020;font-weight:700}
+#pp-mod .ppl-bar .ppl-next .nx-c{color:#fff;font-weight:700}
+#pp-mod .ppl-bar .ppl-next .nx-p{color:#ffb020;font-weight:700}
+#pp-mod .ppl-bar .ppl-next .nx-i{color:#8a8a98}
+#pp-mod .ppl-bar .ppl-next .nx-web{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;color:#4a9eff;border:1px solid #4a9eff66;background:#4a9eff14;border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px}
 #pp-mod .ppl-two{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;margin-top:10px}
 #pp-mod .ppl-two.one{grid-template-columns:1fr}
 #pp-mod .ppl-bx{background:#15151d;border:1px solid #262633;border-radius:9px;padding:12px 13px}
@@ -8217,6 +8242,68 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     ['mousedown','keydown','wheel'].forEach(function(ev){document.addEventListener(ev,hide,true);});
     window.addEventListener('scroll',hide,true);
   })();
+  /* ── Next RNS date, from the calendar (live calendar if open, else its saved files) ── */
+  var RCN={p:null,t:0};
+  function rcnGet(path){
+    var raw=function(){return fetch('https://raw.githubusercontent.com/Markmark5/Database/main/'+path+'?t='+Date.now()).then(function(r){return r.ok?r.json():null;});};
+    var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}):Promise.reject();
+    return rel.catch(raw).catch(function(){return null;});
+  }
+  function rcnLoad(){
+    if(!RCN.p||Date.now()-RCN.t>600000){RCN.t=Date.now();RCN.p=Promise.all([rcnGet('calendar/calendar_state.json'),rcnGet('calendar/approved_events.json')]);}
+    return RCN.p;
+  }
+  function rcnIso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function rcnPart(e){
+    if(e.from===e.to)return 'exact';if(e.from.slice(0,7)!==e.to.slice(0,7))return 'range';
+    var d1=+e.from.slice(8),d2=+e.to.slice(8),last=new Date(+e.from.slice(0,4),+e.from.slice(5,7),0).getDate();
+    if(d1===1&&d2<=10)return 'early';if(d1>=11&&d2<=20)return 'mid';if(d1>=21)return 'late';if(d1===1&&d2===last)return 'month';return 'range';
+  }
+  function rcnKey(e){var p=rcnPart(e);if(p==='exact'||p==='early'||p==='range')return e.from;if(p==='mid')return e.from.slice(0,8)+'15';return e.to;}
+  function rcnNext(tk){
+    try{var fw=document.getElementById('rcal-frame');if(fw&&fw.contentWindow&&fw.contentWindow.rcalNextFor)return Promise.resolve(fw.contentWindow.rcalNextFor(tk));}catch(_){}
+    return rcnLoad().then(function(r){
+      var t0=rcnIso(new Date()),same=function(a,b){return a.type===b.type&&Math.abs(Date.parse(a.from)-Date.parse(b.from))/864e5<=35;};
+      var ev=((r[0]&&r[0].events)||[]).filter(function(e){return String(e.ticker||'').toUpperCase()===tk&&e.from;});
+      /* dates on scorecards the calendar has not saved yet */
+      (typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(c){return String(c.ticker||'').toUpperCase()===tk&&c.calData&&Array.isArray(c.calData.events);})
+        .forEach(function(c){c.calData.events.forEach(function(e){if(!e||!e.from)return;
+          var n={event:e.event||e.type||'',type:e.type||'',from:e.from,to:e.to||e.from,label:e.label||'',conf:String(e.conf||'implied').toLowerCase()};
+          if(!ev.some(function(x){return same(x,n);}))ev.push(n);});});
+      ((r[1])||[]).filter(function(a){return a&&a.from&&String(a.epic||a.company||'').toUpperCase()===tk;}).forEach(function(a){
+        var w={event:a.event||a.type,type:a.type,from:a.from,to:a.to||a.from,label:a.label||'',conf:a.conf||'confirmed',web:true};
+        if(!ev.some(function(x){return same(x,w);}))ev.push(w);});
+      ev=ev.filter(function(e){return (e.to||e.from)>=t0;}).sort(function(a,b){return rcnKey(a).localeCompare(rcnKey(b));});
+      var e=ev[0];return e?{event:e.event||e.type,type:e.type,from:e.from,to:e.to||e.from,label:e.label||'',conf:e.conf,web:!!e.web}:null;
+    });
+  }
+  function rcnTd(target){   /* trading days: weekdays less England & Wales bank holidays */
+    var hol={},add=function(d){hol[rcnIso(d)]=1;},wk=function(d){var w=d.getDay();return w===0||w===6;};
+    var d=new Date();d.setHours(0,0,0,0);var p=target.split('-').map(Number),end=new Date(p[0],p[1]-1,p[2]);
+    for(var y=d.getFullYear();y<=end.getFullYear();y++){
+      var a=y%19,b=Math.floor(y/100),c=y%100,dd=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-dd-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/114);
+      var es=new Date(y,Math.floor((h+l-7*m+114)/31)-1,((h+l-7*m+114)%31)+1);
+      add(new Date(y,es.getMonth(),es.getDate()-2));add(new Date(y,es.getMonth(),es.getDate()+1));
+      var fm=new Date(y,4,1);while(fm.getDay()!==1)fm.setDate(fm.getDate()+1);add(fm);
+      [4,7].forEach(function(mo){var lm=new Date(y,mo+1,0);while(lm.getDay()!==1)lm.setDate(lm.getDate()-1);add(lm);});
+      var ny=new Date(y,0,1);while(wk(ny))ny.setDate(ny.getDate()+1);add(ny);
+      [25,26].forEach(function(day){var x=new Date(y,11,day);while(wk(x)||hol[rcnIso(x)])x.setDate(x.getDate()+1);add(x);});
+    }
+    var n=0;while(d<end){d.setDate(d.getDate()+1);if(!wk(d)&&!hol[rcnIso(d)])n++;}return n;
+  }
+  function fillNext(tk){
+    rcnNext(tk).then(function(e){
+      var el=mod.querySelector('.ppl-next');if(!el||!e)return;
+      var p=rcnPart(e),M=MON[+e.from.slice(5,7)-1],dl;
+      if(p==='exact')dl=+e.from.slice(8)+' '+M;
+      else dl=e.label||(p==='early'?'Early '+M:p==='mid'?'Mid '+M:p==='late'?'Late '+M:p==='month'?M:+e.from.slice(8)+' '+M+'+');
+      var td=p==='exact'?rcnTd(e.from):null;
+      var cf=e.conf==='confirmed'?['nx-c','Confirmed']:e.conf==='provisional'?['nx-p','Provisional']:['nx-i','Implied'];
+      el.innerHTML='<span class="nx-l">📅 Next</span> · '+esc(e.event||e.type||'')+' · <span class="nx-d">'+esc(dl)+'</span>'
+        +(td!==null?' · <span class="nx-td">'+(td<=0?'today':td+' td')+'</span>':'')
+        +' · <span class="'+cf[0]+'">'+cf[1]+'</span>'+(e.web?'<span class="nx-web">WEB</span>':'');
+    }).catch(function(){});
+  }
   function latestBoxes(tk,x){
     var disc=x.snap?null:(x.d.disc||null), marks=x.snap?[]:(x.d.marks||[]);
     var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;})
@@ -8228,7 +8315,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var ntags=(newest.signals||[]).map(function(sg){
         return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
         '<div class="ppl-none">No tags on this scorecard</div>';
-      return '<div class="ppl-bar"><h3>Latest scorecard · '+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</h3></div><div class="ppl-two one">'+
+      return '<div class="ppl-bar"><div class="ppl-bl"><h3>Latest scorecard · '+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</h3><span class="ppl-next"></span></div></div><div class="ppl-two one">'+
         '<div class="ppl-bx"><div class="ppl-bh"><b>Scorecard tags<small>'+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</small></b><span class="ppl-sc">'+esc(newest.score)+'</span></div>'+
         pplSignals(newest,cards)+ntags+'</div></div>';
     }
@@ -8236,7 +8323,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     if(!rns&&!newest)return '';
     var mk=null;for(var i=marks.length-1;i>=0;i--){if(marks[i].d===rns){mk=marks[i];break;}}
     var doc=(disc&&disc.doc)||(mk&&mk.doc)||'';
-    var h='<div class="ppl-bar"><h3>⭐ Latest RNS · '+esc(doc)+(doc?' · ':'')+pplDate(rns)+'</h3>'+
+    var h='<div class="ppl-bar"><div class="ppl-bl"><h3>⭐ Latest RNS · '+esc(doc)+(doc?' · ':'')+pplDate(rns)+'</h3><span class="ppl-next"></span></div>'+
       (mk?'<span>Text '+pplScore(mk.s)+' · '+(mk.g==='flat'?'flat':(mk.g==='RAISE'?'▲ raise':'▼ cut'))+'</span>':'')+'</div>';
     var boxes='';
     if(disc){
@@ -8374,6 +8461,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var o=mod.querySelector('.pmo'); if(o)o.onclick=function(){
         window.open(BASE+x.drift.url+'?t='+Date.now(),'d_'+tk,'width=1500,height=950,scrollbars=yes');};
       ov.classList.add('on');
+      fillNext(tk);
     });
   }
   function closeModal(){ov.classList.remove('on');var t=document.getElementById('dc-tip');if(t)t.style.display='none';}
