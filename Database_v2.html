@@ -1420,6 +1420,12 @@ body.sig-wide .cell-ticker{justify-content:center;}
             </div>
           </div>
           <div class="sb-sec">
+            <div class="sb-lbl" title="Tickers with an RNS date in the calendar (or on a scorecard) from today to 30 days ahead">Calendar</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label class="band-chk rev-chk" style="--rc:#d4a000"><input type="checkbox" id="f-cal30" onchange="applyFilters()"><span class="rev-arr">&#128197;</span><span class="band-chk-lbl">Due within 30 days</span><span class="band-cnt" id="cnt-cal30">0</span></label>
+            </div>
+          </div>
+          <div class="sb-sec">
             <div class="sb-lbl">RNS Type</div>
             <select class="sb-sel" id="f-type" onchange="applyFilters()">
               <option value="">All types</option>
@@ -1461,6 +1467,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
                 <option value="score-desc">Score ↓</option>
                 <option value="score-asc">Score ↑</option>
                 <option value="ticker-asc">Ticker A–Z</option>
+                <option value="cal-asc">Calendar date (soonest)</option>
               </select>
             </div>
           </div>
@@ -3170,7 +3177,8 @@ function applyFilters(){
   const fH1=['ahead','hyp','fire'].filter(function(k){return document.getElementById('f-h1-'+k).checked;});
   const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
   const ixMap=fIx.length?indexMap():null;
-  const sort=document.getElementById('sort-sel').value;
+  const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
+  const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
     else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
@@ -3184,6 +3192,7 @@ function applyFilters(){
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
     if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
+    if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     return true;
   });
@@ -3196,12 +3205,56 @@ function applyFilters(){
       case'score-desc':return c.score-a.score;
       case'score-asc':return a.score-c.score;
       case'ticker-asc':return a.ticker.localeCompare(c.ticker);
+      case'cal-asc':{const x=calN[String(a.ticker||'').toUpperCase()]||'9999',y=calN[String(c.ticker||'').toUpperCase()]||'9999';
+        return x.localeCompare(y)||a.ticker.localeCompare(c.ticker)||c.date.localeCompare(a.date);}
       default:{const d=c.date.localeCompare(a.date);return d||(c.score-a.score)||c.importedAt.localeCompare(a.importedAt);}
     }
   });
   PAGE=1;renderRows();updateBandCounts();
   const fs=document.getElementById('rns-fs');if(fs&&fs.classList.contains('open')&&window.rnsFsRender)window.rnsFsRender();
 }
+
+/* ── Due within 30 days: tickers with a calendar date from today to +30 days. Data: the calendar's
+   saved files (calendar_state.json + approved web dates) plus dates on scorecards not saved there yet. ── */
+var CAL30={ev:null,t:0,busy:false};
+function cal30Get(path){
+  var raw=function(){return fetch('https://raw.githubusercontent.com/Markmark5/Database/main/'+path+'?t='+Date.now()).then(function(r){return r.ok?r.json():null;});};
+  var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json();}):Promise.reject();
+  return rel.catch(raw).catch(function(){return null;});
+}
+function cal30Load(){
+  if(CAL30.busy||(CAL30.ev&&Date.now()-CAL30.t<600000))return;
+  CAL30.busy=true;
+  Promise.all([cal30Get('calendar/calendar_state.json'),cal30Get('calendar/approved_events.json')]).then(function(r){
+    var ev=((r[0]&&r[0].events)||[]).map(function(e){return {tk:e.ticker,from:e.from,to:e.to};})
+      .concat(((r[1])||[]).map(function(a){return {tk:a.epic||a.company,from:a.from,to:a.to};}));
+    CAL30.ev=ev;CAL30.t=Date.now();CAL30.busy=false;applyFilters();
+  });
+}
+function cal30Iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+/* sort date of an event, as the calendar places it: mid-month on the 15th, late / whole month on the last day */
+function calKey(from,to){
+  to=to||from;if(from===to||from.slice(0,7)!==to.slice(0,7))return from;
+  var d1=+from.slice(8),d2=+to.slice(8);
+  if(d1===1&&d2<=10)return from;if(d1>=11&&d2<=20)return from.slice(0,8)+'15';return d1===1||d1>=21?to:from;
+}
+/* {TICKER: soonest date of an event not yet over} */
+function calNextMap(){
+  cal30Load();
+  var t0=cal30Iso(new Date()),m={};
+  var add=function(tk,from,to){if(!tk||!from||(to||from)<t0)return;tk=String(tk).toUpperCase();var k=calKey(from,to);if(!m[tk]||k<m[tk])m[tk]=k;};
+  (CAL30.ev||[]).forEach(function(e){add(e.tk,e.from,e.to);});
+  ALL.forEach(function(c){if(c.calData&&Array.isArray(c.calData.events))c.calData.events.forEach(function(e){if(e)add(c.ticker,e.from,e.to);});});
+  return m;
+}
+function cal30Set(){
+  var t0=cal30Iso(new Date()),d=new Date();d.setDate(d.getDate()+30);var t30=cal30Iso(d),set={};
+  var add=function(tk,from,to){if(tk&&from&&from<=t30&&(to||from)>=t0)set[String(tk).toUpperCase()]=true;};
+  calNextMap();(CAL30.ev||[]).forEach(function(e){add(e.tk,e.from,e.to);});
+  ALL.forEach(function(c){if(c.calData&&Array.isArray(c.calData.events))c.calData.events.forEach(function(e){if(e)add(c.ticker,e.from,e.to);});});
+  return set;
+}
+document.addEventListener('DOMContentLoaded',cal30Load);
 
 /* ── NEW RNS TODAY: today's scorecards first, then today's RNS tickers with no scorecard yet
    (their latest card, date unchanged), then the rest. Data: data/new_rns_today.json from the
@@ -3257,7 +3310,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;})).forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-type').value='';
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
@@ -3450,6 +3503,7 @@ function updateBandCounts(){
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
+  const c30=cal30Set();document.getElementById('cnt-cal30').textContent=ALL.filter(function(r){return c30[String(r.ticker||'').toUpperCase()];}).length;
 }
 /* Hover text for H1 TRK / ACCEL marks */
 function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
