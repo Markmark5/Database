@@ -3179,6 +3179,7 @@ function applyFilters(){
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
+  const newest=(fC30||calN)?calNewest():null;   /* calendar views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
     else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
@@ -3193,6 +3194,7 @@ function applyFilters(){
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
     if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
+    if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     return true;
   });
@@ -3256,6 +3258,11 @@ function calKey(from,to){
 function calNextMap(){
   var t0=cal30Iso(new Date()),m={};
   calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk])m[e.tk]=k;});
+  return m;
+}
+function calNewest(){
+  var m={};ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase(),x=m[k];
+    if(!x||r.date>x.date||(r.date===x.date&&(r.importedAt||'')>(x.importedAt||'')))m[k]=r;});
   return m;
 }
 function cal30Set(){
@@ -3512,7 +3519,7 @@ function updateBandCounts(){
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
-  const c30=cal30Set();document.getElementById('cnt-cal30').textContent=ALL.filter(function(r){return c30[String(r.ticker||'').toUpperCase()];}).length;
+  document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
 }
 /* Hover text for H1 TRK / ACCEL marks */
 function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
