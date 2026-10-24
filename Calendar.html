@@ -80,6 +80,13 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .rc-ring{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;line-height:1}
 .rc-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
 .rc-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
+/* clickable key: tick one or more to filter */
+.rc-kf{cursor:pointer;padding:3px 8px;margin:-3px -4px;border-radius:14px;border:1.5px solid transparent;transition:background .12s,border-color .12s,box-shadow .12s;user-select:none}
+.rc-kf:hover{background:#f0f0f4;border-color:#d6d6de}
+.rc-kf.rc-on{background:#fff6cc;border-color:#f0b400;color:#3a3000;box-shadow:0 0 0 2px #ffd84a66;font-weight:600}
+.rc-kf.rc-on .rc-kc{color:#7a5c00}
+.rc-kc{font-size:10px;color:#a0a0ac;margin-left:3px}
+.rc-kclr{cursor:pointer;color:#b00060;font-weight:600;display:none}
 .rc-beat{font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid transparent;color:#e4e4e4;background:transparent;min-width:22px;cursor:pointer;font-family:inherit}
 .rc-row:hover .rc-beat{color:#c4c4c4}
 .rc-beat:hover{color:#8a8a8a;border-color:#c9c9c9;background:#fff}
@@ -216,8 +223,6 @@ body.rc-embed{background:rgba(0,0,0,.6)}
         <div class="rc-seg" id="rcal-rng">
           <button class="rc-btn" data-r="7">7d</button><button class="rc-btn" data-r="14">14d</button><button class="rc-btn" data-r="21">21d</button><button class="rc-btn rc-on" data-r="30">30d</button><button class="rc-btn" data-r="90">90d</button><button class="rc-btn" data-r="9999">All</button>
         </div>
-        <button class="rc-btn rc-pink" id="rcal-fstar">★ Starred</button>
-        <button class="rc-btn" id="rcal-fbeat">▲ Beat last</button>
         <button class="rc-btn" id="rcal-fnew" title="Dates added or moved in the last 7 days">✦ New</button>
         <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
         <button class="rc-btn rc-pend" id="rcal-pend" style="display:none" title="Dates found on company websites, awaiting your approval">Pending</button>
@@ -227,16 +232,17 @@ body.rc-embed{background:rgba(0,0,0,.6)}
       </div>
     </div>
     <div class="rc-key">
-      <span><span style="color:#ff0a78">★</span> your pick (click star)</span>
-      <span>▲ ahead of forecasts at last update (click to override)</span>
-      <span>📈 H1 ahead of seasonal</span><span><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical</span><span>🔥 H2 accelerating</span><span><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical</span><span>📈🔥 double</span><span>🚀 full-year acceleration</span>
+      <span class="rc-kf" data-kf="star" title="Click to show only starred tickers"><span style="color:#ff0a78">★</span> your pick (click star)<span class="rc-kc"></span></span>
+      <span class="rc-kf" data-kf="beat" title="Click to show only tickers ahead of forecasts">▲ ahead of forecasts at last update (click to override)<span class="rc-kc"></span></span>
+      <span class="rc-kf" data-kf="h1" title="Click to filter; tick several to show any match">📈 H1 ahead of seasonal<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp1" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="h2" title="Click to filter; tick several to show any match">🔥 H2 accelerating<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp2" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="dbl" title="Click to filter; tick several to show any match">📈🔥 double<span class="rc-kc"></span></span><span class="rc-kf" data-kf="acc" title="Click to filter; tick several to show any match">🚀 full-year acceleration<span class="rc-kc"></span></span>
+      <span class="rc-kclr" id="rcal-kclr" title="Clear emoji filters">✕ clear</span>
       <span><span class="rc-web">WEB</span> date from company website</span>
-      <span>Click a ticker for its scorecards</span>
+      <span>Click a ticker for its chart · click a score for its scorecards</span>
     </div>
     <div class="mg-nav" id="rcal-mnav" style="display:none">
       <button class="rc-btn" id="rcal-mprev" aria-label="Previous 30 days">◀</button><b id="rcal-mtitle"></b><button class="rc-btn" id="rcal-mnext" aria-label="Next 30 days">▶</button>
       <button class="rc-btn" id="rcal-mtoday">Today</button>
-      <span class="mg-hint">Weekdays only · click a ticker for its scorecards · “+ more” opens that day in the list</span>
+      <span class="mg-hint">Weekdays only · click a ticker for its chart, a score for its scorecards · “+ more” opens that day in the list</span>
     </div>
     <div id="rcal-list"><div class="rc-empty">Loading calendar…</div></div>
     <div class="rc-foot">
@@ -595,7 +601,23 @@ function passes(e){
   if(FQ&&e.ticker.indexOf(FQ)<0)return false;
   if(FSTAR&&!S.stars[e.ticker])return false;
   if(FBEAT&&!beatState(e.ticker).on)return false;
+  if(KEYON.length&&!KEYON.some(function(k){return keyFlags(e.ticker)[k];}))return false;
   return true;
+}
+/* emoji key filters (any match): same marks the row shows, from the ticker's latest card */
+var KEYON=[];
+function keyFlags(tk){var L=latest(tk),f=flags(L);return {h1:f.h1,hyp1:f.hyp1,h2:f.h2,hyp2:f.hyp2,dbl:!!doubleOf(L),acc:f.acc};}
+function keySync(){
+  document.querySelectorAll('.rc-kf').forEach(function(el){var k=el.getAttribute('data-kf');
+    el.classList.toggle('rc-on',k==='star'?FSTAR:k==='beat'?FBEAT:KEYON.indexOf(k)>=0);});
+  var c=document.getElementById('rcal-kclr');if(c)c.style.display=(KEYON.length||FSTAR||FBEAT)?'inline':'none';
+}
+function keyCounts(){
+  var t0=iso(today()),seen={},n={star:0,beat:0,h1:0,hyp1:0,h2:0,hyp2:0,dbl:0,acc:0};
+  allEvents().forEach(function(e){if(e.to<t0||seen[e.ticker])return;seen[e.ticker]=1;
+    var f=keyFlags(e.ticker);Object.keys(f).forEach(function(k){if(f[k])n[k]++;});
+    if(S.stars[e.ticker])n.star++;if(beatState(e.ticker).on)n.beat++;});
+  document.querySelectorAll('.rc-kf').forEach(function(el){var c=el.querySelector('.rc-kc');if(c)c.textContent=n[el.getAttribute('data-kf')]||'';});
 }
 function newList(){var now=Date.now();return allEvents().filter(function(e){if(!passes(e))return false;var a=addedAt(e);return a&&now-a<=7*864e5;});}
 function renderNew(){
@@ -714,7 +736,7 @@ function renderMonth(EV){
     firstWk=false;
     h+='</div>';
   }
-  if(!ev.length)h+='<div class="rc-empty">No dates in these 30 days'+(FSTAR||FBEAT||FQ||FNEW?' match these filters':'')+'.</div>';
+  if(!ev.length)h+='<div class="rc-empty">No dates in these 30 days'+(FSTAR||FBEAT||FQ||FNEW||KEYON.length?' match these filters':'')+'.</div>';
   $('rcal-list').innerHTML=h;stats();
 }
 function setView(v){
@@ -749,13 +771,14 @@ function row(e,isPast,T,alt){
   var web=e.web?'<span class="rc-web" title="Found on the company website'+(e.web.url?': '+esc(e.web.url):'')+'">WEB</span>':'';
   return '<div class="rc-row'+(alt?' rc-alt':'')+(star?' rc-star':'')+(isPast?' rc-past':'')+'" data-rc-id="'+esc(e.id)+'" tabindex="0">'
    +'<div><div class="rc-d1">'+esc(dlab)+'</div><div class="rc-d2">'+(exact?['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][pd(e.from).getDay()]:fmt(e.from)+'–'+fmt(e.to))+'</div></div>'
-   +'<div style="min-width:0"><span class="rc-tk" data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards">'+esc(e.ticker)+'</span><div class="rc-co">'+esc(co)+'</div></div>'
+   +'<div style="min-width:0"><span class="rc-tk" data-rc-rns="'+esc(e.ticker)+'" title="Show chart and forecasts">'+esc(e.ticker)+'</span><div class="rc-co">'+esc(co)+'</div></div>'
    +'<div class="rc-ev"><div class="rc-e1">'+esc(e.event||e.type)+'</div><div class="rc-e2"><span class="'+confCls(e.conf)+'">'+confLbl(e.conf)+'</span>'+web+(e.userAdded?' · added manually':'')+(e.note?' · '+esc(e.note):'')+'</div></div>'
    +'<div class="rc-mk">'+mk+'</div><div class="rc-sc">'+sc+'</div>'
    +'<div class="rc-days'+(!isPast&&exact&&days<=5?' rc-soon':'')+(!exact?' rc-win':'')+'" title="'+(exact&&!isPast?days+' trading days (weekends and bank holidays excluded)':'')+'">'+dtxt+'</div>'
    +'<button class="rc-st'+(star?' rc-on':'')+'" data-rc-star="'+esc(e.ticker)+'" aria-label="'+(star?'Unstar ':'Star ')+esc(e.ticker)+'">'+(star?'★':'☆')+'</button></div>';
 }
 function stats(){
+  try{keyCounts();keySync();}catch(e){}
   var t0=iso(today()),up=allEvents().filter(function(e){return e.to>=t0;}).length,st=Object.keys(S.stars).filter(function(k){return S.stars[k];}).length;
   $('rcal-stats').textContent=up+' upcoming · '+st+' starred · scores from '+allCards().length+' scorecards'+(CAN_EDIT?'':' · read-only')+(storageOK?'':' · browser storage unavailable');
 }
@@ -769,6 +792,7 @@ if(EMBED){document.body.classList.add('rc-embed');$('rcal-close').style.display=
   $('rcal-ov').addEventListener('click',function(e){if(e.target===$('rcal-ov'))close();});}
 document.addEventListener('keydown',function(e){
   if(e.key!=='Escape')return;
+  try{var pp=PARENT&&PARENT.document.getElementById('pp-ov');if(pp&&pp.classList.contains('on')){pp.classList.remove('on');var tp=PARENT.document.getElementById('dc-tip');if(tp)tp.style.display='none';return;}}catch(_){}
   var rn=$('rcal-rns-ov');if(rn&&rn.style.display==='flex'){rn.style.display='none';return;}
   var subs=document.querySelectorAll('.rc-sub-ov.rc-open');if(subs.length){subs.forEach(function(o){o.classList.remove('rc-open');});return;}
   close();
@@ -777,10 +801,12 @@ document.addEventListener('keydown',function(e){
 window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();render();loadRemote(false);};
 
 /* ── list interactions ── */
+/* ticker click: the Database's chart / forecasts popup (score pill keeps the scorecard history) */
+function openChart(tk){try{if(PARENT&&PARENT.PPOPEN&&PARENT.PPOPEN(tk))return;}catch(e){}showRNS(tk);}
 function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastopen',PASTOPEN?'1':'0');}catch(e){}render();}
 $('rcal-list').addEventListener('click',function(ev){
   if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
-  var tk=ev.target.closest('[data-rc-rns]');if(tk){showRNS(tk.getAttribute('data-rc-rns'));return;}
+  var tk=ev.target.closest('[data-rc-rns]');if(tk){var t=tk.getAttribute('data-rc-rns');if(tk.classList.contains('rc-pill'))showRNS(t);else openChart(t);return;}
   var more=ev.target.closest('[data-mg-day]');if(more){openDay(more.getAttribute('data-mg-day'));return;}
   if(!CAN_EDIT)return;
   var s=ev.target.closest('[data-rc-star]');
@@ -808,8 +834,12 @@ $('rcal-mnext').onclick=function(){MOFF++;render();};
 $('rcal-mtoday').onclick=function(){MOFF=0;render();};
 try{if(localStorage.getItem('rnscal_view')==='month'){VIEW='month';document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-v')==='month');});}}catch(e){}
 document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
-$('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);render();};
-$('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);render();};
+document.querySelectorAll('.rc-kf').forEach(function(el){el.onclick=function(){
+  var k=el.getAttribute('data-kf');
+  if(k==='star'){FSTAR=!FSTAR;keySync();render();return;}
+  if(k==='beat'){FBEAT=!FBEAT;keySync();render();return;}
+  var i=KEYON.indexOf(k);if(i>=0)KEYON.splice(i,1);else KEYON.push(k);keySync();render();};});
+$('rcal-kclr').onclick=function(){KEYON=[];FSTAR=false;FBEAT=false;keySync();render();};
 $('rcal-fnew').onclick=function(){FNEW=!FNEW;this.classList.toggle('rc-on',FNEW);render();};
 $('rcal-fq').oninput=function(){FQ=this.value.trim().toUpperCase();render();};
 
