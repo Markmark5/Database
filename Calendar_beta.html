@@ -223,8 +223,6 @@ body.rc-embed{background:rgba(0,0,0,.6)}
         <div class="rc-seg" id="rcal-rng">
           <button class="rc-btn" data-r="7">7d</button><button class="rc-btn" data-r="14">14d</button><button class="rc-btn" data-r="21">21d</button><button class="rc-btn rc-on" data-r="30">30d</button><button class="rc-btn" data-r="90">90d</button><button class="rc-btn" data-r="9999">All</button>
         </div>
-        <button class="rc-btn rc-pink" id="rcal-fstar">★ Starred</button>
-        <button class="rc-btn" id="rcal-fbeat">▲ Beat last</button>
         <button class="rc-btn" id="rcal-fnew" title="Dates added or moved in the last 7 days">✦ New</button>
         <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
         <button class="rc-btn rc-pend" id="rcal-pend" style="display:none" title="Dates found on company websites, awaiting your approval">Pending</button>
@@ -234,8 +232,8 @@ body.rc-embed{background:rgba(0,0,0,.6)}
       </div>
     </div>
     <div class="rc-key">
-      <span class="rc-kf" data-kf="star" title="Click to show only starred tickers (same as ★ Starred)"><span style="color:#ff0a78">★</span> your pick (click star)<span class="rc-kc"></span></span>
-      <span class="rc-kf" data-kf="beat" title="Click to show only tickers ahead of forecasts (same as ▲ Beat last)">▲ ahead of forecasts at last update (click to override)<span class="rc-kc"></span></span>
+      <span class="rc-kf" data-kf="star" title="Click to show only starred tickers"><span style="color:#ff0a78">★</span> your pick (click star)<span class="rc-kc"></span></span>
+      <span class="rc-kf" data-kf="beat" title="Click to show only tickers ahead of forecasts">▲ ahead of forecasts at last update (click to override)<span class="rc-kc"></span></span>
       <span class="rc-kf" data-kf="h1" title="Click to filter; tick several to show any match">📈 H1 ahead of seasonal<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp1" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="h2" title="Click to filter; tick several to show any match">🔥 H2 accelerating<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp2" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="dbl" title="Click to filter; tick several to show any match">📈🔥 double<span class="rc-kc"></span></span><span class="rc-kf" data-kf="acc" title="Click to filter; tick several to show any match">🚀 full-year acceleration<span class="rc-kc"></span></span>
       <span class="rc-kclr" id="rcal-kclr" title="Clear emoji filters">✕ clear</span>
       <span><span class="rc-web">WEB</span> date from company website</span>
@@ -833,14 +831,12 @@ $('rcal-mnext').onclick=function(){MOFF++;render();};
 $('rcal-mtoday').onclick=function(){MOFF=0;render();};
 try{if(localStorage.getItem('rnscal_view')==='month'){VIEW='month';document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.classList.toggle('rc-on',b.getAttribute('data-v')==='month');});}}catch(e){}
 document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(b){b.onclick=function(){document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.remove('rc-on');});b.classList.add('rc-on');RNG=+b.getAttribute('data-r');render();};});
-$('rcal-fstar').onclick=function(){FSTAR=!FSTAR;this.classList.toggle('rc-on',FSTAR);keySync();render();};
-$('rcal-fbeat').onclick=function(){FBEAT=!FBEAT;this.classList.toggle('rc-on',FBEAT);keySync();render();};
 document.querySelectorAll('.rc-kf').forEach(function(el){el.onclick=function(){
   var k=el.getAttribute('data-kf');
-  if(k==='star'){$('rcal-fstar').onclick.call($('rcal-fstar'));return;}
-  if(k==='beat'){$('rcal-fbeat').onclick.call($('rcal-fbeat'));return;}
+  if(k==='star'){FSTAR=!FSTAR;keySync();render();return;}
+  if(k==='beat'){FBEAT=!FBEAT;keySync();render();return;}
   var i=KEYON.indexOf(k);if(i>=0)KEYON.splice(i,1);else KEYON.push(k);keySync();render();};});
-$('rcal-kclr').onclick=function(){KEYON=[];if(FSTAR)$('rcal-fstar').onclick.call($('rcal-fstar'));if(FBEAT)$('rcal-fbeat').onclick.call($('rcal-fbeat'));keySync();render();};
+$('rcal-kclr').onclick=function(){KEYON=[];FSTAR=false;FBEAT=false;keySync();render();};
 $('rcal-fnew').onclick=function(){FNEW=!FNEW;this.classList.toggle('rc-on',FNEW);render();};
 $('rcal-fq').oninput=function(){FQ=this.value.trim().toUpperCase();render();};
 
