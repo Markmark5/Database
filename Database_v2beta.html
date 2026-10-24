@@ -3731,7 +3731,7 @@ async function commitFile(){
   for(const r of PENDING){try{await dbPut(r);}catch(e){}}
   PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
   FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
-  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();ghAutoPush();
 }
 function onPasteInput(){const html=document.getElementById('paste-box').value;if(html.length<100)return;PENDING=parseScorecard(html);if(PENDING.length)showPreview('paste');}
 async function commitPaste(){
@@ -3740,7 +3740,7 @@ async function commitPaste(){
   for(const r of PENDING){try{await dbPut(r);}catch(e){}}
   PENDING.forEach(function(r){var idx=ALL.findIndex(function(x){return x.id===r.id;});if(idx>=0)ALL[idx]=r;else ALL.push(r);});
   FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
-  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();
+  toast('✓ '+PENDING.length+' record(s) imported','ok');csReportStamp(_stampRes);closeImport();ghAutoPush();
 }
 async function commitManual(){
   const ticker=document.getElementById('m-ticker').value.trim().toUpperCase();
@@ -3751,7 +3751,7 @@ async function commitManual(){
   if(score<0||score>100){msg.className='mbox err';msg.style.display='block';msg.textContent='Score must be 0–100.';return;}
   const rec={id:genId(ticker,date),ticker,score,company:document.getElementById('m-company').value.trim(),date,rnsType:document.getElementById('m-rns-type').value,mode:document.getElementById('m-mode').value,index:document.getElementById('m-index').value.trim(),verdict:document.getElementById('m-verdict').value.trim(),signals:[],revisions:[],sparkStats:[],h1Inds:[],accelInds:[],importedAt:new Date().toISOString(),source:'manual'};
   try{await dbPut(rec);}catch(e){}
-  var idx=ALL.findIndex(function(x){return x.id===rec.id;});if(idx>=0)ALL[idx]=rec;else ALL.push(rec);FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();
+  var idx=ALL.findIndex(function(x){return x.id===rec.id;});if(idx>=0)ALL[idx]=rec;else ALL.push(rec);FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('✓ '+ticker+' saved ('+score+'/100)','ok');closeImport();ghAutoPush();
 }
 
 /* ── SYNC / EXPORT ── */
@@ -3855,7 +3855,7 @@ function epEdit(id, uid) {
 
 async function deleteRec(id){
   openConfirm({icon:'⚠',t:'Delete this record?',s:'Permanently removes the record.',fn:async function(){
-    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');
+    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');ghAutoPush();
   }});
 }
 
@@ -7718,6 +7718,17 @@ function ghBuildPayload() {
   return backup;
 }
 
+// ── AUTO-PUSH after importing scorecards (key holders only; batches imports made close together) ──
+var GH_BUSY=false, GH_AUTO_T=null;
+function ghAutoPush() {
+  if (!ghGetToken()) return;
+  clearTimeout(GH_AUTO_T);
+  GH_AUTO_T = setTimeout(function(){
+    if (GH_BUSY) { ghAutoPush(); return; }
+    toast('☁ Saving changes to GitHub…', 'inf', 2500);
+    ghPush();
+  }, 8000);
+}
 // ── PUSH to GitHub ──
 function ghPush() {
   var pat = ghGetToken();
@@ -7742,6 +7753,7 @@ function ghPushLive() {
     ghSetStatus('⚠ No token — enter your PAT first', 'amber');
     return;
   }
+  GH_BUSY = true;
   ghSetStatus('Preparing data…', 'blue');
   var payload = ghBuildPayload();
   var jsonStr = JSON.stringify(payload, null, 2);
@@ -7751,6 +7763,7 @@ function ghPushLive() {
     b64 = btoa(unescape(encodeURIComponent(jsonStr)));
   } catch(e) {
     ghSetStatus('⚠ Encoding error: ' + e.message, 'red');
+    GH_BUSY = false;
     return;
   }
   ghSetStatus('Connecting to GitHub…', 'blue');
@@ -7775,6 +7788,7 @@ function ghPushLive() {
       });
     })
     .then(function(r) {
+      GH_BUSY = false;
       if (r.status === 200 || r.status === 201) {
         ghSetStatus('✓ Saved to GitHub — ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), 'green');
         toast('✓ Saved to GitHub', 'ok', 3000);
@@ -7784,11 +7798,14 @@ function ghPushLive() {
       } else {
         return r.json().then(function(e) {
           ghSetStatus('⚠ GitHub error ' + r.status + ': ' + (e.message || 'unknown'), 'red');
+          toast('⚠ GitHub save failed (' + r.status + ') — use ☁ GitHub to retry', 'err', 6000);
         });
       }
     })
     .catch(function(e) {
+      GH_BUSY = false;
       ghSetStatus('⚠ Network error: ' + e.message, 'red');
+      toast('⚠ GitHub save failed — use ☁ GitHub to retry', 'err', 6000);
     });
 }
 
