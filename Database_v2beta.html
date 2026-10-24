@@ -8771,7 +8771,7 @@ function $(id){return document.getElementById(id);}
 window.rcalOpen=function(){
   var ov=$('rcal-frame-ov'),fr=$('rcal-frame');
   ov.style.display='block';document.body.style.overflow='hidden';
-  if(!fr.getAttribute('src'))fr.setAttribute('src','Calendar.html?embed=1');
+  if(!fr.getAttribute('src'))fr.setAttribute('src','Calendar_beta.html?embed=1');
   else try{fr.contentWindow.rcalRefresh&&fr.contentWindow.rcalRefresh();}catch(e){}
   try{fr.focus();}catch(e){}
 };
