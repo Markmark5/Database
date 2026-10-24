@@ -3458,7 +3458,7 @@ function accTip(ind){
   const lbl=String(ind.lbl||'').trim().toUpperCase(),name=/^REV/.test(lbl)?'revenue':lbl;
   const mk=String(ind.mark||'');
   let w;
-  if(/[✓✔]/.test(mk)||ind.state==='pos')w='🚀 FC growth accelerating — forecast '+name+' growth this year faster than last year’s growth';
+  if(/[✓✔]/.test(mk)||ind.state==='pos')w='FC Growth Acc — forecast growth % faster than last year';
   else if(/[✕✗]/.test(mk)||ind.state==='neg')w='Forecast '+name+' growth this year slower than last year’s';
   else w='No forecast growth acceleration signal'+(name?' ('+name+')':'');
   return tipEsc((w+(ind.dev?' ('+ind.dev+')':'')).replace(/\s+/g,' '));
