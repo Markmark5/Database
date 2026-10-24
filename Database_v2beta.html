@@ -2149,10 +2149,6 @@ body.sig-wide .cell-ticker{justify-content:center;}
         <input type="file" id="sync-inp" accept=".json" style="display:none;" onchange="onSyncInput(event)">
         <div class="mbox" id="sync-msg"></div>
       </div>
-      <div class="sync-sec">
-        <div class="sync-sec-t" style="color:var(--red);">Danger Zone</div>
-        <button class="xbtn xbtn-red" onclick="confirmNuke()">☢ Delete All Records</button>
-      </div>
     </div>
   </div>
 </div>
@@ -3805,11 +3801,6 @@ async function handleSync(file){
     msg.className='mbox ok';msg.style.display='block';msg.textContent='✓ '+parts.join(', ')+'.';
     toast('Sync: +'+added+' records','ok');
   }catch(e){msg.className='mbox err';msg.style.display='block';msg.textContent='Error: '+e.message;}
-}
-function confirmNuke(){
-  openConfirm({icon:'☢',t:'Delete ALL records?',s:'Permanently erases every record. Export a backup first.',okLabel:'⚠ Delete Everything',fn:async function(){
-    await dbClear();ALL=[];applyFilters();updateSidebar();renderBestWorst();closeSync();toast('All records deleted','err',4000);
-  }});
 }
 function openConfirm(opts){
   document.getElementById('conf-icon').textContent=opts.icon||'⚠';
@@ -7464,6 +7455,7 @@ function dbRestoreApply(backup) {
   if (backup.scorecards && Array.isArray(backup.scorecards) && backup.scorecards.length) {
     // Immediately restore to memory so UI works regardless of IndexedDB
     ALL = backup.scorecards.slice();
+    GH_BASE = ALL.length;
     FILTERED = ALL.slice();
     if (status) status.textContent = 'Restoring other data…';
     dbRestoreNonScorecard(backup, log);
@@ -7719,9 +7711,15 @@ function ghBuildPayload() {
 }
 
 // ── AUTO-PUSH after importing scorecards (key holders only; batches imports made close together) ──
-var GH_BUSY=false, GH_AUTO_T=null;
+var GH_BUSY=false, GH_AUTO_T=null, GH_BASE=0;   /* GH_BASE: scorecard count at last load/save */
 function ghAutoPush() {
   if (!ghGetToken()) return;
+  /* safety: never auto-save an empty database or one that has lost many cards since the last load/save */
+  var n = (typeof ALL!=='undefined'&&Array.isArray(ALL)) ? ALL.length : 0;
+  if (!n || (GH_BASE && n < GH_BASE - 10)) {
+    toast('⚠ Not auto-saved: '+n+' scorecards vs '+GH_BASE+' last saved. Check, then use ☁ GitHub to save.', 'err', 8000);
+    return;
+  }
   clearTimeout(GH_AUTO_T);
   GH_AUTO_T = setTimeout(function(){
     if (GH_BUSY) { ghAutoPush(); return; }
@@ -7790,6 +7788,7 @@ function ghPushLive() {
     .then(function(r) {
       GH_BUSY = false;
       if (r.status === 200 || r.status === 201) {
+        GH_BASE = (payload.scorecardIndex||payload.scorecards||[]).length;
         ghSetStatus('✓ Saved to GitHub — ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), 'green');
         toast('✓ Saved to GitHub', 'ok', 3000);
         // Update nav button to show last save time

@@ -551,6 +551,12 @@ function webEvents(){
 }
 function allEvents(){return S.events.concat(webEvents());}
 
+/* next upcoming date for a ticker (used by the Database chart popup) */
+window.rcalNextFor=function(tk){
+  tk=String(tk||'').toUpperCase();var t0=iso(today());
+  var l=allEvents().filter(function(e){return e.ticker===tk&&e.to>=t0;}).sort(function(a,b){return sortKey(a).localeCompare(sortKey(b));});
+  var e=l[0];return e?{event:e.event||e.type,type:e.type,from:e.from,to:e.to,label:e.label||'',conf:e.conf,web:!!e.web}:null;
+};
 /* ── paste-line parser ── */
 function parseLine(txt){
   var t=txt.toLowerCase(),res={};if(t.trim())res.type=typeOf(t);
