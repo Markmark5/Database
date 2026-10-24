@@ -292,6 +292,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .h1-sub-ind.neg .h1-ind-mark{color:var(--red);}
 .h1-sub-ind.na .h1-ind-mark{color:var(--text-dim);}
 .h1-sub-ind.hyp .h1-ind-lbl,.h1-sub-ind.hyp .h1-ind-mark,.h1-sub-ind.hyp .h1-ind-dev{color:var(--amber,#ffb347);}
+.h1-ind-mark[title]:not([title=""]){cursor:help;}
 .h1-ring{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-size:10px;line-height:1}
 .h1-r1{background:#4a9eff22;box-shadow:0 0 0 1.5px #4a9eff}
 .h1-r2{background:#ff8c1a22;box-shadow:0 0 0 1.5px #ff8c1a}
@@ -3109,10 +3110,10 @@ function buildRow(rec){
   const sstatsHtml=(rec.sparkStats||[]).map(function(s){return '<div class="sstat"><div class="sstat-lbl">'+s.lbl+'</div><div class="sstat-val" style="'+(s.style||'')+'">'+s.val+'</div></div>';}).join('');
   const h1Inds=rec.h1Inds||[];
   const revInds=h1Inds.length>0?h1Inds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}var dn='';if(st==='hyp'){var d2=String(dv||'').replace(/−/g,'-'),m2=/%/.test(d2)?null:d2.match(/([+-]?\d+(?:\.\d+)?)/),v2=m2?parseFloat(m2[1]):null;if(v2!==null&&v2<=-(h2?3:1.5))dn=' dn';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark">'+mk+'</div>'+(dv?'<div class="h1-ind-dev'+dn+'">'+dv+'</div>':'')+'</div>';}).join('');
+  const h1Html=revInds.map(function(ind){var hyp=/🔬/.test((ind.lbl||'')+(ind.mark||'')+(ind.dev||'')),h2=/H2/i.test(ind.lbl||''),mk=ind.mark,dv=ind.dev,st=ind.state;if(hyp){var dd=String(dv||'').replace(/−/g,'-'),mm=/%/.test(dd)?null:dd.match(/([+-]?\d+(?:\.\d+)?)/),v=mm?parseFloat(mm[1]):null;st='hyp';dv=String(dv||'').replace(/🔬/g,'').trim();mk=(v!==null&&v>=(h2?3:1.5))?'<span class="h1-ring '+(h2?'h1-r2':'h1-r1')+'" title="'+(h2?'H2 accelerating':'H1 ahead of seasonal')+', hypothetical">🔬</span>':'🔬';}var dn='';if(st==='hyp'){var d2=String(dv||'').replace(/−/g,'-'),m2=/%/.test(d2)?null:d2.match(/([+-]?\d+(?:\.\d+)?)/),v2=m2?parseFloat(m2[1]):null;if(v2!==null&&v2<=-(h2?3:1.5))dn=' dn';}return '<div class="h1-sub-ind '+st+'"><div class="h1-ind-lbl">'+String(ind.lbl||'').replace(/🔬/g,'')+'</div><div class="h1-ind-mark" title="'+h1Tip(ind,rec)+'">'+mk+'</div>'+(dv?'<div class="h1-ind-dev'+dn+'">'+dv+'</div>':'')+'</div>';}).join('');
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
-  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
+  const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark" title="'+accTip(ind)+'">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
   return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
     +'<div class="cell-ticker"><div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
@@ -3433,6 +3434,34 @@ function updateBandCounts(){
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
+}
+/* Hover text for H1 TRK / ACCEL marks */
+function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function h1Tip(ind,rec){
+  const lbl=String(ind.lbl||'').toUpperCase().replace(/🔬/g,''),h2=/H2/.test(lbl),name=/^REV/.test(lbl.trim())?'Revenue':(/EPS/.test(lbl)?'EPS':lbl.trim()||'Metric');
+  const t=String(rec.rnsType||'').toUpperCase(),per=h2?'H2':(/\bQ1\b/.test(t)?'Q1':(/\bQ3\b/.test(t)?'YTD':'H1'));
+  const mk=String(ind.mark||''),dv=String(ind.dev||'').replace(/🔬/g,'').trim(),all=(ind.lbl||'')+mk+(ind.dev||'');
+  const dvTxt=dv&&dv!=='—'?' ('+dv+(h2?' vs last H2 growth':' vs usual seasonal share')+')':'';
+  let w;
+  if(/🔥/.test(mk))w=per+' '+name+' growth accelerating vs last H2 — strong 2nd half';
+  else if(/[✓✔]/.test(mk))w=h2?per+' '+name+' growth ahead of last H2':per+' '+name+' ahead of the company’s usual seasonal share';
+  else if(/[✕✗]/.test(mk))w=h2?per+' '+name+' growth slower than last H2':per+' '+name+' behind the company’s usual seasonal share';
+  else if(/[~≈◐]/.test(mk))w=per+' '+name+' roughly in line with seasonal';
+  else if(/🔬/.test(mk))w=per+' '+name+' tracking — hypothetical estimate';
+  else if(/[◆✦◎]/.test(mk))w=per+' '+name+' — estimated reading';
+  else if(/^[—−-]?$/.test(mk))w='No '+per+' '+name+' tracking data';
+  else w=per+' '+name+': '+mk;
+  if(/🔬/.test(all)&&!/hypothetical/.test(w))w+=' — hypothetical';
+  return tipEsc(w+dvTxt);
+}
+function accTip(ind){
+  const lbl=String(ind.lbl||'').trim().toUpperCase(),name=/^REV/.test(lbl)?'revenue':lbl;
+  const mk=String(ind.mark||'');
+  let w;
+  if(/[✓✔]/.test(mk)||ind.state==='pos')w='🚀 FC growth accelerating — forecast '+name+' growth this year faster than last year’s growth';
+  else if(/[✕✗]/.test(mk)||ind.state==='neg')w='Forecast '+name+' growth this year slower than last year’s';
+  else w='No forecast growth acceleration signal'+(name?' ('+name+')':'');
+  return tipEsc((w+(ind.dev?' ('+ind.dev+')':'')).replace(/\s+/g,' '));
 }
 /* Index group from the free-text index field: 100 · 250 · sc (Small Cap) · aim · oth */
 const IX_KEYS=['100','250','sc','aim','oth'];
