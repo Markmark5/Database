@@ -8307,8 +8307,9 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
     hidePrev();
     getData(tk).then(function(x){
       if(!x)return;
-      var row=el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
-      var company=(x.drift&&x.drift.company)||(co?co.textContent:'');
+      var row=el&&el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
+      var lc=co?null:(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return String(r.ticker||'').toUpperCase()===tk&&r.company;}).pop();
+      var company=(x.drift&&x.drift.company)||(co?co.textContent:(lc?lc.company:''));
       var last=x.d.px[x.d.px.length-1][0], foot;
       if(x.snap) foot='Weekly closes from weekly snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
       else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'Weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
@@ -8377,7 +8378,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   }
   function closeModal(){ov.classList.remove('on');var t=document.getElementById('dc-tip');if(t)t.style.display='none';}
   ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('on'))closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ov.classList.contains('on')){closeModal();e.stopImmediatePropagation();}});
   function tkOf(el){return (el.textContent||'').trim().toUpperCase();}
   document.addEventListener('mouseover',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
@@ -8400,6 +8401,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
   prev.addEventListener('mouseleave',function(){clearTimeout(HIDE);HIDE=setTimeout(hidePrev,150);});
   /* click/tap the ticker: chart instead of expanding the row (rest of the row still expands) */
   window.PPGET=getData; window.PPSCORES=scoresFor;   /* used by the Cycles popup */
+  /* used by the calendar: open the ticker chart, false if there is no chart for it */
+  window.PPOPEN=function(tk){tk=String(tk||'').toUpperCase();if(!hasAny(tk))return false;openModal(tk,null);return true;};
   document.addEventListener('click',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
     if(!el)return; var tk=tkOf(el); if(!hasAny(tk))return;
@@ -8771,7 +8774,7 @@ function $(id){return document.getElementById(id);}
 window.rcalOpen=function(){
   var ov=$('rcal-frame-ov'),fr=$('rcal-frame');
   ov.style.display='block';document.body.style.overflow='hidden';
-  if(!fr.getAttribute('src'))fr.setAttribute('src','Calendar.html?embed=1');
+  if(!fr.getAttribute('src'))fr.setAttribute('src','Calendar_beta.html?embed=1');
   else try{fr.contentWindow.rcalRefresh&&fr.contentWindow.rcalRefresh();}catch(e){}
   try{fr.focus();}catch(e){}
 };
