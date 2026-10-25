@@ -8287,7 +8287,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-bh b{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#c9c6d8}
 #pp-mod .ppl-bh small{color:#9a9ab5;font-size:10.5px;margin-left:6px;letter-spacing:0;text-transform:none}
 #pp-mod .ppl-bh span{color:#5a5a72;font-size:11px;text-align:right}
-#pp-mod .ppl-sc{background:#f5c542;color:#111;font-weight:700;font-size:11px;border-radius:10px;padding:1px 8px}
+#pp-mod .ppl-sc{background:#ffc400;color:#111;font-weight:700;font-size:11px;border-radius:10px;padding:1px 8px}
+#pp-mod .ppl-sc.g{background:#00c814}#pp-mod .ppl-sc.r{background:#e02525}   /* same as the chart's score circles */
 #pp-mod .ppl-dl{display:flex;gap:9px;margin:0 0 9px;font-size:12.3px;line-height:1.42;color:#e8e8f0}
 #pp-mod .ppl-ic{font-weight:700;width:12px;flex:none;text-align:center}
 #pp-mod .ppl-sp{display:block;color:#6a6a82;font-size:11px;margin-top:1px}
@@ -8545,7 +8546,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
         '<div class="ppl-none">No tags on this scorecard</div>';
       return '<div class="ppl-bar"><div class="ppl-bl"><h3>Latest scorecard · '+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</h3><span class="ppl-next"></span></div></div><div class="ppl-two one">'+
-        '<div class="ppl-bx"><div class="ppl-bh"><b>Scorecard tags<small>'+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</small></b><span class="ppl-sc">'+esc(newest.score)+'</span></div>'+
+        '<div class="ppl-bx"><div class="ppl-bh"><b>Scorecard tags<small>'+esc(newest.rnsType||'')+' · '+pplDate(nd)+'</small></b><span class="ppl-sc '+(newest.score>=75?'g':newest.score<50?'r':'')+'">'+esc(newest.score)+'</span></div>'+
         pplSignals(newest,cards)+ntags+'</div></div>';
     }
     var rns=disc?disc.rns:(marks.length?marks[marks.length-1].d:null);
@@ -8572,7 +8573,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       note='<div class="ppl-new" style="color:#9a9ab5">No scorecard for '+pplDate(rns)+' — showing the latest, '+pplDate(String(newest.date).slice(0,10))+'</div>';}
     var tagsHead,tags;
     if(card){var cd=String(card.date).slice(0,10),star=cd===rns?'⭐ ':'';
-      tagsHead='<b>Scorecard tags<small>'+star+esc(card.rnsType||'')+' · '+pplDate(cd)+'</small></b><span class="ppl-sc">'+esc(card.score)+'</span>';
+      tagsHead='<b>Scorecard tags<small>'+star+esc(card.rnsType||'')+' · '+pplDate(cd)+'</small></b><span class="ppl-sc '+(card.score>=75?'g':card.score<50?'r':'')+'">'+esc(card.score)+'</span>';
       tags=(card.signals||[]).map(function(sg){var c=PPL_TAG[sg.type]||'#9a9ab5';
         return '<div class="ppl-tag"><span class="stag stag-'+(PPL_TAG[sg.type]?sg.type:'amber')+' ppl-pl">'+esc(sg.pill)+'</span><span class="ppl-tt">'+esc(sg.textPlain||'')+'</span></div>';}).join('')||
         '<div class="ppl-none">No tags on this scorecard</div>';
