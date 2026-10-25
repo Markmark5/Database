@@ -8269,6 +8269,18 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .ppl-bar .ppl-next .nx-i{color:#8a8a98}
 #pp-mod .ppl-bar .ppl-next .nx-web{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.04em;color:#4a9eff;border:1px solid #4a9eff66;background:#4a9eff14;border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px}
 #pp-mod .ppl-two{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;margin-top:10px}
+/* scorecard revision call vs broker moves since that card */
+#pp-mod .pcm{display:grid;grid-template-columns:92px repeat(4,minmax(0,1fr));gap:6px 8px;margin:10px 0 22px;font-family:var(--mono)}
+#pp-mod .pcm .h{font-size:9.5px;color:#999;letter-spacing:.06em;text-transform:uppercase;align-self:center;line-height:1.35}
+#pp-mod .pcm .c{background:#15181d;border:1px solid #2a2f38;border-radius:6px;padding:6px 10px;min-width:0}
+#pp-mod .pcm .c.b{background:#101318;border-style:dashed}
+#pp-mod .pcm .k{font-size:9.5px;color:#888;letter-spacing:.06em;display:flex;justify-content:space-between;gap:6px}
+#pp-mod .pcm .v{font-size:17px;font-weight:700;margin-top:1px}
+#pp-mod .pcm .s{font-size:9.5px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pp-mod .pcm .g{color:#00c814}#pp-mod .pcm .r{color:#ff4757}#pp-mod .pcm .n{color:#aaa}
+#pp-mod .pcm .tag{font-size:9px;padding:0 5px;border-radius:3px;border:1px solid;white-space:nowrap}
+#pp-mod .pcm .tag.ok{color:#00c814;border-color:#00c81466}#pp-mod .pcm .tag.hi{color:#4da3ff;border-color:#4da3ff66}#pp-mod .pcm .tag.lo{color:#ff4757;border-color:#ff475766}
+@media(max-width:760px){#pp-mod .pcm{grid-template-columns:repeat(2,minmax(0,1fr))}#pp-mod .pcm .h{grid-column:1/-1}}
 #pp-mod .ppl-two.one{grid-template-columns:1fr}
 #pp-mod .ppl-bx{background:#15151d;border:1px solid #262633;border-radius:9px;padding:12px 13px}
 #pp-mod .ppl-bh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
@@ -8477,6 +8489,50 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         +' · <span class="'+cf[0]+'">'+cf[1]+'</span>'+(e.web?'<span class="nx-web">WEB</span>':'');
     }).catch(function(){});
   }
+  /* Scorecard call (revisions on the newest card) vs broker moves since that card's date, from the
+     Broker Charts weekly rows. After a year-end roll the old fc1 is compared with today's fc. */
+  function pcmHtml(tk){
+    try{
+      if(typeof fcFetchFromExtractor!=='function')return '';
+      var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;});
+      if(!cards.length)return '';
+      var L=cards.reduce(function(a,b){return String(b.date)>String(a.date)||(b.date===a.date&&(b.importedAt||'')>(a.importedAt||''))?b:a;});
+      var rows=fcFetchFromExtractor(tk);if(!rows||rows.length<2)return '';
+      var cd=new Date(String(L.date).slice(0,10)+'T00:00:00'),a=-1,z=rows.length-1;
+      rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=cd)a=i;});
+      if(a<0||a>=z)return '';
+      var rolled=fcComputeRollovers(rows,tk).slice(a+1,z+1).some(Boolean);
+      var revs=(L.revisions||[]).filter(function(v){return /eps|rev/i.test(v.lbl||'');});
+      var yr=function(v){return +((String(v.lbl||'').match(/FY\s*(\d+)/i)||[0,0])[1]);};
+      var pick=function(re,i){var l=revs.filter(function(v){return re.test(v.lbl||'');}).sort(function(x,y){return yr(x)-yr(y);});return l[i]||null;};
+      var rng=function(v){if(!v)return null;var t=String(v.val||'').replace(/−/g,'-');
+        var m=t.match(/([+-]?\d+(?:\.\d+)?)\s*[–-]\s*([+-]?\d+(?:\.\d+)?)%/);
+        if(m){var lo=+m[1],hi=+m[2];if(/^\s*-/.test(t)&&hi>0)hi=-hi;return [Math.min(lo,hi),Math.max(lo,hi)];}
+        var m1=t.match(/([+-]?\d+(?:\.\d+)?)%/);if(m1)return [+m1[1],+m1[1]];
+        return /flat/i.test(t)?[-1,1]:null;};
+      var cls=function(v){return v>0.5?'g':v<-0.5?'r':'n';};
+      var pc=function(v){return '<span class="'+cls(v)+'">'+(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'%</span>';};
+      var MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ds=String(L.date).slice(0,10),cdl=(+ds.slice(8))+' '+MO[+ds.slice(5,7)-1];
+      var items=[['eps','EPS FC',/eps/i,0],['eps2','EPS FC1',/eps/i,1],['rev','REV FC',/rev/i,0],['rev2','REV FC1',/rev/i,1]].map(function(q){
+        var sc=pick(q[2],q[3]),from,to;
+        if(!rolled){from=rows[a][q[0]];to=rows[z][q[0]];}
+        else if(q[0]==='eps2'||q[0]==='rev2'){from=rows[a][q[0]];to=rows[z][q[0].slice(0,3)];}
+        var ok=from!=null&&to!=null&&!isNaN(from)&&!isNaN(to)&&+from!==0;
+        var sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
+        var u=eps?(/\dc(\b|→)/.test(sub)?'c':'p'):(/\$/.test(sub)?'$':/€/.test(sub)?'€':'£');
+        var f=function(v){v=+v;return eps?v.toFixed(1)+u:(Math.abs(v)>=1000?u+(v/1000).toFixed(2)+'bn':u+v.toFixed(0)+'m');};
+        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(rolled&&q[3]===0?'year rolled — reported':'no data'),u:u};});
+      if(items.every(function(it){return it.pct===null;}))return '';
+      var tag=function(it){if(it.pct===null||!it.r)return '';var v=it.pct;
+        return v<it.r[0]-0.5?'<span class="tag lo">▼ below call</span>':v>it.r[1]+0.5?'<span class="tag hi">▲ above call</span>':'<span class="tag ok">✓ in range</span>';};
+      var h='<div class="pcm"><div class="h">Scorecard<br>call<br>'+esc(cdl)+'</div>'+items.map(function(it){
+        var sv=it.sc?String(it.sc.val||'—'):'—',sc=it.r?cls((it.r[0]+it.r[1])/2):'n';
+        return '<div class="c"><div class="k"><span>'+it.lab+'</span><span>'+esc(it.sc?String(it.sc.lbl||'').split(' ')[0]:'')+'</span></div><div class="v '+sc+'">'+esc(sv)+'</div><div class="s" title="'+esc(it.sc?it.sc.sub||'':'')+'">'+esc(it.sc?it.sc.sub||'':'not on card')+'</div></div>';}).join('')
+        +'<div class="h">Broker<br>moves<br>since card'+(rolled?'<br><span style="color:#ffb020">year rolled</span>':'')+'</div>'+items.map(function(it){
+        return '<div class="c b"><div class="k"><span>'+it.lab+'</span>'+tag(it)+'</div><div class="v">'+(it.pct===null?'<span class="n">—</span>':pc(it.pct))+'</div><div class="s">'+esc(it.txt)+'</div></div>';}).join('')+'</div>';
+      return h;
+    }catch(e){return '';}
+  }
   function latestBoxes(tk,x){
     var disc=x.snap?null:(x.d.disc||null), marks=x.snap?[]:(x.d.marks||[]);
     var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;})
@@ -8579,7 +8635,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmrow"><div class="pmp"></div><div class="pmr"></div></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
-        latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
+        (x.snap?'':pcmHtml(tk))+latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
       /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
       var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
       /* today's price + Cycles regime under the ticker, from the live sheets */
