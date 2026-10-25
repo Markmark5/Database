@@ -8547,32 +8547,35 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var cards=(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return r&&String(r.ticker||'').toUpperCase()===tk&&r.date;});
       if(!cards.length)return '';
       var L=cards.reduce(function(a,b){return String(b.date)>String(a.date)||(b.date===a.date&&(b.importedAt||'')>(a.importedAt||''))?b:a;});
-      var rows=fcFetchFromExtractor(tk);if(!rows||rows.length<2)return '';
-      var cd=new Date(String(L.date).slice(0,10)+'T00:00:00'),a=-1,z=rows.length-1;
-      rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=cd)a=i;});
-      if(a<0||a>=z)return '';
-      var rolled=fcComputeRollovers(rows,tk).slice(a+1,z+1).some(Boolean);
+      var rows=null;try{rows=fcFetchFromExtractor(tk);}catch(e){}
+      var cd=new Date(String(L.date).slice(0,10)+'T00:00:00'),a=-1,z=rows?rows.length-1:-1;
+      if(rows)rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=cd)a=i;});
+      /* broker row only when weekly rows exist on both sides of the card date */
+      var why=!rows||rows.length<2?'no broker data':a<0?'no broker data at card date':a>=z?'no broker update since card':'';
+      var rolled=!why&&fcComputeRollovers(rows,tk).slice(a+1,z+1).some(Boolean);
       var revs=(L.revisions||[]).filter(function(v){return /eps|rev/i.test(v.lbl||'');});
       var yr=function(v){return +((String(v.lbl||'').match(/FY\s*(\d+)/i)||[0,0])[1]);};
       var pick=function(re,i){var l=revs.filter(function(v){return re.test(v.lbl||'');}).sort(function(x,y){return yr(x)-yr(y);});return l[i]||null;};
       var rng=function(v){if(!v)return null;var t=String(v.val||'').replace(/−/g,'-');
         var m=t.match(/([+-]?\d+(?:\.\d+)?)\s*[–-]\s*([+-]?\d+(?:\.\d+)?)%/);
-        if(m){var lo=+m[1],hi=+m[2];if(/^\s*-/.test(t)&&hi>0)hi=-hi;return [Math.min(lo,hi),Math.max(lo,hi)];}
-        var m1=t.match(/([+-]?\d+(?:\.\d+)?)%/);if(m1)return [+m1[1],+m1[1]];
+        var dn=/\b(cut|down|lower|downgrade)\b/i.test(t);
+        if(m){var lo=+m[1],hi=+m[2];if(/^\s*-/.test(t)&&hi>0)hi=-hi;if(dn&&lo>=0&&hi>=0){lo=-lo;hi=-hi;}return [Math.min(lo,hi),Math.max(lo,hi)];}
+        var m1=t.match(/([+-]?\d+(?:\.\d+)?)%/);if(m1){var v1=dn&&+m1[1]>0?-m1[1]:+m1[1];return [v1,v1];}
         return /flat/i.test(t)?[-1,1]:null;};
       var cls=function(v){return v>0.5?'g':v<-0.5?'r':'n';};
       var pc=function(v){return '<span class="'+cls(v)+'">'+(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'%</span>';};
       var MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ds=String(L.date).slice(0,10),cdl=(+ds.slice(8))+' '+MO[+ds.slice(5,7)-1];
       var items=[['eps','EPS FC',/eps/i,0],['eps2','EPS FC1',/eps/i,1],['rev','REV FC',/rev/i,0],['rev2','REV FC1',/rev/i,1]].map(function(q){
         var sc=pick(q[2],q[3]),from,to;
-        if(!rolled){from=rows[a][q[0]];to=rows[z][q[0]];}
+        if(why){}
+        else if(!rolled){from=rows[a][q[0]];to=rows[z][q[0]];}
         else if(q[0]==='eps2'||q[0]==='rev2'){from=rows[a][q[0]];to=rows[z][q[0].slice(0,3)];}
         var ok=from!=null&&to!=null&&!isNaN(from)&&!isNaN(to)&&+from!==0;
         var sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
         var u=eps?(/\dc(\b|→)/.test(sub)?'c':'p'):(/\$/.test(sub)?'$':/€/.test(sub)?'€':'£');
         var f=function(v){v=+v;return eps?v.toFixed(1)+u:(Math.abs(v)>=1000?u+(v/1000).toFixed(2)+'bn':u+v.toFixed(0)+'m');};
-        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(rolled&&q[3]===0?'year rolled — reported':'no data'),u:u};});
-      if(items.every(function(it){return it.pct===null;}))return '';
+        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(why||(rolled&&q[3]===0?'year rolled — reported':'no data')),u:u};});
+      if(!revs.length&&items.every(function(it){return it.pct===null;}))return '';
       var tag=function(it){if(it.pct===null||!it.r)return '';var v=it.pct;
         return v<it.r[0]-0.5?'<span class="tag lo">▼ below call</span>':v>it.r[1]+0.5?'<span class="tag hi">▲ above call</span>':'<span class="tag ok">✓ in range</span>';};
       var h='<div class="pcm"><div class="h">Scorecard<br>call<br>'+esc(cdl)+'</div>'+items.map(function(it){
