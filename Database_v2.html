@@ -3208,8 +3208,8 @@ function applyFilters(){
   const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
-  document.body.classList.toggle('due-on',fC30);
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
+  document.body.classList.toggle('due-on',fC30||sort==='cal-asc');
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
   const newest=(fC30||calN||fWL)?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
@@ -3227,6 +3227,7 @@ function applyFilters(){
     if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
     if(fWL&&WL.indexOf(String(r.ticker||'').toUpperCase())<0)return false;
+    if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;   /* calendar sort: only tickers with an upcoming date */
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     return true;
@@ -3298,10 +3299,11 @@ function calNewest(){
     if(!x||r.date>x.date||(r.date===x.date&&(r.importedAt||'')>(x.importedAt||'')))m[k]=r;});
   return m;
 }
-/* next RNS bar on each card while "Due within 30 days" is ticked */
+/* next RNS bar on each card while "Due within 30 days" is ticked or the list is sorted by calendar date */
 var CALDUE={t:0,m:null};
 function calDueBar(rec){
-  const cb=document.getElementById('f-cal30');if(!cb||!cb.checked)return '';
+  const cb=document.getElementById('f-cal30'),so=document.getElementById('sort-sel');
+  if(!(cb&&cb.checked)&&!(so&&so.value==='cal-asc'))return '';
   if(!CALDUE.m||Date.now()-CALDUE.t>2000){
     var t0=cal30Iso(new Date()),m={};
     calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk].k)m[e.tk]={k:k,e:e};});
