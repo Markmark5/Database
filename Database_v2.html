@@ -1209,8 +1209,6 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .nr-div.t1{color:var(--red);border-left-color:var(--red);background:#e025251a}
 .nr-div.t2{color:var(--amber);border-left-color:var(--amber);background:#ffc4001a}
 .nr-div.t3{color:var(--text-secondary);border-left-color:var(--border)}
-.nr-btn{font-family:var(--mono);font-size:9px;font-weight:700;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px dashed var(--amber);cursor:pointer;margin-right:6px}
-.nr-btn.on{background:var(--amber);color:#000}
 
 .section-divider{display:none}
 .drift-strip{display:inline-flex;align-items:center;gap:10px;padding:5px 14px;cursor:pointer;
@@ -1484,7 +1482,6 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div style="display:flex;align-items:center;gap:5px;">
               <button style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber);cursor:pointer;" onclick="toggleRnsSidebar()" title="Show / hide filters">☰ FILTERS</button>
               <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
-              <button id="nr-btn" class="nr-btn" style="display:none;" onclick="nrToggle()" title="Show only today's scorecards and today's RNS">NEW TODAY <span id="nr-cnt"></span></button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
                 <option value="date-desc">Date ↓</option>
@@ -3375,9 +3372,6 @@ function nrIndex(){
     if(!latest[k]||r.date>latest[k].date||(r.date===latest[k].date&&(r.importedAt||'')>(latest[k].importedAt||'')))latest[k]=r;});
   ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase();
     NR_TIER[r.id]=r.date>=d?1:(NR_MAP[k]&&!hasToday[k]&&latest[k]===r)?2:3;});
-  var n=0;for(var id in NR_TIER)if(NR_TIER[id]<3)n++;
-  var btn=document.getElementById('nr-btn');
-  if(btn){btn.style.display=n?'':'none';document.getElementById('nr-cnt').textContent=n;}
 }
 function nrTier(r){if(NEWRNS&&!(r.id in NR_TIER))nrIndex();return NR_TIER[r.id]||3;}
 function nrInfo(r){return NR_MAP[String(r.ticker||'').toUpperCase()]||{time:'',type:'',headline:''};}
@@ -3397,7 +3391,6 @@ function nrDivider(t,prev){
   if(t===2)return '<div class="nr-div t2">RNS '+nrDay()+' · no scorecard yet · previous card, date unchanged</div>';
   return prev?'<div class="nr-div t3">Earlier</div>':'';
 }
-function nrToggle(){NEW_ONLY=!NEW_ONLY;document.getElementById('nr-btn').classList.toggle('on',NEW_ONLY);applyFilters();}
 document.addEventListener('DOMContentLoaded',nrLoad);
 /* Full text / normal view: one body class, shared by the list and the 20-most-recent popup */
 function sigWideLabel(){var on=document.body.classList.contains('sig-wide');
