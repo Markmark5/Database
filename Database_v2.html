@@ -222,6 +222,12 @@ body.sig-wide .cell-ticker{justify-content:center;}
 .row.c-red::before{background:var(--red);}
 .row.c-green::before{background:var(--green);}
 .row.c-amber::before{background:var(--amber);}
+/* Due within 30 days: next RNS date + type in a bar down the right edge */
+.row.has-due{padding-right:22px;}
+body.due-on .rns-main>.col-headers{padding-right:36px;}
+body.due-on #rns-fs-content .col-headers{padding-right:22px;}
+.due-bar{position:absolute;right:0;top:0;bottom:0;width:22px;background:#d4a00022;border-left:2px solid #d4a000;display:flex;align-items:center;justify-content:center;z-index:3;}
+.due-bar span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:9.5px;font-weight:700;color:#f5c518;letter-spacing:.06em;white-space:nowrap;}
 .cell{padding:10px 10px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;overflow:hidden;}
 .cell:last-child{border-right:none;}
 .cell-ticker{position:relative;padding:10px 12px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-start;min-width:0;overflow:hidden;}
@@ -3158,7 +3164,8 @@ function buildRow(rec){
   const accelInds=rec.accelInds||[];
   const accelFb=accelInds.length>0?accelInds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
   const accelHtml=accelFb.map(function(ind){return '<div class="h1-sub-ind '+ind.state+'"><div class="h1-ind-lbl">'+ind.lbl+'</div><div class="h1-ind-mark" title="'+accTip(ind)+'">'+ind.mark+'</div>'+(ind.dev?'<div class="h1-ind-dev">'+ind.dev+'</div>':'')+'</div>';}).join('');
-  return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+'">'
+  const due=calDueBar(rec);
+  return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+(due?' has-due':'')+'">'
     +'<div class="cell-ticker">'+wlStar(rec.ticker)+'<div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
     +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?rec.entryPrice+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
@@ -3170,7 +3177,7 @@ function buildRow(rec){
     +'<div class="cell"><div class="revisions">'+(revHtml||'<span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">No data</span>')+'</div></div>'
     +'<div class="spark-cell"><div class="spark-lbl">'+(rec.sparkLabel||'EPS Consensus Trend')+'</div><div class="spark-wrap" id="swrap-'+uid+'">'+((rec.sparkData&&rec.sparkData.length>1)?'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>':(rec.sparkSVG||'<svg id="spark-'+uid+'" viewBox="0 0 480 56" width="100%" height="56" xmlns="http://www.w3.org/2000/svg"></svg>'))+'<div class="spark-tt" id="tt-'+uid+'" style="display:none;"></div></div><div class="spark-stats-row">'+sstatsHtml+'</div></div>'
     +'<div class="h1-ind-cell">'+h1Html+'</div>'
-    +'<div class="h1-ind-cell">'+accelHtml+'</div>'+nrBadge(rec)
+    +'<div class="h1-ind-cell">'+accelHtml+'</div>'+nrBadge(rec)+due
     +'</div></div>';
 }
 
@@ -3200,6 +3207,7 @@ function applyFilters(){
   const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
+  document.body.classList.toggle('due-on',fC30);
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
   const newest=(fC30||calN||fWL)?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
@@ -3288,6 +3296,21 @@ function calNewest(){
   var m={};ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase(),x=m[k];
     if(!x||r.date>x.date||(r.date===x.date&&(r.importedAt||'')>(x.importedAt||'')))m[k]=r;});
   return m;
+}
+/* next RNS bar on each card while "Due within 30 days" is ticked */
+var CALDUE={t:0,m:null};
+function calDueBar(rec){
+  const cb=document.getElementById('f-cal30');if(!cb||!cb.checked)return '';
+  if(!CALDUE.m||Date.now()-CALDUE.t>2000){
+    var t0=cal30Iso(new Date()),m={};
+    calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk].k)m[e.tk]={k:k,e:e};});
+    CALDUE={t:Date.now(),m:m};}
+  var x=CALDUE.m[String(rec.ticker||'').toUpperCase()];if(!x)return '';
+  var e=x.e,MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],mo=MO[+e.from.slice(5,7)-1],d;
+  if(e.from===e.to)d=(+e.from.slice(8))+' '+mo;
+  else{var d1=+e.from.slice(8),d2=+e.to.slice(8);d=(d1===1&&d2<=10?'EARLY ':d1>=11&&d2<=20?'MID ':d1>=21?'LATE ':'')+mo;}
+  var ty=String(e.type||'RNS').toUpperCase();
+  return '<div class="due-bar" title="Next RNS: '+tipEsc(d+' · '+(e.type||'RNS'))+'"><span>'+tipEsc(d+' · '+ty)+'</span></div>';
 }
 function cal30Set(){
   var t0=cal30Iso(new Date()),d=new Date();d.setDate(d.getDate()+30);var t30=cal30Iso(d),set={};
