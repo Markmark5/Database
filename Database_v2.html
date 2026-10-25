@@ -8328,7 +8328,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pcm .s{font-size:9.5px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #pp-mod .pcm .g{color:#00c814}#pp-mod .pcm .r{color:#ff4757}#pp-mod .pcm .n{color:#aaa}
 #pp-mod .pcm .tag{font-size:9px;padding:0 5px;border-radius:3px;border:1px solid;white-space:nowrap}
-#pp-mod .pcm .tag.ok{color:#00c814;border-color:#00c81466}#pp-mod .pcm .tag.hi{color:#4da3ff;border-color:#4da3ff66}#pp-mod .pcm .tag.lo{color:#ff4757;border-color:#ff475766}
+#pp-mod .pcm .tag.nm{color:#888;border-color:#55555588}#pp-mod .pcm .tag.ok{color:#00c814;border-color:#00c81466}#pp-mod .pcm .tag.hi{color:#4da3ff;border-color:#4da3ff66}#pp-mod .pcm .tag.lo{color:#ff4757;border-color:#ff475766}
 @media(max-width:760px){#pp-mod .pcm{grid-template-columns:repeat(2,minmax(0,1fr))}#pp-mod .pcm .h{grid-column:1/-1}}
 #pp-mod .ppl-two.one{grid-template-columns:1fr}
 #pp-mod .ppl-bx{background:#15151d;border:1px solid #262633;border-radius:9px;padding:12px 13px}
@@ -8549,7 +8549,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var L=cards.reduce(function(a,b){return String(b.date)>String(a.date)||(b.date===a.date&&(b.importedAt||'')>(a.importedAt||''))?b:a;});
       var rows=null;try{rows=fcFetchFromExtractor(tk);}catch(e){}
       var cd=new Date(String(L.date).slice(0,10)+'T00:00:00'),a=-1,z=rows?rows.length-1:-1;
-      if(rows)rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=cd)a=i;});
+      /* baseline = last weekly row BEFORE the card date: the consensus the scorecard was written against */
+      if(rows)rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<cd)a=i;});
       /* broker row only when weekly rows exist on both sides of the card date */
       var why=!rows||rows.length<2?'no broker data':a<0?'no broker data at card date':a>=z?'no broker update since card':'';
       var rolled=!why&&fcComputeRollovers(rows,tk).slice(a+1,z+1).some(Boolean);
@@ -8577,6 +8578,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(why||(rolled&&q[3]===0?'year rolled — reported':'no data')),u:u};});
       if(!revs.length&&items.every(function(it){return it.pct===null;}))return '';
       var tag=function(it){if(it.pct===null||!it.r)return '';var v=it.pct;
+        if(v===0)return '<span class="tag nm">no move yet</span>';
         return v<it.r[0]-0.5?'<span class="tag lo">▼ below call</span>':v>it.r[1]+0.5?'<span class="tag hi">▲ above call</span>':'<span class="tag ok">✓ in range</span>';};
       var h='<div class="pcm"><div class="h">Scorecard<br>call<br>'+esc(cdl)+'</div>'+items.map(function(it){
         var sv=it.sc?String(it.sc.val||'—'):'—',sc=it.r?cls((it.r[0]+it.r[1])/2):'n';
