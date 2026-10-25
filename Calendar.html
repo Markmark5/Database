@@ -233,6 +233,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
     </div>
     <div class="rc-key">
       <span class="rc-kf" data-kf="star" title="Click to show only starred tickers"><span style="color:#ff0a78">★</span> your pick (click star)<span class="rc-kc"></span></span>
+      <span class="rc-kf" data-kf="wl" title="Click to show only RNS Scorecards watchlist tickers">⭐ watchlist<span class="rc-kc"></span></span>
       <span class="rc-kf" data-kf="beat" title="Click to show only tickers ahead of forecasts">▲ ahead of forecasts at last update (click to override)<span class="rc-kc"></span></span>
       <span class="rc-kf" data-kf="h1" title="Click to filter; tick several to show any match">📈 H1 ahead of seasonal<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp1" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r1">🔬</span> H1 ahead, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="h2" title="Click to filter; tick several to show any match">🔥 H2 accelerating<span class="rc-kc"></span></span><span class="rc-kf" data-kf="hyp2" title="Click to filter; tick several to show any match"><span class="rc-ring rc-r2">🔬</span> H2 accelerating, hypothetical<span class="rc-kc"></span></span><span class="rc-kf" data-kf="dbl" title="Click to filter; tick several to show any match">📈🔥 double<span class="rc-kc"></span></span><span class="rc-kf" data-kf="acc" title="Click to filter; tick several to show any match">🚀 full-year acceleration<span class="rc-kc"></span></span>
       <span class="rc-kclr" id="rcal-kclr" title="Clear emoji filters">✕ clear</span>
@@ -411,7 +412,9 @@ function pushState(){
 }
 
 /* ── scorecards: the Database's copy when embedded, else database.json ── */
-var OWN_CARDS=[],OWN_LEGACY=null,cardsReady=false;
+var OWN_CARDS=[],OWN_LEGACY=null,OWN_WL=[],cardsReady=false;
+/* RNS Scorecards watchlist (gold ⭐): the Database's live list when embedded, else database.json */
+function onWL(tk){var w=OWN_WL;try{if(PARENT&&Array.isArray(PARENT.WL))w=PARENT.WL;}catch(e){}return w.indexOf(String(tk||'').toUpperCase())>=0;}
 function parentCards(){
   try{if(PARENT&&typeof PARENT.rcalCards==='function'){var a=PARENT.rcalCards();if(Array.isArray(a)&&a.length)return a;}}catch(e){}
   return null;
@@ -427,7 +430,7 @@ function loadCards(){
       var cards=(d&&d.scorecards)||[],have={};
       cards.forEach(function(r){if(r&&r.id)have[r.id]=1;});
       (d&&Array.isArray(d.scorecardIndex)?d.scorecardIndex:[]).forEach(function(e){if(e&&e.id&&e.arc&&!have[e.id]){var s=Object.assign({},e);s._stub=true;cards.push(s);}});
-      OWN_CARDS=cards;OWN_LEGACY=d&&d.rnsCalendar||null;cardsReady=true;syncMsg('');
+      OWN_CARDS=cards;OWN_LEGACY=d&&d.rnsCalendar||null;OWN_WL=(d&&Array.isArray(d.watchlist)?d.watchlist:[]).map(function(t){return String(t).toUpperCase();});cardsReady=true;syncMsg('');
     },function(){cardsReady=true;syncMsg('· scorecards unavailable',true);});
 }
 /* archived scorecards: the Database's loader when embedded, else fetch archive/scorecards_YYYY-MM.json */
@@ -612,14 +615,14 @@ function passes(e){
 }
 /* emoji key filters (any match): same marks the row shows, from the ticker's latest card */
 var KEYON=[];
-function keyFlags(tk){var L=latest(tk),f=flags(L);return {h1:f.h1,hyp1:f.hyp1,h2:f.h2,hyp2:f.hyp2,dbl:!!doubleOf(L),acc:f.acc};}
+function keyFlags(tk){var L=latest(tk),f=flags(L);return {h1:f.h1,hyp1:f.hyp1,h2:f.h2,hyp2:f.hyp2,dbl:!!doubleOf(L),acc:f.acc,wl:onWL(tk)};}
 function keySync(){
   document.querySelectorAll('.rc-kf').forEach(function(el){var k=el.getAttribute('data-kf');
     el.classList.toggle('rc-on',k==='star'?FSTAR:k==='beat'?FBEAT:KEYON.indexOf(k)>=0);});
   var c=document.getElementById('rcal-kclr');if(c)c.style.display=(KEYON.length||FSTAR||FBEAT)?'inline':'none';
 }
 function keyCounts(){
-  var t0=iso(today()),seen={},n={star:0,beat:0,h1:0,hyp1:0,h2:0,hyp2:0,dbl:0,acc:0};
+  var t0=iso(today()),seen={},n={star:0,beat:0,h1:0,hyp1:0,h2:0,hyp2:0,dbl:0,acc:0,wl:0};
   allEvents().forEach(function(e){if(e.to<t0||seen[e.ticker])return;seen[e.ticker]=1;
     var f=keyFlags(e.ticker);Object.keys(f).forEach(function(k){if(f[k])n[k]++;});
     if(S.stars[e.ticker])n.star++;if(beatState(e.ticker).on)n.beat++;});
@@ -684,6 +687,7 @@ function render(){
 /* compact markers for the month grid (same rules as the list) */
 function marksHtml(tk){
   var L=latest(tk),fl=flags(L),h='';
+  if(onWL(tk))h+='<span title="On RNS Scorecards watchlist">⭐</span>';
   if(beatState(tk).on)h+='<span class="mg-bt" title="Ahead of forecasts at last update">▲</span>';
   var dbl=doubleOf(L);
   if(dbl)h+='<span title="Double: H1 ahead earlier, H2 accelerating now">📈🔥</span>';
@@ -756,6 +760,7 @@ function row(e,isPast,T,alt){
   var dlab=e.label&&!exact?e.label:fmt(e.from);
   var dtxt=isPast?'':(exact?(days<=0?'today':days+' td'):shortWin(e));
   var mk='<button class="rc-beat'+(bs.on?' rc-on':'')+(bs.man?' rc-man':'')+'" data-rc-beat="'+esc(e.ticker)+'" title="'+esc(bs.man?'Set manually.'+(CAN_EDIT?' Click to toggle.':''):(bs.phrase?'“'+bs.phrase+'”.'+(CAN_EDIT?' Click to override.':''):(bs.on?'Ahead of forecasts at last update.':'Not flagged.')))+'">▲</button>';
+  if(onWL(e.ticker))mk+='<span title="On RNS Scorecards watchlist">⭐</span>';
   var dbl=doubleOf(L);
   if(dbl){mk+='<span title="Double: H1 ahead earlier'+(dbl.date?' ('+esc(dbl.date)+(dbl.score!=null?', '+dbl.score:'')+')':'')+', H2 accelerating now">📈🔥</span>';}
   else{
