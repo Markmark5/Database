@@ -2504,10 +2504,58 @@ function rnsClearTickerFilter(){
   rnsUpdateClearBtn();
 }
 /* Called when a score badge on the Target chart is clicked */
-function fcScoreClick(tk){
-  var sb=document.getElementById('rns-sidebar');
-  if(sb&&!sb.classList.contains('collapsed')){try{toggleRnsSidebar();}catch(e){}}
-  bwGoToTicker(tk);
+/* Score circle on a chart → every scorecard for that ticker, newest first (same panel as the calendar's score pill) */
+function fcScoreClick(tk){scAllShow(tk);}
+function scAllShow(t){
+  t=String(t||'').toUpperCase();
+  scAllShell(t,'<div style="padding:30px;text-align:center;color:var(--text-dim);">Loading…</div>');
+  var go=function(){scAllRender(t,ALL.filter(function(r){return r&&!r._stub&&String(r.ticker||'').toUpperCase()===t;}));};
+  arcHydrateTicker(t).then(go,go);
+}
+function scAllShell(t,inner){
+  var ov=document.getElementById('rcal-rns-ov');
+  if(!ov){ov=document.createElement('div');ov.id='rcal-rns-ov';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9600;display:flex;align-items:center;justify-content:center;padding:30px;font-family:var(--sans,Inter,sans-serif);';
+    ov.onclick=function(ev){if(ev.target===ov)ov.style.display='none';};document.body.appendChild(ov);
+    document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&ov.style.display!=='none'){ov.style.display='none';ev.stopImmediatePropagation();ev.preventDefault();}},true);}
+  ov.style.display='flex';
+  ov.innerHTML='<div style="background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;width:min(1400px,96vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden;" onclick="event.stopPropagation()">'
+    +'<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;">'
+    +'<span style="font-weight:700;font-size:15px;color:var(--amber);">'+tipEsc(t)+'</span>'
+    +'<span id="rcal-rns-sub" style="font-size:11px;color:var(--text-secondary);"></span>'
+    +'<button onclick="document.getElementById(\'rcal-rns-ov\').style.display=\'none\'" aria-label="Close" style="margin-left:auto;background:none;border:none;color:var(--text-secondary);font-size:16px;cursor:pointer;">✕</button>'
+    +'</div><div id="rcal-rns-body" style="overflow-y:auto;padding:10px 14px;">'+inner+'</div></div>';
+}
+function scAllRender(t,cards){
+  scAllShell(t,'');
+  var esc=tipEsc,sub=document.getElementById('rcal-rns-sub'),body=document.getElementById('rcal-rns-body');
+  var bandCol=function(s){return s>=75?'var(--green)':s>=50?'var(--amber)':'var(--red)';};
+  if(!cards||!cards.length){if(sub)sub.textContent='no scorecards';body.innerHTML='<div style="padding:30px;text-align:center;color:var(--text-dim);">No RNS scorecards for '+esc(t)+' in the Database.</div>';return;}
+  var sorted=cards.slice().sort(function(a,b){return String(b.date||'').localeCompare(String(a.date||''));});
+  if(sub)sub.textContent=(sorted[0].company||'')+' · '+sorted.length+' scorecard'+(sorted.length>1?'s':'');
+  body.innerHTML=sorted.map(function(c){
+    var col=bandCol(+c.score||0);
+    var revs=(c.revisions||[]).slice(0,4).map(function(v){
+      var cl=/^(var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8})$/i.test(String(v.color||''))?v.color:'var(--text-primary)';
+      return '<div style="display:flex;flex-direction:column;min-width:92px;max-width:150px;">'
+        +'<span style="font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);">'+esc(v.lbl||'')+'</span>'
+        +'<span style="font-size:12px;font-weight:700;color:'+cl+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(v.val||'')+'</span>'
+        +'<span style="font-size:9px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+esc(v.sub||'')+'">'+esc(v.sub||'')+'</span></div>';
+    }).join('');
+    var revHtml=revs?'<div style="display:flex;gap:14px;margin-left:auto;padding-left:12px;">'+revs+'</div>':'';
+    var sigs=(c.signals||[]).map(function(sg){
+      var ty=['red','green','amber','grey'].indexOf(sg.type)>=0?sg.type:'blue';
+      return '<div class="signal-tag rcal-sig" title="'+esc(sg.textPlain||'')+'"><span class="stag stag-'+ty+'">'+esc(sg.pill||'')+'</span><span class="signal-text">'+(sg.textHTML||esc(sg.textPlain||''))+'</span></div>';}).join('');
+    return '<div style="border:1px solid var(--border);border-radius:6px;margin:8px 0;overflow:hidden;">'
+      +'<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);">'
+      +'<span style="font-weight:700;font-size:20px;color:'+col+';">'+(c.score!==undefined?c.score:'—')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">/100</span>'
+      +'<div style="display:flex;flex-direction:column;">'
+      +'<span style="font-size:11px;color:var(--text-primary);font-weight:600;">'+esc(c.verdict||'')+'</span>'
+      +'<span style="font-size:9px;color:var(--text-dim);">'+esc(c.date||'')+' · '+esc(c.rnsType||'')+(c.mode?' · '+esc(c.mode):'')+(c.index?' · '+esc(c.index):'')+'</span>'
+      +'</div>'+revHtml+'</div>'
+      +'<div style="padding:6px 12px;">'+(sigs||'<span style="font-size:10px;color:var(--text-dim);">No signals stored</span>')+'</div></div>';
+  }).join('');
 }
 function bwGoToTicker(tk){
   try{ closeFullscreen('bw-fs'); }catch(e){}
@@ -6130,7 +6178,7 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
       var mx=(ev.clientX-rect.left)*(canvas.width/rect.width)/(window.devicePixelRatio||1);
       var my=(ev.clientY-rect.top)*(canvas.height/rect.height)/(window.devicePixelRatio||1);
       for(var i=0;i<ch._fcScoreHits.length;i++){var h=ch._fcScoreHits[i];
-        if(Math.abs(mx-h.x)<=h.r&&Math.abs(my-h.y)<=h.r){fcScoreClick(fcActive);return;}}
+        if(Math.abs(mx-h.x)<=h.r&&Math.abs(my-h.y)<=h.r){fcScoreClick((rows&&rows._fcTicker)||fcActive);return;}}
     };
     canvas.onmousemove=function(ev){
       var ch=store[id];if(!ch||!ch._fcScoreHits)return;
@@ -8232,6 +8280,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-prev .pph b{color:#f2f2f8}
 .pp-leg{font-size:9px;color:#6a6a85;margin-top:5px}
 #pp-prev .ppf{font-size:9px;color:#4a9eff;margin-top:6px}
+#pp-mod .pmb g.dc-mk:has(text){cursor:pointer}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
 #pp-ov.on{display:flex}
 #pp-mod{width:1240px;max-width:calc(100vw - 20px);max-height:94vh;overflow-y:auto;background:#0f0f15;border:1px solid #3a3a50;border-radius:8px;padding:14px 18px 12px;
@@ -8635,6 +8684,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
         (x.snap?'':pcmHtml(tk))+latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
       /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
       var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
+      pmb.addEventListener('click',function(ev){var g=ev.target.closest&&ev.target.closest('g.dc-mk'),n=g&&g.querySelector('text');
+        if(n&&/^\d{1,3}$/.test(n.textContent.trim())){ev.stopPropagation();ev.preventDefault();scAllShow(tk);}},true);
       /* today's price + Cycles regime under the ticker, from the live sheets */
       var pmp=mod.querySelector('.pmp'), lt=window.CYCTAIL?CYCTAIL(tk,x):x.tail, curY=0;
       if(window.CYCPILLS)CYCPILLS(tk).then(function(h){if(!pmp.isConnected)return; pmp.innerHTML=h;
