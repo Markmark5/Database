@@ -1998,7 +1998,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
   <div class="db-fullscreen-inner" style="width:92vw;max-width:92vw;height:90vh;">
     <div class="db-fullscreen-bar">
       <span style="font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text-secondary);letter-spacing:.08em;text-transform:uppercase;">RNS Scorecards · 20 most recent</span>
-      <span style="display:flex;gap:6px;"><button class="db-expand-btn" onclick="toggleRnsSidebar()" style="font-size:12px;color:var(--amber);border-color:var(--amber);" title="Show / hide filters">☰ Filters</button><button class="db-expand-btn" id="sigwide-btn-fs" onclick="sigWideToggle()" style="font-size:12px;">▶ Full text view</button><button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button></span>
+      <span style="display:flex;gap:6px;align-items:center;"><span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span><select class="sb-sel" id="sort-sel-fs" style="margin-bottom:0;width:auto;" onchange="document.getElementById('sort-sel').value=this.value;applyFilters()"></select><button class="db-expand-btn" onclick="toggleRnsSidebar()" style="font-size:12px;color:var(--amber);border-color:var(--amber);" title="Show / hide filters">☰ Filters</button><button class="db-expand-btn" id="sigwide-btn-fs" onclick="sigWideToggle()" style="font-size:12px;">▶ Full text view</button><button class="db-expand-btn" onclick="closeFullscreen('rns-fs')" style="font-size:12px;">✕ Close</button></span>
     </div>
     <div id="rns-fs-body"><div class="db-fullscreen-content" id="rns-fs-content" style="overflow-y:auto;height:calc(90vh - 44px);"></div></div>
   </div>
@@ -2398,6 +2398,9 @@ function expandSection(id){
   }
   if(id==='rns-fs'){
     sigWideLabel();
+    /* sort list: a copy of the main one, kept on the same choice */
+    const ss=document.getElementById('sort-sel'),sf=document.getElementById('sort-sel-fs');
+    if(ss&&sf){sf.innerHTML=ss.innerHTML;sf.value=ss.value;}
     const c=document.getElementById('rns-fs-content');
     c.style.padding='14px';
     c.style.overflowY='auto';
