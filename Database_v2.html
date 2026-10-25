@@ -3241,9 +3241,9 @@ function rnsTypeCategory(t){
 }
 /* Cycle sort: where the card sits in the company's year.
    1 Q1 · 2 Pre-H1 TU · 3 AGM (Q4 side) · 4 H1 results · 5 Q3 · 6 Pre-FY TU · 7 AGM (Q2 side) · 8 FY results · 9 other.
-   Generic trading updates follow the card's Q: Q4 / pre-H1 → Pre-H1 TU, Q2 / pre-FY → Pre-FY TU. */
+   AGMs and generic trading updates follow the card's Q: Q4 / Q1 / pre-H1 → H1 side, Q2 / Q3 / pre-FY → FY side. */
 function cycleSlot(r){
-  const t=String(r.rnsType||'').toLowerCase(),m=String(r.mode||'').toLowerCase(),q2=/q2|pre-?fy/.test(m);
+  const t=String(r.rnsType||'').toLowerCase(),m=String(r.mode||'').toLowerCase(),q2=/q2|q3|pre-?fy/.test(m);   /* routing key Q2 / Q3 = pre-FY side of the year */
   if(/(^fy\b|full y)/.test(t)&&/result/.test(t))return 8;
   if(/\bq1\b/.test(t))return 1;
   if(/\bq3\b/.test(t))return 5;
