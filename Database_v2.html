@@ -8677,7 +8677,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var lc=co?null:(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return String(r.ticker||'').toUpperCase()===tk&&r.company;}).pop();
       var company=(x.drift&&x.drift.company)||(co?co.textContent:(lc?lc.company:''));
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
-        '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
+        '<span class="pms">'+(function(){var ye='';try{ye=lookupYE(tk);}catch(e){}return ye?'Year End '+esc(ye):'';})()+'</span>'+
         '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmrow"><div class="pmp"></div><div class="pmr"></div></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
         '<div class="pmf"><span></span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
