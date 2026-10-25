@@ -8626,15 +8626,11 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var row=el&&el.closest('.row-wrap'), co=row&&row.querySelector('.company-nm');
       var lc=co?null:(typeof ALL!=='undefined'&&Array.isArray(ALL)?ALL:[]).filter(function(r){return String(r.ticker||'').toUpperCase()===tk&&r.company;}).pop();
       var company=(x.drift&&x.drift.company)||(co?co.textContent:(lc?lc.company:''));
-      var last=x.d.px[x.d.px.length-1][0], foot;
-      if(x.snap) foot='Weekly closes from weekly snapshots · '+fd(x.d.px[0][0])+' to '+fd(last)+' · '+x.d.px.length+' weeks';
-      else foot=(x.lite?'Drift-lite · ':'')+(x.lite&&/ShareScope/.test(x.d.src||'')?'Weekly snapshots (no Alpha Vantage history) to ':'Weekly closes to ')+fd(last)+' · '+(x.lite?'scored ':'frozen at build ')+fd((!x.lite&&x.drift&&x.drift.build_date)||String(x.d.v).slice(0,10))+
-        (x.tail.length?' · extended to '+fd(x.tail[x.tail.length-1][0])+' from weekly snapshots':'');
       mod.innerHTML='<div class="pmh"><span class="pmt">'+esc(tk)+'</span><span class="pmc">'+esc(company)+'</span>'+
         '<span class="pms">'+(x.snap?'weekly share price':'share price vs Text + G prints'+(x.lite?' \u00b7 Drift-lite':''))+'</span>'+
         '<span class="pmd"></span><span class="pmx" title="Close (Esc)">✕</span></div>'+
         '<div class="pmrow"><div class="pmp"></div><div class="pmr"></div></div><div class="pmb"></div><div class="pme"></div>'+((!x.snap||scoresFor(tk).length)?'<div class="pp-leg" style="font-size:10px">'+(x.snap?'':DC.legend('dark'))+(scoresFor(tk).length?SCLEG:'')+'</div>':'')+
-        '<div class="pmf"><span>'+foot+'</span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
+        '<div class="pmf"><span></span>'+(x.drift&&x.drift.url?'<a class="pmo">Open drift dashboard ↗</a>':'')+'</div>'+
         (x.snap?'':pcmHtml(tk))+latestBoxes(tk,x)+'<div class="pmk"><div class="pmkh">Broker charts \u2014 '+esc(tk)+'</div><div id="pp-fc"></div></div>';
       /* 1Y / 3Y / 5Y: re-draw the same chart on the last N years (choice remembered for the session) */
       var pmb=mod.querySelector('.pmb'), pmr=mod.querySelector('.pmr'), allPx=x.d.px;
