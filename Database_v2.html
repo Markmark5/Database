@@ -1402,7 +1402,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
       </div>
       <div class="rns-shell" id="rns-shell">
         <!-- Fixed sidebar toggle tab -->
-        <div class="rns-sb-toggle" id="rns-sb-toggle" onclick="toggleRnsSidebar()" title="Toggle filters"><span class="sb-tog-arrow" id="rns-sb-arrow">‹</span><span class="sb-tog-lbl">FILTERS</span></div>
+        <div class="rns-sb-toggle" id="rns-sb-toggle" style="display:none;" onclick="toggleRnsSidebar()" title="Toggle filters"><span class="sb-tog-arrow" id="rns-sb-arrow">‹</span><span class="sb-tog-lbl">FILTERS</span></div>
         <!-- Sidebar -->
         <div class="rns-sidebar" id="rns-sidebar">
           <div class="sb-sec">
@@ -1482,6 +1482,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
               <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>≤49</div>
             </div>
             <div style="display:flex;align-items:center;gap:5px;">
+              <button style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber);cursor:pointer;" onclick="toggleRnsSidebar()" title="Show / hide filters">☰ FILTERS</button>
               <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
               <button id="nr-btn" class="nr-btn" style="display:none;" onclick="nrToggle()" title="Show only today's scorecards and today's RNS">NEW TODAY <span id="nr-cnt"></span></button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
