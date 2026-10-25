@@ -1491,6 +1491,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
                 <option value="ticker-asc">Ticker A–Z</option>
                 <option value="cal-asc">Calendar date (soonest)</option>
                 <option value="wl">★ Watchlist</option>
+                <option value="cycle">Cycle (earliest first)</option>
               </select>
             </div>
           </div>
@@ -3190,6 +3191,25 @@ function rnsTypeCategory(t){
   if(s.indexOf('q1')>-1||s.indexOf('q3')>-1||s.indexOf('trading')>-1||s.indexOf('update')>-1||s.indexOf('trd upd')>-1||s.indexOf('pre-close')>-1)return'Trading Update';
   return'Other';
 }
+/* Cycle sort: where the card sits in the company's year.
+   1 Q1 · 2 Pre-H1 TU · 3 AGM (Q4 side) · 4 H1 results · 5 Q3 · 6 Pre-FY TU · 7 AGM (Q2 side) · 8 FY results · 9 other.
+   Generic trading updates follow the card's Q: Q4 / pre-H1 → Pre-H1 TU, Q2 / pre-FY → Pre-FY TU. */
+function cycleSlot(r){
+  const t=String(r.rnsType||'').toLowerCase(),m=String(r.mode||'').toLowerCase(),q2=/q2|pre-?fy/.test(m);
+  if(/(^fy\b|full y)/.test(t)&&/result/.test(t))return 8;
+  if(/\bq1\b/.test(t))return 1;
+  if(/\bq3\b/.test(t))return 5;
+  if(/agm/.test(t))return q2?7:3;
+  if(/trading|update|\bupd|trd|\btu\b|pre-close|statement/.test(t)){
+    if(/h1|half/.test(t))return 2;
+    if(/\bfy|full y|yr-end|year-end/.test(t))return 6;
+    return q2?6:2;}
+  if(/pre-?h1/.test(t))return 2;
+  if(/pre-?fy/.test(t))return 6;
+  if(/^h1\b|half|interim/.test(t))return 4;
+  if(/^fy\b|full y|final|prelim/.test(t))return 8;
+  return 9;
+}
 function applyFilters(){
   nrIndex();
   const q=(document.getElementById('search-inp').value||'').toLowerCase();
@@ -3208,7 +3228,7 @@ function applyFilters(){
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   document.body.classList.toggle('due-on',fC30||sort==='cal-asc');
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
-  const newest=(fC30||calN||fWL)?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
+  const newest=(fC30||calN||fWL||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
     else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
@@ -3238,6 +3258,7 @@ function applyFilters(){
       case'score-desc':return c.score-a.score;
       case'score-asc':return a.score-c.score;
       case'ticker-asc':return a.ticker.localeCompare(c.ticker);
+      case'cycle':{const x=cycleSlot(a)-cycleSlot(c);return x||c.date.localeCompare(a.date)||a.ticker.localeCompare(c.ticker);}
       case'cal-asc':{const x=calN[String(a.ticker||'').toUpperCase()]||'9999',y=calN[String(c.ticker||'').toUpperCase()]||'9999';
         return x.localeCompare(y)||a.ticker.localeCompare(c.ticker)||c.date.localeCompare(a.date);}
       default:{const d=c.date.localeCompare(a.date);return d||(c.score-a.score)||c.importedAt.localeCompare(a.importedAt);}
