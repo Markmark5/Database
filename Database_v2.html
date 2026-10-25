@@ -8549,11 +8549,13 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var L=cards.reduce(function(a,b){return String(b.date)>String(a.date)||(b.date===a.date&&(b.importedAt||'')>(a.importedAt||''))?b:a;});
       var rows=null;try{rows=fcFetchFromExtractor(tk);}catch(e){}
       var cd=new Date(String(L.date).slice(0,10)+'T00:00:00'),a=-1,z=rows?rows.length-1:-1;
-      /* baseline = last weekly row BEFORE the card date: the consensus the scorecard was written against */
+      /* start point = the consensus figure the card itself quotes ("cons 887.9m → …"); if it gives none,
+         the last weekly row before the card date. End point = the latest weekly row after the card. */
       if(rows)rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<cd)a=i;});
-      /* broker row only when weekly rows exist on both sides of the card date */
-      var why=!rows||rows.length<2?'no broker data':a<0?'no broker data at card date':a>=z?'no broker update since card':'';
-      var rolled=!why&&fcComputeRollovers(rows,tk).slice(a+1,z+1).some(Boolean);
+      var why=!rows||rows.length<2?'no broker data':a>=z?'no broker update since card':'';
+      var rolled=!why&&fcComputeRollovers(rows,tk).slice(Math.max(a+1,0),z+1).some(Boolean);
+      var cardStart=function(sub,eps){var m=String(sub||'').match(/^\s*(?:cons\.?\s*)?[£$€]?\s*(\d[\d,]*(?:\.\d+)?)\s*(bn|m|p|c)?\s*(?:→|->|>)/i);
+        if(!m)return null;var v=+m[1].replace(/,/g,'');if(!eps&&/bn/i.test(m[2]||''))v*=1000;return isFinite(v)&&v?v:null;};
       var revs=(L.revisions||[]).filter(function(v){return /eps|rev/i.test(v.lbl||'');});
       var yr=function(v){return +((String(v.lbl||'').match(/FY\s*(\d+)/i)||[0,0])[1]);};
       var pick=function(re,i){var l=revs.filter(function(v){return re.test(v.lbl||'');}).sort(function(x,y){return yr(x)-yr(y);});return l[i]||null;};
@@ -8567,15 +8569,16 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       var pc=function(v){return '<span class="'+cls(v)+'">'+(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'%</span>';};
       var MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ds=String(L.date).slice(0,10),cdl=(+ds.slice(8))+' '+MO[+ds.slice(5,7)-1];
       var items=[['eps','EPS FC',/eps/i,0],['eps2','EPS FC1',/eps/i,1],['rev','REV FC',/rev/i,0],['rev2','REV FC1',/rev/i,1]].map(function(q){
-        var sc=pick(q[2],q[3]),from,to;
-        if(why){}
-        else if(!rolled){from=rows[a][q[0]];to=rows[z][q[0]];}
-        else if(q[0]==='eps2'||q[0]==='rev2'){from=rows[a][q[0]];to=rows[z][q[0].slice(0,3)];}
+        var sc=pick(q[2],q[3]),from,to,sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
+        if(!why&&!(rolled&&q[3]===0)){
+          to=rows[z][rolled?q[0].slice(0,3):q[0]];
+          var rf=a>=0?rows[a][q[0]]:null,cs=cardStart(sub,eps),num=function(v){return v!=null&&!isNaN(v)&&+v!==0;};
+          /* card figure unless it's clearly a different unit / basis from the broker data */
+          if(cs&&(num(rf)?cs/rf>0.8&&cs/rf<1.25:num(to)&&cs/to>0.5&&cs/to<2))from=cs;else from=rf;}
         var ok=from!=null&&to!=null&&!isNaN(from)&&!isNaN(to)&&+from!==0;
-        var sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
         var u=eps?(/\dc(\b|→)/.test(sub)?'c':'p'):(/\$/.test(sub)?'$':/€/.test(sub)?'€':'£');
-        var f=function(v){v=+v;return eps?v.toFixed(1)+u:(Math.abs(v)>=1000?u+(v/1000).toFixed(2)+'bn':u+v.toFixed(0)+'m');};
-        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(why||(rolled&&q[3]===0?'year rolled — reported':'no data')),u:u};});
+        var f=function(v){v=+v;return eps?v.toFixed(1)+u:(Math.abs(v)>=1000?u+(v/1000).toFixed(2)+'bn':u+(v%1?v.toFixed(1):v.toFixed(0))+'m');};
+        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(why||(rolled&&q[3]===0?'year rolled — reported':a<0?'no broker data at card date':'no data')),u:u};});
       if(!revs.length&&items.every(function(it){return it.pct===null;}))return '';
       var tag=function(it){if(it.pct===null||!it.r)return '';var v=it.pct;
         if(v===0)return '<span class="tag nm">no move yet</span>';
