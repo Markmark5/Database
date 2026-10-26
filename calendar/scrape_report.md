@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-10-23
+# Calendar scrape - 2026-10-26
 
-**143 sources · 16 events staged for approval**
+**144 sources · 16 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 75 | read OK, upcoming events found |
-| EMPTY | 53 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 11 | 401/403/429 - bot protection or login |
+| EMPTY | 54 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
+| BLOCKED | 10 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
@@ -17,9 +17,9 @@
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
-- Focusrite (TUNE) - http 200, browser - https://focusriteplc.com/investors/company-documents/
+- Focusrite (TUNE) - http 200, http - https://focusriteplc.com/investors/company-documents/
 - Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
-- Hercules (HERC) - http 200, browser - https://hercules-construction.co.uk/share-information/
+- Hercules (HERC) - http 200, http - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
 - 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
@@ -27,17 +27,18 @@
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
 - NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
-- Tristel (TSTL) - http 200, browser - https://investors.tristel.com/investor-hub/
+- Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
+- Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
-- Crown Agents Bank (CABP) - http 200, browser - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
-- FRP Advisory (FRP) - http 200, browser - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
+- Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
+- FRP Advisory (FRP) - http 200, http - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
@@ -62,9 +63,13 @@
 - Tribal Group (TRB) - http 200, http - https://www.tribalgroup.com/investors/announcements
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
-- Wynnstay (WYN) - http 200, browser - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
+- Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
+- ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
+
+## UNREADABLE
+
+- Genus (GNS) - http 200, http - https://www.genusplc.com/investors/financial-calendar/
 
 ## BLOCKED
 
@@ -78,7 +83,6 @@
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
 - Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
-- ZIGUP (ZIG) - http 403, chrome - https://zigup.com/investors/financial-calendar/
 
 ## ERROR
 
@@ -89,4 +93,8 @@
 
 ## Approved events not re-verified tonight
 
+- Genus AGM 2026-11-18
 - Peel Hunt H1 results 2026-11-18
+- Genus H1 results 2027-02-25
+- Genus FY results 2027-09-16
+- Genus AGM 2027-11-17
