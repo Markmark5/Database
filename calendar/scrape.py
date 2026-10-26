@@ -106,7 +106,7 @@ def classify(text):
     return None
 
 # ---------------------------------------------------------------- page → lines
-def page_lines(html):
+def _visible_lines(html):
     soup = BeautifulSoup(html, "lxml")
     for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
@@ -136,6 +136,26 @@ def page_lines(html):
             out.append(f"{a} {b}"); i += 2; continue
         out.append(a); i += 1
     return out
+
+# CMS-driven sites (Next.js / Prismic: Alfa Systems) ship the calendar as JSON inside a script
+# and draw it in the browser; pull "title ... date" pairs out of that data
+RE_JSON_EVENT = re.compile(r'"text":"([^"{}]{3,90})"[^{]{0,400}?"date":"(20\d\d-\d\d-\d\d)"')
+
+def json_event_lines(html):
+    raw = html.replace('\\"', '"') if isinstance(html, str) else ""
+    seen, out = set(), []
+    for title, d in RE_JSON_EVENT.findall(raw):
+        if (title, d) not in seen:
+            seen.add((title, d)); out.append(f"{d} | {title}")
+    return out
+
+def page_lines(html):
+    lines = _visible_lines(html)
+    if not any(next(find_dates(l), None) for l in lines):   # nothing dated on screen: try the embedded data
+        extra = json_event_lines(html)
+        if extra:
+            lines = lines + ["Key dates"] + extra
+    return lines
 
 # ---------------------------------------------------------------- extraction
 def find_dates(line):
