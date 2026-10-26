@@ -42,7 +42,7 @@ MON = r"(january|february|march|april|may|june|july|august|september|october|nov
 RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?\s*(?:of\s+)?{MON}\.?,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?\b", re.I)
 RE_MDY = re.compile(rf"\b{MON}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?", re.I)
 RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4}|\d{2})(?![\d.])")
-RE_ISO = re.compile(r"\b(20\d\d)-(\d{2})-(\d{2})\b")
+RE_ISO = re.compile(r"\b(20\d\d)-(\d{2})-(\d{2})\b(?![T ]?\d{1,2}:\d{2})")   # "2026-11-12 09:00" = add-to-calendar widget timestamp, not a row
 RE_WIN = re.compile(rf"\b(early|beginning of|mid|middle of|late|end of|towards the end of)?[\s-]*{MON}\.?\s+(\d{{4}})\b", re.I)
 RE_YEAR_LINE = re.compile(r"^(20\d\d)$")
 RE_DATEISH = re.compile(rf"\b20\d\d-\d\d-\d\d\b|\b\d{{1,2}}\s*(?:st|nd|rd|th)?\s+{MON}\b|\b{MON}\s+20\d\d\b", re.I)
@@ -106,7 +106,7 @@ def classify(text):
     return None
 
 # ---------------------------------------------------------------- page → lines
-def page_lines(html):
+def _visible_lines(html):
     soup = BeautifulSoup(html, "lxml")
     for tag in soup(["script", "style", "noscript", "svg", "template"]):
         tag.decompose()
@@ -136,6 +136,26 @@ def page_lines(html):
             out.append(f"{a} {b}"); i += 2; continue
         out.append(a); i += 1
     return out
+
+# CMS-driven sites (Next.js / Prismic: Alfa Systems) ship the calendar as JSON inside a script
+# and draw it in the browser; pull "title ... date" pairs out of that data
+RE_JSON_EVENT = re.compile(r'"text":"([^"{}]{3,90})"[^{]{0,400}?"date":"(20\d\d-\d\d-\d\d)"')
+
+def json_event_lines(html):
+    raw = html.replace('\\"', '"') if isinstance(html, str) else ""
+    seen, out = set(), []
+    for title, d in RE_JSON_EVENT.findall(raw):
+        if (title, d) not in seen:
+            seen.add((title, d)); out.append(f"{d} | {title}")
+    return out
+
+def page_lines(html):
+    lines = _visible_lines(html)
+    if not any(next(find_dates(l), None) for l in lines):   # nothing dated on screen: try the embedded data
+        extra = json_event_lines(html)
+        if extra:
+            lines = lines + ["Key dates"] + extra
+    return lines
 
 # ---------------------------------------------------------------- extraction
 def find_dates(line):
@@ -260,8 +280,17 @@ def block_layouts(lines):
     so vote again within each run of nearby date rows; a run with no clear vote uses the page's."""
     rows, out, run = date_rows(lines), {}, []
     for i in rows + [None]:
-        if run and (i is None or i - run[-1] > 4):
+        split = i is None or (run and (i - run[-1] > 10 or any(   # widget rows can be ~8 lines apart;
+            len(lines[j]) < 60 and (RE_PAST.search(lines[j]) or RE_UPCOMING.search(lines[j]))  # "Past events" starts a new block
+            for j in range(run[-1] + 1, i))))
+        if run and split:
             v = _vote(lines, run)
+            if v is None and len(run) > 1:
+                # tie: a block whose first date sits straight under a heading ("Key dates")
+                # has its labels below the dates (Galliford: date, label, widget clutter, ...)
+                i0 = run[0]; a0 = label_above(lines, i0)
+                if a0 and not classify(a0) and not any(event_dates(lines[j]) for j in range(max(0, i0 - 6), i0)):
+                    v = "below"
             if v:
                 out.update({k: v for k in run})
             run = []
