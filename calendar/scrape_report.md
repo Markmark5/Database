@@ -1,10 +1,10 @@
 # Calendar scrape - 2026-10-27
 
-**289 sources · 157 events staged for approval**
+**290 sources · 159 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 146 | read OK, upcoming events found |
+| CLEAN | 147 | read OK, upcoming events found |
 | EMPTY | 129 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 10 | 401/403/429 - bot protection or login |
