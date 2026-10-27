@@ -882,7 +882,20 @@ window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();ren
 
 /* ── list interactions ── */
 /* ticker click: the Database's chart / forecasts popup (score pill keeps the scorecard history) */
-function openChart(tk){try{if(PARENT&&PARENT.PPOPEN&&PARENT.PPOPEN(tk))return;}catch(e){}showRNS(tk);}
+/* ticker → the Database's chart popup. Embedded: the parent page. In its own window: the Database tab
+   that opened it (or one this window opened), else a new Database tab opened on that chart (?chart=). */
+var CHARTWIN=null;
+function dbWin(w){try{return w&&!w.closed&&w.PPOPEN&&w.LITEMAP?w:null;}catch(e){return null;}}
+function openChart(tk){
+  try{if(PARENT&&PARENT.PPOPEN&&PARENT.PPOPEN(tk))return;}catch(e){}
+  if(!EMBED){
+    var w=dbWin(window.opener)||dbWin(CHARTWIN);
+    if(w){try{if(!w.PPOPEN(tk)&&w.scAllShow)w.scAllShow(tk);w.focus();return;}catch(e){}}
+    CHARTWIN=window.open(location.href.replace(/[^\/]*([?#].*)?$/,'')+'Database_v2.html?chart='+encodeURIComponent(tk),'rnsdb-chart');
+    if(CHARTWIN){try{CHARTWIN.focus();}catch(e){}return;}
+  }
+  showRNS(tk);
+}
 function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastopen',PASTOPEN?'1':'0');}catch(e){}render();}
 $('rcal-list').addEventListener('click',function(ev){
   if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
