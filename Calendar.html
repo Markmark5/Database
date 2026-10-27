@@ -210,6 +210,14 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .mg-mk .rc-ring{width:15px;height:15px;font-size:8.5px}
 .mg-more{font-size:10px;color:#1f6fd1;font-weight:600;padding:1px 4px;cursor:pointer;background:none;border:none;font-family:inherit}
 .mg-more:hover{text-decoration:underline}
+/* "+N more" grows the day box downwards over the days below it */
+.mg-d{position:relative}
+.mg-xtra{display:none}
+.mg-d.mg-open{overflow:visible;z-index:30}
+.mg-d.mg-open .mg-in{position:absolute;top:-1px;left:-1px;right:-1px;min-height:calc(100% + 2px);box-sizing:border-box;padding:5px 6px 6px;
+  background:#fff;border:2px solid #1f6fd1;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.mg-d.mg-past.mg-open .mg-in{background:#f6f6f8}
+.mg-d.mg-open .mg-xtra{display:block}
 .mg-win{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:5px 8px;background:#fffaf0;border-top:1px dashed #e8d6a8;font-size:11px}
 .mg-win .mg-lab{font-weight:700;color:#8a5a00;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
 .mg-win .mg-w{cursor:pointer}.mg-win .mg-w b:hover{color:#1f6fd1;text-decoration:underline}
@@ -255,7 +263,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
     <div class="mg-nav" id="rcal-mnav" style="display:none">
       <button class="rc-btn" id="rcal-mprev" aria-label="Previous 30 days">◀</button><b id="rcal-mtitle"></b><button class="rc-btn" id="rcal-mnext" aria-label="Next 30 days">▶</button>
       <button class="rc-btn" id="rcal-mtoday">Today</button>
-      <span class="mg-hint">Weekdays only · click a ticker for its chart, a score for its scorecards · “+ more” opens that day in the list</span>
+      <span class="mg-hint">Weekdays only · click a ticker for its chart, a score for its scorecards · “+ more” shows the whole day</span>
     </div>
     <div id="rcal-list"><div class="rc-empty">Loading calendar…</div></div>
     <div class="rc-foot">
@@ -762,12 +770,13 @@ function renderMonth(EV){
       var d=new Date(w.getTime());d.setDate(d.getDate()+i);var k=iso(d);
       var out=k<s0||k>e0,past=k<t0,isT=k===t0,days=tdays(T,k);
       var list=(ex[k]||[]).slice().sort(function(a,b){return (S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||((latest(b.ticker)||{}).score||0)-((latest(a.ticker)||{}).score||0)||a.ticker.localeCompare(b.ticker);});
-      h+='<div class="mg-d'+(past?' mg-past':'')+(isT?' mg-today':'')+(out?' mg-out':'')+(HOLS[k]?' mg-hol':'')+'">'
+      h+='<div class="mg-d'+(past?' mg-past':'')+(isT?' mg-today':'')+(out?' mg-out':'')+(HOLS[k]?' mg-hol':'')+'"><div class="mg-in">'
         +'<div class="mg-dn"><b>'+d.getDate()+(d.getDate()===1||i===0?' '+MON[d.getMonth()]:'')+'</b><span class="mg-td'+(!past&&!isT&&days<=5?' rc-soon':'')+'">'
         +(HOLS[k]?'Bank holiday':past?'':isT?'today':days+' td')+'</span></div>';
       list.slice(0,MAXCHIP).forEach(function(e){h+=chip(e);});
-      if(list.length>MAXCHIP)h+='<button class="mg-more" data-mg-day="'+k+'">+'+(list.length-MAXCHIP)+' more</button>';
-      h+='</div>';
+      if(list.length>MAXCHIP)h+='<div class="mg-xtra">'+list.slice(MAXCHIP).map(chip).join('')+'</div>'
+        +'<button class="mg-more" data-mg-day="'+k+'" data-n="'+(list.length-MAXCHIP)+'">+'+(list.length-MAXCHIP)+' more</button>';
+      h+='</div></div>';
     }
     /* windows sit under the week they start in (or the first week if they began earlier) */
     var wf=iso(w),wt=iso(fri);
@@ -841,6 +850,7 @@ document.addEventListener('keydown',function(e){
   try{var pp=PARENT&&PARENT.document.getElementById('pp-ov');if(pp&&pp.classList.contains('on')){pp.classList.remove('on');var tp=PARENT.document.getElementById('dc-tip');if(tp)tp.style.display='none';return;}}catch(_){}
   var rn=$('rcal-rns-ov');if(rn&&rn.style.display==='flex'){rn.style.display='none';return;}
   var subs=document.querySelectorAll('.rc-sub-ov.rc-open');if(subs.length){subs.forEach(function(o){o.classList.remove('rc-open');});return;}
+  if(document.querySelector('.mg-d.mg-open')){shutDays();return;}
   close();
 });
 /* the Database calls this each time its Calendar button is pressed */
@@ -853,7 +863,7 @@ function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastop
 $('rcal-list').addEventListener('click',function(ev){
   if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
   var tk=ev.target.closest('[data-rc-rns]');if(tk){var t=tk.getAttribute('data-rc-rns');if(tk.classList.contains('rc-pill'))showRNS(t);else openChart(t);return;}
-  var more=ev.target.closest('[data-mg-day]');if(more){openDay(more.getAttribute('data-mg-day'));return;}
+  var more=ev.target.closest('[data-mg-day]');if(more){toggleDay(more);return;}
   if(!CAN_EDIT)return;
   var s=ev.target.closest('[data-rc-star]');
   if(s){var k=s.getAttribute('data-rc-star');if(S.stars[k])delete S.stars[k];else S.stars[k]=true;save();render();return;}
@@ -867,13 +877,13 @@ $('rcal-list').addEventListener('click',function(ev){
 });
 $('rcal-list').addEventListener('keydown',function(ev){if((ev.key==='Enter'||ev.key===' ')&&ev.target.id==='rcal-pasttog'){ev.preventDefault();togglePast();return;}});
 $('rcal-list').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&CAN_EDIT&&ev.target.classList.contains('rc-row')){var id=ev.target.getAttribute('data-rc-id');if(id.indexOf('w_')===0)openWeb(id.slice(2));else openEv(id);}});
-/* "+N more": that day in the list view */
-function openDay(day){
-  RNG=9999;document.querySelectorAll('#rcal-rng .rc-btn').forEach(function(x){x.classList.toggle('rc-on',x.getAttribute('data-r')==='9999');});
-  FNEW=false;$('rcal-fnew').classList.remove('rc-on');setView('list');
-  var hd=document.querySelector('#rcal-list [data-day="'+day+'"]');
-  if(hd){hd.scrollIntoView({block:'start'});hd.classList.add('rc-flash');setTimeout(function(){hd.classList.remove('rc-flash');},1500);}
+/* "+N more": the day box grows to show every date; "Show less", Esc or a click elsewhere shuts it */
+function shutDays(){document.querySelectorAll('.mg-d.mg-open').forEach(function(d){d.classList.remove('mg-open');var b=d.querySelector('.mg-more');b.textContent='+'+b.getAttribute('data-n')+' more';});}
+function toggleDay(btn){
+  var d=btn.closest('.mg-d'),was=d.classList.contains('mg-open');shutDays();
+  if(!was){d.classList.add('mg-open');btn.textContent='Show less';}
 }
+document.addEventListener('click',function(ev){if(!ev.target.closest('.mg-d.mg-open'))shutDays();});
 document.querySelectorAll('#rcal-view .rc-btn').forEach(function(b){b.onclick=function(){setView(b.getAttribute('data-v'));};});
 $('rcal-mprev').onclick=function(){MOFF--;render();};
 $('rcal-mnext').onclick=function(){MOFF++;render();};
