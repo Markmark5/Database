@@ -516,6 +516,34 @@ function doubleOf(L){
   if(L.calData&&typeof L.calData.double==='boolean'){return L.calData.double?(h1Before(L.ticker,String(L.date))||{}):null;}
   return h1Before(L.ticker,String(L.date||''));
 }
+/* hover text for a marker, from the company's last scorecard (same wording as the Database's signal strip) */
+function cardSrc(r){var d=pd(String(r.date||'').slice(0,10));return String(r.rnsType||'scorecard')+' · '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();}
+function ppTxt(v){return (v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'pp';}
+function sigTip(L,kind){
+  if(!L)return '';
+  var t=String(L.rnsType||'').toUpperCase(),per=/\bQ1\b/.test(t)?'Q1':(/\bQ3\b/.test(t)?'YTD':'H1'),lines=[];
+  if(kind==='acc'){
+    var acc=(L.accelInds||[]).filter(function(i){return i.state==='pos';}).map(function(i){return /^REV/i.test(i.lbl||'')?'Rev':'EPS';});
+    lines.push('Full-year acceleration: forecast growth this year faster than last year’s ('+acc.join(', ')+')');
+  }else{
+    var h2=kind==='h2'||kind==='hyp2',hyp=kind==='hyp1'||kind==='hyp2';
+    lines.push(h2?(hyp?'H2 accelerating, hypothetical':'H2 accelerating vs last H2'):(hyp?per+' ahead of seasonal, hypothetical':per+' ahead of seasonal'));
+    (L.h1Inds||[]).forEach(function(i){
+      if(/H2/i.test(i.lbl||'')!==h2)return;
+      var v=devPP(i.dev),ih=/🔬/.test((i.mark||'')+(i.dev||''));if(v===null||ih!==hyp)return;
+      lines.push((/^REV/i.test(i.lbl||'')?'Rev':'EPS')+' '+ppTxt(v)+(h2?' vs last H2 growth':' vs usual seasonal share'));
+    });
+  }
+  lines.push(cardSrc(L));
+  return lines.join('\n');
+}
+function dblTip(L,dbl){
+  var e=dbl&&dbl.date?(dbl.h1Inds||[]).filter(function(i){return !/H2/i.test(i.lbl||'')&&devPP(i.dev)!==null&&devPP(i.dev)>0;}).map(function(i){return (/^REV/i.test(i.lbl||'')?'Rev':'EPS')+' '+ppTxt(devPP(i.dev));}).join(', '):'';
+  return 'Double: H1 ahead earlier, H2 accelerating now\n'
+    +(dbl&&dbl.date?'Earlier: '+cardSrc(dbl)+(e?' ('+e+')':'')+'\n':'')
+    +'Now: '+sigTip(L,'h2').split('\n').slice(1).join('\n');
+}
+function beatTip(tk){var b=beatState(tk),L=latest(tk);return 'Ahead of forecasts at last update'+(b.phrase?'\n“'+b.phrase+'”':'')+(L?'\n'+cardSrc(L):'')+(b.man?'\n(set manually)':'');}
 function beatState(tk){
   var L=latest(tk);var since=L?String(L.date||''):'';var ov=S.beatOv[tk];
   var auto=!!(L&&L.calData&&L.calData.beat);var phrase=L&&L.calData?L.calData.beatPhrase:'';
@@ -728,16 +756,20 @@ function render(){
   list.innerHTML=h;stats();
 }
 /* compact markers for the month grid (same rules as the list) */
+function sigMarks(L,fl){
+  var h='',dbl=doubleOf(L),t=function(x){return ' title="'+esc(x)+'"';};
+  if(dbl)h+='<span'+t(dblTip(L,dbl))+'>📈🔥</span>';
+  else{if(fl.h1)h+='<span'+t(sigTip(L,'h1'))+'>📈</span>';if(fl.h2)h+='<span'+t(sigTip(L,'h2'))+'>🔥</span>';}
+  if(fl.hyp1)h+='<span class="rc-ring rc-r1"'+t(sigTip(L,'hyp1'))+'>🔬</span>';
+  if(fl.hyp2)h+='<span class="rc-ring rc-r2"'+t(sigTip(L,'hyp2'))+'>🔬</span>';
+  if(fl.acc)h+='<span'+t(sigTip(L,'acc'))+'>🚀</span>';
+  return h;
+}
 function marksHtml(tk){
   var L=latest(tk),fl=flags(L),h='';
   if(onWL(tk))h+='<span title="On RNS Scorecards watchlist">⭐</span>';
-  if(beatState(tk).on)h+='<span class="mg-bt" title="Ahead of forecasts at last update">▲</span>';
-  var dbl=doubleOf(L);
-  if(dbl)h+='<span title="Double: H1 ahead earlier, H2 accelerating now">📈🔥</span>';
-  else{if(fl.h1)h+='<span title="H1 ahead of seasonal">📈</span>';if(fl.h2)h+='<span title="H2 accelerating">🔥</span>';}
-  if(fl.hyp1)h+='<span class="rc-ring rc-r1" title="H1 ahead, hypothetical">🔬</span>';
-  if(fl.hyp2)h+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical">🔬</span>';
-  if(fl.acc)h+='<span title="Full-year acceleration">🚀</span>';
+  if(beatState(tk).on)h+='<span class="mg-bt" title="'+esc(beatTip(tk))+'">▲</span>';
+  h+=sigMarks(L,fl);
   return h?'<span class="mg-mk">'+h+'</span>':'';
 }
 var SHORT={'H1 results':'H1 res','FY results':'FY res','Pre-H1 TU':'H1 TU','Pre-FY TU':'FY TU','Trading update':'TU'};
@@ -805,15 +837,7 @@ function row(e,isPast,T,alt){
   var dtxt=isPast?'':(exact?(days<=0?'today':days+' td'):shortWin(e));
   var mk='<button class="rc-beat'+(bs.on?' rc-on':'')+(bs.man?' rc-man':'')+'" data-rc-beat="'+esc(e.ticker)+'" title="'+esc(bs.man?'Set manually.'+(CAN_EDIT?' Click to toggle.':''):(bs.phrase?'“'+bs.phrase+'”.'+(CAN_EDIT?' Click to override.':''):(bs.on?'Ahead of forecasts at last update.':'Not flagged.')))+'">▲</button>';
   if(onWL(e.ticker))mk+='<span title="On RNS Scorecards watchlist">⭐</span>';
-  var dbl=doubleOf(L);
-  if(dbl){mk+='<span title="Double: H1 ahead earlier'+(dbl.date?' ('+esc(dbl.date)+(dbl.score!=null?', '+dbl.score:'')+')':'')+', H2 accelerating now">📈🔥</span>';}
-  else{
-    if(fl.h1)mk+='<span title="H1 ahead of seasonal (last card)">📈</span>';
-    if(fl.h2)mk+='<span title="H2 accelerating vs last H2 (last card)">🔥</span>';
-  }
-  if(fl.hyp1)mk+='<span class="rc-ring rc-r1" title="H1 ahead of seasonal, hypothetical (last card)">🔬</span>';
-  if(fl.hyp2)mk+='<span class="rc-ring rc-r2" title="H2 accelerating, hypothetical (last card)">🔬</span>';
-  if(fl.acc)mk+='<span title="Full-year growth accelerating vs prior year (last card)">🚀</span>';
+  mk+=sigMarks(L,fl);
   var sc,tkA=' data-rc-rns="'+esc(e.ticker)+'" title="Show RNS scorecards"';
   if(isPast){
     var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
