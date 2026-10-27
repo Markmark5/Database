@@ -88,6 +88,10 @@ def classify(text):
         return "AGM"
     strong_tu = re.search(r"trading (?:update|statement|report)|pre[- ]close|post[- ]close|business update", t)
     if RE_RES.search(t) and not strong_tu:
+        if re.search(r"\bq3\b|third quarter|nine months|9 months|\b9m\b", t):
+            return "Q3"
+        if re.search(r"\bq1\b|first quarter|three months|3 months|\b3m\b", t):
+            return "Q1"
         if re.search(r"half|interim|\bh1\b|\b1h(?:\d\d)?\b|\bhy\b|six months", t):
             return "H1 results"
         if re.search(r"full[- ]year|final|prelim|annual results|year[- ]end|\bfy|twelve months|12 months", t):
@@ -212,9 +216,13 @@ def nearby_year(lines, i):
             return int(lines[j])
     return None
 
+# a timing note after a date ("(Post-market close - UK)", "(7am)") is not a label
+RE_TIME_NOTE = re.compile(r"\([^)]*\b(?:\d{1,2}(?:[:.]\d{2})?\s*(?:am|pm)|market|close|open|gmt|bst|uk|time)\b[^)]*\)", re.I)
+
 def residue(line):
     for *_, (a, b) in find_dates(line):
         line = line[:a] + " " * (b - a) + line[b:]
+    line = RE_TIME_NOTE.sub(" ", line)
     return re.sub(r"\b20\d\d\b", " ", line)
 
 def has_words(text):
