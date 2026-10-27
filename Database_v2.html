@@ -8215,6 +8215,33 @@ window.addEventListener('message', function(ev){
   };
   if (typeof arcHydrateTicker === 'function') arcHydrateTicker(t).then(send, send); else send();
 });
+/* Ignition: newest score per ticker for its score circles, and a ticker click → this page's chart popup
+   {type:'rns_scores_request'} → {type:'rns_scores_response', scores:{TICKER:{score,date}}}
+   {type:'chart_request', ticker} → chart popup (all-scorecards panel when there's no chart) */
+window.addEventListener('message', function(ev){
+  var d = ev.data || {}, src = ev.source;
+  if (d.type === 'rns_scores_request') {
+    var tries = 0;
+    (function reply(){
+      var all = (typeof ALL !== 'undefined' && Array.isArray(ALL)) ? ALL : [];
+      if (!all.length && tries++ < 40) return setTimeout(reply, 500);   /* scorecards still loading */
+      var m = {};
+      all.forEach(function(r){ if (!r || !r.ticker || r.score == null) return;
+        var t = String(r.ticker).toUpperCase(), x = m[t];
+        if (!x || String(r.date) > x.date) m[t] = {score:+r.score, date:String(r.date||'').slice(0,10)}; });
+      try { src.postMessage({type:'rns_scores_response', scores:m}, '*'); } catch(e){}
+    })();
+  } else if (d.type === 'chart_request' && d.ticker) {
+    var tk = String(d.ticker).toUpperCase();
+    if (!(window.PPOPEN && window.PPOPEN(tk)) && typeof scAllShow === 'function') scAllShow(tk);
+  }
+});
+/* ?chart=TICKER (Ignition opened on its own): open that ticker's chart once the data is in */
+(function(){
+  var m = location.search.match(/[?&]chart=([^&]+)/); if (!m) return;
+  var tk = decodeURIComponent(m[1]).toUpperCase(), n = 0;
+  (function go(){ if (window.PPOPEN && window.PPOPEN(tk)) return; if (n++ < 60) setTimeout(go, 500); })();
+})();
 
 function openWebPopup(url, title) {
   _webPopupFS = false;
