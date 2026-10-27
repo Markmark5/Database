@@ -3355,7 +3355,7 @@ function calNewest(){
     if(!x||r.date>x.date||(r.date===x.date&&(r.importedAt||'')>(x.importedAt||'')))m[k]=r;});
   return m;
 }
-/* next RNS bar on each card while "Due within 30 days" is ticked or the list is sorted by calendar date */
+/* next RNS bar down the right of every card (empty when the calendar has no upcoming date) */
 var CALDUE={t:0,m:null};
 function calDueBar(rec){
   if(!CALDUE.m||Date.now()-CALDUE.t>2000){
