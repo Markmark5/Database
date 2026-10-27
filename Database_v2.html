@@ -227,6 +227,7 @@ body.sig-wide .cell-ticker{justify-content:center;}
 body.due-on .rns-main>.col-headers{padding-right:36px;}
 body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .due-bar{position:absolute;right:0;top:0;bottom:0;width:22px;background:#d4a00022;border-left:2px solid #d4a000;display:flex;align-items:center;justify-content:center;z-index:3;}
+.due-bar.none{background:transparent;border-left-color:var(--border);}
 .due-bar span{writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:9.5px;font-weight:700;color:#f5c518;letter-spacing:.06em;white-space:nowrap;}
 .cell{padding:10px 10px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;overflow:hidden;}
 .cell:last-child{border-right:none;}
@@ -3262,7 +3263,7 @@ function applyFilters(){
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
-  document.body.classList.toggle('due-on',fC30||sort==='cal-asc');
+  document.body.classList.add('due-on');
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
   const newest=(fC30||calN||fWL||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
@@ -3354,20 +3355,18 @@ function calNewest(){
     if(!x||r.date>x.date||(r.date===x.date&&(r.importedAt||'')>(x.importedAt||'')))m[k]=r;});
   return m;
 }
-/* next RNS bar on each card while "Due within 30 days" is ticked or the list is sorted by calendar date */
+/* next RNS bar down the right of every card (empty when the calendar has no upcoming date) */
 var CALDUE={t:0,m:null};
 function calDueBar(rec){
-  const cb=document.getElementById('f-cal30'),so=document.getElementById('sort-sel');
-  if(!(cb&&cb.checked)&&!(so&&so.value==='cal-asc'))return '';
   if(!CALDUE.m||Date.now()-CALDUE.t>2000){
     var t0=cal30Iso(new Date()),m={};
     calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk].k)m[e.tk]={k:k,e:e};});
     CALDUE={t:Date.now(),m:m};}
-  var x=CALDUE.m[String(rec.ticker||'').toUpperCase()];if(!x)return '';
+  var x=CALDUE.m[String(rec.ticker||'').toUpperCase()];if(!x)return '<div class="due-bar none"></div>';   /* no date: empty bar keeps the columns lined up */
   var e=x.e,MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],mo=MO[+e.from.slice(5,7)-1],d;
   if(e.from===e.to)d=(+e.from.slice(8))+' '+mo;
   else{var d1=+e.from.slice(8),d2=+e.to.slice(8);d=(d1===1&&d2<=10?'EARLY ':d1>=11&&d2<=20?'MID ':d1>=21?'LATE ':'')+mo;}
-  var ty=String(e.type||'RNS').toUpperCase();
+  var ty=String(e.type||'RNS').toUpperCase().replace(/TRADING UPDATE/,'TU');   /* short, so the date always fits */
   return '<div class="due-bar" title="Next RNS: '+tipEsc(d+' · '+(e.type||'RNS'))+'"><span>'+tipEsc(d+' · '+ty)+'</span></div>';
 }
 function cal30Set(){
