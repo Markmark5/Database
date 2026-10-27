@@ -128,6 +128,17 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .rc-status.rc-bad{color:#b42323}
 #rcal-ov button:focus-visible,.rc-sub-ov :focus-visible{outline:2px solid #1f6fd1;outline-offset:1px}
 
+/* sources list */
+.sr-row{display:grid;grid-template-columns:62px minmax(0,1fr) 230px;gap:12px;align-items:center;padding:6px 14px;border-bottom:1px solid #eeeef2;font-size:12px}
+.sr-row:hover{background:#f7fbff}
+.sr-row.sr-bad{background:#fff6f4}
+.sr-tk{font-weight:700}
+.sr-co a{color:#1d1d24;font-weight:600;text-decoration:none}.sr-co a:hover{color:#1f6fd1;text-decoration:underline}
+.sr-url{font-size:10.5px;color:#1f6fd1;word-break:break-all}.sr-url a{color:#1f6fd1}
+.sr-st{font-size:11px;color:#55556a}.sr-st.sr-ok{color:#0b7a36;font-weight:600}.sr-st.sr-err{color:#b42323;font-weight:600}.sr-st.sr-off{color:#8a8a98}
+.sr-search{background:#fff;border:1px solid #c9c9d2;border-radius:3px;padding:5px 8px;font-family:inherit;font-size:11px;width:180px}
+@media (max-width:760px){.sr-row{grid-template-columns:52px minmax(0,1fr)}.sr-row .sr-st{grid-column:2}}
+
 /* pending review panel */
 .pd-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;background:#f4f4f6;border-bottom:1px solid #d9d9df}
 .pd-grp{display:flex;align-items:center;gap:10px;background:#f0f0f0;font-size:11px;color:#555;cursor:default}
@@ -225,6 +236,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
         </div>
         <button class="rc-btn" id="rcal-fnew" title="Dates added or moved in the last 7 days">✦ New</button>
         <input class="rc-search" id="rcal-fq" placeholder="Ticker" aria-label="Filter by ticker">
+        <button class="rc-btn" id="rcal-src" title="Every company website the nightly scraper checks, with last night's result">🌐 Sources</button>
         <button class="rc-btn rc-pend" id="rcal-pend" style="display:none" title="Dates found on company websites, awaiting your approval">Pending</button>
         <button class="rc-btn rc-add" id="rcal-add" style="display:none">＋ Add date</button>
         <button class="rc-btn" id="rcal-popout" style="display:none" title="Open the calendar in its own window">↗ New window</button>
@@ -307,6 +319,17 @@ body.rc-embed{background:rgba(0,0,0,.6)}
   </div>
 </div>
 
+<div class="rc-sub-ov" id="rcal-src-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-src-title" style="padding-top:4vh">
+  <div class="rc-modal rc-xwide">
+    <div class="pd-head">
+      <div class="rc-title" id="rcal-src-title">🌐 Company websites checked each night<small id="rcal-src-gen"></small></div>
+      <div class="rc-bar"><input class="sr-search" id="rcal-src-q" placeholder="Search ticker or company" aria-label="Search sources"><button class="rc-x" data-rc-close aria-label="Close">✕</button></div>
+    </div>
+    <div class="pd-body" id="rcal-src-body"><div class="rc-empty">Loading…</div></div>
+    <div class="pd-foot"><span class="rc-status" id="rcal-src-sum"></span><span class="rc-status">Links open the company page in a new tab</span></div>
+  </div>
+</div>
+
 <div class="rc-sub-ov" id="rcal-pd-ov" role="dialog" aria-modal="true" aria-labelledby="rcal-pd-title" style="padding-top:4vh">
   <div class="rc-modal rc-xwide">
     <div class="pd-head">
@@ -361,6 +384,18 @@ function getJSON(path){
   return rel.then(function(r){if(r.status===404)return null;if(!r.ok)throw 0;return r.json();})
     .catch(function(){return fetch('https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/'+path+'?t='+Date.now())
       .then(function(r){if(r.status===404)return null;if(!r.ok)throw new Error(path+' HTTP '+r.status);return r.json();});});
+}
+/* same as getJSON, for plain text files (sources.csv) */
+function getText(path){
+  var k=ghKey();
+  if(k){
+    return fetch(API+path+'?ref='+BRANCH+'&t='+Date.now(),{headers:{'Authorization':'token '+k,'Accept':'application/vnd.github.raw+json'},cache:'no-store'})
+      .then(function(r){if(!r.ok)throw new Error(path+' HTTP '+r.status);return r.text();});
+  }
+  var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}):Promise.reject();
+  return rel.then(function(r){if(!r.ok)throw 0;return r.text();})
+    .catch(function(){return fetch('https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/'+path+'?t='+Date.now())
+      .then(function(r){if(!r.ok)throw new Error(path+' HTTP '+r.status);return r.text();});});
 }
 /* write a repo JSON file; update(current) returns the new content (read-modify-write, retried on sha clash) */
 function putJSON(path,update,msg,tries){
@@ -1093,6 +1128,61 @@ function reject(ids){
   .then(function(next){REJECTED=next;ids.forEach(function(id){delete PD_SEL[id];});renderPending();render();pdBusy(false,ids.length+' rejected');},
     function(e){pdBusy(false,'Save failed: '+e.message);note('Reject failed','err');});
 }
+/* ── SOURCES: every website the scraper reads, last night's result; failures first ── */
+var SRC=null;
+function parseCSV(t){
+  var rows=String(t||'').replace(/\r/g,'').split('\n').filter(function(l){return l.trim();});
+  var head=rows.shift().split(',');
+  return rows.map(function(l){var c=l.split(','),o={};head.forEach(function(h,i){o[h.trim()]=(c[i]||'').trim();});return o;});
+}
+function srcStatus(r,x){
+  if(r.active==='0')return {cls:'sr-off',txt:'Switched off in sources.csv',bad:false,off:true};
+  if(!x)return {cls:'sr-off',txt:'Not checked yet (added since the last run)',bad:false};
+  var err=String(x.error||'');
+  switch(x.outcome){
+    case 'CLEAN':return {cls:'sr-ok',txt:'✓ '+x.events_found+' upcoming date'+(x.events_found===1?'':'s')+' found'+(x.method&&x.method!=='http'?' (via '+x.method+')':''),bad:false};
+    case 'EMPTY':return {cls:'',txt:'Read OK · nothing upcoming listed',bad:false};
+    case 'BLOCKED':return {cls:'sr-err',txt:'⚠ Site blocks automated checks ('+x.http+')',bad:true};
+    case 'UNREADABLE':return {cls:'sr-err',txt:'⚠ Page loads but shows no dates',bad:true};
+    default:return {cls:'sr-err',txt:'⚠ '+(/SSL|CERT/i.test(err)?'Site’s security certificate is broken':/Timeout/i.test(err)?'Site didn’t respond':'Couldn’t load the page'),bad:true};
+  }
+}
+function renderSources(){
+  var body=$('rcal-src-body');
+  if(!SRC){body.innerHTML='<div class="rc-empty">Loading…</div>';return;}
+  if(SRC.err){body.innerHTML='<div class="rc-empty">Couldn’t load the source list.</div>';return;}
+  var q=($('rcal-src-q').value||'').trim().toLowerCase();
+  var rep={};(SRC.report||[]).forEach(function(x){rep[x.url]=x;});
+  var list=SRC.sources.map(function(r){return {r:r,s:srcStatus(r,rep[r.url])};})
+    .filter(function(o){return !q||(o.r.epic+' '+o.r.company).toLowerCase().indexOf(q)>=0;});
+  var byName=function(a,b){return a.r.company.toLowerCase().localeCompare(b.r.company.toLowerCase());};
+  var bad=list.filter(function(o){return o.s.bad;}).sort(byName),
+      off=list.filter(function(o){return o.s.off;}).sort(byName),
+      ok=list.filter(function(o){return !o.s.bad&&!o.s.off;}).sort(byName);
+  var row=function(o){var r=o.r;
+    return '<div class="sr-row'+(o.s.bad?' sr-bad':'')+'"><div class="sr-tk">'+esc(r.epic||'–')+'</div>'
+      +'<div style="min-width:0"><div class="sr-co"><a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.company)+'</a></div>'
+      +'<div class="sr-url"><a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.url)+' ↗</a>'
+      +(r.alt_url?' · <a href="'+esc(r.alt_url)+'" target="_blank" rel="noopener">alternative page ↗</a>':'')+'</div></div>'
+      +'<div class="sr-st '+o.s.cls+'">'+esc(o.s.txt)+'</div></div>';};
+  var h='';
+  if(bad.length)h+='<div class="pd-grp"><b>⚠ Can’t be read</b><span>'+bad.length+' · add these dates from the “Notice of results” RNS with ＋ Add date</span></div>'+bad.map(row).join('');
+  if(ok.length)h+='<div class="pd-grp pd-chg"><b>Checked each night</b><span>'+ok.length+' · A–Z</span></div>'+ok.map(row).join('');
+  if(off.length)h+='<div class="pd-grp pd-dup"><b>Switched off</b><span>'+off.length+'</span></div>'+off.map(row).join('');
+  if(!h)h='<div class="rc-empty">No sources match.</div>';
+  body.innerHTML=h;
+  $('rcal-src-sum').textContent=SRC.sources.length+' websites · '+bad.length+' can’t be read';
+  $('rcal-src-gen').textContent=PENDING&&PENDING.generated?'last checked '+String(PENDING.generated).slice(0,16).replace('T',' ')+' UTC':'';
+}
+$('rcal-src').onclick=function(){
+  openSub('rcal-src-ov');renderSources();
+  Promise.all([getText('calendar/sources.csv'),getJSON('calendar/scrape_report.json').catch(function(){return [];}),
+               PENDING?Promise.resolve(PENDING):getJSON(F_PENDING).catch(function(){return null;})])
+    .then(function(r){SRC={sources:parseCSV(r[0]),report:r[1]||[]};if(!PENDING)PENDING=r[2];renderSources();},
+          function(){SRC={err:true};renderSources();});
+};
+$('rcal-src-q').oninput=renderSources;
+
 $('rcal-pend').onclick=function(){PD_EDIT=null;renderPending();openSub('rcal-pd-ov');};
 $('rcal-pd-body').addEventListener('click',function(ev){
   var t=ev.target,a;
