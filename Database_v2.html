@@ -3224,17 +3224,7 @@ function buildRow(rec){
 }
 
 /* ── FILTERS & SORT ── */
-function rnsTypeCategory(t){
-  const s=(t||'').toLowerCase();
-  if(s.indexOf('pre-fy')>-1||s.indexOf('pre fy')>-1)return'Pre-FY';
-  if(s.indexOf('pre-h1')>-1||s.indexOf('pre h1')>-1)return'Pre-H1';
-  if(s.indexOf('half')>-1||s.indexOf('interim')>-1||s.indexOf('pre-close')>-1&&s.indexOf('h1')>-1||(s.indexOf('h1')===0)||(s.indexOf('h1')>-1&&s.indexOf('result')>-1))return'H1 Results';
-  if(s.indexOf('fy result')>-1||s.indexOf('full year')>-1||s.indexOf('full yr')>-1||s.indexOf('final result')>-1||s.indexOf('prelim')>-1||s.indexOf('fy trading')>-1||s.indexOf('fy trd')>-1||s==='fy results'||s==='fy update')return'FY Results';
-  if(s.indexOf('agm')>-1)return'AGM';
-  if(s.indexOf('q1')>-1||s.indexOf('q3')>-1||s.indexOf('trading')>-1||s.indexOf('update')>-1||s.indexOf('trd upd')>-1||s.indexOf('pre-close')>-1)return'Trading Update';
-  return'Other';
-}
-/* Cycle sort: where the card sits in the company's year.
+/* Cycle sort (also the RNS Type filter): where the card sits in the company's year.
    1 Q1 · 2 Pre-H1 TU · 3 AGM (Q4 side) · 4 H1 results · 5 Q3 · 6 Pre-FY TU · 7 AGM (Q2 side) · 8 FY results · 9 other.
    AGMs and generic trading updates follow the card's Q: Q4 / Q1 / pre-H1 → H1 side, Q2 / Q3 / pre-FY → FY side. */
 function cycleSlot(r){
@@ -3259,7 +3249,7 @@ function applyFilters(){
   const fG=document.getElementById('f-green').checked;
   const fA=document.getElementById('f-amber').checked;
   const fR=document.getElementById('f-red').checked;
-  const fTy=TY_KEYS.filter(function(k){return document.getElementById('f-ty-'+k[0]).checked;}).map(function(k){return k[1];});
+  const fTy=TY_KEYS.filter(function(k){return document.getElementById('f-ty-'+k[0]).checked;}).map(function(k){return k[0];});
   const fFrom=document.getElementById('f-from').value;
   const fTo=document.getElementById('f-to').value;
   const fUp=document.getElementById('f-rev-up').checked;
@@ -3279,7 +3269,7 @@ function applyFilters(){
     if(b==='green'&&!fG)return false;
     if(b==='amber'&&!fA)return false;
     if(b==='red'&&!fR)return false;
-    if(fTy.length&&fTy.indexOf(rnsTypeCategory(r.rnsType))<0)return false;
+    if(fTy.length&&fTy.indexOf(cycleSlot(r))<0)return false;
     if(fFrom&&r.date<fFrom)return false;
     if(fTo&&r.date>fTo)return false;
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
@@ -3656,8 +3646,8 @@ function updateBandCounts(){
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
-  const tyCnt={};ALL.forEach(function(r){const c=rnsTypeCategory(r.rnsType);tyCnt[c]=(tyCnt[c]||0)+1;});
-  TY_KEYS.forEach(function(k){document.getElementById('cnt-ty-'+k[0]).textContent=tyCnt[k[1]]||0;});
+  const tyCnt={};ALL.forEach(function(r){const c=cycleSlot(r);tyCnt[c]=(tyCnt[c]||0)+1;});
+  TY_KEYS.forEach(function(k){document.getElementById('cnt-ty-'+k[0]).textContent=tyCnt[k[0]]||0;});
   document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
   document.getElementById('cnt-wl').textContent=WL.length;
 }
@@ -3691,8 +3681,8 @@ function accTip(ind){
 }
 /* Index group from the free-text index field: 100 · 250 · sc (Small Cap) · aim · oth */
 const IX_KEYS=['100','250','sc','aim','oth'];
-/* RNS Type tick boxes: key → rnsTypeCategory() label */
-const TY_KEYS=[['fy','FY Results'],['h1','H1 Results'],['prefy','Pre-FY'],['preh1','Pre-H1'],['agm','AGM'],['tu','Trading Update']];
+/* RNS Type tick boxes, in cycle order: cycleSlot() number → label */
+const TY_KEYS=[[1,'Q1'],[2,'Pre-H1'],[3,'H1 AGM'],[4,'H1 Results'],[5,'Q3'],[6,'Pre-FY'],[7,'H2 AGM'],[8,'FY Results'],[9,'Other']];
 document.getElementById('f-ty-box').innerHTML=TY_KEYS.map(function(k){
   return '<label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ty-'+k[0]+'" onchange="applyFilters()"><span class="band-chk-lbl">'+k[1]+'</span><span class="band-cnt" id="cnt-ty-'+k[0]+'">0</span></label>';}).join('');
 function indexClass(ix){
