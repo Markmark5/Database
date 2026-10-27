@@ -8240,7 +8240,12 @@ window.addEventListener('message', function(ev){
 (function(){
   var m = location.search.match(/[?&]chart=([^&]+)/); if (!m) return;
   var tk = decodeURIComponent(m[1]).toUpperCase(), n = 0;
-  (function go(){ if (window.PPOPEN && window.PPOPEN(tk)) return; if (n++ < 60) setTimeout(go, 500); })();
+  (function go(){
+    if (window.PPOPEN && window.PPOPEN(tk)) return;
+    /* chart data in but nothing for this ticker (or still nothing after 30s): show its scorecards instead */
+    if ((window.LITEMAP && typeof ALL !== 'undefined' && ALL.length) || n++ >= 60) { if (typeof scAllShow === 'function') scAllShow(tk); return; }
+    setTimeout(go, 500);
+  })();
 })();
 
 function openWebPopup(url, title) {
