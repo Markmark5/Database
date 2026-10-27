@@ -24,7 +24,13 @@ from bs4 import BeautifulSoup
 
 HERE = Path(__file__).resolve().parent
 TODAY = datetime.now(timezone.utc).date()
-HORIZON = TODAY + timedelta(days=550)
+def _months_ahead(d, n):
+    y, m = divmod(d.month - 1 + n, 12)
+    y, m = d.year + y, m + 1
+    nxt = date(y + (m == 12), m % 12 + 1, 1)
+    return date(y, m, min(d.day, (nxt - timedelta(days=1)).day))
+
+HORIZON = _months_ahead(TODAY, 4)   # stage nothing more than 4 months out (27 Oct -> 27 Feb)
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/128.0 Safari/537.36")
 HEADERS = {"User-Agent": UA, "Accept-Language": "en-GB,en;q=0.9",
