@@ -2533,7 +2533,7 @@ function scAllRender(t,cards){
   body.innerHTML=sorted.map(function(c){
     var col=bandCol(+c.score||0);
     var revs=(c.revisions||[]).slice(0,4).map(function(v){
-      var cl=/^(var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8})$/i.test(String(v.color||''))?v.color:'var(--text-primary)';
+      var cl=revColor(v);
       return '<div style="display:flex;flex-direction:column;min-width:92px;max-width:150px;">'
         +'<span style="font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);">'+esc(v.lbl||'')+'</span>'
         +'<span style="font-size:12px;font-weight:700;color:'+cl+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(v.val||'')+'</span>'
@@ -3200,7 +3200,7 @@ function buildRow(rec){
   const uid=rec.id.replace(/[^a-zA-Z0-9]/g,'_');
   const hasA=!!(rec.hasAnalysis&&(rec.analysisHtml||rec.analysisSections?.length))||!!(rec.analysisText);
   const sigHtml=(rec.signals||[]).map(function(s){return '<div class="signal-tag"><span class="stag stag-'+s.type+'">'+s.pill+'</span><span class="signal-text">'+(s.textHTML||s.textPlain||'')+'</span></div>';}).join('');
-  const revHtml=(rec.revisions||[]).map(function(r){return '<div class="rev-item"><div class="rev-lbl">'+r.lbl+'</div><div class="rev-val" style="color:'+(r.color||'var(--text-primary)')+'">'+r.val+'</div><div class="rev-sub">'+(r.sub||'')+'</div></div>';}).join('');
+  const revHtml=(rec.revisions||[]).map(function(r){return '<div class="rev-item"><div class="rev-lbl">'+r.lbl+'</div><div class="rev-val" style="color:'+revColor(r)+'">'+r.val+'</div><div class="rev-sub">'+(r.sub||'')+'</div></div>';}).join('');
   const sstatsHtml=(rec.sparkStats||[]).map(function(s){return '<div class="sstat"><div class="sstat-lbl">'+s.lbl+'</div><div class="sstat-val" style="'+(s.style||'')+'">'+s.val+'</div></div>';}).join('');
   const h1Inds=rec.h1Inds||[];
   const revInds=h1Inds.length>0?h1Inds:[{lbl:'REV',mark:'—',dev:'',state:'na'},{lbl:'EPS',mark:'—',dev:'',state:'na'}];
@@ -3740,6 +3740,18 @@ function revRowPct(v){
   if(/^\W*(n\/?a)\W*$/i.test(val))return null;
   if(/flat|\bhold\b|held|in[- ]?line|unchanged|maintain|reiterat/i.test(val))return 0;
   return revPct(v.sub);
+}
+/* Colour of a revision value. EPS / Revenue rows: cut words red, flat / hold words amber, else + green
+   − red 0 amber; no number (or another row type, e.g. TP) keeps the colour saved with the card. */
+function revColor(v){
+  const saved=/^(var\(--[a-z0-9-]+\)|#[0-9a-f]{3,8})$/i.test(String(v.color||''))?v.color:'var(--text-primary)';
+  if(!/eps|rev/i.test(v.lbl||''))return saved;
+  const val=String(v.val||'');
+  if(/\b(cuts?|downgrad\w*|trim\w*|lower\w*|miss)\b/i.test(val))return'var(--red)';
+  if(/flat|\bhold\b|held|in[- ]?line|unchanged|maintain|reiterat|^\s*=/i.test(val))return'var(--amber)';
+  const p=revRowPct(v);
+  if(p==null)return saved;
+  return p>0?'var(--green)':p<0?'var(--red)':'var(--amber)';
 }
 /* Largest up / down EPS or Revenue revision on a record (null if none parseable) */
 function revRange(r){
