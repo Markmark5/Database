@@ -1,14 +1,14 @@
 # Calendar scrape - 2026-10-27
 
-**145 sources · 19 events staged for approval**
+**289 sources · 157 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 77 | read OK, upcoming events found |
-| EMPTY | 53 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 146 | read OK, upcoming events found |
+| EMPTY | 129 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 10 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -64,7 +64,83 @@
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
 - ZIGUP (ZIG) - http 200, http - https://zigup.com/investors/financial-calendar/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
+- 4basebio (4BB) - http 200, http - https://www.4basebio.com/events
+- AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
+- Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
+- Aptamer (APTA) - http 200, http - https://aptamergroup.com/investors/shareholder-information/
+- ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
+- Auction Technology (ATG) - http 200, browser - https://www.auctiontechnologygroup.com/investors/financial-calendar/
+- Avation (AVAP) - http 200, http - https://www.avation.net/results.html
+- Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
+- Brave Bison (BBSN) - http 200, http - https://bravebison.com/investors/
+- Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
+- Beeks Financial Cloud (BKS) - http 200, http - https://beeksgroup.com/investor-relations/shareholder-information/
+- Boku Inc (BOKU) - http 200, http - https://investors.boku.com/events/
+- Bow Street (BOW) - http 200, http - https://dimt.co.uk/investor-relations/shareholder-information/
+- Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
+- Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
+- CLS (CLI) - http 200, http - https://clsholdings.com/investors/financial-calendar
+- Calnex Solutions (CLX) - http 200, http - https://investors.calnexsol.com/investors/financial-calendar/
+- Northcoders (CODE) - http 200, http - https://investors.northcodersgroup.com/investors/financial-calendar.asp
+- Chesnara plc · Life Insurance (CSN) - http 200, http - https://www.chesnara.co.uk/investors/financial-calendar
+- Christie (CTG) - http 200, http - https://www.christiegroup.com/investors/shareholder-information/financial-calendar
+- CVS (CVSG) - http 200, http - https://www.cvsukltd.co.uk/investor-centre/financial-calendar/
+- Ceres Power (CWR) - http 200, http - https://www.ceres.tech/investors/financial-calendar/
+- Diales (DIAL) - http 200, http - https://www.diales.com/en/investors/financial-calendar
+- Man (EMG) - http 200, http - https://www.man.com/shareholder-relations
+- Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
+- W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
+- Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
+- Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
+- Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
+- Halfords (HFD) - http 200, http - https://www.halfordscompany.com/investor-hub/financial-calendar/
+- Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
+- Hill & Smith (HILS) - http 200, http - https://hsgroup.com/investors/financial-calendar/
+- Hostelworld (HSW) - http 200, http - https://www.hostelworldgroup.com/investors/financial-calendar
+- Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
+- IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
+- Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
+- Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
+- Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
+- Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
+- LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
+- London Stock Exchange (LSEG) - http 200, http - https://www.lseg.com/en/investor-relations/financial-calendar
+- James Latham (LTHM) - http 200, http - https://www.lathamtimber.co.uk/investors/company-calendar
+- McBride (MCB) - http 200, http - https://www.mcbride.co.uk/investors/financial-calendar/
+- Mears (MER) - http 200, http - https://www.mearsgroup.co.uk/investors/shareholder-centre/
+- Tortilla Mexican Grill (MEX) - http 200, http - https://www.tortillagroup.co.uk/financial-calendar/
+- Novacyt SA (NCYT) - http 200, browser - https://novacyt.com/investors/corporate-calendar/
+- Nichols (NICL) - http 200, browser - https://www.nicholsplc.co.uk/investors/events/
+- NWF (NWF) - http 200, http - https://www.nwf.co.uk/investors/financial-calendar/
+- Nexteq (NXQ) - http 200, http - https://nexteqplc.com/investor-hub/
+- One Health (OHGR) - http 200, http - https://www.onehealth.co.uk/investor-events
+- Ondo Insurtech (ONDO) - http 200, http - https://www.ondoplc.com/investors/financial-calendar/
+- Michael Page (PAGE) - http 200, http - https://investors.michaelpage.com/investors/financial-calendar
+- Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
+- Power Probe (PWR) - http 200, http - https://investors.powerprobe.com/results-centre
+- Quartix Technologies (QTX) - http 200, http - https://www.quartix.com/en-gb/company/investors/
+- Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
+- Severfield (SFR) - http 200, http - https://www.severfield.com/calendar
+- Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
+- Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
+- Stelrad (SRAD) - http 200, browser - https://stelradplc.com/investors-2/financial-calendar/
+- Shearwater (SWG) - http 200, http - https://www.shearwatergroup.com/investors/results-centre/
+- Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
+- tinyBuild Inc (TBLD) - http 200, http - https://www.tinybuildinvestors.com/financial-calendar
+- TP ICAP (TCAP) - http 200, http - https://tpicap.com/tpicap/investors/financial-calendar-upcoming
+- THG (THG) - http 200, http - https://www.thg.com/investor-relations/financial-calendar
+- Team Internet Group (TIG) - http 200, http - https://teaminternet.com/investors/
+- Tullow Oil (TLW) - http 200, http - https://www.tullowoil.com/investors/events/
+- Titon (TON) - http 200, http - https://www.titon.com/shareholder-information
+- Transense Technologies (TRT) - http 200, http - https://www.transense.com/investors/meetings
+- Victoria (VCP) - http 200, http - https://www.victoriaplc.com/financial-calendar/
+- Watkin Jones (WJG) - http 200, http - https://watkinjonesplc.com/investors/shareholder-centre/financial-calendar/
+- WPP (WPP) - http 200, browser - https://www.wpp.com/en/investors/calendar-and-events
+- YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
+- Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
+- Zoo Digital (ZOO) - http 200, http - https://www.zoodigital.com/investors/shareholder-information/
 
 ## UNREADABLE
 
@@ -81,11 +157,10 @@
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Knights (KGH) - http 403, chrome - https://www.knightsplc.com/company/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
-- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
+- Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
 
-- Brickability (BRCK) - http None, chrome - https://brickabilitygroupplc.com/investors/financial-timetable
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
@@ -93,7 +168,6 @@
 ## Approved events not re-verified tonight
 
 - Genus AGM 2026-11-18
-- Peel Hunt H1 results 2026-11-18
 - Genus H1 results 2027-02-25
 - Genus FY results 2027-09-16
 - Genus AGM 2027-11-17

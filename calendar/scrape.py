@@ -39,7 +39,7 @@ MONTHS = {m: i for i, names in enumerate([
     ("september", "sept", "sep"), ("october", "oct"), ("november", "nov"),
     ("december", "dec")], start=1) for m in names}
 MON = r"(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sept|sep|oct|nov|dec)"
-RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?\s*(?:of\s+)?{MON}\.?,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?\b", re.I)
+RE_DMY = re.compile(rf"\b(\d{{1,2}})\s*(?:st|nd|rd|th)?(?:\s*|-)(?:of\s+)?{MON}\.?,?(?:(?:\s+|-)'?(\d{{4}}|\d{{2}})(?![\d:]))?\b", re.I)   # also 13-Oct-2026
 RE_MDY = re.compile(rf"\b{MON}\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b,?(?:\s+'?(\d{{4}}|\d{{2}})(?![\d:]))?", re.I)
 RE_NUM = re.compile(r"\b(\d{1,2})[/.](\d{1,2})[/.](\d{4}|\d{2})(?![\d.])")
 RE_ISO = re.compile(r"\b(20\d\d)-(\d{2})-(\d{2})\b(?![T ]?\d{1,2}:\d{2})")   # "2026-11-12 09:00" = add-to-calendar widget timestamp, not a row
@@ -336,8 +336,12 @@ def extract(lines):
         if is_year_line(lines, i) and is_year_line(lines, i + 1) and not is_year_line(lines, i - 1):
             tab_year, tab_last = int(line), None
         # period references ("nine months to 30 September") are skipped by event_dates
-        for kind, a, mo, y, span in event_dates(line):
+        dated = event_dates(line)
+        line_has_year = any(d[3] is not None for d in dated)
+        for kind, a, mo, y, span in dated:
             conf = "confirmed"
+            if y is None and line_has_year:
+                continue     # "19 Feb 2024 | 19 Feb Announcement...": the yearless one just repeats it
             if y is None:  # yearless: needs a nearby year line, a year tab bar or an upcoming heading
                 y = nearby_year(lines, i)
                 if y is None and tab_year and kind == "exact":
