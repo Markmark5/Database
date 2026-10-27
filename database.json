@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-10-27T07:41:53.804Z",
-    "savedAtLabel": "27 Oct 2026 07:41",
+    "savedAt": "2026-10-27T15:31:41.591Z",
+    "savedAtLabel": "27 Oct 2026 15:31",
     "source": "github-sync"
   },
   "scorecards": [
@@ -184003,6 +184003,303 @@
         ]
       },
       "entryPrice": 76.5
+    },
+    {
+      "id": "SWG_2026_10_27",
+      "ticker": "SWG",
+      "score": 60,
+      "company": "Shearwater Group PLC",
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "FY Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "FY26 adjusted EPS of 5.5p beat the post-upgrade 4.9p consensus by <span class=\"val-up\">+12%</span>, and adjusted PBT of £1.4m came in <span class=\"val-up\">+17%</span> ahead, a second beat on top of July’s raise.",
+          "textPlain": "FY26 adjusted EPS of 5.5p beat the post-upgrade 4.9p consensus by +12%, and adjusted PBT of £1.4m came in +17% ahead, a second beat on top of July’s raise."
+        },
+        {
+          "pill": "IN LINE",
+          "type": "amber",
+          "textHTML": "FY27 guided in line with market expectations, so 5.9p EPS and £38.0m revenue hold <span class=\"val-fl\">~flat</span>; consensus already assumes revenue falls 10% as one-off work rolls off.",
+          "textPlain": "FY27 guided in line with market expectations, so 5.9p EPS and £38.0m revenue hold ~flat; consensus already assumes revenue falls 10% as one-off work rolls off."
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "Current team record since Nov 2024: <span class=\"val-up\">2 hit, 3 raised, 0 missed</span>; FY25 and FY26 both opened “in line” and finished ahead, so today’s wording looks conservative.",
+          "textPlain": "Current team record since Nov 2024: 2 hit, 3 raised, 0 missed; FY25 and FY26 both opened “in line” and finished ahead, so today’s wording looks conservative."
+        },
+        {
+          "pill": "MARGIN",
+          "type": "amber",
+          "textHTML": "Services gross margin fell to <span class=\"val-dn\">18.7%</span> from 21.6% on third-party software mix, and Software revenue dropped <span class=\"val-dn\">17%</span> to £1.7m; growth leans on Services volume.",
+          "textPlain": "Services gross margin fell to 18.7% from 21.6% on third-party software mix, and Software revenue dropped 17% to £1.7m; growth leans on Services volume."
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "Cash of <span class=\"val-up\">£5.6m</span> with no borrowings; a capital reduction backed on 13 October enables dividends or buybacks, and accrued income for the next 12 months rose to £6.1m.",
+          "textPlain": "Cash of £5.6m with no borrowings; a capital reduction backed on 13 October enables dividends or buybacks, and accrued income for the next 12 months rose to £6.1m."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "+12%",
+          "sub": "4.9p → 5.5p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "~flat",
+          "sub": "5.9p → 5.9p held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "+1%",
+          "sub": "£42.0m → £42.3m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£38.0m → £38.0m held",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "+8.9%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "+18.3%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "Year End: Jun 2026 · 34 weeks",
+      "sparkSVG": "<svg id=\"spark-SWG\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-SWG\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-10-27T15:31:31.511Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar 26",
+          "eps": 4.5,
+          "price": 42.5
+        },
+        {
+          "d": "06 Mar 26",
+          "eps": 4.5,
+          "price": 43
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 4.5,
+          "price": 42
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 4.5,
+          "price": 38.5
+        },
+        {
+          "d": "27 Mar 26",
+          "eps": 4.5,
+          "price": 38
+        },
+        {
+          "d": "03 Apr 26",
+          "eps": 4.5,
+          "price": 39
+        },
+        {
+          "d": "10 Apr 26",
+          "eps": 4.5,
+          "price": 39.5
+        },
+        {
+          "d": "17 Apr 26",
+          "eps": 4.5,
+          "price": 38.5
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 4.5,
+          "price": 38
+        },
+        {
+          "d": "08 May 26",
+          "eps": 4.5,
+          "price": 41
+        },
+        {
+          "d": "15 May 26",
+          "eps": 4.5,
+          "price": 39
+        },
+        {
+          "d": "22 May 26",
+          "eps": 4.5,
+          "price": 37.5
+        },
+        {
+          "d": "02 Jun 26",
+          "eps": 4.5,
+          "price": 38
+        },
+        {
+          "d": "05 Jun 26",
+          "eps": 4.5,
+          "price": 38.5
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 4.5,
+          "price": 37.5
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 4.5,
+          "price": 37
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 4.5,
+          "price": 37
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 4.5,
+          "price": 43.5
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 4.5,
+          "price": 42.5
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 4.5,
+          "price": 45.2
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 4.5,
+          "price": 45.5
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 4.9,
+          "price": 56.5
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 4.9,
+          "price": 62
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 4.9,
+          "price": 59.5
+        },
+        {
+          "d": "21 Aug 26",
+          "eps": 4.9,
+          "price": 57.5
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 4.9,
+          "price": 58.5
+        },
+        {
+          "d": "07 Sep 26",
+          "eps": 4.9,
+          "price": 58.5
+        },
+        {
+          "d": "11 Sep 26",
+          "eps": 4.9,
+          "price": 56
+        },
+        {
+          "d": "18 Sep 26",
+          "eps": 4.9,
+          "price": 54.5
+        },
+        {
+          "d": "25 Sep 26",
+          "eps": 4.9,
+          "price": 56
+        },
+        {
+          "d": "02 Oct 26",
+          "eps": 4.9,
+          "price": 66.5
+        },
+        {
+          "d": "09 Oct 26",
+          "eps": 4.9,
+          "price": 67
+        },
+        {
+          "d": "16 Oct 26",
+          "eps": 4.9,
+          "price": 69.5
+        },
+        {
+          "d": "23 Oct 26",
+          "eps": 4.9,
+          "price": 71
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 69.5
     }
   ],
   "scorecardIndex": [
@@ -195613,6 +195910,202 @@
       "arc": null
     },
     {
+      "id": "IHC_2026_10_27",
+      "ticker": "IHC",
+      "company": "Inspiration Healthcare Group PLC",
+      "score": 81,
+      "verdict": "Upgrade likely",
+      "date": "2026-10-27",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 18.5,
+      "importedAt": "2026-10-27T07:40:39.303Z",
+      "arc": null
+    },
+    {
+      "id": "NCC_2026_10_27",
+      "ticker": "NCC",
+      "company": "NCC Group PLC",
+      "score": 66,
+      "verdict": "Modest / mixed",
+      "date": "2026-10-27",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 154.6,
+      "importedAt": "2026-10-27T07:40:39.304Z",
+      "arc": null
+    },
+    {
+      "id": "LUCE_2026_10_27",
+      "ticker": "LUCE",
+      "company": "Luceco PLC",
+      "score": 58,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE Small Cap",
+      "entryPrice": 205.5,
+      "importedAt": "2026-10-27T07:40:39.309Z",
+      "arc": null
+    },
+    {
+      "id": "ULTP_2026_10_27",
+      "ticker": "ULTP",
+      "company": "Ultimate Products PLC",
+      "score": 57,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "FY Results",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 46.7,
+      "importedAt": "2026-10-27T07:40:39.311Z",
+      "arc": null
+    },
+    {
+      "id": "IGR_2026_10_27",
+      "ticker": "IGR",
+      "company": "IG Design Group PLC",
+      "score": 57,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 97,
+      "importedAt": "2026-10-27T07:40:39.313Z",
+      "arc": null
+    },
+    {
+      "id": "ALU_2026_10_27",
+      "ticker": "ALU",
+      "company": "Alumasc Group PLC",
+      "score": 57,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "AGM",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 228.5,
+      "importedAt": "2026-10-27T07:40:39.313Z",
+      "arc": null
+    },
+    {
+      "id": "LPA_2026_10_27",
+      "ticker": "LPA",
+      "company": "LPA Group PLC",
+      "score": 57,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 83,
+      "importedAt": "2026-10-27T07:41:44.278Z",
+      "arc": null
+    },
+    {
+      "id": "RWS_2026_10_27",
+      "ticker": "RWS",
+      "company": "RWS Holdings PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM UK 50",
+      "entryPrice": 150.85,
+      "importedAt": "2026-10-27T07:41:44.278Z",
+      "arc": null
+    },
+    {
+      "id": "RCN_2026_10_27",
+      "ticker": "RCN",
+      "company": "Redcentric PLC",
+      "score": 54,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "AIM UK 50",
+      "entryPrice": 87.995,
+      "importedAt": "2026-10-27T07:41:44.279Z",
+      "arc": null
+    },
+    {
+      "id": "LBG_2026_10_27",
+      "ticker": "LBG",
+      "company": "LBG Media PLC",
+      "score": 53,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 35.3,
+      "importedAt": "2026-10-27T07:41:44.281Z",
+      "arc": null
+    },
+    {
+      "id": "INF_2026_10_27",
+      "ticker": "INF",
+      "company": "Informa PLC",
+      "score": 53,
+      "verdict": "Hold and wait",
+      "date": "2026-10-27",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 100",
+      "entryPrice": 875.8,
+      "importedAt": "2026-10-27T07:41:44.282Z",
+      "arc": null
+    },
+    {
+      "id": "REVB_2026_10_27",
+      "ticker": "REVB",
+      "company": "Revolution Beauty Group PLC",
+      "score": 39,
+      "verdict": "Upgrade, capped",
+      "date": "2026-10-27",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 4.5,
+      "importedAt": "2026-10-27T07:41:44.283Z",
+      "arc": null
+    },
+    {
+      "id": "RKT_2026_10_27",
+      "ticker": "RKT",
+      "company": "Reckitt Benckiser Group PLC",
+      "score": 36,
+      "verdict": "Downgrades probable",
+      "date": "2026-10-27",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FT 30, FTSE 100",
+      "entryPrice": 5515,
+      "importedAt": "2026-10-27T07:41:44.283Z",
+      "arc": null
+    },
+    {
+      "id": "SHOE_2026_10_27",
+      "ticker": "SHOE",
+      "company": "Shoe Zone PLC",
+      "score": 15,
+      "verdict": "Downgrades probable",
+      "date": "2026-10-27",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 76.5,
+      "importedAt": "2026-10-27T07:41:44.283Z",
+      "arc": null
+    },
+    {
       "id": "AJB_2026_04_23",
       "ticker": "AJB",
       "company": "AJ Bell PLC",
@@ -198132,199 +198625,17 @@
       "arc": "2026-03"
     },
     {
-      "id": "IHC_2026_10_27",
-      "ticker": "IHC",
-      "company": "Inspiration Healthcare Group PLC",
-      "score": 81,
-      "verdict": "Upgrade likely",
-      "date": "2026-10-27",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 18.5,
-      "importedAt": "2026-10-27T07:40:39.303Z",
-      "arc": null
-    },
-    {
-      "id": "NCC_2026_10_27",
-      "ticker": "NCC",
-      "company": "NCC Group PLC",
-      "score": 66,
-      "verdict": "Modest / mixed",
-      "date": "2026-10-27",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 154.6,
-      "importedAt": "2026-10-27T07:40:39.304Z",
-      "arc": null
-    },
-    {
-      "id": "LUCE_2026_10_27",
-      "ticker": "LUCE",
-      "company": "Luceco PLC",
-      "score": 58,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE Small Cap",
-      "entryPrice": 205.5,
-      "importedAt": "2026-10-27T07:40:39.309Z",
-      "arc": null
-    },
-    {
-      "id": "ULTP_2026_10_27",
-      "ticker": "ULTP",
-      "company": "Ultimate Products PLC",
-      "score": 57,
+      "id": "SWG_2026_10_27",
+      "ticker": "SWG",
+      "company": "Shearwater Group PLC",
+      "score": 60,
       "verdict": "Hold and wait",
       "date": "2026-10-27",
       "rnsType": "FY Results",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 46.7,
-      "importedAt": "2026-10-27T07:40:39.311Z",
-      "arc": null
-    },
-    {
-      "id": "IGR_2026_10_27",
-      "ticker": "IGR",
-      "company": "IG Design Group PLC",
-      "score": 57,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Pre-H1 TU",
       "mode": "Q4",
       "index": "AIM All-Share",
-      "entryPrice": 97,
-      "importedAt": "2026-10-27T07:40:39.313Z",
-      "arc": null
-    },
-    {
-      "id": "ALU_2026_10_27",
-      "ticker": "ALU",
-      "company": "Alumasc Group PLC",
-      "score": 57,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "AGM",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 228.5,
-      "importedAt": "2026-10-27T07:40:39.313Z",
-      "arc": null
-    },
-    {
-      "id": "LPA_2026_10_27",
-      "ticker": "LPA",
-      "company": "LPA Group PLC",
-      "score": 57,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 83,
-      "importedAt": "2026-10-27T07:41:44.278Z",
-      "arc": null
-    },
-    {
-      "id": "RWS_2026_10_27",
-      "ticker": "RWS",
-      "company": "RWS Holdings PLC",
-      "score": 56,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM UK 50",
-      "entryPrice": 150.85,
-      "importedAt": "2026-10-27T07:41:44.278Z",
-      "arc": null
-    },
-    {
-      "id": "RCN_2026_10_27",
-      "ticker": "RCN",
-      "company": "Redcentric PLC",
-      "score": 54,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Pre-H1 TU",
-      "mode": "Q4",
-      "index": "AIM UK 50",
-      "entryPrice": 87.995,
-      "importedAt": "2026-10-27T07:41:44.279Z",
-      "arc": null
-    },
-    {
-      "id": "LBG_2026_10_27",
-      "ticker": "LBG",
-      "company": "LBG Media PLC",
-      "score": 53,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 35.3,
-      "importedAt": "2026-10-27T07:41:44.281Z",
-      "arc": null
-    },
-    {
-      "id": "INF_2026_10_27",
-      "ticker": "INF",
-      "company": "Informa PLC",
-      "score": 53,
-      "verdict": "Hold and wait",
-      "date": "2026-10-27",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE 100",
-      "entryPrice": 875.8,
-      "importedAt": "2026-10-27T07:41:44.282Z",
-      "arc": null
-    },
-    {
-      "id": "REVB_2026_10_27",
-      "ticker": "REVB",
-      "company": "Revolution Beauty Group PLC",
-      "score": 39,
-      "verdict": "Upgrade, capped",
-      "date": "2026-10-27",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 4.5,
-      "importedAt": "2026-10-27T07:41:44.283Z",
-      "arc": null
-    },
-    {
-      "id": "RKT_2026_10_27",
-      "ticker": "RKT",
-      "company": "Reckitt Benckiser Group PLC",
-      "score": 36,
-      "verdict": "Downgrades probable",
-      "date": "2026-10-27",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FT 30, FTSE 100",
-      "entryPrice": 5515,
-      "importedAt": "2026-10-27T07:41:44.283Z",
-      "arc": null
-    },
-    {
-      "id": "SHOE_2026_10_27",
-      "ticker": "SHOE",
-      "company": "Shoe Zone PLC",
-      "score": 15,
-      "verdict": "Downgrades probable",
-      "date": "2026-10-27",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 76.5,
-      "importedAt": "2026-10-27T07:41:44.283Z",
+      "entryPrice": 69.5,
+      "importedAt": "2026-10-27T15:31:31.511Z",
       "arc": null
     }
   ],
