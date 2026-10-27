@@ -1420,6 +1420,8 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div style="display:flex;flex-direction:column;gap:2px;">
               <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-rev-up" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green)">▲</span><span class="band-chk-lbl">Upgrade +2%+</span><span class="band-cnt" id="cnt-rev-up">0</span></label>
               <label class="band-chk rev-chk" style="--rc:var(--red)"><input type="checkbox" id="f-rev-dn" onchange="applyFilters()"><span class="rev-arr" style="color:var(--red)">▼</span><span class="band-chk-lbl">Downgrade −2%+</span><span class="band-cnt" id="cnt-rev-dn">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)" title="FY1 and FY2 both have an EPS or Revenue upgrade of +2% or more"><input type="checkbox" id="f-rev-up2" onchange="applyFilters()"><span class="rev-arr" style="color:var(--green);font-size:7px;letter-spacing:-2px">▲▲</span><span class="band-chk-lbl">+2% Both</span><span class="band-cnt" id="cnt-rev-up2">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--red)" title="FY1 and FY2 both have an EPS or Revenue downgrade of 2% or more"><input type="checkbox" id="f-rev-dn2" onchange="applyFilters()"><span class="rev-arr" style="color:var(--red);font-size:7px;letter-spacing:-2px">▼▼</span><span class="band-chk-lbl">−2% Both</span><span class="band-cnt" id="cnt-rev-dn2">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -3254,6 +3256,7 @@ function applyFilters(){
   const fTo=document.getElementById('f-to').value;
   const fUp=document.getElementById('f-rev-up').checked;
   const fDn=document.getElementById('f-rev-dn').checked;
+  const fUp2=document.getElementById('f-rev-up2').checked,fDn2=document.getElementById('f-rev-dn2').checked;
   const fH1=['ahead','hyp','fire'].filter(function(k){return document.getElementById('f-h1-'+k).checked;});
   const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
   const ixMap=fIx.length?indexMap():null;
@@ -3272,7 +3275,8 @@ function applyFilters(){
     if(fTy.length&&fTy.indexOf(cycleSlot(r))<0)return false;
     if(fFrom&&r.date<fFrom)return false;
     if(fTo&&r.date>fTo)return false;
-    if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
+    if(fUp||fDn||fUp2||fDn2){const x=revRange(r);
+      if(!((x&&((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))||(fUp2&&revBoth(r,1))||(fDn2&&revBoth(r,-1))))return false;}
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
     if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
@@ -3454,7 +3458,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
   applyFilters();
@@ -3643,6 +3647,8 @@ function updateBandCounts(){
   document.getElementById('cnt-red').textContent=ALL.filter(function(r){return r.score<50;}).length;
   document.getElementById('cnt-rev-up').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.up>=2;}).length;
   document.getElementById('cnt-rev-dn').textContent=ALL.filter(function(r){const x=revRange(r);return x&&x.dn<=-2;}).length;
+  document.getElementById('cnt-rev-up2').textContent=ALL.filter(function(r){return revBoth(r,1);}).length;
+  document.getElementById('cnt-rev-dn2').textContent=ALL.filter(function(r){return revBoth(r,-1);}).length;
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
@@ -3724,15 +3730,45 @@ function revPct(s){
   }
   return null;
 }
+/* % revision on one revision row. "~flat" / "Hold" / "In line" / "Unchanged" = 0 (the sub line then
+   describes something else, e.g. "6% underlying" or "+8% YoY"); "na" = none; a bare figure ("7.2p")
+   falls back to the % in the sub line. */
+function revRowPct(v){
+  const val=String(v.val||'');
+  let p=revPct(val);if(p!=null)return p;
+  if(/%/.test(val))return null;
+  if(/^\W*(n\/?a)\W*$/i.test(val))return null;
+  if(/flat|\bhold\b|held|in[- ]?line|unchanged|maintain|reiterat/i.test(val))return 0;
+  return revPct(v.sub);
+}
 /* Largest up / down EPS or Revenue revision on a record (null if none parseable) */
 function revRange(r){
   let up=-Infinity,dn=Infinity,any=false;
   (r.revisions||[]).forEach(function(v){
     if(!/eps|rev/i.test(v.lbl||''))return;
-    let p=revPct(v.val);if(p==null&&!/%/.test(v.val||''))p=revPct(v.sub);
+    const p=revRowPct(v);
     if(p==null)return;any=true;if(p>up)up=p;if(p<dn)dn=p;
   });
   return any?{up:up,dn:dn}:null;
+}
+/* Largest up / down EPS or Revenue revision per year: [FY1, FY2] (null when a year has none).
+   Labels are "FY1 EPS" / "FY2 Rev" or real years "FY26 EPS" / "FY27e Rev": earliest year = FY1. */
+function revYears(r){
+  const by={};
+  (r.revisions||[]).forEach(function(v){
+    const l=String(v.lbl||'');if(!/eps|rev/i.test(l))return;
+    const m=l.match(/fy\s?'?(\d{1,4})/i);if(!m)return;
+    const p=revRowPct(v);
+    if(p==null)return;
+    const y=+m[1],o=by[y]||(by[y]={up:-Infinity,dn:Infinity});
+    if(p>o.up)o.up=p;if(p<o.dn)o.dn=p;
+  });
+  const ys=Object.keys(by).map(Number).sort(function(a,b){return a-b;});
+  return [by[ys[0]]||null,by[ys[1]]||null];
+}
+function revBoth(r,dir){
+  const y=revYears(r);if(!y[0]||!y[1])return false;
+  return dir>0?(y[0].up>=2&&y[1].up>=2):(y[0].dn<=-2&&y[1].dn<=-2);
 }
 function updateSidebar(){
   document.getElementById('st-total').textContent=ALL.length;
