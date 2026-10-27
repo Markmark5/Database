@@ -3347,7 +3347,7 @@ function calKey(from,to){
 /* {TICKER: soonest date of an event not yet over} */
 function calNextMap(){
   var t0=cal30Iso(new Date()),m={};
-  calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk])m[e.tk]=k;});
+  calEvents().forEach(function(e){if(!e.tk||e.to<=t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk])m[e.tk]=k;});   /* from tomorrow: today's RNS is already out */
   return m;
 }
 function calNewest(){
@@ -3360,7 +3360,7 @@ var CALDUE={t:0,m:null};
 function calDueBar(rec){
   if(!CALDUE.m||Date.now()-CALDUE.t>2000){
     var t0=cal30Iso(new Date()),m={};
-    calEvents().forEach(function(e){if(!e.tk||e.to<t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk].k)m[e.tk]={k:k,e:e};});
+    calEvents().forEach(function(e){if(!e.tk||e.to<=t0)return;var k=calKey(e.from,e.to);if(!m[e.tk]||k<m[e.tk].k)m[e.tk]={k:k,e:e};});
     CALDUE={t:Date.now(),m:m};}
   var x=CALDUE.m[String(rec.ticker||'').toUpperCase()];if(!x)return '<div class="due-bar none"></div>';   /* no date: empty bar keeps the columns lined up */
   var e=x.e,MO=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],mo=MO[+e.from.slice(5,7)-1],d;
@@ -3371,7 +3371,7 @@ function calDueBar(rec){
 }
 function cal30Set(){
   var t0=cal30Iso(new Date()),d=new Date();d.setDate(d.getDate()+30);var t30=cal30Iso(d),set={};
-  calEvents().forEach(function(e){if(e.tk&&e.to>=t0&&calKey(e.from,e.to)<=t30)set[e.tk]=true;});   /* placed in the next 30 days, as the calendar shows it */
+  calEvents().forEach(function(e){if(e.tk&&e.to>t0&&calKey(e.from,e.to)<=t30)set[e.tk]=true;});   /* placed in the next 30 days, as the calendar shows it */
   return set;
 }
 document.addEventListener('DOMContentLoaded',cal30Load);
