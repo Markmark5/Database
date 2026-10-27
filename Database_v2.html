@@ -1448,13 +1448,8 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             </div>
           </div>
           <div class="sb-sec">
-            <div class="sb-lbl">RNS Type</div>
-            <select class="sb-sel" id="f-type" onchange="applyFilters()">
-              <option value="">All types</option>
-              <option>FY Results</option><option>H1 Results</option>
-              <option>Pre-FY</option><option>Pre-H1</option>
-              <option>AGM</option><option>Trading Update</option>
-            </select>
+            <div class="sb-lbl" title="Ticking more than one shows any match; none ticked shows all types">RNS Type</div>
+            <div style="display:flex;flex-direction:column;gap:2px;" id="f-ty-box"></div>
           </div>
           <div class="sb-sec">
             <div class="sb-lbl">Date Range</div>
@@ -3264,7 +3259,7 @@ function applyFilters(){
   const fG=document.getElementById('f-green').checked;
   const fA=document.getElementById('f-amber').checked;
   const fR=document.getElementById('f-red').checked;
-  const fT=document.getElementById('f-type').value;
+  const fTy=TY_KEYS.filter(function(k){return document.getElementById('f-ty-'+k[0]).checked;}).map(function(k){return k[1];});
   const fFrom=document.getElementById('f-from').value;
   const fTo=document.getElementById('f-to').value;
   const fUp=document.getElementById('f-rev-up').checked;
@@ -3284,7 +3279,7 @@ function applyFilters(){
     if(b==='green'&&!fG)return false;
     if(b==='amber'&&!fA)return false;
     if(b==='red'&&!fR)return false;
-    if(fT&&rnsTypeCategory(r.rnsType)!==fT)return false;
+    if(fTy.length&&fTy.indexOf(rnsTypeCategory(r.rnsType))<0)return false;
     if(fFrom&&r.date<fFrom)return false;
     if(fTo&&r.date>fTo)return false;
     if(fUp||fDn){const x=revRange(r);if(!x||!((fUp&&x.up>=2)||(fDn&&x.dn<=-2)))return false;}
@@ -3469,8 +3464,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;})).forEach(function(id){document.getElementById(id).checked=false;});
-  document.getElementById('f-type').value='';
+  ['f-rev-up','f-rev-dn','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
   applyFilters();
@@ -3662,6 +3656,8 @@ function updateBandCounts(){
   ['ahead','hyp','fire'].forEach(function(k){document.getElementById('cnt-h1-'+k).textContent=ALL.filter(function(r){return h1Flags(r)[k];}).length;});
   const ixMap=indexMap(),ixCnt={};ALL.forEach(function(r){const g=indexGroup(r,ixMap);ixCnt[g]=(ixCnt[g]||0)+1;});
   IX_KEYS.forEach(function(k){document.getElementById('cnt-ix-'+k).textContent=ixCnt[k]||0;});
+  const tyCnt={};ALL.forEach(function(r){const c=rnsTypeCategory(r.rnsType);tyCnt[c]=(tyCnt[c]||0)+1;});
+  TY_KEYS.forEach(function(k){document.getElementById('cnt-ty-'+k[0]).textContent=tyCnt[k[1]]||0;});
   document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
   document.getElementById('cnt-wl').textContent=WL.length;
 }
@@ -3695,6 +3691,10 @@ function accTip(ind){
 }
 /* Index group from the free-text index field: 100 · 250 · sc (Small Cap) · aim · oth */
 const IX_KEYS=['100','250','sc','aim','oth'];
+/* RNS Type tick boxes: key → rnsTypeCategory() label */
+const TY_KEYS=[['fy','FY Results'],['h1','H1 Results'],['prefy','Pre-FY'],['preh1','Pre-H1'],['agm','AGM'],['tu','Trading Update']];
+document.getElementById('f-ty-box').innerHTML=TY_KEYS.map(function(k){
+  return '<label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ty-'+k[0]+'" onchange="applyFilters()"><span class="band-chk-lbl">'+k[1]+'</span><span class="band-cnt" id="cnt-ty-'+k[0]+'">0</span></label>';}).join('');
 function indexClass(ix){
   ix=String(ix||'').toUpperCase();
   if(/FTSE\s*100/.test(ix))return '100';
