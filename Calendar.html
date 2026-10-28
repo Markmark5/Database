@@ -210,6 +210,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .mg-mk .rc-ring{width:15px;height:15px;font-size:8.5px}
 .mg-more{font-size:10px;color:#1f6fd1;font-weight:600;padding:1px 4px;cursor:pointer;background:none;border:none;font-family:inherit}
 .mg-more:hover{text-decoration:underline}
+#rcal-dbf{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:99990;display:none;background:transparent}
 /* "+N more" grows the day box downwards over the days below it */
 .mg-d{position:relative}
 .mg-xtra{display:none}
@@ -882,20 +883,41 @@ window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();ren
 
 /* ── list interactions ── */
 /* ticker click: the Database's chart / forecasts popup (score pill keeps the scorecard history) */
-/* ticker → the Database's chart popup. Embedded: the parent page. In its own window: the Database tab
-   that opened it (or one this window opened), else a new Database tab opened on that chart (?chart=). */
-var CHARTWIN=null;
-function dbWin(w){try{return w&&!w.closed&&w.PPOPEN&&w.LITEMAP?w:null;}catch(e){return null;}}
+/* ticker → the Database's Drift-lite chart popup. Embedded: the parent page draws it.
+   In its own window: the Database loads once, invisibly, in a full-window frame here; a ticker click
+   shows just its chart popup over the calendar, and the frame hides again when the popup closes. */
+var DBF=null,DBQ=null;
+function dbFrame(){
+  if(DBF)return DBF;
+  DBF=document.createElement('iframe');DBF.id='rcal-dbf';DBF.title='Chart';
+  DBF.src=location.href.replace(/[^\/]*([?#].*)?$/,'')+'Database_v2.html?calframe=1';
+  DBF.onload=function(){
+    var w=DBF.contentWindow,n=0;
+    (function ready(){   /* chart list (LITEMAP) and scorecards arrive after load */
+      if(w.PPOPEN&&w.LITEMAP){DBF.rdy=true;if(DBQ){var t=DBQ;DBQ=null;openChart(t);}return;}
+      if(n++<60)setTimeout(ready,500);else if(DBQ){var t2=DBQ;DBQ=null;showRNS(t2);}
+    })();
+    try{var ov=w.document.getElementById('pp-ov');
+      new w.MutationObserver(function(){if(!ov.classList.contains('on'))DBF.style.display='none';}).observe(ov,{attributes:true,attributeFilter:['class']});}catch(e){}
+  };
+  document.body.appendChild(DBF);
+  return DBF;
+}
 function openChart(tk){
   try{if(PARENT&&PARENT.PPOPEN&&PARENT.PPOPEN(tk))return;}catch(e){}
   if(!EMBED){
-    var w=dbWin(window.opener)||dbWin(CHARTWIN);
-    if(w){try{if(!w.PPOPEN(tk)&&w.scAllShow)w.scAllShow(tk);w.focus();return;}catch(e){}}
-    CHARTWIN=window.open(location.href.replace(/[^\/]*([?#].*)?$/,'')+'Database_v2.html?chart='+encodeURIComponent(tk),'rnsdb-chart');
-    if(CHARTWIN){try{CHARTWIN.focus();}catch(e){}return;}
+    var f=dbFrame();
+    if(!f.rdy){DBQ=tk;note('Loading chart…');return;}
+    try{f.style.display='block';if(f.contentWindow.PPOPEN(tk)){f.contentWindow.focus();
+      /* no chart data after all: the popup never opens, so don't leave the frame over the calendar */
+      setTimeout(function(){try{if(!f.contentWindow.document.getElementById('pp-ov').classList.contains('on'))f.style.display='none';}catch(e){}},5000);
+      return;}}catch(e){}
+    f.style.display='none';
   }
   showRNS(tk);
 }
+/* own window: start loading the Database in the background so the first chart opens quickly */
+if(!EMBED)setTimeout(dbFrame,2500);
 function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastopen',PASTOPEN?'1':'0');}catch(e){}render();}
 $('rcal-list').addEventListener('click',function(ev){
   if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
