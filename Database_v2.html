@@ -8467,7 +8467,12 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #ppl-tip .q{margin-top:4px;opacity:.85;font-style:italic}
 #ppl-tip .s{margin-top:4px;color:#8a8aa5}
 @media(max-width:760px){#pp-mod .ppl-two{grid-template-columns:1fr}}
+/* ?calframe=1: loaded invisibly by the calendar's own window, which shows only this chart popup */
+html.calframe,html.calframe body{background:transparent!important}
+html.calframe body>*{visibility:hidden}
+html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
 </style>
+<script>if(/[?&]calframe=1/.test(location.search))document.documentElement.classList.add('calframe');</script>
 <div id="pp-prev"></div>
 <div id="pp-ov"><div id="pp-mod"></div></div>
 <script>
