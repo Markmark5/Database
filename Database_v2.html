@@ -8806,7 +8806,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
       /* today's price + Cycles regime under the ticker, from the live sheets */
       var pmp=mod.querySelector('.pmp'), lt=window.CYCTAIL?CYCTAIL(tk,x):x.tail, curY=0;
       if(window.CYCPILLS)CYCPILLS(tk).then(function(h){if(!pmp.isConnected)return; pmp.innerHTML=h;
-        var l2=CYCTAIL(tk,x); if(l2.live&&!lt.live){lt=l2;drawRange(curY);}   /* sheets just read: redraw with today's live point */
+        var l2=CYCTAIL(tk,x),lastv=function(t){return t.length?t[t.length-1][1]:null;}; if(l2.live&&(!lt.live||lastv(l2)!==lastv(lt))){lt=l2;drawRange(curY);}   /* sheets just read: redraw with today's live price (new or changed) */
       }).catch(function(){});
       var lastIso=(x.tail&&x.tail.length?x.tail[x.tail.length-1][0]:allPx[allPx.length-1][0]);
       var spanYrs=(Date.parse(lastIso)-Date.parse(allPx[0][0]))/(365.25*864e5);
@@ -9377,9 +9377,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     });
     FR.then(function(){FR=null;},function(){FR=null;});
     return FR;}
-  /* today's price and regime pills for the ticker-click chart (sheets re-read after 15 min) */
+  /* today's price and regime pills for the ticker-click chart (sheets re-read after 2 min; they refresh every 10) */
   window.CYCPILLS=function(tk){
-    return (D&&Date.now()-T<15*60000?Promise.resolve():fetchRows()).then(function(){
+    return (D&&Date.now()-T<2*60000?Promise.resolve():fetchRows()).then(function(){
       var d=D&&D.filter(function(r){return r.t==tk;})[0]; if(!d)return '';
       return hdrPrice(d).replace('margin-left:auto;','')+'<span class="cyc-pill" style="margin-left:0;color:'+COL[d.r]+';border-color:'+COL[d.r]+'66">'+title(d.r)+'</span>';});};
   /* the chart's dotted tail plus today's live sheet price as its last point (in the chart's own units, via the snapshot reader) */
@@ -9598,7 +9598,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
     var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
-    if(!D||Date.now()-T>15*60000)load(); else note(BAD);   /* sheets refresh during the day: re-read after 15 min */
+    if(!D||Date.now()-T>2*60000)load(); else note(BAD);   /* sheets refresh every 10 min: re-read after 2 min */
   };
   window.cycClose=function(){document.getElementById('cyc-ov').classList.remove('on');};
   window.addEventListener('keydown',function(e){
