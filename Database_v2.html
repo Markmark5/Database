@@ -7760,6 +7760,34 @@ var GH_REPO = 'Markmark5/Database';
 var GH_FILE = 'database.json';
 var GH_API  = 'https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_FILE;
 var GH_RAW  = 'https://raw.githubusercontent.com/' + GH_REPO + '/main/' + GH_FILE;
+/* raw.githubusercontent.com caches a branch file for up to 5 min and ignores ?t=, so a load straight
+   after a save from another device can get the previous copy. Fix: ask the API for the latest commit
+   (a few bytes, not cached), then fetch the file AT that commit — a new address per save, never stale.
+   If the API doesn't answer, fall back to the branch address as before. */
+var GH_FILE_SHA = null, GH_AUTO = false;   /* blob sha of the copy this device loaded / last saved */
+function ghFreshRaw() {
+  var pat = ghGetToken(), h = { 'Accept': 'application/vnd.github.sha' };
+  if (pat) h['Authorization'] = 'token ' + pat;
+  var ctl = window.AbortController ? new AbortController() : null, tm = ctl && setTimeout(function(){ ctl.abort(); }, 6000);
+  return fetch('https://api.github.com/repos/' + GH_REPO + '/commits/main?t=' + Date.now(), { headers: h, cache: 'no-store', signal: ctl && ctl.signal })
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(sha){ clearTimeout(tm); sha = String(sha || '').trim();
+      return /^[0-9a-f]{40}$/.test(sha) ? 'https://raw.githubusercontent.com/' + GH_REPO + '/' + sha + '/' + GH_FILE : GH_RAW + '?t=' + Date.now(); })
+    .catch(function(){ clearTimeout(tm); return GH_RAW + '?t=' + Date.now(); });
+}
+/* git blob sha of the downloaded bytes — the same id GitHub reports for the file */
+function ghBlobSha(bytes) {
+  try {
+    var head = new TextEncoder().encode('blob ' + bytes.length + '\0'), all = new Uint8Array(head.length + bytes.length);
+    all.set(head, 0); all.set(bytes, head.length);
+    return crypto.subtle.digest('SHA-1', all).then(function(d){
+      return Array.prototype.map.call(new Uint8Array(d), function(b){ return ('0' + b.toString(16)).slice(-2); }).join(''); }).catch(function(){ return null; });
+  } catch(e) { return Promise.resolve(null); }
+}
+function ghTakeBytes(bytes) {   /* note the loaded copy's id, then parse it */
+  ghBlobSha(bytes).then(function(h){ if (h) GH_FILE_SHA = h; });
+  return JSON.parse(new TextDecoder('utf-8').decode(bytes));
+}
 
 /* ═══════════════════════════════════════════════
    SCORECARD ARCHIVE — live window + slim index + monthly archives
@@ -7982,7 +8010,7 @@ function ghAutoPush() {
   GH_AUTO_T = setTimeout(function(){
     if (GH_BUSY) { ghAutoPush(); return; }
     toast('☁ Saving changes to GitHub…', 'inf', 2500);
-    ghPush();
+    GH_AUTO = true; ghPush();
   }, 8000);
 }
 // ── PUSH to GitHub ──
@@ -8024,9 +8052,19 @@ function ghPushLive() {
   }
   ghSetStatus('Connecting to GitHub…', 'blue');
   // Get current SHA (needed for update commits)
-  fetch(GH_API, { headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' } })
+  fetch(GH_API + '?t=' + Date.now(), { cache: 'no-store', headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' } })
     .then(function(r) { return r.ok ? r.json() : null; })
     .then(function(meta) {
+      /* never write over a newer save from another device without asking */
+      var auto = GH_AUTO; GH_AUTO = false;
+      if (meta && meta.sha && GH_FILE_SHA && meta.sha !== GH_FILE_SHA) {
+        if (auto || !confirm('GitHub has a newer save than the copy on this device (another browser saved since this one loaded).\n\nOverwrite it with this device\'s copy? Cancel, then use Pull, to get the newer copy first.')) {
+          GH_BUSY = false;
+          ghSetStatus('⚠ Not saved — GitHub has a newer copy. Use Pull first.', 'red');
+          toast('⚠ Not saved: another device saved since this page loaded. Reload or Pull, then redo the change.', 'err', 10000);
+          return null;
+        }
+      }
       var body = {
         message: 'Database sync ' + new Date().toISOString().slice(0,16).replace('T',' '),
         content: b64
@@ -8045,7 +8083,9 @@ function ghPushLive() {
     })
     .then(function(r) {
       GH_BUSY = false;
+      if (!r) return;   /* stopped by the newer-copy check */
       if (r.status === 200 || r.status === 201) {
+        r.clone().json().then(function(j){ if (j && j.content && j.content.sha) GH_FILE_SHA = j.content.sha; }).catch(function(){});
         GH_BASE = (payload.scorecardIndex||payload.scorecards||[]).length;
         ghSetStatus('✓ Saved to GitHub — ' + new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}), 'green');
         toast('✓ Saved to GitHub', 'ok', 3000);
@@ -8069,11 +8109,11 @@ function ghPushLive() {
 // ── PULL from GitHub ──
 function ghPull() {
   ghSetStatus('Fetching from GitHub…', 'blue');
-  // Use raw URL — no auth needed for public repo
-  fetch(GH_RAW + '?t=' + Date.now())
+  // Raw URL at the latest commit — no auth needed for a public repo
+  ghFreshRaw().then(function(url){ return fetch(url); })
     .then(function(r) {
       if (!r.ok) throw new Error('HTTP ' + r.status + ' — has database.json been saved yet?');
-      return r.json();
+      return r.arrayBuffer().then(function(b){ return ghTakeBytes(new Uint8Array(b)); });
     })
     .then(function(backup) {
       if (!backup._meta) throw new Error('Not a valid database backup');
@@ -8132,18 +8172,18 @@ function ghAutoLoad() {
   var viewOnly = !ghGetToken();
   ghLoadBox('busy','Loading latest data…','Fetching your database from GitHub — about 15 MB, so a few seconds on a phone.');
   ghLoadPct(3);
-  fetch(GH_RAW + '?t=' + Date.now())
+  ghFreshRaw().then(function(url){ return fetch(url); })
     .then(function(r) {
       if (!r.ok) throw new Error('GitHub answered ' + r.status);
       /* stream it so the bar and the MB count move while it downloads */
-      if (!r.body || !r.body.getReader || !window.TextDecoder) return r.json();
+      if (!r.body || !r.body.getReader || !window.TextDecoder) return r.arrayBuffer().then(function(b){ return ghTakeBytes(new Uint8Array(b)); });
       var total = +r.headers.get('Content-Length') || 0, got = 0, reader = r.body.getReader(), chunks = [];
       function pump() {
         return reader.read().then(function(x) {
           if (x.done) {
             var all = new Uint8Array(got), off = 0;
             chunks.forEach(function(c){ all.set(c, off); off += c.length; });
-            return JSON.parse(new TextDecoder('utf-8').decode(all));
+            return ghTakeBytes(all);
           }
           chunks.push(x.value); got += x.value.length;
           var mb = (got / 1048576).toFixed(1);
