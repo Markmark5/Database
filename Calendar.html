@@ -93,6 +93,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .rc-beat.rc-on{color:#0b7a36;border-color:#9fd8b4;background:#e2f5e9}
 .rc-beat.rc-man{box-shadow:0 0 0 1px #4a9eff88}
 .rc-ro .rc-beat{cursor:default}
+.rc-mv{text-align:right;line-height:1.25;white-space:nowrap}.rc-mv b{font-size:12px}.rc-mv small{display:block;font-size:9.5px;color:#8a8a98}.rc-mv .up{color:#0a9d50}.rc-mv .dn{color:#e0303e}.rc-mv .fl{color:#8a8a98}
 .rc-sc{display:flex;align-items:center;gap:6px;font-size:11px;color:#6a6a78;min-width:0}
 .rc-pill{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-weight:700;font-size:9px;line-height:1;color:#0d0d16;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.18);flex-shrink:0}
 .rc-pill[data-rc-rns]{cursor:pointer}.rc-pill[data-rc-rns]:hover{box-shadow:0 0 0 2px #1f6fd1}
@@ -733,13 +734,15 @@ function render(){
     list.innerHTML='<div class="rc-empty">No dates yet. Dates arrive with new scorecards and approved web dates'+(CAN_EDIT?', or add one with ＋ Add date.<br><br><button class="rc-btn" id="rcal-eseed">Load recent dates</button>':'.')+'</div>';
     if($('rcal-eseed'))$('rcal-eseed').onclick=seed;stats();return;
   }
+  /* reported = date passed, or an exact date of today (today's RNS is out); a window ending today stays upcoming */
+  var done=function(e){return e.to<t0||(e.from===t0&&e.to===t0);};
   var ev=EV.filter(function(e){
     if(!passes(e))return false;
-    if(e.to<t0)return e.to>=pastFrom;
+    if(done(e))return e.to>=pastFrom;
     return sortKey(e)<=horizon;
   });
-  var past=ev.filter(function(e){return e.to<t0;}).sort(function(a,b){return b.to.localeCompare(a.to);});
-  var up=ev.filter(function(e){return e.to>=t0;}).sort(function(a,b){
+  var past=ev.filter(done).sort(function(a,b){return b.to.localeCompare(a.to);});
+  var up=ev.filter(function(e){return !done(e);}).sort(function(a,b){
     return sortKey(a).localeCompare(sortKey(b))||RANK[partOf(a)]-RANK[partOf(b)]||(S.stars[b.ticker]?1:0)-(S.stars[a.ticker]?1:0)||a.ticker.localeCompare(b.ticker);});
   var h='',alt=false;
   /* recently reported: folded away by default (remembered per browser), click the band to open */
@@ -844,6 +847,7 @@ function row(e,isPast,T,alt){
   if(isPast){
     var rs=recs(e.ticker),bef=rs.filter(function(r){return String(r.date)<e.from;}),aft=rs.filter(function(r){return String(r.date)>=e.from;});
     var pv=bef.length?bef[bef.length-1]:null,nw=aft.length?aft[0]:null;
+    dtxt=moveHtml(nw,e.ticker);
     sc='<span class="rc-pill '+band(pv&&pv.score)+'"'+tkA+'>'+(pv?pv.score:'—')+'</span> → '+(nw?'<span class="rc-pill '+band(nw.score)+'"'+tkA+'>'+nw.score+'</span>':'<span title="Import the new scorecard to record the result">awaiting</span>');
   }else{
     sc='<span class="rc-pill '+band(L&&L.score)+'"'+tkA+'>'+(L?L.score:'—')+'</span><span class="rc-vd" title="'+esc(L?(L.verdict||'')+' · '+(L.date||''):'No scorecard yet')+'">'+esc(L?(L.verdict||L.date):(cardsReady?'no card':'…'))+'</span>';
@@ -881,6 +885,40 @@ document.addEventListener('keydown',function(e){
 });
 /* the Database calls this each time its Calendar button is pressed */
 window.rcalRefresh=function(){CAN_EDIT=!!ghKey();applyMode();syncFromCards();render();loadRemote(false);};
+
+/* ── % move since the RNS (Recently reported) ──
+   start: the new card's entry price — the previous close, captured on the RNS morning
+   now:   today's price in pence, read here from the ShareScope live sheets (£ → pence); the Database's
+          live prices (parent page, opener tab or the Database loaded in this window) only if that read fails */
+var LIVEPX=null,LIVEPX_T=0,LIVEPX_BUSY=false,LIVEPX_FAIL=false;
+function liveFrom(w){try{return w&&w.liveData&&Object.keys(w.liveData).length?w.liveData:null;}catch(e){return null;}}
+function livePrice(tk){
+  /* own read of the live sheets first (fresh, re-read after 2 min); the Database's prices only until it arrives,
+     as the Database doesn't refresh its live prices on open */
+  loadLivePx();
+  if(LIVEPX&&LIVEPX[tk])return LIVEPX[tk];
+  if(!LIVEPX&&!LIVEPX_FAIL)return null;   /* first read still on its way: blank, not a stale price */
+  var w=liveFrom(PARENT)||liveFrom(window.opener)||(DBF&&liveFrom(DBF.contentWindow));
+  var p=w&&w[tk]&&w[tk].price;return isFinite(p)&&p>0?p:null;
+}
+function loadLivePx(){
+  if(LIVEPX_BUSY||(LIVEPX&&Date.now()-LIVEPX_T<120000))return;LIVEPX_BUSY=true;
+  fetch('https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/data/cycles_urls.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
+    .then(function(urls){return Promise.all((urls||[]).filter(Boolean).map(function(u){return fetch(u+(u.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});}));})
+    .then(function(txts){var m={};
+      txts.forEach(function(t){String(t||'').split(/\r?\n/).slice(1).forEach(function(line){   /* column A ticker, I price */
+        var c=(line.match(/("([^"]|"")*"|[^,]*)(,|$)/g)||[]).map(function(x){return x.replace(/,$/,'').replace(/^"|"$/g,'').replace(/""/g,'"');});
+        var tk=String(c[0]||'').trim().toUpperCase(),raw=String(c[8]||'').trim();if(!tk||!raw||m[tk])return;
+        var v=parseFloat(raw.replace(/[£p,\s]/g,''));if(!isFinite(v)||v<=0)return;m[tk]=/£/.test(raw)?v*100:v;});});
+      LIVEPX=m;LIVEPX_T=Date.now();LIVEPX_BUSY=false;LIVEPX_FAIL=!Object.keys(m).length;render();})
+    .catch(function(){LIVEPX_BUSY=false;LIVEPX_FAIL=true;render();});
+}
+function moveHtml(card,tk){
+  var a=card&&+card.entryPrice,b=livePrice(tk);if(!a||!b||a<=0)return '';
+  if(b/a>5||a/b>5)return '';   /* units don't match */
+  var pc=(b-a)/a*100,f=function(v){return v>=100?v.toFixed(0):v>=10?v.toFixed(1):v.toFixed(2);};
+  return '<div class="rc-mv" title="Since RNS: close before the RNS '+f(a)+'p → now '+f(b)+'p"><b class="'+(pc>0.05?'up':pc<-0.05?'dn':'fl')+'">'+(pc>0?'+':pc<0?'−':'±')+Math.abs(pc).toFixed(1)+'%</b><small>'+f(a)+'→'+f(b)+'p</small></div>';
+}
 
 /* ── list interactions ── */
 /* ticker click: the Database's chart / forecasts popup (score pill keeps the scorecard history) */
