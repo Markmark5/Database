@@ -8890,6 +8890,10 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
   window.PPGET=getData; window.PPSCORES=scoresFor;   /* used by the Cycles popup */
   /* used by the calendar: open the ticker chart, false if there is no chart for it */
   window.PPOPEN=function(tk){tk=String(tk||'').toUpperCase();if(!hasAny(tk))return false;openModal(tk,null);return true;};
+  /* the calendar's own window pre-fetches its tickers' charts (and the live-price sheets once) so clicks open at once */
+  window.PPWARM=function(tk){tk=String(tk||'').toUpperCase();if(!hasAny(tk))return Promise.resolve(false);
+    var w=[getData(tk)];if(window.CYCPILLS&&!PPWARM.cyc){PPWARM.cyc=1;w.push(CYCPILLS(tk));}
+    return Promise.all(w).then(function(){return true;},function(){return false;});};
   document.addEventListener('click',function(e){
     var el=e.target.closest&&e.target.closest('.ticker-sym');
     if(!el)return; var tk=tkOf(el); if(!hasAny(tk))return;

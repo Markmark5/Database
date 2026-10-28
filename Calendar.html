@@ -210,6 +210,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 .mg-mk .rc-ring{width:15px;height:15px;font-size:8.5px}
 .mg-more{font-size:10px;color:#1f6fd1;font-weight:600;padding:1px 4px;cursor:pointer;background:none;border:none;font-family:inherit}
 .mg-more:hover{text-decoration:underline}
+#rcal-warm{margin-left:12px;font-size:12px;font-weight:600;color:#8a5a00;background:#fff4d6;border:1px solid #f0c75e;border-radius:12px;padding:2px 10px;vertical-align:middle;white-space:nowrap}
 #rcal-dbf{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:99990;display:none;background:transparent}
 /* "+N more" grows the day box downwards over the days below it */
 .mg-d{position:relative}
@@ -237,7 +238,7 @@ body.rc-embed{background:rgba(0,0,0,.6)}
 <div id="rcal-ov">
   <div class="rc-box" id="rcal-box">
     <div class="rc-head">
-      <div class="rc-title" id="rcal-title">🗓 RNS calendar<small id="rcal-today"></small></div>
+      <div class="rc-title" id="rcal-title">🗓 RNS calendar<small id="rcal-today"></small><span id="rcal-warm" style="display:none"></span></div>
       <div class="rc-bar">
         <div class="rc-seg rc-view" id="rcal-view"><button class="rc-btn rc-on" data-v="list">☰ List</button><button class="rc-btn" data-v="month">▦ Month</button></div>
         <div class="rc-seg" id="rcal-rng">
@@ -894,8 +895,8 @@ function dbFrame(){
   DBF.onload=function(){
     var w=DBF.contentWindow,n=0;
     (function ready(){   /* chart list (LITEMAP) and scorecards arrive after load */
-      if(w.PPOPEN&&w.LITEMAP){DBF.rdy=true;if(DBQ){var t=DBQ;DBQ=null;openChart(t);}return;}
-      if(n++<60)setTimeout(ready,500);else if(DBQ){var t2=DBQ;DBQ=null;showRNS(t2);}
+      if(w.PPOPEN&&w.LITEMAP){DBF.rdy=true;if(DBQ){var t=DBQ;DBQ=null;openChart(t);}warmCharts();return;}
+      if(n++<60)setTimeout(ready,500);else{warmMsg('');if(DBQ){var t2=DBQ;DBQ=null;showRNS(t2);}}
     })();
     try{var ov=w.document.getElementById('pp-ov');
       new w.MutationObserver(function(){if(!ov.classList.contains('on'))DBF.style.display='none';}).observe(ov,{attributes:true,attributeFilter:['class']});}catch(e){}
@@ -917,7 +918,21 @@ function openChart(tk){
   showRNS(tk);
 }
 /* own window: start loading the Database in the background so the first chart opens quickly */
-if(!EMBED)setTimeout(dbFrame,2500);
+if(!EMBED){setTimeout(dbFrame,1000);setTimeout(function(){if(!DBF||!DBF.rdy)warmMsg('Loading charts…');},1000);}
+/* then fetch the charts of every ticker in the next 30 days, 6 at a time; the page stays usable meanwhile */
+function warmMsg(t){var m=$('rcal-warm');if(!t){m.style.display='none';return;}m.textContent='⏳ '+t;m.style.display='';}
+function warmCharts(){
+  var w=DBF.contentWindow;if(!w.PPWARM){warmMsg('');return;}
+  var T=today(),a=iso(T),e=new Date(T.getTime());e.setDate(e.getDate()+30);var b=iso(e),seen={},q=[];
+  allEvents().forEach(function(x){var t=String(x.ticker||'').toUpperCase();if(t&&!seen[t]&&x.to>=a&&x.from<=b){seen[t]=1;q.push(t);}});
+  var n=q.length,done=0,run=0;
+  if(!n){warmMsg('');return;}
+  (function next(){
+    while(run<6&&q.length){run++;w.PPWARM(q.shift()).catch(function(){}).then(function(){run--;done++;
+      warmMsg('Loading charts '+done+' / '+n);if(done>=n){warmMsg('Charts ready');setTimeout(function(){warmMsg('');},2500);}else next();});}
+  })();
+  warmMsg('Loading charts 0 / '+n);
+}
 function togglePast(){PASTOPEN=!PASTOPEN;try{localStorage.setItem('rnscal_pastopen',PASTOPEN?'1':'0');}catch(e){}render();}
 $('rcal-list').addEventListener('click',function(ev){
   if(ev.target.closest('#rcal-pasttog')){togglePast();return;}
