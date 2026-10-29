@@ -1,75 +1,105 @@
 {
- "generated": "2026-10-28T11:40:48+00:00",
- "count": 67,
- "unverified": [],
- "events": [
+ "generated": "2026-10-29T11:50:07+00:00",
+ "count": 33,
+ "unverified": [
   {
-   "type": "Pre-H1 TU",
-   "from": "2026-10-01",
-   "to": "2026-10-31",
-   "label": "Oct 2026",
-   "conf": "provisional",
-   "event": "Half Year Trading update",
-   "snippet": "October 2026 | Half Year Trading update",
-   "id": "a6f474e53163",
-   "epic": "MOTR",
-   "company": "Motorpoint",
-   "url": "https://www.motorpoint.co.uk/plc/investor-relations/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2026-10-01",
-   "to": "2026-10-31",
-   "label": "Oct 2026",
-   "conf": "provisional",
-   "event": "Q3 Results Announcement",
-   "snippet": "October 2026",
-   "id": "75f8d16aa546",
-   "epic": "PBEE",
-   "company": "PensionBee Group",
-   "url": "https://www.pensionbee.com/investor-relations",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2026-10-28",
-   "to": "2026-10-28",
+   "id": "cfd131de7eca",
+   "epic": "TIME",
+   "company": "Time Finance",
+   "type": "FY results",
+   "event": "Full Year Results Announcement",
+   "from": "2026-11-05",
+   "to": "2026-11-05",
    "label": "",
    "conf": "confirmed",
-   "event": "Q3 2026 Trading Update",
-   "snippet": "28/10/2026",
-   "id": "edff9003b4dd",
-   "epic": "ELM",
-   "company": "Elementis",
-   "url": "https://www.elementis.com/investors/investor-information/financial-calendar/",
+   "snippet": "Full Year Results Announcement 05 November 2026",
+   "url": "https://timefinance.com/financial-results-calendar/",
    "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-27",
+   "approved": "2026-10-27"
   },
   {
+   "id": "b36b17ab47bb",
+   "epic": "PEN",
+   "company": "Princes Group",
    "type": "Q3",
-   "from": "2026-10-30",
-   "to": "2026-10-30",
+   "event": "FY26 Q3 Trading Update",
+   "from": "2026-11-10",
+   "to": "2026-11-10",
+   "label": "",
+   "conf": "confirmed",
+   "snippet": "10 November 2026 FY26 Q3 Trading Update",
+   "url": "https://princesgroupinvestors.com/financial-calendar/",
+   "src": "Web",
+   "found": "2026-10-27",
+   "approved": "2026-10-27"
+  },
+  {
+   "id": "e11535f77d19",
+   "epic": "WISE",
+   "company": "Wise",
+   "type": "H1 results",
+   "event": "H1 FY27 Results Presentation",
+   "from": "2026-11-12",
+   "to": "2026-11-12",
+   "label": "",
+   "conf": "confirmed",
+   "snippet": "NOV 12, 2026 H1 FY27 Results Presentation",
+   "url": "https://wise.com/owners/",
+   "src": "Web",
+   "found": "2026-10-27",
+   "approved": "2026-10-27"
+  },
+  {
+   "id": "70ce1e01399a",
+   "epic": "TIME",
+   "company": "Time Finance",
+   "type": "AGM",
+   "event": "Annual General Meeting",
+   "from": "2026-11-30",
+   "to": "2026-11-30",
+   "label": "",
+   "conf": "confirmed",
+   "snippet": "Annual General Meeting 30 November 2026",
+   "url": "https://timefinance.com/financial-results-calendar/",
+   "src": "Web",
+   "found": "2026-10-27",
+   "approved": "2026-10-27"
+  },
+  {
+   "id": "4be7572de6a1",
+   "epic": "INF",
+   "company": "Informa",
+   "type": "FY results",
+   "event": "Informa 2026 Full Year Results",
+   "from": "2027-03-11",
+   "to": "2027-03-11",
+   "label": "",
+   "conf": "confirmed",
+   "snippet": "11 Mar 2027 Informa 2026 Full Year Results",
+   "url": "https://www.informa.com/investors/financial-calendar/",
+   "src": "Web",
+   "found": "2026-10-28",
+   "approved": "2026-10-28"
+  }
+ ],
+ "events": [
+  {
+   "type": "Q3",
+   "from": "2026-10-29",
+   "to": "2026-10-29",
    "label": "",
    "conf": "implied",
-   "event": "AZN 9M and Q3 2026 results",
-   "snippet": "30 Oct",
-   "id": "f53d21cdbe3f",
-   "epic": "AZN",
-   "company": "AstraZeneca",
-   "url": "https://www.astrazeneca.com/investor-relations/shareholder-information.html",
+   "event": "Third Quarter Trading Update 2026",
+   "snippet": "29 October | Third Quarter Trading Update 2026",
+   "id": "8a89ade624e8",
+   "epic": "WPP",
+   "company": "WPP",
+   "url": "https://www.wpp.com/en/investors/calendar-and-events",
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "Q3",
@@ -86,24 +116,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2026-11-01",
-   "to": "2026-11-30",
-   "label": "Nov 2026",
-   "conf": "provisional",
-   "event": "Q3 2026 PRODUCTION RESULTS",
-   "snippet": "November 2026",
-   "id": "84a73edac49f",
-   "epic": "HOC",
-   "company": "Hochschild Mining",
-   "url": "https://www.hochschildmining.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "AGM",
@@ -120,7 +133,7 @@
    "src": "Web",
    "status": "changed",
    "was": "2026-11-01",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "Q3",
@@ -137,24 +150,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2026-11-03",
-   "to": "2026-11-03",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Q3 2026 Trading Update",
-   "snippet": "03 November 2026 Q3 2026 Trading Update",
-   "id": "943b2f85cad2",
-   "epic": "TCAP",
-   "company": "TP ICAP",
-   "url": "https://tpicap.com/tpicap/investors/financial-calendar-upcoming",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "AGM",
@@ -171,7 +167,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -188,7 +184,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -205,24 +201,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2026-11-10",
-   "to": "2026-11-10",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Full Year Results 2026",
-   "snippet": "10 November 2026 Full Year Results 2026",
-   "id": "07b390beee97",
-   "epic": "AVON",
-   "company": "Avon Technologies",
-   "url": "https://www.avon-technologiesplc.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -239,7 +218,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -256,7 +235,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -273,7 +252,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -290,7 +269,7 @@
    "src": "Web",
    "status": "changed",
    "was": "2026-11-01",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -307,7 +286,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -324,7 +303,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -341,7 +320,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -358,24 +337,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "H1 results",
-   "from": "2026-11-24",
-   "to": "2026-11-24",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Interim / HY Presentation",
-   "snippet": "Tuesday, 24th November 2026 Interim / HY Presentation London",
-   "id": "7917b6bbc798",
-   "epic": "AO.",
-   "company": "AO World",
-   "url": "https://www.ao-world.com/investor-centre/events-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -392,7 +354,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -409,7 +371,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -426,7 +388,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "Q3",
@@ -443,7 +405,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -460,7 +422,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -477,24 +439,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "H1 results",
-   "from": "2026-11-24",
-   "to": "2026-11-24",
-   "label": "",
-   "conf": "confirmed",
-   "event": "FY27 Interim Results",
-   "snippet": "FY27 Interim Results All Day November 24, 2026",
-   "id": "a3692c40a8cb",
-   "epic": "SFR",
-   "company": "Severfield",
-   "url": "https://www.severfield.com/calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "AGM",
@@ -511,41 +456,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "H1 results",
-   "from": "2026-11-26",
-   "to": "2026-11-26",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Interim 2026/2027 results announced",
-   "snippet": "Interim 2026/2027 results announced - 26th November 2026",
-   "id": "1eb018653227",
-   "epic": "LTHM",
-   "company": "James Latham",
-   "url": "https://www.lathamtimber.co.uk/investors/company-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Trading update",
-   "from": "2026-11-27",
-   "to": "2026-11-27",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Trading Update",
-   "snippet": "Friday 27th November 2026 Trading Update",
-   "id": "53863baea603",
-   "epic": "SRAD",
-   "company": "Stelrad",
-   "url": "https://stelradplc.com/investors-2/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -562,7 +473,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -579,7 +490,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -596,7 +507,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -604,7 +515,7 @@
    "to": "2026-12-02",
    "label": "",
    "conf": "confirmed",
-   "event": "Interim results – FY2027",
+   "event": "Interim results \u2013 FY2027",
    "snippet": "02 December 2026",
    "id": "8a7956fd7b2c",
    "epic": "ZIG",
@@ -613,24 +524,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Pre-FY TU",
-   "from": "2026-12-03",
-   "to": "2026-12-03",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Trading update",
-   "snippet": "Financial Calendar 2026: 3 December Trading update",
-   "id": "6afecb3d09ef",
-   "epic": "BBY",
-   "company": "Balfour Beatty",
-   "url": "https://www.balfourbeatty.com/investors/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -647,7 +541,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "AGM",
@@ -664,7 +558,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -681,24 +575,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-01-01",
-   "to": "2027-01-31",
-   "label": "Jan 2027",
-   "conf": "provisional",
-   "event": "Publication of FY26 Financial Results",
-   "snippet": "January 2027 Publication of FY26 Financial Results",
-   "id": "d744cc54c37e",
-   "epic": "RFX",
-   "company": "Ramsdens",
-   "url": "https://www.ramsdensplc.com/investor-relations/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -715,92 +592,24 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
-   "type": "Pre-FY TU",
+   "type": "Trading update",
    "from": "2027-01-13",
    "to": "2027-01-13",
    "label": "",
    "conf": "confirmed",
    "event": "Q4 Trading Update",
-   "snippet": "13 Jan 2027 Q4 Trading Update",
-   "id": "4c3486ae5e05",
+   "snippet": "13 Jan 2027 | Q4 Trading Update | Download Q4 Trading Update event and add into your calender Add to calendar",
+   "id": "d141e2af62da",
    "epic": "PAGE",
    "company": "Michael Page",
    "url": "https://investors.michaelpage.com/investors/financial-calendar",
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "AGM",
-   "from": "2027-01-14",
-   "to": "2027-01-14",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Annual general meeting",
-   "snippet": "14 January 2027 at 11am Annual general meeting",
-   "id": "f91b4c563365",
-   "epic": "APN",
-   "company": "Applied Nutrition",
-   "url": "https://www.appliednutritionplc.com/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Trading update",
-   "from": "2027-01-20",
-   "to": "2027-01-20",
-   "label": "",
-   "conf": "provisional",
-   "event": "Q4 trading update",
-   "snippet": "20 January 2027 (Post-market close - UK)",
-   "id": "43690b0732d9",
-   "epic": "PBEE",
-   "company": "PensionBee Group",
-   "url": "https://www.pensionbee.com/investor-relations",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Pre-FY TU",
-   "from": "2027-01-20",
-   "to": "2027-01-20",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2026 Fourth Quarter Operations Review",
-   "snippet": "Wednesday, 20 January 2027 2026 Fourth Quarter Operations Review",
-   "id": "ce8290558f4b",
-   "epic": "RIO",
-   "company": "Rio Tinto",
-   "url": "https://www.riotinto.com/en/invest/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Pre-FY TU",
-   "from": "2027-01-20",
-   "to": "2027-01-20",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Trading and operations update",
-   "snippet": "20 Jan 2027 Trading and operations update",
-   "id": "f42d01d38e31",
-   "epic": "SQZ",
-   "company": "Serica Energy",
-   "url": "https://www.serica-energy.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "H1 results",
@@ -817,41 +626,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2027-01-29",
-   "to": "2027-01-29",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Q3’27 results",
-   "snippet": "29 January 2027 | Q3’27 results",
-   "id": "e8653c889dcc",
-   "epic": "AAF",
-   "company": "Airtel Africa",
-   "url": "https://www.airtel.africa/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-02-01",
-   "to": "2027-02-28",
-   "label": "Feb 2027",
-   "conf": "provisional",
-   "event": "Preliminary Results",
-   "snippet": "UPCOMING EVENTS February Preliminary Results",
-   "id": "84406ddb4417",
-   "epic": "LBG",
-   "company": "LBG Media",
-   "url": "https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   },
   {
    "type": "FY results",
@@ -868,279 +643,7 @@
    "src": "Web",
    "status": "new",
    "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-01",
-   "to": "2027-03-31",
-   "label": "Mar 2027",
-   "conf": "provisional",
-   "event": "2026 Full Year Results",
-   "snippet": "2026 FULL YEAR RESULTS MAR 2027",
-   "id": "c13059b1f683",
-   "epic": "BIG",
-   "company": "Big Technologies",
-   "url": "https://www.buddi.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-01",
-   "to": "2027-03-31",
-   "label": "Mar 2027",
-   "conf": "provisional",
-   "event": "Full Year 2026 results",
-   "snippet": "Full Year 2026 results March 2027",
-   "id": "1a35c9f0fd37",
-   "epic": "TTG",
-   "company": "TT Electronics",
-   "url": "https://www.ttelectronics.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-04",
-   "to": "2027-03-04",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Full Year Results",
-   "snippet": "04 Mar 2027 Full Year Results",
-   "id": "c564dacf5e6b",
-   "epic": "PAGE",
-   "company": "Michael Page",
-   "url": "https://investors.michaelpage.com/investors/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-09",
-   "to": "2027-03-09",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2026 Full Year Results",
-   "snippet": "March 9th 2026 Full Year Results",
-   "id": "6e067ea82d38",
-   "epic": "TPK",
-   "company": "Travis Perkins",
-   "url": "https://www.travisperkinsplc.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-11",
-   "to": "2027-03-11",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Informa 2026 Full Year Results",
-   "snippet": "11 Mar 2027 Informa 2026 Full Year Results",
-   "id": "4be7572de6a1",
-   "epic": "INF",
-   "company": "Informa",
-   "url": "https://www.informa.com/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-11",
-   "to": "2027-03-11",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Full Year 2026 Results",
-   "snippet": "11 March 2027 Full Year 2026 Results",
-   "id": "bcff38e52512",
-   "epic": "TCAP",
-   "company": "TP ICAP",
-   "url": "https://tpicap.com/tpicap/investors/financial-calendar-upcoming",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-16",
-   "to": "2027-03-16",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2026 Full Year Results",
-   "snippet": "16 March 2027 * 2026 Full Year Results",
-   "id": "a24deb83689d",
-   "epic": "SBRE",
-   "company": "Sabre Insurance",
-   "url": "https://sabreplc.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-03-23",
-   "to": "2027-03-23",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Preliminary Results",
-   "snippet": "2027 23 Mar Preliminary Results",
-   "id": "17bd89378df2",
-   "epic": "BOOT",
-   "company": "Boot (Henry)",
-   "url": "https://www.henryboot.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q1",
-   "from": "2027-04-21",
-   "to": "2027-04-21",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2027 First Quarter Operations Review",
-   "snippet": "Wednesday, 21 April 2027 2027 First Quarter Operations Review",
-   "id": "130a9df6c4b7",
-   "epic": "RIO",
-   "company": "Rio Tinto",
-   "url": "https://www.riotinto.com/en/invest/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "FY results",
-   "from": "2027-05-01",
-   "to": "2027-05-31",
-   "label": "May 2027",
-   "conf": "provisional",
-   "event": "Annual Results",
-   "snippet": "Calendar May 2027 - Annual Results",
-   "id": "a333f5fea035",
-   "epic": "VTU",
-   "company": "Vertu Motors",
-   "url": "https://investors.vertumotors.com/investors/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "AGM",
-   "from": "2027-05-20",
-   "to": "2027-05-20",
-   "label": "",
-   "conf": "confirmed",
-   "event": "AGM Trading Update",
-   "snippet": "2027 20 May AGM Trading Update",
-   "id": "4a15cb917910",
-   "epic": "BOOT",
-   "company": "Boot (Henry)",
-   "url": "https://www.henryboot.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Trading update",
-   "from": "2027-05-20",
-   "to": "2027-05-20",
-   "label": "",
-   "conf": "confirmed",
-   "event": "AGM Trading Update",
-   "snippet": "2027 20 May AGM Trading Update",
-   "id": "e581eabde248",
-   "epic": "BOOT",
-   "company": "Boot (Henry)",
-   "url": "https://www.henryboot.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "AGM",
-   "from": "2027-06-03",
-   "to": "2027-06-03",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Annual General Meeting",
-   "snippet": "3 June 2027 Annual General Meeting",
-   "id": "44abf549a2e3",
-   "epic": "CKT",
-   "company": "Checkit",
-   "url": "https://www.checkit.net/investor-relations/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Pre-H1 TU",
-   "from": "2027-07-15",
-   "to": "2027-07-15",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2027 Second Quarter Operations Review",
-   "snippet": "Thursday, 15 July 2027 2027 Second Quarter Operations Review",
-   "id": "fba01924dcf1",
-   "epic": "RIO",
-   "company": "Rio Tinto",
-   "url": "https://www.riotinto.com/en/invest/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "H1 results",
-   "from": "2027-09-21",
-   "to": "2027-09-21",
-   "label": "",
-   "conf": "confirmed",
-   "event": "Interim Results",
-   "snippet": "2027 21 Sep Interim Results",
-   "id": "59c381905826",
-   "epic": "BOOT",
-   "company": "Boot (Henry)",
-   "url": "https://www.henryboot.co.uk/investors/financial-calendar/",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
-  },
-  {
-   "type": "Q3",
-   "from": "2027-10-15",
-   "to": "2027-10-15",
-   "label": "",
-   "conf": "confirmed",
-   "event": "2027 Third Quarter Operations Review",
-   "snippet": "Friday, 15 October 2027 2027 Third Quarter Operations Review",
-   "id": "f78aceaf2019",
-   "epic": "RIO",
-   "company": "Rio Tinto",
-   "url": "https://www.riotinto.com/en/invest/financial-calendar",
-   "src": "Web",
-   "status": "new",
-   "was": "",
-   "found": "2026-10-28"
+   "found": "2026-10-29"
   }
  ]
 }
