@@ -3289,7 +3289,7 @@ function applyFilters(){
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     /* Today's RNS: today's scorecards, plus today's RNS with no scorecard yet (their previous card) */
-    if(sort==='today'&&String(r.date).slice(0,10)!==tIso&&!(NEWRNS&&NEWRNS.date===tIso&&nrTier(r)===2))return false;
+    if(sort==='today'&&String(r.date).slice(0,10)!==tIso&&nrTier(r)!==2)return false;
     return true;
   });
   FILTERED.sort(function(a,c){
@@ -3426,26 +3426,29 @@ function nrLoad(){
 }
 function nrIndex(){
   NR_MAP={};NR_TIER={};
-  if(!NEWRNS)return;
-  (NEWRNS.rns||[]).forEach(function(x){var k=String(x.ticker||'').toUpperCase();if(k&&!NR_MAP[k])NR_MAP[k]={time:(x.time||'').slice(0,5),type:x.type||'RNS',headline:x.headline||'',marks:x.marks||[],disc:x.disc||0};});
-  var d=NEWRNS.date,hasToday={},latest={};
+  ((NEWRNS&&NEWRNS.rns)||[]).forEach(function(x){var k=String(x.ticker||'').toUpperCase();if(k&&!NR_MAP[k])NR_MAP[k]={time:(x.time||'').slice(0,5),type:x.type||'RNS',headline:x.headline||'',marks:x.marks||[],disc:x.disc||0};});
+  /* "new" = dated today. Drift's file names the day it ran; if that run was missed the file is stale, so
+     today's date wins and the file's RNS list (yesterday's) is ignored. */
+  var d=cal30Iso(new Date());
+  if(!NEWRNS||NEWRNS.date!==d)NR_MAP={};
+  var hasToday={},latest={};
   ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase();
     if(r.date>=d)hasToday[k]=true;
     if(!latest[k]||r.date>latest[k].date||(r.date===latest[k].date&&(r.importedAt||'')>(latest[k].importedAt||'')))latest[k]=r;});
   ALL.forEach(function(r){var k=String(r.ticker||'').toUpperCase();
     NR_TIER[r.id]=r.date>=d?1:(NR_MAP[k]&&!hasToday[k]&&latest[k]===r)?2:3;});
 }
-function nrTier(r){if(NEWRNS&&!(r.id in NR_TIER))nrIndex();return NR_TIER[r.id]||3;}
+function nrTier(r){if(!(r.id in NR_TIER))nrIndex();return NR_TIER[r.id]||3;}
 function nrInfo(r){return NR_MAP[String(r.ticker||'').toUpperCase()]||{time:'',type:'',headline:''};}
-function nrTiersOn(){var s=document.getElementById('sort-sel').value;return !!NEWRNS&&(s==='date-desc'||s==='today'||!s);}
-function nrDay(){var p=NEWRNS.date.split('-');return (+p[2])+' '+NR_MON[+p[1]-1];}
+function nrTiersOn(){var s=document.getElementById('sort-sel').value;return s==='date-desc'||s==='today'||!s;}
+function nrDay(){var p=cal30Iso(new Date()).split('-');return (+p[2])+' '+NR_MON[+p[1]-1];}
 function nrBadge(r){
-  if(!NEWRNS)return '';var t=nrTier(r);if(t>2)return '';
+  var t=nrTier(r);if(t>2)return '';
   return t===1?'<div class="nr-stamp"><span>NEW</span><span class="nr-s2">'+nrDay()+'</span></div>'
               :'<div class="nr-stamp amb"><span>NEW RNS</span><span class="nr-s2">'+(nrInfo(r).time||nrDay())+'</span></div>';
 }
 function nrChip(r){
-  if(!NEWRNS||nrTier(r)!==2)return '';var i=nrInfo(r);
+  if(nrTier(r)!==2)return '';var i=nrInfo(r);
   return '<div class="nr-chip" title="'+i.headline.replace(/"/g,'&quot;')+'">RNS '+(i.time||nrDay())+' · '+i.type+'<span class="nr-hl">'+i.headline+'</span><span class="nr-hl">Drift: '+(i.marks.length?i.marks.join(', '):'no new mark')+(i.disc?' · disclosure '+i.disc:'')+'</span></div>';
 }
 function nrDivider(t,prev){
