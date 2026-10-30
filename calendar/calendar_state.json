@@ -1,6 +1,6 @@
 {
  "version": 1,
- "saved": "2026-10-30T08:19:05.086Z",
+ "saved": "2026-10-30T16:26:15.095Z",
  "events": [
   {
    "id": "emufqu1rrltk8",
@@ -1229,6 +1229,22 @@
    "added": 1791875590709
   },
   {
+   "id": "emv6cgmk516ai",
+   "ticker": "BP.",
+   "company": "BP PLC",
+   "type": "Q3",
+   "event": "Third quarter 2026 results",
+   "from": "2026-10-30",
+   "to": "2026-10-30",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-10-13",
+   "manual": false,
+   "note": "",
+   "added": 1791875590709
+  },
+  {
    "id": "emv6cgmk51skl",
    "ticker": "PAGE",
    "company": "Michael Page PLC",
@@ -2144,54 +2160,6 @@
    "rns": "",
    "userAdded": true,
    "added": 1793290328849
-  },
-  {
-   "id": "emvupaty5wwle",
-   "ticker": "BP.",
-   "company": "BP PLC",
-   "type": "Other",
-   "event": "Strategy and outlook update",
-   "from": "2026-12-15",
-   "to": "2026-12-15",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-10-30",
-   "manual": false,
-   "note": "",
-   "added": 1793348343581
-  },
-  {
-   "id": "emvupaty5768q",
-   "ticker": "MHA",
-   "company": "MHA PLC",
-   "type": "H1 results",
-   "event": "Interim results",
-   "from": "2026-11-19",
-   "to": "2026-11-19",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-10-30",
-   "manual": false,
-   "note": "",
-   "added": 1793348343581
-  },
-  {
-   "id": "emvupaty5v1q5",
-   "ticker": "AZN",
-   "company": "AstraZeneca PLC",
-   "type": "FY results",
-   "event": "FY and Q4 2026 results",
-   "from": "2027-02-09",
-   "to": "2027-02-09",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-10-30",
-   "manual": false,
-   "note": "",
-   "added": 1793348343581
   }
  ],
  "stars": {
@@ -2221,7 +2189,8 @@
   "KNOS": true,
   "MTEC": true,
   "GLEN": true,
-  "GATC": true
+  "GATC": true,
+  "MWE": true
  },
  "beatOv": {
   "MOTR": {
@@ -2514,12 +2483,6 @@
   "IMI_2026_10_29": 1,
   "WPP_2026_10_29": 1,
   "ASAI_2026_10_29": 1,
-  "GLEN_2026_10_29": 1,
-  "BP__2026_10_30": 1,
-  "FTC_2026_10_30": 1,
-  "MHA_2026_10_30": 1,
-  "AZN_2026_10_30": 1,
-  "RGG_2026_10_30": 1,
-  "AAF_2026_10_30": 1
+  "GLEN_2026_10_29": 1
  }
 }
