@@ -1,18 +1,18 @@
-# Calendar scrape - 2026-10-29
+# Calendar scrape - 2026-10-30
 
-**279 sources · 33 events staged for approval**
+**279 sources · 34 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 137 | read OK, upcoming events found |
-| EMPTY | 131 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 134 | read OK, upcoming events found |
+| EMPTY | 129 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 3 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
-| ERROR | 3 | timeout, DNS or server error |
+| ERROR | 5 | timeout, DNS or server error |
 
 ## EMPTY
 
-- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
+- Cake Box (CBOX) - http 202, browser - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
@@ -20,9 +20,7 @@
 - Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
 - Hercules (HERC) - http 200, http - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
-- ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
-- NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
@@ -38,6 +36,7 @@
 - Anpario (ANP) - http 200, browser - https://www.anpario.com/investor/financial-calendar/
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
 - Applied Nutrition (APN) - http 200, http - https://www.appliednutritionplc.com/financial-calendar/
+- ASA International (ASAI) - http 200, http - https://www.asa-international.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
@@ -70,10 +69,9 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Zotefoams (ZTF) - http 200, http - https://www.zotefoams.com/investors/financial-updates/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
-- AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
 - Avation (AVAP) - http 200, http - https://www.avation.net/results.html
@@ -100,7 +98,6 @@
 - Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
 - Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
-- Halfords (HFD) - http 200, http - https://www.halfordscompany.com/investor-hub/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
 - Hill & Smith (HILS) - http 200, http - https://hsgroup.com/investors/financial-calendar/
 - Hostelworld (HSW) - http 200, http - https://www.hostelworldgroup.com/investors/financial-calendar
@@ -141,8 +138,15 @@
 - Virgin Wines UK (VINO) - http 200, http - https://www.virginwinesplc.co.uk/investors/financial-calendar/
 - Vertu Motors (VTU) - http 200, http - https://investors.vertumotors.com/investors/
 - Watkin Jones (WJG) - http 200, http - https://watkinjonesplc.com/investors/shareholder-centre/financial-calendar/
+- WPP (WPP) - http 200, browser - https://www.wpp.com/en/investors/calendar-and-events
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
+
+## UNREADABLE
+
+- NIOX (NIOX) - http 202, browser - https://investors.niox.com/investors/financial-calendar/
+- AEP Plantations (AEP) - http 202, browser - https://aepplantations.com/investors/notices-and-financial-calendar/
+- Smiths News (SNWS) - http 202, browser - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 
 ## BLOCKED
 
@@ -157,12 +161,15 @@
 
 ## ERROR
 
+- ActiveOps (AOM) - http 504, browser - https://investors.activeops.com/investors/financial-calendar/
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
+- Goodwin (GDWN) - http None, chrome - https://www.goodwin.co.uk/financial-calendar/
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
 
 ## Approved events not re-verified tonight
 
+- Goodwin AGM 2026-10-01
 - Time Finance FY results 2026-11-05
 - Princes Group Q3 2026-11-10
 - Wise H1 results 2026-11-12
