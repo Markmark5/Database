@@ -2609,12 +2609,18 @@ function csBuildPriceMap(){
   });
   return{map:map,count:n};
 }
-/* Capture today's snapshot from whatever liveData is loaded NOW.
-   Only called inside the capture window after a fresh fetch. */
+/* Capture today's snapshot from liveData. Only data from a fetch made in
+   the last 10 minutes counts: liveData restored from the cache (or from a
+   database.json sync) can be days old and must never become "today's close". */
+var CS_FRESH_MS = 10*60*1000;
+function csLiveIsFresh(){
+  return !!(liveFetchedAt && Date.now()-liveFetchedAt < CS_FRESH_MS);
+}
 function csCaptureFromLive(force){
   var today=csTodayStr();
   var existing=csLoadSnap();
   if(!force && existing&&existing.date===today)return false; // already locked today
+  if(!csLiveIsFresh())return false;
   var b=csBuildPriceMap();
   if(!b.count)return false;
   var now=new Date();
@@ -2642,20 +2648,20 @@ function csSchedulerTick(){
   var snap=csLoadSnap();
   if(snap&&snap.date===today){csRenderChip();return;} // captured today — done
   if(csInWindow()){
-    // Retry every tick until a snapshot is captured. If live data is already
-    // loaded, capture immediately; otherwise trigger a fetch (capture then
-    // fires from the liveOnAllFetched hook or the next tick).
-    var pm=(typeof csBuildPriceMap==='function')?csBuildPriceMap():{count:0};
-    if(pm.count>0){
+    // Retry every tick until a snapshot is captured. Prices already in memory
+    // may be a stale cache, so capture only from a fresh fetch; otherwise
+    // fetch now (capture then fires from the liveOnAllFetched hook).
+    if(csLiveIsFresh() && csBuildPriceMap().count>0){
       csCaptureFromLive(false);
-    } else if(typeof liveRefresh==='function' && liveGetUrls && liveGetUrls().length){
-      csWindowFetchActive=true;
+    } else if((!csWindowFetchActive || Date.now()-csWindowFetchAt>120000)   // a hung fetch gets retried after 2 min
+              && typeof liveRefresh==='function' && liveGetUrls && liveGetUrls().length){
+      csWindowFetchActive=true; csWindowFetchAt=Date.now();
       liveRefresh();
     }
   }
   csRenderChip();
 }
-var csWindowFetchActive=false;
+var csWindowFetchActive=false, csWindowFetchAt=0;
 /* Status chip in RNS header */
 function csRenderChip(){
   var dot=document.getElementById('close-snap-dot');
@@ -2791,7 +2797,7 @@ function csManualCapture(){
 async function csManualFinish(){
   var btn=document.getElementById('cs-manual-btn');
   var pm=csBuildPriceMap();
-  if(!pm.count){
+  if(!pm.count || !csLiveIsFresh()){        // timed out: whatever is loaded is not from this fetch
     if(btn){btn.textContent='⚡ Get Prices';btn.disabled=false;}
     csManualBusy=false;
     toast('⚠ No live prices loaded — fetch failed or blocked. Snapshot NOT captured.','err',6000);
@@ -7017,9 +7023,11 @@ document.addEventListener('DOMContentLoaded', function() { hmInit(); });
 var LIVE_URL_KEY   = 'live_sheet_urls';
 var LIVE_CACHE_KEY = 'live_data_cache';
 var LIVE_TS_KEY    = 'live_data_ts';
+var LIVE_AT_KEY    = 'live_data_at';   // ISO time of the fetch behind live_data_cache
 
 /* ── State ── */
 var liveData         = {};
+var liveFetchedAt    = 0;              // ms of the last successful fetch this page load (0 = cache only)
 var liveSectorMap    = {};
 var liveActiveSector = null;
 var liveSortMode     = 'az';
@@ -7223,7 +7231,11 @@ function liveOnAllFetched(errors, total) {
   if (dot) dot.className=count>0?'live-dot ready':'live-dot';
   if (ts) ts.textContent=tsStr;
   if (btn){btn.textContent='⚡ Refresh';btn.disabled=false;}
-  try{localStorage.setItem(LIVE_CACHE_KEY,JSON.stringify(liveData));localStorage.setItem(LIVE_TS_KEY,tsStr);}catch(e){}
+  if(count>0){
+    liveFetchedAt=now.getTime();
+    try{localStorage.setItem(LIVE_CACHE_KEY,JSON.stringify(liveData));localStorage.setItem(LIVE_TS_KEY,tsStr);
+        localStorage.setItem(LIVE_AT_KEY,now.toISOString());}catch(e){}
+  }
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
   try{
@@ -7568,6 +7580,7 @@ function dbBackupSave() {
     watchlist: WL.slice(),
     liveDataCache: (function(){ try{ return localStorage.getItem('live_data_cache'); }catch(e){ return null; } })(),
     liveDataTs: (function(){ try{ return localStorage.getItem('live_data_ts'); }catch(e){ return null; } })(),
+    liveDataAt: (function(){ try{ return localStorage.getItem('live_data_at'); }catch(e){ return null; } })(),
     h1Cache: (function(){ try{ return localStorage.getItem('sc_cache_v1'); }catch(e){ return null; } })(),
     h1CacheMeta: (function(){ try{ return localStorage.getItem('sc_cache_meta_v1'); }catch(e){ return null; } })(),
     fcCache: (function(){ try{ return localStorage.getItem('fc_cache'); }catch(e){ return null; } })()
@@ -7700,9 +7713,16 @@ function dbRestoreApply(backup) {
       if (typeof liveLoadUrls === 'function') liveLoadUrls();
       log.push('live URLs');
     }
-    if (backup.liveDataCache) {
+    /* Only take the backup's price cache when it is newer than this browser's
+       (or this browser has none). A backup without liveDataAt predates the
+       timestamp and never replaces a local cache: restoring it every sync kept
+       the 19 Oct prices alive and stamped them as "today's close". */
+    var localCache = null, localAt = '';
+    try{ localCache = localStorage.getItem('live_data_cache'); localAt = localStorage.getItem('live_data_at') || ''; }catch(ex){}
+    if (backup.liveDataCache && (!localCache || (backup.liveDataAt && backup.liveDataAt > localAt))) {
       try{ localStorage.setItem('live_data_cache', backup.liveDataCache); }catch(ex){}
       try{ localStorage.setItem('live_data_ts', backup.liveDataTs || ''); }catch(ex){}
+      try{ localStorage.setItem('live_data_at', backup.liveDataAt || ''); }catch(ex){}
       if (typeof liveRestoreCache === 'function') liveRestoreCache();
       log.push('live data cache');
     }
@@ -7998,6 +8018,7 @@ function ghBuildPayload() {
   backup.watchlist = WL.slice();
   try{ backup.liveDataCache = localStorage.getItem('live_data_cache') || ''; }catch(e){}
   try{ backup.liveDataTs = localStorage.getItem('live_data_ts') || ''; }catch(e){}
+  try{ backup.liveDataAt = localStorage.getItem('live_data_at') || ''; }catch(e){}
   try{ backup.h1Cache = localStorage.getItem('sc_cache_v1') || ''; }catch(e){}
   try{ backup.h1CacheMeta = localStorage.getItem('sc_cache_meta_v1') || ''; }catch(e){}
   try{ backup.fcCache = localStorage.getItem('fc_cache') || ''; }catch(e){}
