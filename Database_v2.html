@@ -9016,6 +9016,10 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
 #aaii-body th:first-child,#aaii-body td:first-child{text-align:left}
 #aaii-body .aa-tbl{max-height:300px;overflow:auto;border:1px solid var(--border);border-radius:6px}
 @media (max-width:640px){#aaii-body .aa-tiles{grid-template-columns:repeat(2,1fr)}}
+#aaii-body .aabb-rng button{background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);font:600 11px var(--mono);padding:5px 12px;cursor:pointer}
+#aaii-body .aabb-rng button:first-child{border-radius:5px 0 0 5px}#aaii-body .aabb-rng button:last-child{border-radius:0 5px 5px 0}
+#aaii-body .aabb-rng button.on{background:#0a1a12;color:#3fd68a;border-color:#3fd68a77}
+#aabb-tip{position:fixed;pointer-events:none;background:var(--surface3);border:1px solid var(--border-bright);border-radius:5px;padding:6px 9px;font:11px var(--mono);color:var(--text-primary);display:none;z-index:3000;font-variant-numeric:tabular-nums}
 </style>
 <script>
 /* AAII data — live copy lives in GitHub: Markmark5/Database/data/aaii.json (updated weekly by scheduled task).
@@ -9055,6 +9059,7 @@ async function aaiiOpen(){
   R.forEach((q,i)=>{const v=sp(q),a=y2(0),c=y2(v);s2+=`<rect x="${x(i)-bw/2}" y="${Math.min(a,c)}" width="${bw}" height="${Math.max(1,Math.abs(c-a))}" fill="${v<0?RD:G}" opacity="${i===n-1?1:.6}"><title>${fd(q[0])}: ${sgn(v)} pp</title></rect>`});
   s2+='</svg>';
   h+=`<h4>Bull–Bear spread (pp)</h4>`+s2;
+  h+='<div id="aa-bb"></div>';
   // table
   const avgOf=k=>R.reduce((a,q)=>a+q[k],0)/n;
   h+=`<h4>Weekly results · 2026 avg: Bull ${f(avgOf(1))} / Neutral ${f(avgOf(2))} / Bear ${f(avgOf(3))}</h4><div class="aa-tbl"><table><thead><tr><th>Week ending</th><th>Bullish</th><th>Neutral</th><th>Bearish</th><th>Spread</th></tr></thead><tbody>`+
@@ -9062,6 +9067,88 @@ async function aaiiOpen(){
     <div style="font-size:10px;color:var(--text-dim);margin-top:10px">Source: AAII Sentiment Survey (aaii.com/sentimentsurvey). <a href="https://www.aaii.com/sentimentsurvey/sent_results" target="_blank" style="color:var(--blue)">Latest results ↗</a></div>`;
   document.getElementById('aaii-body').innerHTML=h;
   document.getElementById('aaii-overlay').style.display='flex';
+  aaBBInit();
+}
+
+/* ── AAII Bull/Bear history block (ratio + spread, 1Y/5Y/10Y) ──
+   History: data/aaii_history.json (static, 1987–2025 + S&P closes). Live 2026+ rows: AAII_DATA (data/aaii.json, weekly scheduled task). */
+let AABB_HIST=null, AABB_ROWS=null, AABB_ST=null, AABB_YRS=1;
+async function aaBBInit(){
+  const el=document.getElementById('aa-bb'); if(!el) return;
+  el.innerHTML='<div style="color:var(--text-secondary);font-size:12px;margin-top:14px">Loading AAII history…</div>';
+  try{
+    if(!AABB_HIST){const r=await fetch('https://raw.githubusercontent.com/Markmark5/Database/main/data/aaii_history.json?t='+Date.now(),{cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); AABB_HIST=await r.json();}
+  }catch(e){el.innerHTML='<div style="color:var(--text-dim);font-size:11px;margin-top:14px">AAII history unavailable ('+e.message+').</div>';return;}
+  // merge history + live rows (live wins on same date)
+  const m=new Map(); AABB_HIST.rows.forEach(r=>m.set(r[0],r)); (AAII_DATA.rows||[]).forEach(r=>m.set(r[0],r));
+  const all=[...m.values()].sort((a,b)=>a[0]<b[0]?-1:1).filter(r=>r[3]>0);
+  let sb=0,sr=0,ss=0,ss2=0; all.forEach(r=>{sb+=r[1];sr+=r[3];const s=r[1]-r[3];ss+=s;ss2+=s*s});
+  const N=all.length; AABB_ST={avgR:sb/sr,mS:ss/N,sd:Math.sqrt((ss2-ss*ss/N)/(N-1))};
+  const spx=AABB_HIST.spx||{}; let runMax=0;
+  AABB_ROWS=all.map((r,i)=>{const sp=r[1]-r[3];let ma=null;if(i>=7){let t=0;for(let k=i-7;k<=i;k++)t+=all[k][1]-all[k][3];ma=t/8}
+    const c=spx[r[0]]??null; let rec=false; if(c!=null){if(c>=runMax){rec=true;runMax=c}}
+    return [r[0],r[1],r[3],ma,c,rec]});
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)">
+    <h4 style="margin:0">Bull / Bear history · ${AABB_ROWS[0][0].slice(0,4)}–${AABB_ROWS[AABB_ROWS.length-1][0].slice(0,4)}</h4>
+    <div class="aabb-rng">${[1,5,10].map(y=>`<button data-y="${y}" onclick="aaBBRender(${y})">${y}Y</button>`).join('')}</div></div>
+    <div id="aabb-tiles" class="aa-tiles" style="margin-top:10px"></div>
+    <h4>Bull / Bear ratio (Bull% / Bear%)</h4>
+    <div class="aa-leg"><span><i style="background:#4ad8f0"></i>Ratio</span><span><i style="background:#ff5a4f"></i>Long-run avg ${AABB_ST.avgR.toFixed(2)}</span><span><i style="background:var(--border-bright)"></i>1.0 = parity</span></div>
+    <div id="aabb-c1"></div>
+    <h4>Bull – Bear spread (pp) vs S&amp;P 500</h4>
+    <div class="aa-leg"><span><i style="background:#3fd68a"></i>Bulls ahead</span><span><i style="background:#ff5a4f"></i>Bears ahead</span><span><i style="background:#fff"></i>8-wk avg</span><span><i style="background:var(--blue)"></i>Avg ±1 SD (since 1987)</span><span><i style="background:#ffc400"></i>S&amp;P 500 (right axis, dots = record close)</span></div>
+    <div id="aabb-c2"></div>`;
+  aaBBRender(AABB_YRS);
+}
+function aaBBRender(yrs){
+  AABB_YRS=yrs; const ST=AABB_ST, G='#3fd68a',RD='#ff5a4f',CY='#4ad8f0',BL='#4a9eff',GO='#ffc400';
+  document.querySelectorAll('#aa-bb .aabb-rng button').forEach(b=>b.classList.toggle('on',+b.dataset.y===yrs));
+  const sgn=x=>(x>0?'+':'')+x.toFixed(1), fd=s=>new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const last=new Date(AABB_ROWS[AABB_ROWS.length-1][0]+'T00:00:00'),cut=new Date(last);cut.setFullYear(cut.getFullYear()-yrs);
+  const R=AABB_ROWS.filter(r=>new Date(r[0]+'T00:00:00')>cut),n=R.length,L=R[n-1],P=R[n-2];
+  const rat=r=>r[1]/r[2],spr=r=>r[1]-r[2],rs=R.map(rat),ss=R.map(spr);
+  const iMax=ss.indexOf(Math.max(...ss)),iMin=ss.indexOf(Math.min(...ss)),pct=Math.round(100*ss.filter(v=>v<spr(L)).length/n);
+  const t=(l,v,c,s)=>`<div class="aa-tile"><div class="aa-lab">${l}</div><div class="aa-val" style="color:${c}">${v}</div><div class="aa-sub">${s}</div></div>`;
+  document.getElementById('aabb-tiles').innerHTML=
+    t('Ratio',rat(L).toFixed(2),rat(L)>=ST.avgR?G:RD,`prev ${rat(P).toFixed(2)} · avg ${ST.avgR.toFixed(2)}`)+
+    t('Spread',sgn(spr(L))+' pp',spr(L)>=0?G:RD,`prev ${sgn(spr(P))} · avg ${sgn(ST.mS)}`)+
+    t(`${yrs}Y high`,sgn(ss[iMax]),G,fd(R[iMax][0]))+
+    t(`${yrs}Y low`,sgn(ss[iMin]),RD,`${fd(R[iMin][0])} · now ${pct}th pctl`);
+  const W=860,l=36,r=46,tp=10,b=22,x=i=>l+i*(W-l-r)/(n-1);
+  const axisX=H=>{let s='',lastK='';R.forEach((q,i)=>{const k=yrs===1?q[0].slice(0,7):q[0].slice(0,4);if(k!==lastK){lastK=k;if(i>2){const lb=yrs===1?new Date(q[0]+'T00:00:00').toLocaleDateString('en-GB',{month:'short'}):k;s+=`<line x1="${x(i)}" x2="${x(i)}" y1="${tp}" y2="${H-b}" stroke="var(--border)" opacity=".5"/><text x="${x(i)+3}" y="${H-6}">${lb}</text>`}}});return s};
+  // ratio
+  const H1=240,hi=Math.max(2,Math.ceil(Math.max(...rs)*2)/2),y=v=>tp+(hi-v)*(H1-tp-b)/hi;
+  let s=`<svg viewBox="0 0 ${W} ${H1}" width="100%">`;
+  for(let v=0;v<=hi+1e-9;v+=0.5)s+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)"/><text x="${l-6}" y="${y(v)+3}" text-anchor="end">${v.toFixed(1)}</text>`;
+  s+=axisX(H1);
+  const pts=R.map((q,i)=>x(i).toFixed(1)+','+y(rat(q)).toFixed(1)).join(' ');
+  s+=`<polygon points="${x(0)},${y(0)} ${pts} ${x(n-1)},${y(0)}" fill="${CY}" opacity=".22"/><polyline points="${pts}" fill="none" stroke="${CY}" stroke-width="${yrs===1?1.8:1.1}" stroke-linejoin="round"/>`;
+  s+=`<line x1="${l}" x2="${W-r}" y1="${y(1)}" y2="${y(1)}" stroke="var(--border-bright)" stroke-width="1.2"/><line x1="${l}" x2="${W-r}" y1="${y(ST.avgR)}" y2="${y(ST.avgR)}" stroke="${RD}" stroke-dasharray="3 3" stroke-width="1.4"/>`;
+  s+=`<circle cx="${x(n-1)}" cy="${y(rat(L))}" r="3.5" fill="${CY}"/><line id="aabb-cur1" y1="${tp}" y2="${H1-b}" stroke="#fff" opacity="0"/><rect x="${l}" y="${tp}" width="${W-l-r}" height="${H1-tp-b}" fill="transparent" class="aabb-hv"/></svg>`;
+  document.getElementById('aabb-c1').innerHTML=s;
+  // spread + S&P
+  const H2=220,mx=Math.max(30,...ss,ST.mS+ST.sd)+4,mn=Math.min(-30,...ss,ST.mS-ST.sd)-4,y2=v=>tp+(mx-v)*(H2-tp-b)/(mx-mn),bw=Math.max(1,(W-l-r)/n*.7);
+  let s2=`<svg viewBox="0 0 ${W} ${H2}" width="100%">`;
+  for(let v=Math.ceil(mn/10)*10;v<=mx;v+=10)s2+=`<line x1="${l}" x2="${W-r}" y1="${y2(v)}" y2="${y2(v)}" stroke="${v===0?'var(--border-bright)':'var(--border)'}" stroke-width="${v===0?1.4:1}"/><text x="${l-6}" y="${y2(v)+3}" text-anchor="end">${v>0?'+'+v:v}</text>`;
+  s2+=axisX(H2)+`<rect x="${l}" y="${y2(ST.mS+ST.sd)}" width="${W-l-r}" height="${y2(ST.mS-ST.sd)-y2(ST.mS+ST.sd)}" fill="${BL}" opacity=".06"/>`;
+  [[ST.mS+ST.sd,'2 3'],[ST.mS-ST.sd,'2 3'],[ST.mS,'']].forEach(([v,d])=>s2+=`<line x1="${l}" x2="${W-r}" y1="${y2(v)}" y2="${y2(v)}" stroke="${BL}" stroke-dasharray="${d}" stroke-width="1.1" opacity=".85"/>`);
+  R.forEach((q,i)=>{const v=spr(q),a=y2(0),c=y2(v);s2+=`<rect x="${(x(i)-bw/2).toFixed(1)}" y="${Math.min(a,c).toFixed(1)}" width="${bw.toFixed(2)}" height="${Math.max(.8,Math.abs(c-a)).toFixed(1)}" fill="${v<0?RD:G}" opacity="${i===n-1?1:.55}"/>`});
+  const C=R.map((q,i)=>[i,q[4]]).filter(z=>z[1]!=null);
+  if(C.length>1){const cs=C.map(z=>z[1]),cl=Math.min(...cs),ch=Math.max(...cs),pad=(ch-cl)*.06||1,yc=v=>tp+(ch+pad-v)*(H2-tp-b)/(ch-cl+2*pad);
+    for(let k=0;k<=4;k++){const v=cl-pad+(ch-cl+2*pad)*k/4;s2+=`<text x="${W-r+5}" y="${yc(v)+3}" style="fill:#ffc40099">${Math.round(v).toLocaleString()}</text>`}
+    s2+=`<polyline points="${C.map(([i,c])=>x(i).toFixed(1)+','+yc(c).toFixed(1)).join(' ')}" fill="none" stroke="${GO}" stroke-width="1.3" opacity=".6" stroke-linejoin="round"/>`;
+    C.forEach(([i,c])=>{if(R[i][5])s2+=`<circle cx="${x(i)}" cy="${yc(c)}" r="${yrs===1?2.6:1.4}" fill="${GO}" opacity=".8"/>`});}
+  s2+=`<polyline points="${R.map((q,i)=>q[3]==null?'':x(i).toFixed(1)+','+y2(q[3]).toFixed(1)).join(' ')}" fill="none" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>`;
+  s2+=`<line id="aabb-cur2" y1="${tp}" y2="${H2-b}" stroke="#fff" opacity="0"/><rect x="${l}" y="${tp}" width="${W-l-r}" height="${H2-tp-b}" fill="transparent" class="aabb-hv"/></svg>`;
+  document.getElementById('aabb-c2').innerHTML=s2;
+  // hover
+  let tip=document.getElementById('aabb-tip'); if(!tip){tip=document.createElement('div');tip.id='aabb-tip';document.body.appendChild(tip)}
+  const cur=(i,o)=>['aabb-cur1','aabb-cur2'].forEach(id=>{const c=document.getElementById(id);if(c){c.setAttribute('x1',x(i));c.setAttribute('x2',x(i));c.setAttribute('opacity',o)}});
+  document.querySelectorAll('#aa-bb .aabb-hv').forEach(el=>{const svg=el.ownerSVGElement;
+    el.onmousemove=e=>{const bb=svg.getBoundingClientRect(),sx=(e.clientX-bb.left)*W/bb.width,i=Math.max(0,Math.min(n-1,Math.round((sx-l)*(n-1)/(W-l-r)))),q=R[i];cur(i,.35);
+      tip.innerHTML=`<b>${fd(q[0])}</b><br>Bull ${q[1].toFixed(1)}% · Bear ${q[2].toFixed(1)}%<br>Ratio <b style="color:${CY}">${rat(q).toFixed(2)}</b> · Spread <b style="color:${spr(q)<0?RD:G}">${sgn(spr(q))}</b>`+(q[3]!=null?`<br><span style="color:var(--text-dim)">8-wk avg ${sgn(q[3])}</span>`:'')+(q[4]!=null?`<br>S&amp;P <b style="color:${GO}">${q[4].toLocaleString()}</b>`:'');
+      tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)+'px';tip.style.top=(e.clientY-10)+'px'};
+    el.onmouseleave=()=>{tip.style.display='none';cur(0,0)}});
 }
 </script>
 
