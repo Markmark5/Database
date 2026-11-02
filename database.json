@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-11-02T07:48:35.880Z",
-    "savedAtLabel": "02 Nov 2026 07:48",
+    "savedAt": "2026-11-02T08:34:44.862Z",
+    "savedAtLabel": "02 Nov 2026 08:34",
     "source": "github-sync"
   },
   "scorecards": [
@@ -185151,6 +185151,912 @@
         "events": []
       },
       "entryPrice": 80.65
+    },
+    {
+      "id": "ADVT_2026_11_02",
+      "ticker": "ADVT",
+      "score": 65,
+      "company": "AdvancedAdvT Ltd",
+      "verdict": "Modest upgrade",
+      "date": "2026-11-02",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM 100",
+      "signals": [
+        {
+          "pill": "BEAT",
+          "type": "green",
+          "textHTML": "H1 revenue <span class=\"val-up\">£28.8m</span> (<span class=\"val-up\">+13%</span>) and adj EBITDA <span class=\"val-up\">£8.4m</span> (<span class=\"val-up\">+17%</span>) beat October's not-less-than floors of <span class=\"val-up\">£28.5m</span> and <span class=\"val-up\">£8.0m</span>; H1 outturn ahead of management expectations",
+          "textPlain": "H1 revenue £28.8m (+13%) and adj EBITDA £8.4m (+17%) beat October's not-less-than floors of £28.5m and £8.0m; H1 outturn ahead of management expectations"
+        },
+        {
+          "pill": "H2 BAR",
+          "type": "green",
+          "textHTML": "H2 needs only <span class=\"val-up\">£28.2m</span> revenue (<span class=\"val-up\">+0.7%</span> YoY) and <span class=\"val-up\">5.3p</span> EPS (<span class=\"val-up\">+4.9%</span>) to hit FY27 cons of <span class=\"val-up\">£57.0m</span> and <span class=\"val-up\">11.1p</span>, after H1 grew <span class=\"val-up\">13%</span>; recurring revenue is now <span class=\"val-up\">83%</span> of the total",
+          "textPlain": "H2 needs only £28.2m revenue (+0.7% YoY) and 5.3p EPS (+4.9%) to hit FY27 cons of £57.0m and 11.1p, after H1 grew 13%; recurring revenue is now 83% of the total"
+        },
+        {
+          "pill": "CASH",
+          "type": "green",
+          "textHTML": "<span class=\"val-up\">£95.2m</span> cash plus <span class=\"val-up\">£18.0m</span> M&amp;C Saatchi stake is <span class=\"val-up\">£113m</span>, about <span class=\"val-up\">49%</span> of market cap; second <span class=\"val-up\">£10m</span> buyback live, <span class=\"val-up\">7.9m</span> shares bought for <span class=\"val-up\">£13.1m</span> by 29 October 2026",
+          "textPlain": "£95.2m cash plus £18.0m M&C Saatchi stake is £113m, about 49% of market cap; second £10m buyback live, 7.9m shares bought for £13.1m by 29 October 2026"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "Every floor beaten since Oct-25: H1-26 <span class=\"val-fl\">£7.2m</span> vs ≥<span class=\"val-fl\">£7m</span>, FY26 <span class=\"val-fl\">£14.5m</span> vs ≥<span class=\"val-fl\">£14.4m</span>, now <span class=\"val-fl\">£8.4m</span> vs ≥<span class=\"val-fl\">£8.0m</span> EBITDA. The organic growth split is no longer disclosed",
+          "textPlain": "Every floor beaten since Oct-25: H1-26 £7.2m vs ≥£7m, FY26 £14.5m vs ≥£14.4m, now £8.4m vs ≥£8.0m EBITDA. The organic growth split is no longer disclosed"
+        },
+        {
+          "pill": "WATCH",
+          "type": "amber",
+          "textHTML": "Net finance income fell <span class=\"val-dn\">14%</span> to <span class=\"val-dn\">£1.44m</span> as cash funds buybacks; FY28 cons EPS of <span class=\"val-dn\">10.7p</span> sits below FY27's <span class=\"val-dn\">11.1p</span> and the outlook gives no next-year guide at all",
+          "textPlain": "Net finance income fell 14% to £1.44m as cash funds buybacks; FY28 cons EPS of 10.7p sits below FY27's 11.1p and the outlook gives no next-year guide at all"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "+1–3%",
+          "sub": "11.1p → 11.2–11.4p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "~flat",
+          "sub": "10.7p → 10.7p held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+1–3%",
+          "sub": "£57.0m → £57.6–58.7m",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "~flat",
+          "sub": "£59.0m → £59.0m held",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "+6.7%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "Year End: Feb 2027 · 35 weeks",
+      "sparkSVG": "\n        <svg id=\"spark-ADVT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-ADVT\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-11-02T08:34:34.617Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 10.3,
+          "price": 145
+        },
+        {
+          "d": "06 Mar",
+          "eps": 10.3,
+          "price": 160
+        },
+        {
+          "d": "13 Mar",
+          "eps": 10.3,
+          "price": 165
+        },
+        {
+          "d": "20 Mar",
+          "eps": 10.3,
+          "price": 165
+        },
+        {
+          "d": "27 Mar",
+          "eps": 10.3,
+          "price": 165
+        },
+        {
+          "d": "03 Apr",
+          "eps": 10.3,
+          "price": 165
+        },
+        {
+          "d": "10 Apr",
+          "eps": 10.3,
+          "price": 170
+        },
+        {
+          "d": "17 Apr",
+          "eps": 10.3,
+          "price": 170
+        },
+        {
+          "d": "24 Apr",
+          "eps": 10.3,
+          "price": 165
+        },
+        {
+          "d": "08 May",
+          "eps": 10.3,
+          "price": 160
+        },
+        {
+          "d": "15 May",
+          "eps": 10.3,
+          "price": 155
+        },
+        {
+          "d": "22 May",
+          "eps": 10.7,
+          "price": 160
+        },
+        {
+          "d": "02 Jun",
+          "eps": 10.7,
+          "price": 152.5
+        },
+        {
+          "d": "05 Jun",
+          "eps": 10.7,
+          "price": 155
+        },
+        {
+          "d": "12 Jun",
+          "eps": 10.4,
+          "price": 152.5
+        },
+        {
+          "d": "19 Jun",
+          "eps": 10.4,
+          "price": 155
+        },
+        {
+          "d": "26 Jun",
+          "eps": 10.4,
+          "price": 155
+        },
+        {
+          "d": "03 Jul",
+          "eps": 10.4,
+          "price": 155
+        },
+        {
+          "d": "10 Jul",
+          "eps": 10.4,
+          "price": 157.5
+        },
+        {
+          "d": "17 Jul",
+          "eps": 10.4,
+          "price": 160
+        },
+        {
+          "d": "24 Jul",
+          "eps": 10.4,
+          "price": 170
+        },
+        {
+          "d": "31 Jul",
+          "eps": 10.4,
+          "price": 170
+        },
+        {
+          "d": "07 Aug",
+          "eps": 10.4,
+          "price": 175
+        },
+        {
+          "d": "14 Aug",
+          "eps": 10.4,
+          "price": 175
+        },
+        {
+          "d": "21 Aug",
+          "eps": 10.4,
+          "price": 175
+        },
+        {
+          "d": "28 Aug",
+          "eps": 10.4,
+          "price": 180
+        },
+        {
+          "d": "07 Sep",
+          "eps": 10.4,
+          "price": 177.5
+        },
+        {
+          "d": "11 Sep",
+          "eps": 10.4,
+          "price": 172.5
+        },
+        {
+          "d": "18 Sep",
+          "eps": 10.4,
+          "price": 175
+        },
+        {
+          "d": "25 Sep",
+          "eps": 10.4,
+          "price": 180
+        },
+        {
+          "d": "02 Oct",
+          "eps": 10.4,
+          "price": 180
+        },
+        {
+          "d": "09 Oct",
+          "eps": 10.4,
+          "price": 187.5
+        },
+        {
+          "d": "16 Oct",
+          "eps": 11.1,
+          "price": 182.5
+        },
+        {
+          "d": "23 Oct",
+          "eps": 11.1,
+          "price": 180
+        },
+        {
+          "d": "30 Oct",
+          "eps": 11.1,
+          "price": 180
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 180
+    },
+    {
+      "id": "CPX_2026_11_02",
+      "ticker": "CPX",
+      "score": 57,
+      "company": "CAP-XX Ltd",
+      "verdict": "No coverage",
+      "date": "2026-11-02",
+      "rnsType": "FY Results",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "ORDERS",
+          "type": "green",
+          "textHTML": "Q1 FY27 orders <span class=\"val-up\">+66%</span> to <span class=\"val-up\">A$2.07m</span> and revenue <span class=\"val-up\">+25%</span> to <span class=\"val-up\">A$1.30m</span>; backlog <span class=\"val-up\">A$4.20m</span>, up <span class=\"val-up\">23%</span> in the quarter and equal to <span class=\"val-up\">79%</span> of FY26's full-year revenue of A$5.29m",
+          "textPlain": "Q1 FY27 orders +66% to A$2.07m and revenue +25% to A$1.30m; backlog A$4.20m, up 23% in the quarter and equal to 79% of FY26's full-year revenue of A$5.29m"
+        },
+        {
+          "pill": "RESULTS",
+          "type": "green",
+          "textHTML": "FY26 revenue <span class=\"val-up\">+7%</span> to <span class=\"val-up\">A$5.29m</span>, gross margin <span class=\"val-up\">58.8%</span> (40.7%), EBITDA loss cut <span class=\"val-up\">33%</span> to <span class=\"val-up\">A$2.03m</span>; H2 loss <span class=\"val-up\">A$0.90m</span> vs <span class=\"val-up\">A$1.13m</span> in H1 as tighter cost control lifted the margin",
+          "textPlain": "FY26 revenue +7% to A$5.29m, gross margin 58.8% (40.7%), EBITDA loss cut 33% to A$2.03m; H2 loss A$0.90m vs A$1.13m in H1 as tighter cost control lifted the margin"
+        },
+        {
+          "pill": "CASH",
+          "type": "red",
+          "textHTML": "Year-end cash just <span class=\"val-dn\">A$0.87m</span> after <span class=\"val-dn\">A$2.52m</span> operating burn; July raise of <span class=\"val-dn\">A$4.4m</span> at 0.15p plus <span class=\"val-dn\">A$1.93m</span> R&amp;D credit funds roughly two years at current burn",
+          "textPlain": "Year-end cash just A$0.87m after A$2.52m operating burn; July raise of A$4.4m at 0.15p plus A$1.93m R&D credit funds roughly two years at current burn"
+        },
+        {
+          "pill": "H2",
+          "type": "amber",
+          "textHTML": "H2 revenue <span class=\"val-fl\">A$2.69m</span>, <span class=\"val-fl\">+5.9%</span> YoY vs <span class=\"val-fl\">+10.4%</span> last H2, so H2 growth slowed <span class=\"val-fl\">4.5pp</span> before the Q1 rebound; halves are rounded to A$0.1m so treat the gap with care",
+          "textPlain": "H2 revenue A$2.69m, +5.9% YoY vs +10.4% last H2, so H2 growth slowed 4.5pp before the Q1 rebound; halves are rounded to A$0.1m so treat the gap with care"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "Nov-25 cited a strengthened balance sheet and flexibility to invest; cash then fell to <span class=\"val-fl\">A$0.87m</span> and a July placing followed. The <span class=\"val-fl\">1.2</span> book-to-bill pointer was met",
+          "textPlain": "Nov-25 cited a strengthened balance sheet and flexibility to invest; cash then fell to A$0.87m and a July placing followed. The 1.2 book-to-bill pointer was met"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "—",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "—",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "—",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "Year End: Jun 2026 · 35 weeks",
+      "sparkSVG": "\n        <svg id=\"spark-CPX\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-CPX\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV H2",
+          "mark": "✕",
+          "dev": "−4.5pp",
+          "state": "neg"
+        },
+        {
+          "lbl": "EPS H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-11-02T08:34:34.618Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 0,
+          "price": 0.26
+        },
+        {
+          "d": "06 Mar",
+          "eps": 0,
+          "price": 0.24
+        },
+        {
+          "d": "13 Mar",
+          "eps": 0,
+          "price": 0.22
+        },
+        {
+          "d": "20 Mar",
+          "eps": 0,
+          "price": 0.21
+        },
+        {
+          "d": "27 Mar",
+          "eps": 0,
+          "price": 0.2
+        },
+        {
+          "d": "03 Apr",
+          "eps": 0,
+          "price": 0.2
+        },
+        {
+          "d": "10 Apr",
+          "eps": 0,
+          "price": 0.225
+        },
+        {
+          "d": "17 Apr",
+          "eps": 0,
+          "price": 0.23
+        },
+        {
+          "d": "24 Apr",
+          "eps": 0,
+          "price": 0.24
+        },
+        {
+          "d": "08 May",
+          "eps": 0,
+          "price": 0.21
+        },
+        {
+          "d": "15 May",
+          "eps": 0,
+          "price": 0.24
+        },
+        {
+          "d": "22 May",
+          "eps": 0,
+          "price": 0.24
+        },
+        {
+          "d": "02 Jun",
+          "eps": 0,
+          "price": 0.31
+        },
+        {
+          "d": "05 Jun",
+          "eps": 0,
+          "price": 0.27
+        },
+        {
+          "d": "12 Jun",
+          "eps": 0,
+          "price": 0.275
+        },
+        {
+          "d": "19 Jun",
+          "eps": 0,
+          "price": 0.275
+        },
+        {
+          "d": "26 Jun",
+          "eps": 0,
+          "price": 0.31
+        },
+        {
+          "d": "03 Jul",
+          "eps": 0,
+          "price": 0.3
+        },
+        {
+          "d": "10 Jul",
+          "eps": 0,
+          "price": 0.295
+        },
+        {
+          "d": "17 Jul",
+          "eps": 0,
+          "price": 0.28
+        },
+        {
+          "d": "24 Jul",
+          "eps": 0,
+          "price": 0.26
+        },
+        {
+          "d": "31 Jul",
+          "eps": 0,
+          "price": 0.205
+        },
+        {
+          "d": "07 Aug",
+          "eps": 0,
+          "price": 0.16
+        },
+        {
+          "d": "14 Aug",
+          "eps": 0,
+          "price": 0.1525
+        },
+        {
+          "d": "21 Aug",
+          "eps": 0,
+          "price": 0.15
+        },
+        {
+          "d": "28 Aug",
+          "eps": 0,
+          "price": 0.145
+        },
+        {
+          "d": "07 Sep",
+          "eps": 0,
+          "price": 0.145
+        },
+        {
+          "d": "11 Sep",
+          "eps": 0,
+          "price": 0.1425
+        },
+        {
+          "d": "18 Sep",
+          "eps": 0,
+          "price": 0.1375
+        },
+        {
+          "d": "25 Sep",
+          "eps": 0,
+          "price": 0.14
+        },
+        {
+          "d": "02 Oct",
+          "eps": 0,
+          "price": 0.13
+        },
+        {
+          "d": "09 Oct",
+          "eps": 0,
+          "price": 0.1225
+        },
+        {
+          "d": "16 Oct",
+          "eps": 0,
+          "price": 0.125
+        },
+        {
+          "d": "23 Oct",
+          "eps": 0,
+          "price": 0.1175
+        },
+        {
+          "d": "30 Oct",
+          "eps": 0,
+          "price": 0.11
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 0.109
+    },
+    {
+      "id": "NWT_2026_11_02",
+      "ticker": "NWT",
+      "score": 56,
+      "company": "Newmark Security PLC",
+      "verdict": "No coverage",
+      "date": "2026-11-02",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "signals": [
+        {
+          "pill": "ARR",
+          "type": "green",
+          "textHTML": "HCM ARR <span class=\"val-up\">+13%</span> to <span class=\"val-up\">£4.3m</span> in September 2026 (£3.8m), or <span class=\"val-up\">+26%</span> underlying after the Mexican services contract roll-off; GT Tablet is driving recurring growth",
+          "textPlain": "HCM ARR +13% to £4.3m in September 2026 (£3.8m), or +26% underlying after the Mexican services contract roll-off; GT Tablet is driving recurring growth"
+        },
+        {
+          "pill": "ORDERS",
+          "type": "green",
+          "textHTML": "Largest-ever clock order from the main HCM customer, due for delivery by the April 2027 year end, plus a first Workday D2E win and a first large order from a US airline",
+          "textPlain": "Largest-ever clock order from the main HCM customer, due for delivery by the April 2027 year end, plus a first Workday D2E win and a first large order from a US airline"
+        },
+        {
+          "pill": "H1 WORDING",
+          "type": "amber",
+          "textHTML": "H1 guide is only a year-on-year revenue increase in HCM, with no profit comment, versus Oct-25's strong revenue growth with a positive impact on profitability",
+          "textPlain": "H1 guide is only a year-on-year revenue increase in HCM, with no profit comment, versus Oct-25's strong revenue growth with a positive impact on profitability"
+        },
+        {
+          "pill": "SIMPLIFY",
+          "type": "grey",
+          "textHTML": "Safetell sale completed 30 Sep 2026 after the NSI review; Access Control in talks with a buyer; Board reviewing group cost savings as Newmark becomes HCM-only",
+          "textPlain": "Safetell sale completed 30 Sep 2026 after the NSI review; Access Control in talks with a buyer; Board reviewing group cost savings as Newmark becomes HCM-only"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "ARR growth slowed from <span class=\"val-dn\">+36%</span> (Sep-25) to <span class=\"val-dn\">+8%</span> (Apr-26) and <span class=\"val-dn\">+13%</span> now; the Jan-26 guide that both divisions would beat H2 FY25 was missed on Safetell slippage",
+          "textPlain": "ARR growth slowed from +36% (Sep-25) to +8% (Apr-26) and +13% now; the Jan-26 guide that both divisions would beat H2 FY25 was missed on Safetell slippage"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "na",
+          "sub": "no consensus",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "—",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "—",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "—",
+          "style": "color:var(--amber)"
+        }
+      ],
+      "sparkLabel": "Year End: Apr 2027 · 35 weeks",
+      "sparkSVG": "\n        <svg id=\"spark-NWT\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-NWT\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-11-02T08:34:34.620Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 0,
+          "price": 107.5
+        },
+        {
+          "d": "06 Mar",
+          "eps": 0,
+          "price": 107.5
+        },
+        {
+          "d": "13 Mar",
+          "eps": 0,
+          "price": 105
+        },
+        {
+          "d": "20 Mar",
+          "eps": 0,
+          "price": 102.5
+        },
+        {
+          "d": "27 Mar",
+          "eps": 0,
+          "price": 95
+        },
+        {
+          "d": "03 Apr",
+          "eps": 0,
+          "price": 95
+        },
+        {
+          "d": "10 Apr",
+          "eps": 0,
+          "price": 95
+        },
+        {
+          "d": "17 Apr",
+          "eps": 0,
+          "price": 95
+        },
+        {
+          "d": "24 Apr",
+          "eps": 0,
+          "price": 95
+        },
+        {
+          "d": "08 May",
+          "eps": 0,
+          "price": 97.5
+        },
+        {
+          "d": "15 May",
+          "eps": 0,
+          "price": 97.5
+        },
+        {
+          "d": "22 May",
+          "eps": 0,
+          "price": 112.5
+        },
+        {
+          "d": "02 Jun",
+          "eps": 0,
+          "price": 112.5
+        },
+        {
+          "d": "05 Jun",
+          "eps": 0,
+          "price": 117.5
+        },
+        {
+          "d": "12 Jun",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "19 Jun",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "26 Jun",
+          "eps": 0,
+          "price": 111.5
+        },
+        {
+          "d": "03 Jul",
+          "eps": 0,
+          "price": 111.5
+        },
+        {
+          "d": "10 Jul",
+          "eps": 0,
+          "price": 111.5
+        },
+        {
+          "d": "17 Jul",
+          "eps": 0,
+          "price": 107.5
+        },
+        {
+          "d": "24 Jul",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "31 Jul",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "07 Aug",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "14 Aug",
+          "eps": 0,
+          "price": 110
+        },
+        {
+          "d": "21 Aug",
+          "eps": 0,
+          "price": 106.5
+        },
+        {
+          "d": "28 Aug",
+          "eps": 0,
+          "price": 106.5
+        },
+        {
+          "d": "07 Sep",
+          "eps": 0,
+          "price": 108.5
+        },
+        {
+          "d": "11 Sep",
+          "eps": 0,
+          "price": 108.5
+        },
+        {
+          "d": "18 Sep",
+          "eps": 0,
+          "price": 108.5
+        },
+        {
+          "d": "25 Sep",
+          "eps": 0,
+          "price": 105
+        },
+        {
+          "d": "02 Oct",
+          "eps": 0,
+          "price": 107.5
+        },
+        {
+          "d": "09 Oct",
+          "eps": 0,
+          "price": 107.5
+        },
+        {
+          "d": "16 Oct",
+          "eps": 0,
+          "price": 105
+        },
+        {
+          "d": "23 Oct",
+          "eps": 0,
+          "price": 97
+        },
+        {
+          "d": "30 Oct",
+          "eps": 0,
+          "price": 100.5
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 100.5
     }
   ],
   "scorecardIndex": [
@@ -185237,20 +186143,6 @@
       "entryPrice": 593.25,
       "importedAt": "2026-07-23T07:48:40.170Z",
       "arc": null
-    },
-    {
-      "id": "ALFA_2026_04_30",
-      "ticker": "ALFA",
-      "company": "Alfa Financial Software Holdings PLC",
-      "score": 42,
-      "verdict": "Neutral / hold",
-      "date": "2026-04-30",
-      "rnsType": "Q1 Trading Update",
-      "mode": "Pre-H1",
-      "index": "Alfa Financial Software Hold",
-      "entryPrice": 155,
-      "importedAt": "2026-04-30T06:23:26.072Z",
-      "arc": "2026-04"
     },
     {
       "id": "ALU_2026_07_17",
@@ -185585,20 +186477,6 @@
       "entryPrice": 2089,
       "importedAt": "2026-05-07T06:46:11.383Z",
       "arc": null
-    },
-    {
-      "id": "BBSN_2026_04_30",
-      "ticker": "BBSN",
-      "company": "Brave Bison Group PLC",
-      "score": 82,
-      "verdict": "Upgrade cycle starting",
-      "date": "2026-04-30",
-      "rnsType": "Full Year Results",
-      "mode": "Pre-FY",
-      "index": "Brave Bison Group PLC",
-      "entryPrice": 73.5,
-      "importedAt": "2026-04-30T06:23:26.072Z",
-      "arc": "2026-04"
     },
     {
       "id": "BBSN_2026_06_17",
@@ -186465,20 +187343,6 @@
       "arc": null
     },
     {
-      "id": "CSC_2026_04_30",
-      "ticker": "CSC",
-      "company": "Chesterfield Special Cylinders Holdings PLC",
-      "score": 22,
-      "verdict": "Negative / Downgrades",
-      "date": "2026-04-30",
-      "rnsType": "Pre-H1 Update",
-      "mode": "Pre-H1",
-      "index": "AIM ALL-SHARE",
-      "entryPrice": 52,
-      "importedAt": "2026-04-30T06:23:45.617Z",
-      "arc": "2026-04"
-    },
-    {
       "id": "CSC_2026_05_20",
       "ticker": "CSC",
       "company": "Chesterfield Special Cylinders",
@@ -187149,20 +188013,6 @@
       "arc": null
     },
     {
-      "id": "FRAN_2026_04_30",
-      "ticker": "FRAN",
-      "company": "Franchise Brands PLC",
-      "score": 44,
-      "verdict": "Neutral / hold",
-      "date": "2026-04-30",
-      "rnsType": "AGM Statement",
-      "mode": "Pre-H1",
-      "index": "Franchise Brands PLC",
-      "entryPrice": 137,
-      "importedAt": "2026-04-30T06:23:26.072Z",
-      "arc": "2026-04"
-    },
-    {
       "id": "FRAN_2026_07_29",
       "ticker": "FRAN",
       "company": "Franchise Brands PLC",
@@ -187482,20 +188332,6 @@
       "entryPrice": 526.85,
       "importedAt": "2026-08-05T06:45:35.822Z",
       "arc": null
-    },
-    {
-      "id": "GLE_2026_05_01",
-      "ticker": "GLE",
-      "company": "MJ Gleeson PLC",
-      "score": 28,
-      "verdict": "Conditional guidance · FY27 profit warning tone",
-      "date": "2026-05-01",
-      "rnsType": "Pre-FY Trading Update",
-      "mode": "Pre-FY",
-      "index": "FTSE Small Cap",
-      "entryPrice": 229,
-      "importedAt": "2026-05-01T06:42:46.445Z",
-      "arc": "2026-05"
     },
     {
       "id": "GLE_2026_07_10",
@@ -188065,20 +188901,6 @@
       "entryPrice": 869.7,
       "importedAt": "2026-07-30T06:50:39.466Z",
       "arc": null
-    },
-    {
-      "id": "IOF_2026_04_30",
-      "ticker": "IOF",
-      "company": "Iofina PLC",
-      "score": 82,
-      "verdict": "Strongly Positive",
-      "date": "2026-04-30",
-      "rnsType": "FY Results",
-      "mode": "Pre-FY",
-      "index": "AIM ALL-SHARE",
-      "entryPrice": 32.5,
-      "importedAt": "2026-04-30T06:23:45.617Z",
-      "arc": "2026-04"
     },
     {
       "id": "ITIM_2026_05_13",
@@ -189558,20 +190380,6 @@
       "arc": null
     },
     {
-      "id": "PRO_2026_05_01",
-      "ticker": "PRO",
-      "company": "ProService Building Services",
-      "score": 18,
-      "verdict": "FY27 profit warning · refi risk · material cuts",
-      "date": "2026-05-01",
-      "rnsType": "Pre-FY Trading Update",
-      "mode": "Pre-FY",
-      "index": "AIM All-Share",
-      "entryPrice": 3.86,
-      "importedAt": "2026-05-01T06:42:46.446Z",
-      "arc": "2026-05"
-    },
-    {
       "id": "PRV_2026_06_29",
       "ticker": "PRV",
       "company": "Porvair PLC",
@@ -189598,34 +190406,6 @@
       "entryPrice": 1052,
       "importedAt": "2026-08-06T08:00:22.198Z",
       "arc": null
-    },
-    {
-      "id": "PSON_2026_05_01",
-      "ticker": "PSON",
-      "company": "Pearson PLC",
-      "score": 58,
-      "verdict": "In-line confirm · no upgrade signal",
-      "date": "2026-05-01",
-      "rnsType": "Q1 Trading Update",
-      "mode": "Pre-H1",
-      "index": "FTSE 100",
-      "entryPrice": 1081,
-      "importedAt": "2026-05-01T06:42:46.445Z",
-      "arc": "2026-05"
-    },
-    {
-      "id": "PULS_2026_05_01",
-      "ticker": "PULS",
-      "company": "Pulsar Group PLC",
-      "score": 72,
-      "verdict": "FY25 in-line · Q1 FY26 +55% · constructive",
-      "date": "2026-05-01",
-      "rnsType": "Full Year Results",
-      "mode": "Pre-FY",
-      "index": "AIM All-Share",
-      "entryPrice": 40,
-      "importedAt": "2026-05-01T06:42:46.445Z",
-      "arc": "2026-05"
     },
     {
       "id": "PULS_2026_07_20",
@@ -189959,20 +190739,6 @@
       "entryPrice": 912,
       "importedAt": "2026-05-12T12:04:40.463Z",
       "arc": null
-    },
-    {
-      "id": "ROR_2026_05_01",
-      "ticker": "ROR",
-      "company": "Rotork PLC",
-      "score": 57,
-      "verdict": "Guidance held · neutral · no revision",
-      "date": "2026-05-01",
-      "rnsType": "Q1 Trading Update",
-      "mode": "Pre-H1",
-      "index": "FTSE 250",
-      "entryPrice": 308.8,
-      "importedAt": "2026-05-01T06:42:46.445Z",
-      "arc": "2026-05"
     },
     {
       "id": "RPI_2026_06_05",
@@ -190669,20 +191435,6 @@
       "entryPrice": 104.5,
       "importedAt": "2026-06-05T06:33:15.210Z",
       "arc": null
-    },
-    {
-      "id": "STX_2026_05_01",
-      "ticker": "STX",
-      "company": "Shield Therapeutics PLC",
-      "score": 42,
-      "verdict": "Milestone-inflated · NY Medicaid risk · cautious",
-      "date": "2026-05-01",
-      "rnsType": "Q1 Trading Update",
-      "mode": "Pre-H1",
-      "index": "AIM All-Share",
-      "entryPrice": 8.75,
-      "importedAt": "2026-05-01T06:42:46.445Z",
-      "arc": "2026-05"
     },
     {
       "id": "SUP_2026_07_01",
@@ -191547,20 +192299,6 @@
       "importedAt": "2026-06-18T06:36:50.170Z",
       "hasAnalysis": true,
       "arc": null
-    },
-    {
-      "id": "WEIR_2026_04_30",
-      "ticker": "WEIR",
-      "company": "Weir Group PLC",
-      "score": 58,
-      "verdict": "Neutral / Hold",
-      "date": "2026-04-30",
-      "rnsType": "Q1 Update",
-      "mode": "Pre-H1",
-      "index": "FTSE 100 · IND ENG",
-      "entryPrice": 2764,
-      "importedAt": "2026-04-30T07:25:37.278Z",
-      "arc": "2026-04"
     },
     {
       "id": "WEIR_2026_07_29",
@@ -196989,6 +197727,188 @@
       "arc": null
     },
     {
+      "id": "IBST_2026_11_02",
+      "ticker": "IBST",
+      "company": "Ibstock PLC",
+      "score": 0,
+      "verdict": "Rebase cut",
+      "date": "2026-11-02",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE Small Cap",
+      "entryPrice": 80.65,
+      "importedAt": "2026-11-02T07:48:14.497Z",
+      "arc": null
+    },
+    {
+      "id": "ALFA_2026_04_30",
+      "ticker": "ALFA",
+      "company": "Alfa Financial Software Holdings PLC",
+      "score": 42,
+      "verdict": "Neutral / hold",
+      "date": "2026-04-30",
+      "rnsType": "Q1 Trading Update",
+      "mode": "Pre-H1",
+      "index": "Alfa Financial Software Hold",
+      "entryPrice": 155,
+      "importedAt": "2026-04-30T06:23:26.072Z",
+      "arc": "2026-04"
+    },
+    {
+      "id": "BBSN_2026_04_30",
+      "ticker": "BBSN",
+      "company": "Brave Bison Group PLC",
+      "score": 82,
+      "verdict": "Upgrade cycle starting",
+      "date": "2026-04-30",
+      "rnsType": "Full Year Results",
+      "mode": "Pre-FY",
+      "index": "Brave Bison Group PLC",
+      "entryPrice": 73.5,
+      "importedAt": "2026-04-30T06:23:26.072Z",
+      "arc": "2026-04"
+    },
+    {
+      "id": "CSC_2026_04_30",
+      "ticker": "CSC",
+      "company": "Chesterfield Special Cylinders Holdings PLC",
+      "score": 22,
+      "verdict": "Negative / Downgrades",
+      "date": "2026-04-30",
+      "rnsType": "Pre-H1 Update",
+      "mode": "Pre-H1",
+      "index": "AIM ALL-SHARE",
+      "entryPrice": 52,
+      "importedAt": "2026-04-30T06:23:45.617Z",
+      "arc": "2026-04"
+    },
+    {
+      "id": "FRAN_2026_04_30",
+      "ticker": "FRAN",
+      "company": "Franchise Brands PLC",
+      "score": 44,
+      "verdict": "Neutral / hold",
+      "date": "2026-04-30",
+      "rnsType": "AGM Statement",
+      "mode": "Pre-H1",
+      "index": "Franchise Brands PLC",
+      "entryPrice": 137,
+      "importedAt": "2026-04-30T06:23:26.072Z",
+      "arc": "2026-04"
+    },
+    {
+      "id": "GLE_2026_05_01",
+      "ticker": "GLE",
+      "company": "MJ Gleeson PLC",
+      "score": 28,
+      "verdict": "Conditional guidance · FY27 profit warning tone",
+      "date": "2026-05-01",
+      "rnsType": "Pre-FY Trading Update",
+      "mode": "Pre-FY",
+      "index": "FTSE Small Cap",
+      "entryPrice": 229,
+      "importedAt": "2026-05-01T06:42:46.445Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "IOF_2026_04_30",
+      "ticker": "IOF",
+      "company": "Iofina PLC",
+      "score": 82,
+      "verdict": "Strongly Positive",
+      "date": "2026-04-30",
+      "rnsType": "FY Results",
+      "mode": "Pre-FY",
+      "index": "AIM ALL-SHARE",
+      "entryPrice": 32.5,
+      "importedAt": "2026-04-30T06:23:45.617Z",
+      "arc": "2026-04"
+    },
+    {
+      "id": "PRO_2026_05_01",
+      "ticker": "PRO",
+      "company": "ProService Building Services",
+      "score": 18,
+      "verdict": "FY27 profit warning · refi risk · material cuts",
+      "date": "2026-05-01",
+      "rnsType": "Pre-FY Trading Update",
+      "mode": "Pre-FY",
+      "index": "AIM All-Share",
+      "entryPrice": 3.86,
+      "importedAt": "2026-05-01T06:42:46.446Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "PSON_2026_05_01",
+      "ticker": "PSON",
+      "company": "Pearson PLC",
+      "score": 58,
+      "verdict": "In-line confirm · no upgrade signal",
+      "date": "2026-05-01",
+      "rnsType": "Q1 Trading Update",
+      "mode": "Pre-H1",
+      "index": "FTSE 100",
+      "entryPrice": 1081,
+      "importedAt": "2026-05-01T06:42:46.445Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "PULS_2026_05_01",
+      "ticker": "PULS",
+      "company": "Pulsar Group PLC",
+      "score": 72,
+      "verdict": "FY25 in-line · Q1 FY26 +55% · constructive",
+      "date": "2026-05-01",
+      "rnsType": "Full Year Results",
+      "mode": "Pre-FY",
+      "index": "AIM All-Share",
+      "entryPrice": 40,
+      "importedAt": "2026-05-01T06:42:46.445Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "ROR_2026_05_01",
+      "ticker": "ROR",
+      "company": "Rotork PLC",
+      "score": 57,
+      "verdict": "Guidance held · neutral · no revision",
+      "date": "2026-05-01",
+      "rnsType": "Q1 Trading Update",
+      "mode": "Pre-H1",
+      "index": "FTSE 250",
+      "entryPrice": 308.8,
+      "importedAt": "2026-05-01T06:42:46.445Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "STX_2026_05_01",
+      "ticker": "STX",
+      "company": "Shield Therapeutics PLC",
+      "score": 42,
+      "verdict": "Milestone-inflated · NY Medicaid risk · cautious",
+      "date": "2026-05-01",
+      "rnsType": "Q1 Trading Update",
+      "mode": "Pre-H1",
+      "index": "AIM All-Share",
+      "entryPrice": 8.75,
+      "importedAt": "2026-05-01T06:42:46.445Z",
+      "arc": "2026-05"
+    },
+    {
+      "id": "WEIR_2026_04_30",
+      "ticker": "WEIR",
+      "company": "Weir Group PLC",
+      "score": 58,
+      "verdict": "Neutral / Hold",
+      "date": "2026-04-30",
+      "rnsType": "Q1 Update",
+      "mode": "Pre-H1",
+      "index": "FTSE 100 · IND ENG",
+      "entryPrice": 2764,
+      "importedAt": "2026-04-30T07:25:37.278Z",
+      "arc": "2026-04"
+    },
+    {
       "id": "HFD_2026_04_29_2",
       "ticker": "HFD",
       "company": "Halfords Group PLC",
@@ -199812,17 +200732,45 @@
       "arc": "2026-03"
     },
     {
-      "id": "IBST_2026_11_02",
-      "ticker": "IBST",
-      "company": "Ibstock PLC",
-      "score": 0,
-      "verdict": "Rebase cut",
+      "id": "ADVT_2026_11_02",
+      "ticker": "ADVT",
+      "company": "AdvancedAdvT Ltd",
+      "score": 65,
+      "verdict": "Modest upgrade",
       "date": "2026-11-02",
-      "rnsType": "Q3 TU",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM 100",
+      "entryPrice": 180,
+      "importedAt": "2026-11-02T08:34:34.617Z",
+      "arc": null
+    },
+    {
+      "id": "CPX_2026_11_02",
+      "ticker": "CPX",
+      "company": "CAP-XX Ltd",
+      "score": 57,
+      "verdict": "No coverage",
+      "date": "2026-11-02",
+      "rnsType": "FY Results",
       "mode": "Q2",
-      "index": "FTSE Small Cap",
-      "entryPrice": 80.65,
-      "importedAt": "2026-11-02T07:48:14.497Z",
+      "index": "AIM All-Share",
+      "entryPrice": 0.109,
+      "importedAt": "2026-11-02T08:34:34.618Z",
+      "arc": null
+    },
+    {
+      "id": "NWT_2026_11_02",
+      "ticker": "NWT",
+      "company": "Newmark Security PLC",
+      "score": 56,
+      "verdict": "No coverage",
+      "date": "2026-11-02",
+      "rnsType": "Pre-H1 TU",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 100.5,
+      "importedAt": "2026-11-02T08:34:34.620Z",
       "arc": null
     }
   ],
