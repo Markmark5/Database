@@ -1,0 +1,37 @@
+name: Broker forecasts daily save
+
+on:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  schedule:
+    - cron: "20 17 * * 1-5"   # 17:20 UTC weekdays: after the close, the live sheets refresh every 10 min
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fc-daily
+  cancel-in-progress: false
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Save today's forecast figures
+        run: python scripts/fc_daily.py
+
+      - name: Commit results
+        run: |
+          git config user.name  "fc-bot"
+          git config user.email "fc-bot@users.noreply.github.com"
+          git add -A data/fc_daily
+          git diff --staged --quiet && exit 0
+          git commit -m "Broker forecasts $(date -u +%F)"
+          git pull --rebase -X theirs
+          git push
