@@ -9038,27 +9038,7 @@ async function aaiiOpen(){
   const sp=r=>r[1]-r[3], sgn=x=>(x>0?'+':'')+x.toFixed(1);
   const dlt=(a,b)=>`<span style="color:${a-b>=0?G:RD}">${sgn(a-b)} vs prior wk</span>`;
   const tile=(lab,val,col,sub)=>`<div class="aa-tile"><div class="aa-lab">${lab}</div><div class="aa-val" style="color:${col}">${val}</div><div class="aa-sub">${sub}</div></div>`;
-  let h=`<div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px">Week ending ${fd(L[0])} · ${n} weeks since 1 Jan 2026 · long-run averages since 1987${D.updated?' · data updated '+D.updated:''}</div>
-  <div class="aa-tiles">${tile('Bullish',f(L[1]),G,dlt(L[1],P[1])+' · avg '+f(D.avg.bull))}${tile('Neutral',f(L[2]),Y,dlt(L[2],P[2])+' · avg '+f(D.avg.neu))}${tile('Bearish',f(L[3]),RD,dlt(L[3],P[3])+' · avg '+f(D.avg.bear))}${tile('Bull–Bear',sgn(sp(L))+' pp',sp(L)<0?RD:G,dlt(sp(L),sp(P)))}</div>`;
-  // line chart
-  const W=860,H=230,l=34,r=10,t=10,b=24, x=i=>l+i*(W-l-r)/(n-1);
-  const lo=10,hi=60,y=v=>t+(hi-v)*(H-t-b)/(hi-lo);
-  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
-  for(let v=lo;v<=hi;v+=10)s+=`<line x1="${l}" x2="${W-r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)"/><text x="${l-6}" y="${y(v)+3}" text-anchor="end">${v}</text>`;
-  let lastM='';R.forEach((q,i)=>{const m=q[0].slice(5,7);if(m!==lastM){lastM=m;s+=`<text x="${x(i)}" y="${H-6}" text-anchor="start">${new Date(q[0]+'T00:00:00').toLocaleDateString('en-GB',{month:'short'})}</text>`}});
-  const line=(k,c,w)=>`<polyline fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round" points="${R.map((q,i)=>x(i).toFixed(1)+','+y(q[k]).toFixed(1)).join(' ')}"/>`;
-  s+=`<line x1="${l}" x2="${W-r}" y1="${y(D.avg.bull)}" y2="${y(D.avg.bull)}" stroke="${G}" stroke-dasharray="3 4" opacity=".5"/>`;
-  s+=line(2,Y,1.2)+line(1,G,2)+line(3,RD,2);
-  [[1,G],[3,RD]].forEach(([k,c])=>s+=`<circle cx="${x(n-1)}" cy="${y(L[k])}" r="3.5" fill="${c}"/>`);
-  s+='</svg>';
-  h+=`<h4>Bullish / Neutral / Bearish %</h4><div class="aa-leg"><span><i style="background:${G}"></i>Bullish</span><span><i style="background:${Y}"></i>Neutral</span><span><i style="background:${RD}"></i>Bearish</span><span><i style="background:${G};opacity:.5"></i>Bull avg ${f(D.avg.bull)}</span></div>`+s;
-  // spread bars
-  const H2=150,mn=Math.min(-30,...R.map(sp)),mx=Math.max(30,...R.map(sp)),y2=v=>t+(mx-v)*(H2-t-b)/(mx-mn),bw=(W-l-r)/n*.65;
-  let s2=`<svg viewBox="0 0 ${W} ${H2}" width="100%">`;
-  for(let v=Math.ceil(mn/10)*10;v<=mx;v+=10)s2+=`<line x1="${l}" x2="${W-r}" y1="${y2(v)}" y2="${y2(v)}" stroke="var(--border)" ${v===0?'stroke-width="1.5" stroke="var(--border-bright)"':''}/><text x="${l-6}" y="${y2(v)+3}" text-anchor="end">${sgn(v).replace('.0','')}</text>`;
-  R.forEach((q,i)=>{const v=sp(q),a=y2(0),c=y2(v);s2+=`<rect x="${x(i)-bw/2}" y="${Math.min(a,c)}" width="${bw}" height="${Math.max(1,Math.abs(c-a))}" fill="${v<0?RD:G}" opacity="${i===n-1?1:.6}"><title>${fd(q[0])}: ${sgn(v)} pp</title></rect>`});
-  s2+='</svg>';
-  h+=`<h4>Bull–Bear spread (pp)</h4>`+s2;
+  let h=`<div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px">Week ending ${fd(L[0])} · ${n} weeks since 1 Jan 2026 · long-run averages since 1987${D.updated?' · data updated '+D.updated:''}</div>`;
   h+='<div id="aa-bb"></div>';
   // table
   const avgOf=k=>R.reduce((a,q)=>a+q[k],0)/n;
@@ -9088,7 +9068,7 @@ async function aaBBInit(){
   AABB_ROWS=all.map((r,i)=>{const sp=r[1]-r[3];let ma=null;if(i>=7){let t=0;for(let k=i-7;k<=i;k++)t+=all[k][1]-all[k][3];ma=t/8}
     const c=spx[r[0]]??null; let rec=false; if(c!=null){if(c>=runMax){rec=true;runMax=c}}
     return [r[0],r[1],r[3],ma,c,rec]});
-  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px;padding-top:14px;border-top:1px solid var(--border)">
+  el.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px">
     <h4 style="margin:0">Bull / Bear history · ${AABB_ROWS[0][0].slice(0,4)}–${AABB_ROWS[AABB_ROWS.length-1][0].slice(0,4)}</h4>
     <div class="aabb-rng">${[1,5,10].map(y=>`<button data-y="${y}" onclick="aaBBRender(${y})">${y}Y</button>`).join('')}</div></div>
     <div id="aabb-tiles" class="aa-tiles" style="margin-top:10px"></div>
@@ -9109,11 +9089,12 @@ function aaBBRender(yrs){
   const rat=r=>r[1]/r[2],spr=r=>r[1]-r[2],rs=R.map(rat),ss=R.map(spr);
   const iMax=ss.indexOf(Math.max(...ss)),iMin=ss.indexOf(Math.min(...ss)),pct=Math.round(100*ss.filter(v=>v<spr(L)).length/n);
   const t=(l,v,c,s)=>`<div class="aa-tile"><div class="aa-lab">${l}</div><div class="aa-val" style="color:${c}">${v}</div><div class="aa-sub">${s}</div></div>`;
+  const av=(AAII_DATA&&AAII_DATA.avg)||{bull:37.5,bear:31.5}, dl=(a,b)=>`<span style="color:${a-b>=0?G:RD}">${sgn(a-b)} vs prior wk</span>`, dlr=(a,b)=>`<span style="color:${a-b>=0?G:RD}">${(a-b>=0?'+':'')+(a-b).toFixed(2)} vs prior wk</span>`;
   document.getElementById('aabb-tiles').innerHTML=
-    t('Ratio',rat(L).toFixed(2),rat(L)>=ST.avgR?G:RD,`prev ${rat(P).toFixed(2)} · avg ${ST.avgR.toFixed(2)}`)+
-    t('Spread',sgn(spr(L))+' pp',spr(L)>=0?G:RD,`prev ${sgn(spr(P))} · avg ${sgn(ST.mS)}`)+
-    t(`${yrs}Y high`,sgn(ss[iMax]),G,fd(R[iMax][0]))+
-    t(`${yrs}Y low`,sgn(ss[iMin]),RD,`${fd(R[iMin][0])} · now ${pct}th pctl`);
+    t('Ratio',rat(L).toFixed(2),rat(L)>=ST.avgR?G:RD,`${dlr(rat(L),rat(P))} · avg ${ST.avgR.toFixed(2)}`)+
+    t('Spread',sgn(spr(L))+' pp',spr(L)>=0?G:RD,`${dl(spr(L),spr(P))} · avg ${sgn(ST.mS)}`)+
+    t('Bullish',L[1].toFixed(1)+'%',G,`${dl(L[1],P[1])} · avg ${av.bull.toFixed(1)}%`)+
+    t('Bearish',L[2].toFixed(1)+'%',RD,`${dl(L[2],P[2])} · avg ${av.bear.toFixed(1)}%`);
   const W=860,l=36,r=46,tp=10,b=22,x=i=>l+i*(W-l-r)/(n-1);
   const axisX=H=>{let s='',lastK='';R.forEach((q,i)=>{const k=yrs===1?q[0].slice(0,7):q[0].slice(0,4);if(k!==lastK){lastK=k;if(i>2){const lb=yrs===1?new Date(q[0]+'T00:00:00').toLocaleDateString('en-GB',{month:'short'}):k;s+=`<line x1="${x(i)}" x2="${x(i)}" y1="${tp}" y2="${H-b}" stroke="var(--border)" opacity=".5"/><text x="${x(i)+3}" y="${H-6}">${lb}</text>`}}});return s};
   // ratio
