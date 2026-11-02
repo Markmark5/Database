@@ -1185,6 +1185,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 #wl-pop .wl-none{color:#777}
 /* Broker Changes */
 #broker-section .db-section-hdr{gap:10px;flex-wrap:wrap}
+.bkc-load{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:4px;background:#2a1f00;color:#ffc400;border:1px solid #ffc40066;cursor:pointer;white-space:nowrap}.bkc-load:disabled{opacity:.6;cursor:default}
 .bkc-sub{font-family:var(--mono);font-size:10px;color:var(--text-dim)}
 .bkc-tg{display:flex;border:1px solid var(--border);border-radius:4px;overflow:hidden}
 .bkc-tg span{padding:4px 11px;font-family:var(--mono);font-size:10.5px;color:var(--text-secondary);cursor:pointer;user-select:none}
@@ -1611,12 +1612,12 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
   <div class="db-section" id="broker-section">
     <div class="db-section-hdr">
       <div class="db-section-title"><span class="dot dot-blue"></span>Broker Changes</div>
-      <span class="bkc-sub" id="bkc-sub">scroll here to load</span>
+      <span class="bkc-sub" id="bkc-sub">not loaded</span>
       <div class="bkc-tg" id="bkc-per" style="margin-left:auto"><span data-p="d">1 day</span><span data-p="w" class="on">1 week</span><span data-p="m">1 month</span></div>
       <div class="bkc-tg" id="bkc-ix"><span data-i="all" class="on">All</span><span data-i="100">FTSE 100</span><span data-i="250">FTSE 250</span><span data-i="sc">Small Cap</span><span data-i="aim">AIM</span></div>
-      <button class="db-expand-btn" onclick="bkcLoad(true)" title="Re-read the live sheets">↻</button>
+      <button class="bkc-load" id="bkc-load" onclick="bkcLoad(true)" title="Read the live sheets and work out every period once; switching is then instant">⚡ Load data</button>
     </div>
-    <div id="bkc-body" class="bkc-two"><div class="bkc-none">Loading when you scroll here…</div></div>
+    <div id="bkc-body" class="bkc-two"><div class="bkc-none">Press ⚡ Load data</div></div>
     <div class="bkc-note">Change = live forecast now vs the saved figure from the last trading day (1 day), 7 days ago (1 week) or 30 days ago (1 month), from the actual figures, not ShareScope's % columns. Where the year end rolled in between, last period's FC1 is compared with today's FC (↻ year rolled). Click a ticker for its chart.</div>
   </div>
 
@@ -2544,8 +2545,9 @@ function rnsClearTickerFilter(){
    now     : Ignition's Group A live sheets (data/fc_urls.json; columns by name)
    1 day   : data/fc_daily/<last trading day>.json, saved after each close by the fc-daily job
    1 week / 1 month : the weekly snapshot (Broker Charts rows) from 7 / 30 days ago
-   A year-end roll in between compares last period's FC1 with today's FC. ── */
-var BKC={live:null,day:null,dayDate:'',ixm:null,per:'w',ix:'all',busy:false,t:0};
+   A year-end roll in between compares last period's FC1 with today's FC.
+   ⚡ Load data reads the sheets and works out all three periods once; switching period / index just redraws. ── */
+var BKC={live:null,day:null,dayDate:'',ixm:null,calc:null,per:'w',ix:'all',busy:false,t:0};
 function bkcGet(path,asText){
   var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return asText?r.text():r.json();}):Promise.reject();
   return rel.catch(function(){return fetch('https://raw.githubusercontent.com/Markmark5/Database/main/'+path+'?t='+Date.now()).then(function(r){if(!r.ok)throw 0;return asText?r.text():r.json();});});
@@ -2556,7 +2558,8 @@ function bkcCsv(t){var R=[],r=[],f='',Q=false;for(var i=0;i<t.length;i++){var c=
   if(f||r.length){r.push(f);R.push(r);}return R;}
 function bkcLoad(force){
   if(BKC.busy||(!force&&BKC.live&&Date.now()-BKC.t<600000))return;
-  BKC.busy=true;document.getElementById('bkc-sub').textContent='reading the live sheets…';
+  BKC.busy=true;var btn=document.getElementById('bkc-load');btn.disabled=true;btn.textContent='⏳ Reading sheets…';
+  document.getElementById('bkc-sub').textContent='reading the live sheets…';
   var today=cal30Iso(new Date());
   var live=bkcGet('data/fc_urls.json').then(function(urls){
     return Promise.all(urls.map(function(u){return fetch(u+(u.indexOf('?')<0?'?':'&')+'t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});}));
@@ -2570,34 +2573,47 @@ function bkcLoad(force){
   var day=bkcGet('data/fc_daily/index.json').then(function(j){
     var d=(j.dates||[]).filter(function(x){return x<today;}).pop();if(!d)return null;
     return bkcGet('data/fc_daily/'+d+'.json').then(function(v){return {d:d,v:v};});}).catch(function(){return null;});
-  Promise.all([live,day]).then(function(a){BKC.live=a[0];BKC.day=a[1]&&a[1].v;BKC.dayDate=a[1]?a[1].d:'';BKC.t=Date.now();BKC.busy=false;bkcRender();})
-    .catch(function(){BKC.busy=false;document.getElementById('bkc-sub').textContent='couldn’t read the live sheets — try ↻';});
+  Promise.all([live,day]).then(function(a){BKC.live=a[0];BKC.day=a[1]&&a[1].v;BKC.dayDate=a[1]?a[1].d:'';BKC.ixm=null;bkcPrecompute();})
+    .catch(function(){BKC.busy=false;btn.disabled=false;btn.textContent='⚡ Load data';document.getElementById('bkc-sub').textContent='couldn’t read the live sheets — try again';});
+}
+/* every period for every ticker, worked out once in small batches (page stays usable); switching then just redraws */
+function bkcPrecompute(){
+  var tks=Object.keys(BKC.live),i=0,calc={d:{},w:{},m:{}},btn=document.getElementById('bkc-load');
+  (function batch(){
+    var end=Math.min(i+40,tks.length);
+    for(;i<end;i++){var r=bkcCalc(tks[i]);if(r.d)calc.d[tks[i]]=r.d;if(r.w)calc.w[tks[i]]=r.w;if(r.m)calc.m[tks[i]]=r.m;}
+    if(i<tks.length){btn.textContent='⏳ Working out '+Math.round(i/tks.length*100)+'%';setTimeout(batch,0);return;}
+    BKC.calc=calc;BKC.t=Date.now();BKC.busy=false;btn.disabled=false;
+    btn.textContent='↻ Reload · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});bkcRender();
+  })();
 }
 function bkcIndexOf(tk){
   if(!BKC.ixm){var m={};try{(slotState[2]||[]).forEach(function(r){var t=String(r.TIDM||'').trim().toUpperCase();if(t)m[t]=indexClass(r['Index membership']);});}catch(e){}
     var c=indexMap();Object.keys(c).forEach(function(t){if(!m[t]||m[t]==='oth')m[t]=c[t];});BKC.ixm=m;}
   return BKC.ixm[tk]||'oth';
 }
-function bkcMove(tk){
-  var L=BKC.live[tk];if(!L)return null;var now=L.v,then=null,rolled=false,base='';
-  if(BKC.per==='d'){then=BKC.day&&BKC.day[tk];base=BKC.dayDate;
-    /* roll: today's FC is yesterday's FC1 and FC moved */
-    if(then&&now[0]!=null&&then[1]&&then[0]&&Math.abs(now[0]-then[1])/Math.abs(then[1])<0.005&&Math.abs(now[0]-then[0])/Math.abs(then[0])>0.02)rolled=true;}
-  else{var rows;try{rows=fcFetchFromExtractor(tk);}catch(e){rows=null;}if(!rows||!rows.length)return null;
-    var lim=new Date(Date.now()-(BKC.per==='w'?7:30)*864e5),a=-1;rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=lim)a=i;});if(a<0)return null;
-    then=[rows[a].eps,rows[a].eps2,rows[a].rev,rows[a].rev2];base=rows[a].date;
-    try{rolled=fcComputeRollovers(rows,tk).slice(a+1).some(Boolean);}catch(e){}}
-  if(!then)return null;
+function bkcCalc(tk){
+  var L=BKC.live[tk],out={};if(!L)return out;var now=L.v;
   var pc=function(t,n){return (t!=null&&n!=null&&isFinite(t)&&isFinite(n)&&t!==0)?{p:(n-t)/Math.abs(t)*100,a:t,b:n}:null;};
-  return rolled?{roll:true,eps:pc(then[1],now[0]),eps2:null,rev:pc(then[3],now[2]),rev2:null,base:base}
-               :{roll:false,eps:pc(then[0],now[0]),eps2:pc(then[1],now[1]),rev:pc(then[2],now[2]),rev2:pc(then[3],now[3]),base:base};
+  var mk=function(then,rolled,base){return rolled?{roll:true,eps:pc(then[1],now[0]),eps2:null,rev:pc(then[3],now[2]),rev2:null,base:base}
+    :{roll:false,eps:pc(then[0],now[0]),eps2:pc(then[1],now[1]),rev:pc(then[2],now[2]),rev2:pc(then[3],now[3]),base:base};};
+  /* 1 day: the saved figures from the last trading day; roll = today's FC is that day's FC1 and FC moved */
+  var t1=BKC.day&&BKC.day[tk];
+  if(t1)out.d=mk(t1,now[0]!=null&&t1[1]&&t1[0]&&Math.abs(now[0]-t1[1])/Math.abs(t1[1])<0.005&&Math.abs(now[0]-t1[0])/Math.abs(t1[0])>0.02,BKC.dayDate);
+  /* 1 week / 1 month: the weekly snapshot rows, read once */
+  var rows;try{rows=fcFetchFromExtractor(tk);}catch(e){rows=null;}
+  if(rows&&rows.length){var rl=null;try{rl=fcComputeRollovers(rows,tk);}catch(e){}
+    [['w',7],['m',30]].forEach(function(q){var lim=new Date(Date.now()-q[1]*864e5),a=-1;
+      rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<=lim)a=i;});if(a<0)return;
+      out[q[0]]=mk([rows[a].eps,rows[a].eps2,rows[a].rev,rows[a].rev2],!!(rl&&rl.slice(a+1).some(Boolean)),rows[a].date);});}
+  return out;
 }
 function bkcRender(){
-  var body=document.getElementById('bkc-body'),sub=document.getElementById('bkc-sub');if(!BKC.live)return;
+  var body=document.getElementById('bkc-body'),sub=document.getElementById('bkc-sub');if(!BKC.calc)return;var C=BKC.calc[BKC.per];
   document.querySelectorAll('#bkc-per span').forEach(function(e){e.classList.toggle('on',e.getAttribute('data-p')===BKC.per);e.classList.toggle('off',e.getAttribute('data-p')==='d'&&!BKC.day);
     if(e.getAttribute('data-p')==='d')e.title=BKC.day?'vs '+BKC.dayDate+' close':'Starts after the first daily save';});
   document.querySelectorAll('#bkc-ix span').forEach(function(e){e.classList.toggle('on',e.getAttribute('data-i')===BKC.ix);});
-  var rows=[];Object.keys(BKC.live).forEach(function(tk){if(BKC.ix!=='all'&&bkcIndexOf(tk)!==BKC.ix)return;var x=bkcMove(tk);if(x&&x.eps)rows.push({tk:tk,n:BKC.live[tk].n,x:x});});
+  var rows=[];Object.keys(C).forEach(function(tk){if(BKC.ix!=='all'&&bkcIndexOf(tk)!==BKC.ix)return;var x=C[tk];if(x&&x.eps)rows.push({tk:tk,n:BKC.live[tk].n,x:x});});
   var mv=rows.filter(function(r){return Math.abs(r.x.eps.p)>=0.05;});
   var up=mv.filter(function(r){return r.x.eps.p>0;}).sort(function(a,b){return b.x.eps.p-a.x.eps.p;}).slice(0,12);
   var dn=mv.filter(function(r){return r.x.eps.p<0;}).sort(function(a,b){return a.x.eps.p-b.x.eps.p;}).slice(0,12);
@@ -2615,9 +2631,6 @@ function bkcRender(){
   document.getElementById('bkc-per').addEventListener('click',function(ev){var e=ev.target.closest('[data-p]');if(!e||e.classList.contains('off'))return;BKC.per=e.getAttribute('data-p');bkcRender();});
   document.getElementById('bkc-ix').addEventListener('click',function(ev){var e=ev.target.closest('[data-i]');if(!e)return;BKC.ix=e.getAttribute('data-i');bkcRender();});
   document.getElementById('bkc-body').addEventListener('click',function(ev){var e=ev.target.closest('[data-bkc-tk]');if(!e)return;var tk=e.getAttribute('data-bkc-tk');if(!(window.PPOPEN&&window.PPOPEN(tk))&&typeof scAllShow==='function')scAllShow(tk);});
-  /* read the sheets when the section comes into view (and again after 10 min) */
-  if(window.IntersectionObserver)new IntersectionObserver(function(en){if(en.some(function(x){return x.isIntersecting;}))bkcLoad(false);}).observe(sec);
-  else setTimeout(function(){bkcLoad(false);},4000);
 })();
 function fcScoreClick(tk){scAllShow(tk);}
 function scAllShow(t){
