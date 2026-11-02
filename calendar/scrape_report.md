@@ -1,18 +1,18 @@
-# Calendar scrape - 2026-10-30
+# Calendar scrape - 2026-11-02
 
-**279 sources · 34 events staged for approval**
+**279 sources · 39 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 134 | read OK, upcoming events found |
-| EMPTY | 129 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 3 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
-| ERROR | 5 | timeout, DNS or server error |
+| CLEAN | 139 | read OK, upcoming events found |
+| EMPTY | 126 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
+| BLOCKED | 9 | 401/403/429 - bot protection or login |
+| ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
-- Cake Box (CBOX) - http 202, browser - https://cakeboxinvestors.com/investor-hub/financial-calendar/
+- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
@@ -20,7 +20,9 @@
 - Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
 - Hercules (HERC) - http 200, http - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
+- ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
+- NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
@@ -33,9 +35,7 @@
 - Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
 - Alumasc (ALU) - http 200, browser - https://www.alumasc.co.uk/key-dates
-- Anpario (ANP) - http 200, browser - https://www.anpario.com/investor/financial-calendar/
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
-- Applied Nutrition (APN) - http 200, http - https://www.appliednutritionplc.com/financial-calendar/
 - ASA International (ASAI) - http 200, http - https://www.asa-international.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
@@ -58,10 +58,8 @@
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
-- Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
-- Telecom Plus (TEP) - http 200, browser - https://www.telecomplus.co.uk/site-services/financial-calendar
 - Beauty Tech Group (TBTG) - http 200, http - https://www.thebeautytechgroup.com/financial-calendar
 - Pebble Group (PEBB) - http 200, http - https://www.thepebblegroup.com/investors/financial-calendar/
 - Travis Perkins (TPK) - http 200, http - https://www.travisperkinsplc.co.uk/investors/financial-calendar/
@@ -72,15 +70,17 @@
 - Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
+- AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
 - Avation (AVAP) - http 200, http - https://www.avation.net/results.html
 - Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
+- AstraZeneca (AZN) - http 200, browser - https://www.astrazeneca.com/investor-relations/shareholder-information.html
 - Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
-- Big Technologies (BIG) - http 200, browser - https://www.buddi.com/investors/financial-calendar/
 - Beeks Financial Cloud (BKS) - http 200, http - https://beeksgroup.com/investor-relations/shareholder-information/
 - Boku Inc (BOKU) - http 200, http - https://investors.boku.com/events/
 - Boot (Henry) (BOOT) - http 200, http - https://www.henryboot.co.uk/investors/financial-calendar/
+- BP (BP.) - http 200, browser - https://www.bp.com/investors/shareholder-and-dividend-information/financial-calendar
 - Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
 - Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
@@ -123,7 +123,6 @@
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
-- Severfield (SFR) - http 200, http - https://www.severfield.com/calendar
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
 - Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
@@ -133,9 +132,7 @@
 - Team Internet Group (TIG) - http 200, http - https://teaminternet.com/investors/
 - Tullow Oil (TLW) - http 200, http - https://www.tullowoil.com/investors/events/
 - Titon (TON) - http 200, http - https://www.titon.com/shareholder-information
-- TT Electronics (TTG) - http 200, http - https://www.ttelectronics.com/investors/financial-calendar/
 - Victoria (VCP) - http 200, http - https://www.victoriaplc.com/financial-calendar/
-- Virgin Wines UK (VINO) - http 200, http - https://www.virginwinesplc.co.uk/investors/financial-calendar/
 - Vertu Motors (VTU) - http 200, http - https://investors.vertumotors.com/investors/
 - Watkin Jones (WJG) - http 200, http - https://watkinjonesplc.com/investors/shareholder-centre/financial-calendar/
 - WPP (WPP) - http 200, browser - https://www.wpp.com/en/investors/calendar-and-events
@@ -144,9 +141,7 @@
 
 ## UNREADABLE
 
-- NIOX (NIOX) - http 202, browser - https://investors.niox.com/investors/financial-calendar/
-- AEP Plantations (AEP) - http 202, browser - https://aepplantations.com/investors/notices-and-financial-calendar/
-- Smiths News (SNWS) - http 202, browser - https://smithsnews.co.uk/investor-zone/investors/key-dates/
+- Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
 
 ## BLOCKED
 
@@ -157,19 +152,20 @@
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
 
-- ActiveOps (AOM) - http 504, browser - https://investors.activeops.com/investors/financial-calendar/
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
-- Goodwin (GDWN) - http None, chrome - https://www.goodwin.co.uk/financial-calendar/
+- Luceco (LUCE) - http 504, browser - https://www.lucecoplc.com/investors/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
 
 ## Approved events not re-verified tonight
 
-- Goodwin AGM 2026-10-01
+- Peel Hunt H1 results 2026-11-18
+- Luceco Pre-FY TU 2027-01-28
 - Time Finance FY results 2026-11-05
 - Princes Group Q3 2026-11-10
 - Wise H1 results 2026-11-12
