@@ -1193,6 +1193,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .bkc-two{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:10px 14px 0;font-family:var(--mono)}
 .bkc-two h4{margin:0 0 6px;font-size:10px;letter-spacing:.1em}
 .bkc-two table{width:100%;border-collapse:collapse}
+.bkc-th{cursor:pointer;user-select:none}.bkc-th:hover,.bkc-th.on{color:var(--text-primary)}
 .bkc-scr{height:470px;overflow-y:auto;border-bottom:1px solid var(--border)}
 .bkc-scr th{position:sticky;top:0;background:var(--surface);z-index:1}
 .bkc-two th{font-size:8.5px;color:var(--text-dim);font-weight:600;text-align:right;padding:4px 6px;border-bottom:1px solid var(--border);letter-spacing:.06em}
@@ -2549,7 +2550,7 @@ function rnsClearTickerFilter(){
    1 week / 1 month : the weekly snapshot (Broker Charts rows) from 7 / 30 days ago
    A year-end roll in between compares last period's FC1 with today's FC.
    ⚡ Load data reads the sheets and works out all three periods once; switching period / index just redraws. ── */
-var BKC={live:null,day:null,dayDate:'',ixm:null,calc:null,per:'w',ix:'all',busy:false,t:0};
+var BKC={live:null,day:null,dayDate:'',ixm:null,calc:null,per:'w',ix:'all',busy:false,t:0,sk:'eps',rev:false};
 function bkcGet(path,asText){
   var rel=/^https?:/.test(location.protocol)?fetch(path+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return asText?r.text():r.json();}):Promise.reject();
   return rel.catch(function(){return fetch('https://raw.githubusercontent.com/Markmark5/Database/main/'+path+'?t='+Date.now()).then(function(r){if(!r.ok)throw 0;return asText?r.text():r.json();});});
@@ -2618,14 +2619,21 @@ function bkcRender(){
   var rows=[];Object.keys(C).forEach(function(tk){if(BKC.ix!=='all'&&bkcIndexOf(tk)!==BKC.ix)return;var x=C[tk];if(x&&x.eps)rows.push({tk:tk,n:BKC.live[tk].n,x:x});});
   /* every EPS move of 0.5% or more, biggest first; each side scrolls past 12 rows */
   var mv=rows.filter(function(r){return Math.abs(r.x.eps.p)>=0.5;});
-  var up=mv.filter(function(r){return r.x.eps.p>0;}).sort(function(a,b){return b.x.eps.p-a.x.eps.p;});
-  var dn=mv.filter(function(r){return r.x.eps.p<0;}).sort(function(a,b){return a.x.eps.p-b.x.eps.p;});
+  /* sort by the clicked column: upgrades biggest rise first, cuts biggest fall first (reversed on a second click);
+     blanks always last; Ticker A–Z */
+  var srt=function(sign){var k=BKC.sk,f=BKC.rev?-1:1;return function(a,b){
+    if(k==='tk')return f*a.tk.localeCompare(b.tk);
+    var x=a.x[k],y=b.x[k];if(!x&&!y)return a.tk.localeCompare(b.tk);if(!x)return 1;if(!y)return -1;
+    return f*sign*(y.p-x.p)||a.tk.localeCompare(b.tk);};};
+  var up=mv.filter(function(r){return r.x.eps.p>0;}).sort(srt(1));
+  var dn=mv.filter(function(r){return r.x.eps.p<0;}).sort(srt(-1));
   var PL={d:'1 day',w:'1 week',m:'1 month'}[BKC.per];
   sub.textContent=mv.length+' of '+rows.length+' tickers with an EPS move of 0.5%+ · '+PL+(BKC.per==='d'&&BKC.dayDate?' (vs '+BKC.dayDate+' close)':'');
   var fmt=function(v,rev){return rev?(Math.abs(v)>=1000?'£'+(v/1000).toFixed(2)+'bn':'£'+(v%1?v.toFixed(1):v.toFixed(0))+'m'):(v.toFixed(1)+'p');};
   var cell=function(x,rev){return x?'<div class="bkc-pc '+(x.p>0.05?'bkc-up':x.p<-0.05?'bkc-dn':'bkc-fl')+'">'+(x.p>0?'+':x.p<0?'−':'±')+Math.abs(x.p).toFixed(1)+'%</div><div class="bkc-ab">'+fmt(x.a,rev)+' → '+fmt(x.b,rev)+'</div>':'<span class="bkc-fl">—</span>';};
   var tbl=function(list){if(!list.length)return '<div class="bkc-none">None</div>';
-    return '<div class="bkc-scr"><table><tr><th>TICKER</th><th>EPS FC</th><th>EPS FC1</th><th>REV FC</th><th>REV FC1</th></tr>'+list.map(function(r){var x=r.x;
+    var th=function(k,t){var on=BKC.sk===k;return '<th class="bkc-th'+(on?' on':'')+'" data-bkc-sk="'+k+'" title="Sort by '+t+' (click again to reverse)">'+t+(on?(BKC.rev?' ▲':' ▼'):'')+'</th>';};
+    return '<div class="bkc-scr"><table><tr>'+th('tk','TICKER')+th('eps','EPS FC')+th('eps2','EPS FC1')+th('rev','REV FC')+th('rev2','REV FC1')+'</tr>'+list.map(function(r){var x=r.x;
       return '<tr><td><div class="bkc-tk" data-bkc-tk="'+tipEsc(r.tk)+'">'+tipEsc(r.tk)+'</div><div class="bkc-nm">'+tipEsc(r.n)+'</div>'+(x.roll?'<div class="bkc-rl">↻ year rolled</div>':'')+'</td><td>'+cell(x.eps)+'</td><td>'+cell(x.eps2)+'</td><td>'+cell(x.rev,1)+'</td><td>'+cell(x.rev2,1)+'</td></tr>';}).join('')+'</table></div>';};
   body.innerHTML='<div><h4 class="bkc-up">▲ EPS UPGRADES · '+PL.toUpperCase()+' · '+up.length+'</h4>'+tbl(up)+'</div><div><h4 class="bkc-dn">▼ EPS CUTS · '+PL.toUpperCase()+' · '+dn.length+'</h4>'+tbl(dn)+'</div>';
 }
@@ -2633,7 +2641,9 @@ function bkcRender(){
   var sec=document.getElementById('broker-section');if(!sec)return;
   document.getElementById('bkc-per').addEventListener('click',function(ev){var e=ev.target.closest('[data-p]');if(!e||e.classList.contains('off'))return;BKC.per=e.getAttribute('data-p');bkcRender();});
   document.getElementById('bkc-ix').addEventListener('click',function(ev){var e=ev.target.closest('[data-i]');if(!e)return;BKC.ix=e.getAttribute('data-i');bkcRender();});
-  document.getElementById('bkc-body').addEventListener('click',function(ev){var e=ev.target.closest('[data-bkc-tk]');if(!e)return;var tk=e.getAttribute('data-bkc-tk');if(!(window.PPOPEN&&window.PPOPEN(tk))&&typeof scAllShow==='function')scAllShow(tk);});
+  document.getElementById('bkc-body').addEventListener('click',function(ev){
+    var h=ev.target.closest('[data-bkc-sk]');if(h){var k=h.getAttribute('data-bkc-sk');if(BKC.sk===k)BKC.rev=!BKC.rev;else{BKC.sk=k;BKC.rev=false;}bkcRender();return;}
+    var e=ev.target.closest('[data-bkc-tk]');if(!e)return;var tk=e.getAttribute('data-bkc-tk');if(!(window.PPOPEN&&window.PPOPEN(tk))&&typeof scAllShow==='function')scAllShow(tk);});
 })();
 function fcScoreClick(tk){scAllShow(tk);}
 function scAllShow(t){
