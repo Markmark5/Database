@@ -1221,6 +1221,27 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .drift-btn .dt{font-size:18px;line-height:1}
 .cyc-bike{display:inline-block;transition:transform .6s}
 .db-actbtn:hover .cyc-bike{transform:translateX(4px) rotate(-6deg)}
+/* header button emojis move on hover (Cycles' bike rides above) */
+.hx{display:inline-block;transform-origin:50% 60%}
+@keyframes hxFear{0%,100%{transform:translate(0,0) rotate(0)}10%{transform:translate(-1.5px,1px) rotate(-6deg)}20%{transform:translate(1.5px,-1px) rotate(6deg)}30%{transform:translate(-1px,-1px) rotate(-4deg)}40%{transform:translate(1px,1px) rotate(5deg)}50%{transform:translate(-1.5px,0) rotate(-6deg)}60%{transform:translate(1.5px,1px) rotate(4deg)}70%{transform:translate(-1px,-1px) rotate(-5deg)}80%{transform:translate(1px,0) rotate(6deg)}90%{transform:translate(0,1px) rotate(-3deg)}}
+@keyframes hxZap{0%,100%{opacity:1;transform:scale(1)}20%{opacity:.35;transform:scale(1.25) rotate(-8deg)}35%{opacity:1;transform:scale(1)}55%{opacity:.5;transform:scale(1.2) rotate(8deg)}70%{opacity:1;transform:scale(1.05)}}
+@keyframes hxWobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg) scale(1.08)}75%{transform:rotate(14deg) scale(1.08)}}
+@keyframes hxFlip{0%{transform:rotateX(0)}50%{transform:rotateX(180deg)}100%{transform:rotateX(360deg)}}
+@keyframes hxSweep{0%,100%{transform:rotate(0)}30%{transform:rotate(-22deg) translateX(-2px)}70%{transform:rotate(18deg) translateX(2px)}}
+@keyframes hxRustle{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-7deg) scale(1.1)}50%{transform:rotate(5deg) scale(1.05)}75%{transform:rotate(-4deg) scale(1.1)}}
+@keyframes hxDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+@keyframes hxUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes hxDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+.db-actbtn:hover .hx-fear{animation:hxFear .28s linear infinite}
+.db-actbtn:hover .hx-zap{animation:hxZap .6s ease-in-out infinite}
+.db-actbtn:hover .hx-wobble{animation:hxWobble .7s ease-in-out infinite}
+.db-actbtn:hover .hx-flip{animation:hxFlip .9s ease-in-out infinite}
+.db-actbtn:hover .hx-sweep{animation:hxSweep .7s ease-in-out infinite;transform-origin:70% 20%}
+.db-actbtn:hover .hx-rustle{animation:hxRustle .6s ease-in-out infinite}
+.db-actbtn:hover .hx-down{animation:hxDown .6s ease-in-out infinite}
+.db-actbtn:hover .hx-up{animation:hxUp .6s ease-in-out infinite}
+.db-actbtn:hover .hx-drift{animation:hxDrift 1s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.db-actbtn:hover .hx{animation:none}}
 .drift-btn .dw{font-family:'CaveatDrift',cursive;font-weight:400;font-size:20px;text-transform:none;letter-spacing:.02em;line-height:1;
   color:#fff;padding:1px 6px 3px;background-repeat:no-repeat;
   background-image:linear-gradient(90deg,#ff0a78 0%,#ff0a78 62%,#ff0a7800 100%);
@@ -1295,18 +1316,18 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
     <div class="db-time" id="db-clock"></div>
   </div>
   <div class="db-navrow2">
-    <button class="db-actbtn" onclick="dbBackupOpen()" style="background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);">&#11015; Backup</button>
-    <button class="db-actbtn" onclick="dbRestoreOpen()" style="background:#0a0f1a;color:#7aa2ff;border:1px solid #7aa2ff55;">&#11014; Restore</button>
-    <button class="db-actbtn" onclick="ghSyncOpen()" style="background:#0a0f1a;color:#4a9eff;border:1px solid #4a9eff66;">&#9729; GitHub</button>
-    <button class="db-actbtn" onclick="openWebPopup('https://markmark5.github.io/Ignition/IgnitionV2.html','Ignition')" style="background:#1a0800;color:#ff8c00;border:1px solid #ff8c0066;"><span class="bi">&#9889;</span>Ignition</button>
-    <button class="db-actbtn drift-btn" onclick="openWebPopup('https://markmark5.github.io/Drift/index.html','Drift Tracker')"><span class="dt">&#127919;</span><span class="dw">Drift</span></button>
-    <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
-    <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi">&#128552;</span>Fear &amp; Greed</button>
-    <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi">&#128552;</span>AAII</button>
-    <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
+    <button class="db-actbtn" onclick="dbBackupOpen()" style="background:var(--green-dim);color:var(--green);border:1px solid var(--green-mid);"><span class="hx hx-down">&#11015;</span> Backup</button>
+    <button class="db-actbtn" onclick="dbRestoreOpen()" style="background:#0a0f1a;color:#7aa2ff;border:1px solid #7aa2ff55;"><span class="hx hx-up">&#11014;</span> Restore</button>
+    <button class="db-actbtn" onclick="ghSyncOpen()" style="background:#0a0f1a;color:#4a9eff;border:1px solid #4a9eff66;"><span class="hx hx-drift">&#9729;</span> GitHub</button>
+    <button class="db-actbtn" onclick="openWebPopup('https://markmark5.github.io/Ignition/IgnitionV2.html','Ignition')" style="background:#1a0800;color:#ff8c00;border:1px solid #ff8c0066;"><span class="bi hx hx-zap">&#9889;</span>Ignition</button>
+    <button class="db-actbtn drift-btn" onclick="openWebPopup('https://markmark5.github.io/Drift/index.html','Drift Tracker')"><span class="dt hx hx-wobble">&#127919;</span><span class="dw">Drift</span></button>
+    <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc hx hx-flip">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
+    <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi hx hx-fear">&#128552;</span>Fear &amp; Greed</button>
+    <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi hx hx-fear">&#128552;</span>AAII</button>
+    <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi hx hx-flip" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
     <button class="db-actbtn" onclick="cycOpen()" style="background:#00140a;color:#00d97e;border:1px solid #00d97e55;" title="Cycles: 10/20/40-week moving-average regimes, live"><span class="bi cyc-bike" style="font-size:25px;margin:-4px 0">&#128690;</span><span style="font-style:italic;letter-spacing:.1em"><span style="color:#00d97e">CYC</span><span style="color:#ff4757">LES</span></span></button>
-    <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/PwaQPjo3LcFvGWqWAHXDjw','_blank','noopener')" style="background:#001a1a;color:#2ad4c8;border:1px solid #2ad4c855;" title="Morning sweep (opens in a new tab)"><span class="bi">&#129529;</span>Sweep</button>
-    <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/75kK4UoY38boxUbaXKnBQR','_blank','noopener')" style="background:#14110a;color:#e8dcc0;border:1px solid #e8dcc055;padding-left:10px;padding-right:10px;" title="UK Morning Business Brief (opens in a new tab)" aria-label="UK Morning Business Brief"><span class="bi" style="margin:0;">&#128240;</span></button>
+    <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/PwaQPjo3LcFvGWqWAHXDjw','_blank','noopener')" style="background:#001a1a;color:#2ad4c8;border:1px solid #2ad4c855;" title="Morning sweep (opens in a new tab)"><span class="bi hx hx-sweep">&#129529;</span>Sweep</button>
+    <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/75kK4UoY38boxUbaXKnBQR','_blank','noopener')" style="background:#14110a;color:#e8dcc0;border:1px solid #e8dcc055;padding-left:10px;padding-right:10px;" title="UK Morning Business Brief (opens in a new tab)" aria-label="UK Morning Business Brief"><span class="bi hx hx-rustle" style="margin:0;">&#128240;</span></button>
   </div>
 </nav>
 
