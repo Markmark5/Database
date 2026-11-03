@@ -2619,8 +2619,9 @@ function bkcRender(){
     if(e.getAttribute('data-p')==='d')e.title=BKC.day?'vs '+BKC.dayDate+' close':'Starts after the first daily save';});
   document.querySelectorAll('#bkc-ix span').forEach(function(e){e.classList.toggle('on',e.getAttribute('data-i')===BKC.ix);});
   var rows=[];Object.keys(C).forEach(function(tk){if(BKC.ix!=='all'&&bkcIndexOf(tk)!==BKC.ix)return;var x=C[tk];if(x&&x.eps)rows.push({tk:tk,n:BKC.live[tk].n,x:x});});
-  /* every EPS move of 0.5% or more, biggest first; each side scrolls past 12 rows */
-  var mv=rows.filter(function(r){return Math.abs(r.x.eps.p)>=0.5;});
+  /* every EPS move of 0.5% or more (0.25% on 1 day), biggest first; each side scrolls past 12 rows */
+  var thr=BKC.per==='d'?0.25:0.5;
+  var mv=rows.filter(function(r){return Math.abs(r.x.eps.p)>=thr;});
   /* sort by the clicked column: upgrades biggest rise first, cuts biggest fall first (reversed on a second click);
      blanks always last; Ticker A–Z */
   var srt=function(sign){var k=BKC.sk,f=BKC.rev?-1:1;return function(a,b){
@@ -2630,7 +2631,7 @@ function bkcRender(){
   var up=mv.filter(function(r){return r.x.eps.p>0;}).sort(srt(1));
   var dn=mv.filter(function(r){return r.x.eps.p<0;}).sort(srt(-1));
   var PL={d:'1 day',w:'1 week',m:'1 month'}[BKC.per];
-  sub.textContent=mv.length+' of '+rows.length+' tickers with an EPS move of 0.5%+ · '+PL+(BKC.per==='d'&&BKC.dayDate?' (vs '+BKC.dayDate+' close)':'');
+  sub.textContent=mv.length+' of '+rows.length+' tickers with an EPS move of '+thr+'%+ · '+PL+(BKC.per==='d'&&BKC.dayDate?' (vs '+BKC.dayDate+' close)':'');
   var fmt=function(v,rev){return rev?(Math.abs(v)>=1000?'£'+(v/1000).toFixed(2)+'bn':'£'+(v%1?v.toFixed(1):v.toFixed(0))+'m'):(v.toFixed(1)+'p');};
   var cell=function(x,rev){return x?'<div class="bkc-pc '+(x.p>0.05?'bkc-up':x.p<-0.05?'bkc-dn':'bkc-fl')+'">'+(x.p>0?'+':x.p<0?'−':'±')+Math.abs(x.p).toFixed(1)+'%</div><div class="bkc-ab">'+fmt(x.a,rev)+' → '+fmt(x.b,rev)+'</div>':'<span class="bkc-fl">—</span>';};
   var tbl=function(list){if(!list.length)return '<div class="bkc-none">None</div>';
