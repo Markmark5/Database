@@ -1616,7 +1616,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
     <div class="db-section-hdr">
       <div class="db-section-title"><span class="dot dot-blue"></span>Broker Changes</div>
       <span class="bkc-sub" id="bkc-sub">not loaded</span>
-      <div class="bkc-tg" id="bkc-per" style="margin-left:auto"><span data-p="d">1 day</span><span data-p="w" class="on">1 week</span><span data-p="m">1 month</span></div>
+      <div class="bkc-tg" id="bkc-per" style="margin-left:auto"><span data-p="d" class="on">1 day</span><span data-p="w">1 week</span><span data-p="m">1 month</span></div>
       <div class="bkc-tg" id="bkc-ix"><span data-i="all" class="on">All</span><span data-i="100">FTSE 100</span><span data-i="250">FTSE 250</span><span data-i="sc">Small Cap</span><span data-i="aim">AIM</span></div>
       <button class="bkc-load" id="bkc-load" onclick="bkcLoad(true)" title="Read the live sheets and work out every period once; switching is then instant">⚡ Load data</button>
     </div>
@@ -2587,6 +2587,7 @@ function bkcPrecompute(){
     for(;i<end;i++){var r=bkcCalc(tks[i]);if(r.d)calc.d[tks[i]]=r.d;if(r.w)calc.w[tks[i]]=r.w;if(r.m)calc.m[tks[i]]=r.m;}
     if(i<tks.length){btn.textContent='⏳ Working out '+Math.round(i/tks.length*100)+'%';setTimeout(batch,0);return;}
     BKC.calc=calc;BKC.t=Date.now();BKC.busy=false;btn.disabled=false;
+    BKC.per=BKC.day?'d':'w';   /* each load opens on 1 day (1 week if there's no saved day yet) */
     btn.textContent='↻ Reload · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});bkcRender();
   })();
 }
