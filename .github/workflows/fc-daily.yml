@@ -3,7 +3,7 @@ name: Broker forecasts daily save
 on:
   workflow_dispatch:          # "Run workflow" button in the Actions tab
   schedule:
-    - cron: "20 17 * * 1-5"   # 17:20 UTC weekdays: after the close, the live sheets refresh every 10 min
+    - cron: "50 16 * * 1-5"   # 16:50 UTC weekdays, after the close (GitHub may start it hours late; the script dates a pre-9am run to the previous trading day)
 
 permissions:
   contents: write
