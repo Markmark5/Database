@@ -9792,7 +9792,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(show=='early')return l.ec;
     if(show=='ac')return !!l.ac;
     if(show=='f12')return !!l.f12;
-    if(/^nd\d+$/.test(show))return !!l.c&&l.d>=ago(+show.slice(2)-1);   /* New Signals: a red or green print today / last 7 / last 30 days */
+    if(/^nd\d+$/.test(show))return l.d>=ago(+show.slice(2)-1);   /* New Signals: any Text + G print (green, red or neutral) today / last 7 / last 30 days */
     if(show=='turn')return down30(d)&&l.c=='g'&&l.pc=='r';   /* reversal: newest print green straight after a red one, 30w MA falling */
     if(show=='g30')return down30(d)&&l.c=='g';
     /* bearish mirrors */
@@ -9806,6 +9806,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     .sort(function(a,b){
       if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
         if(p&&r&&p.d!==r.d)return p.d<r.d?1:-1;}
+      else if(/^nd\d+$/.test(show)){var x=lastPr(a.t), y=lastPr(b.t), CR={g:0,r:1};   /* New Signals: green, then red, then neutral; newest first within each */
+        var cx=x?(x.c in CR?CR[x.c]:2):3, cy=y?(y.c in CR?CR[y.c]:2):3; if(cx!==cy)return cx-cy;
+        if(x&&y&&x.d!==y.d)return x.d<y.d?1:-1;}
       else if(show!='all'){var x=lastPr(a.t), y=lastPr(b.t);   /* a filter shows the newest trigger first */
         var xd=x&&(show=='early'?x.ecd:x.d), yd=y&&(show=='early'?y.ecd:y.d);
         if(xd&&yd&&xd!==yd)return xd<yd?1:-1;}
