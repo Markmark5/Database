@@ -1,14 +1,14 @@
-# Calendar scrape - 2026-11-02
+# Calendar scrape - 2026-11-03
 
-**279 sources · 39 events staged for approval**
+**279 sources · 36 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 139 | read OK, upcoming events found |
-| EMPTY | 126 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 9 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| CLEAN | 140 | read OK, upcoming events found |
+| EMPTY | 128 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
+| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -22,6 +22,7 @@
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
+- Made Tech (MTEC) - http 200, http - https://investors.madetech.com/share-information/
 - NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
@@ -58,6 +59,7 @@
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
+- Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
 - Beauty Tech Group (TBTG) - http 200, http - https://www.thebeautytechgroup.com/financial-calendar
@@ -139,10 +141,6 @@
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
 
-## UNREADABLE
-
-- Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
-
 ## BLOCKED
 
 - BAE Systems (BA.) - http 403, chrome - https://investors.baesystems.com/financial-calendar
@@ -152,20 +150,16 @@
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
 - Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
-- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
 
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
-- Luceco (LUCE) - http 504, browser - https://www.lucecoplc.com/investors/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
 
 ## Approved events not re-verified tonight
 
-- Peel Hunt H1 results 2026-11-18
-- Luceco Pre-FY TU 2027-01-28
 - Time Finance FY results 2026-11-05
 - Princes Group Q3 2026-11-10
 - Wise H1 results 2026-11-12
