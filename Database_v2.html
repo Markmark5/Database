@@ -2600,9 +2600,11 @@ function bkcCalc(tk){
   var pc=function(t,n){return (t!=null&&n!=null&&isFinite(t)&&isFinite(n)&&t!==0)?{p:(n-t)/Math.abs(t)*100,a:t,b:n}:null;};
   var mk=function(then,rolled,base){return rolled?{roll:true,eps:pc(then[1],now[0]),eps2:null,rev:pc(then[3],now[2]),rev2:null,base:base}
     :{roll:false,eps:pc(then[0],now[0]),eps2:pc(then[1],now[1]),rev:pc(then[2],now[2]),rev2:pc(then[3],now[3]),base:base};};
-  /* 1 day: the saved figures from the last trading day; roll = today's FC is that day's FC1 and FC moved */
+  /* 1 day: the saved figures from the last trading day. Roll = today's FC is that day's FC1, FC moved, and FC1
+     moved too (a new year's forecast) — without the last test a stock whose FC simply fell to the old FC1 (ECO) read as a roll */
   var t1=BKC.day&&BKC.day[tk];
-  if(t1)out.d=mk(t1,now[0]!=null&&t1[1]&&t1[0]&&Math.abs(now[0]-t1[1])/Math.abs(t1[1])<0.005&&Math.abs(now[0]-t1[0])/Math.abs(t1[0])>0.02,BKC.dayDate);
+  if(t1)out.d=mk(t1,now[0]!=null&&now[1]!=null&&t1[1]&&t1[0]&&Math.abs(now[0]-t1[1])/Math.abs(t1[1])<0.005&&Math.abs(now[0]-t1[0])/Math.abs(t1[0])>0.02
+    &&Math.abs(now[1]-t1[1])/Math.abs(t1[1])>0.005,BKC.dayDate);
   /* 1 week / 1 month: the weekly snapshot rows, read once */
   var rows;try{rows=fcFetchFromExtractor(tk);}catch(e){rows=null;}
   if(rows&&rows.length){var rl=null;try{rl=fcComputeRollovers(rows,tk);}catch(e){}
