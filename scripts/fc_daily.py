@@ -28,7 +28,14 @@ def uk_today():
         d = datetime(y, m + 1, 1, tzinfo=timezone.utc) - timedelta(days=1)
         return d - timedelta(days=(d.weekday() + 1) % 7)
     bst = last_sunday(now.year, 3).replace(hour=1) <= now < last_sunday(now.year, 10).replace(hour=1)
-    return (now + timedelta(hours=1 if bst else 0)).strftime('%Y-%m-%d')
+    uk = now + timedelta(hours=1 if bst else 0)
+    # GitHub often starts scheduled jobs hours late. A run before 9am UK is still the previous
+    # trading day's close (ShareScope updates ~10am), so label it with that day, skipping weekends.
+    if uk.hour < 9:
+        uk -= timedelta(days=1)
+        while uk.weekday() >= 5:
+            uk -= timedelta(days=1)
+    return uk.strftime('%Y-%m-%d')
 
 
 def main():
