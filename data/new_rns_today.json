@@ -1,21 +1,29 @@
 {
- "date": "2026-11-02",
+ "date": "2026-11-03",
  "rns": [
   {
    "time": "07:00",
-   "ticker": "VCP",
-   "type": "Trading update",
-   "headline": "Trading Update",
-   "marks": [
-    "flat -2 (FY27)"
-   ],
-   "disc": 4
+   "ticker": "TCAP",
+   "type": "Q3 TU",
+   "headline": "Trading Statement",
+   "marks": [],
+   "disc": 2
   },
   {
    "time": "07:00",
-   "ticker": "ADVT",
-   "type": "H1 results",
-   "headline": "Results for six months ended 31 August 2026",
+   "ticker": "ABF",
+   "type": "FY results",
+   "headline": "Annual Results Announcement",
+   "marks": [
+    "CUT -2 (FY27)"
+   ],
+   "disc": 3
+  },
+  {
+   "time": "07:00",
+   "ticker": "GATC",
+   "type": "FY results",
+   "headline": "Final results for the year ended 31 July 2026",
    "marks": [
     "flat +0 (FY27)"
    ],
@@ -23,11 +31,41 @@
   },
   {
    "time": "07:00",
-   "ticker": "IBST",
+   "ticker": "TUNE",
+   "type": "H1 results",
+   "headline": "Interim Results",
+   "marks": [
+    "flat +0 (FY27)"
+   ],
+   "disc": 2
+  },
+  {
+   "time": "07:00",
+   "ticker": "LIKE",
+   "type": "Pre-FY TU",
+   "headline": "Trading Update",
+   "marks": [
+    "RAISE +3 (FY26)"
+   ],
+   "disc": 3
+  },
+  {
+   "time": "07:00",
+   "ticker": "IWG",
+   "type": "Q3 TU",
+   "headline": "THIRD QUARTER 2026 TRADING STATEMENT",
+   "marks": [
+    "RAISE +1 (FY26)"
+   ],
+   "disc": 4
+  },
+  {
+   "time": "07:00",
+   "ticker": "FRAN",
    "type": "Q3 TU",
    "headline": "Q3 Trading Update",
    "marks": [
-    "CUT -3 (FY26)"
+    "flat +0 (FY26)"
    ],
    "disc": 4
   }
