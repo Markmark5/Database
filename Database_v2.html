@@ -1493,6 +1493,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div class="sb-lbl" title="Tickers with an RNS date in the calendar (or on a scorecard) from today to 30 days ahead">Calendar</div>
             <div style="display:flex;flex-direction:column;gap:2px;">
               <label class="band-chk rev-chk" style="--rc:#d4a000"><input type="checkbox" id="f-cal30" onchange="applyFilters()"><span class="rev-arr">&#128197;</span><span class="band-chk-lbl">Due within 30 days</span><span class="band-cnt" id="cnt-cal30">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:#ff4757"><input type="checkbox" id="f-today" onchange="applyFilters()"><span class="rev-arr">&#127381;</span><span class="band-chk-lbl">Today's scorecards</span><span class="band-cnt" id="cnt-today">0</span></label>
               <label class="band-chk rev-chk" style="--rc:#f5c518"><input type="checkbox" id="f-wl" onchange="applyFilters()"><span class="rev-arr" style="color:#f5c518">★</span><span class="band-chk-lbl">Watchlist</span><span class="band-cnt" id="cnt-wl">0</span><span class="wl-edit" title="Add / remove tickers" onclick="event.preventDefault();event.stopPropagation();wlOpen(this)">＋</span></label>
             </div>
           </div>
@@ -3435,6 +3436,7 @@ function applyFilters(){
   const fIx=IX_KEYS.filter(function(k){return document.getElementById('f-ix-'+k).checked;});
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
+  const fTD=document.getElementById('f-today').checked;
   const tIso=cal30Iso(new Date());
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   document.body.classList.add('due-on');
@@ -3455,6 +3457,7 @@ function applyFilters(){
     if(fH1.length){const h=h1Flags(r);if(!fH1.some(function(k){return h[k];}))return false;}
     if(fIx.length&&fIx.indexOf(indexGroup(r,ixMap))<0)return false;
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
+    if(fTD&&String(r.date).slice(0,10)!==tIso)return false;   /* Today's scorecards: dated today */
     if(fWL&&WL.indexOf(String(r.ticker||'').toUpperCase())<0)return false;
     if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;   /* calendar sort: only tickers with an upcoming date */
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
@@ -3636,7 +3639,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-today','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
   applyFilters();
@@ -3833,6 +3836,7 @@ function updateBandCounts(){
   const tyCnt={};ALL.forEach(function(r){const c=cycleSlot(r);tyCnt[c]=(tyCnt[c]||0)+1;});
   TY_KEYS.forEach(function(k){document.getElementById('cnt-ty-'+k[0]).textContent=tyCnt[k[0]]||0;});
   document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
+  const tdI=cal30Iso(new Date());document.getElementById('cnt-today').textContent=ALL.filter(function(r){return String(r.date).slice(0,10)===tdI;}).length;
   document.getElementById('cnt-wl').textContent=WL.length;
 }
 /* Hover text for H1 TRK / ACCEL marks */
