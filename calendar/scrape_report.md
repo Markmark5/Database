@@ -1,11 +1,11 @@
 # Calendar scrape - 2026-11-04
 
-**279 sources · 38 events staged for approval**
+**280 sources · 40 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 140 | read OK, upcoming events found |
-| EMPTY | 128 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 142 | read OK, upcoming events found |
+| EMPTY | 127 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
@@ -69,7 +69,7 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Glencore (GLEN) - http 200, http - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
@@ -113,7 +113,6 @@
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
 - London Stock Exchange (LSEG) - http 200, http - https://www.lseg.com/en/investor-relations/financial-calendar
 - James Latham (LTHM) - http 200, http - https://www.lathamtimber.co.uk/investors/company-calendar
-- McBride (MCB) - http 200, http - https://www.mcbride.co.uk/investors/financial-calendar/
 - Mears (MER) - http 200, http - https://www.mearsgroup.co.uk/investors/shareholder-centre/
 - Tortilla Mexican Grill (MEX) - http 200, http - https://www.tortillagroup.co.uk/financial-calendar/
 - Novacyt SA (NCYT) - http 200, browser - https://novacyt.com/investors/corporate-calendar/
