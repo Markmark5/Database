@@ -1,4 +1,4 @@
-name: UK breadth daily
+name: Index breadth daily
 
 on:
   workflow_dispatch:          # "Run workflow" button in the Actions tab
@@ -6,7 +6,7 @@ on:
     paths:
       - data/breadth/*_members.csv   # re-run as soon as a new member list is uploaded
   schedule:
-    - cron: "40 17 * * 1-5"   # 17:40 UTC weekdays, after the LSE close
+    - cron: "40 21 * * 1-5"   # 21:40 UTC weekdays, after both the LSE and US closes
 
 permissions:
   contents: write
@@ -38,6 +38,6 @@ jobs:
           git config user.email "breadth-bot@users.noreply.github.com"
           git add -A data/breadth
           git diff --staged --quiet && exit 0
-          git commit -m "UK breadth $(date -u +%F)"
+          git commit -m "Index breadth $(date -u +%F)"
           git pull --rebase -X theirs
           git push
