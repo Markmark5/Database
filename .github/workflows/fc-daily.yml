@@ -28,8 +28,8 @@ jobs:
 
       - name: Commit results
         run: |
-          git config user.name  "fc-bot"
-          git config user.email "fc-bot@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/fc_daily
           git diff --staged --quiet && exit 0
           git commit -m "Broker forecasts $(date -u +%F)"
