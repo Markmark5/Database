@@ -9520,7 +9520,8 @@ function fgRender(){
 #fg-body details.fg-drawer[open]>summary:after{transform:rotate(180deg)}
 #fg-body details.fg-drawer .fg-tbl{border:none;border-radius:0 0 6px 6px}
 #fg-body .fg-dsub{font-weight:400;letter-spacing:0;text-transform:none;color:#9a9a9a;margin-left:8px}
-#fg-body .br-sec{margin-top:22px;padding-top:16px;border-top:1px solid #e6e6e6}
+#fg-body .br-sec{margin:28px -18px 0;padding:0 18px;border-top:1px solid #d8d8d8}
+#fg-body .br-sec>h4:first-child{margin:0 -18px 14px;padding:12px 18px;background:#f7f7f5;border-bottom:1px solid #e6e6e6}
 #fg-body .br-title{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#14181c;margin-bottom:10px}
 #fg-body .fg-rng .sep{display:inline-block;width:1px;height:14px;background:#ddd;margin:0 4px 0 8px;vertical-align:-3px}
 #fg-body td.tl{text-align:left}
@@ -9619,7 +9620,7 @@ async function brRender(){
     return '<div class="fg-tile'+(now?' now':'')+'"><div class="fg-lab">'+lab+'</div><div class="fg-val" style="color:'+col+'">'+val+'</div><div class="fg-sub">'+sub+'</div></div>';
   };
   var btn=function(k,v,on,lab){return '<button class="'+(on?'on':'')+'" onclick="brSet(\''+k+'\',\''+v+'\')">'+lab+'</button>';};
-  var h='<div class="br-sec"><h4 style="margin-top:0"><span class="br-title" style="margin:0">Overbought / oversold · 50-day spread</span><span class="fg-rng">'
+  var h='<div class="br-sec"><h4 style="margin-top:0"><span class="br-title" style="margin:0">&#128202; Overbought / oversold · 50-day spread</span><span class="fg-rng">'
     +Object.keys(BR_IDX).map(function(k){return btn('key',k,BR_KEY===k,BR_IDX[k].btn);}).join('')
     +'<span class="sep"></span>'
     +['3m','ytd','1y','all'].map(function(k){return btn('rng',k,BR_RANGE===k,k);}).join('')
