@@ -188,11 +188,11 @@ function draw(months){
   const idx=cut(IDX,months), br=cut(BR,months);
   const xAxis={type:'category',ticks:{maxTicksLimit:8,autoSkip:true,maxRotation:0,callback(v){return fmtD(this.getLabelForValue(v))}},grid:{display:false}};
   const tip={mode:'index',intersect:false,callbacks:{title:i=>fmtD(i[0].label)}};
-  const lim=Math.max(3,Math.ceil(Math.max(...idx.map(r=>Math.abs(r.Spread)))));
+  const lim=3;   // fixed ±3 SD; readings beyond are pinned to the edge
   charts.push(new Chart(c1,{type:'line',plugins:[bands],
-    data:{labels:idx.map(r=>r.Date),datasets:[{label:'Spread',data:idx.map(r=>r.Spread),borderColor:ink,borderWidth:1.6,pointRadius:0,tension:.15}]},
+    data:{labels:idx.map(r=>r.Date),datasets:[{label:'Spread',data:idx.map(r=>Math.max(-3,Math.min(3,r.Spread))),borderColor:ink,borderWidth:1.6,pointRadius:0,tension:.15}]},
     options:{maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{...tip.callbacks,label:c=>' Spread '+c.parsed.y.toFixed(2)+' SD   (index '+idx[c.dataIndex].Close.toLocaleString('en-GB')+')'}}},
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{...tip.callbacks,label:c=>' Spread '+idx[c.dataIndex].Spread.toFixed(2)+' SD   (index '+idx[c.dataIndex].Close.toLocaleString('en-GB')+')'}}},
       scales:{x:xAxis,y:{min:-lim,max:lim,ticks:{stepSize:1},grid:{color:line}}}}}));
   charts.push(new Chart(c2,{type:'line',
     data:{labels:br.map(r=>r.Date),datasets:[
@@ -206,7 +206,7 @@ function draw(months){
   charts.push(new Chart(c3,{type:'line',
     data:{labels:br.map(r=>r.Date),datasets:[
       {label:'Net breadth (OB−OS, %)',data:br.map(r=>+(r.OB-r.OS).toFixed(1)),borderColor:acc,borderWidth:1.5,pointRadius:0,yAxisID:'y',tension:.15},
-      {label:'Index spread (SD)',data:br.map(r=>sMap[r.Date]??null),borderColor:ink,borderWidth:1,borderDash:[4,3],pointRadius:0,yAxisID:'y2',tension:.15}]},
+      {label:'Index spread (SD)',data:br.map(r=>sMap[r.Date]==null?null:Math.max(-3,Math.min(3,sMap[r.Date]))),borderColor:ink,borderWidth:1,borderDash:[4,3],pointRadius:0,yAxisID:'y2',tension:.15}]},
     options:{maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
       plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2}},tooltip:tip},
       scales:{x:xAxis,y:{position:'left',ticks:{callback:v=>v+'%'},grid:{color:line}},y2:{position:'right',min:-lim,max:lim,grid:{display:false}}}}}));
