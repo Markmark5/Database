@@ -1,0 +1,194 @@
+"""FTSE 250 overbought/oversold breadth (Bespoke-style 50-day spread).
+
+Spread = (Close - 50DMA) / SD of last 50 closes.
+  >= +1  overbought (OB)      >= +2  extreme OB
+  <= -1  oversold   (OS)      <= -2  extreme OS
+
+Inputs
+  data/breadth/ftse250_members.csv   TIDM,Name  (a raw ShareScope list export works as-is;
+                                     only the first two columns are read)
+
+Outputs (data/breadth/)
+  ftse250_index_spread.csv  Date,Close,Spread           index (^FTMC), rebuilt each run
+  ftse250_breadth.csv       Date,N,OB,OS,XOB,XOS,Source  % of members; history is FROZEN:
+                            past rows are never recalculated, so each day keeps the
+                            membership it had at the time. Source = backfill | live.
+  ftse250_latest.csv        TIDM,Name,Close,Spread,PctVs50   today's reading per stock
+  members_snapshot.csv      last membership seen (used to detect changes)
+  membership_log.csv        Date,Change,TIDM,Name    joiners / leavers each review
+  failed.txt                tickers Yahoo returned no usable data for
+"""
+import csv
+import datetime as dt
+import os
+import sys
+
+import numpy as np
+import pandas as pd
+import yfinance as yf
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+D = os.path.join(ROOT, "data", "breadth")
+MEMBERS = os.path.join(D, "ftse250_members.csv")
+SNAP = os.path.join(D, "members_snapshot.csv")
+LOG = os.path.join(D, "membership_log.csv")
+BREADTH = os.path.join(D, "ftse250_breadth.csv")
+INDEX = os.path.join(D, "ftse250_index_spread.csv")
+LATEST = os.path.join(D, "ftse250_latest.csv")
+FAILED = os.path.join(D, "failed.txt")
+
+WIN = 50
+INDEX_TICKER = "^FTMC"
+HISTORY_DAYS = 480          # ~12 months to plot + 50-day warm-up
+
+
+def read_members(path):
+    out = {}
+    with open(path, encoding="utf-8-sig") as f:
+        r = csv.reader(f)
+        next(r, None)
+        for row in r:
+            if row and row[0].strip():
+                out[row[0].strip()] = (row[1].strip() if len(row) > 1 else "")
+    return out
+
+
+def yahoo(tidm):
+    # "AO." -> "AO.L", "BT.A" -> "BT-A.L"
+    t = tidm.rstrip(".").replace(".", "-")
+    return t + ".L"
+
+
+def log_membership(members, today):
+    old = read_members(SNAP) if os.path.exists(SNAP) else None
+    if old is not None:
+        joined = sorted(set(members) - set(old))
+        left = sorted(set(old) - set(members))
+        if joined or left:
+            new_file = not os.path.exists(LOG)
+            with open(LOG, "a", newline="") as f:
+                w = csv.writer(f)
+                if new_file:
+                    w.writerow(["Date", "Change", "TIDM", "Name"])
+                for t in joined:
+                    w.writerow([today, "joined", t, members[t]])
+                for t in left:
+                    w.writerow([today, "left", t, old[t]])
+            print(f"Membership change: +{len(joined)} -{len(left)}")
+    with open(SNAP, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["TIDM", "Name"])
+        for t, n in members.items():
+            w.writerow([t, n])
+
+
+def fix_units(s):
+    """Yahoo sometimes flips a day between pence and pounds (x100 jumps). Undo those."""
+    s = s.copy()
+    r = s / s.shift(1)
+    for i in np.where((r > 50) | (r < 0.02))[0]:
+        prev, cur = s.iloc[i - 1], s.iloc[i]
+        s.iloc[i] = cur / 100 if cur > prev else cur * 100
+    return s
+
+
+def download(tickers, start):
+    df = yf.download(tickers, start=start, auto_adjust=True, progress=False,
+                     threads=True, group_by="column")["Close"]
+    if isinstance(df, pd.Series):
+        df = df.to_frame(tickers[0])
+    missing = [t for t in tickers if t not in df or df[t].count() == 0]
+    for t in missing:                       # retry one at a time (cache-lock / throttle blips)
+        try:
+            s = yf.download(t, start=start, auto_adjust=True, progress=False)["Close"]
+            if isinstance(s, pd.DataFrame):
+                s = s.iloc[:, 0]
+            if s.count():
+                df[t] = s
+        except Exception as e:              # noqa: BLE001
+            print("retry failed", t, e)
+    return df
+
+
+def spread(df):
+    ma = df.rolling(WIN, min_periods=WIN).mean()
+    sd = df.rolling(WIN, min_periods=WIN).std()
+    return (df - ma) / sd.replace(0, np.nan), (df / ma - 1) * 100
+
+
+def main():
+    today = dt.date.today().isoformat()
+    members = read_members(MEMBERS)
+    log_membership(members, today)
+
+    start = (dt.date.today() - dt.timedelta(days=HISTORY_DAYS)).isoformat()
+    tick = {t: yahoo(t) for t in members}
+    px = download(list(tick.values()) + [INDEX_TICKER], start)
+    px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
+    px = px.sort_index()
+
+    # ---- index panel (no membership issue: rebuild every run)
+    idx = px[INDEX_TICKER].dropna()
+    isp, _ = spread(idx.to_frame())
+    out = pd.DataFrame({"Close": idx.round(2), "Spread": isp.iloc[:, 0].round(3)}).dropna()
+    out.index.name = "Date"
+    out.to_csv(INDEX, date_format="%Y-%m-%d")
+
+    # ---- constituents
+    stocks = px[[v for v in tick.values() if v in px]].copy()
+    # forward-fill only short gaps (holidays/suspensions); stale names drop out naturally
+    stocks = stocks.apply(fix_units).ffill(limit=3)
+    stocks = stocks.loc[idx.index.min():]
+    sp, pct = spread(stocks)
+
+    failed = sorted(t for t, y in tick.items() if y not in stocks or stocks[y].count() < WIN)
+    with open(FAILED, "w") as f:
+        f.write("\n".join(f"{t}\t{tick[t]}" for t in failed) + ("\n" if failed else ""))
+
+    valid = sp.notna()
+    n = valid.sum(axis=1)
+    calc = pd.DataFrame({
+        "N": n,
+        "OB": (sp >= 1).sum(axis=1) / n * 100,
+        "OS": (sp <= -1).sum(axis=1) / n * 100,
+        "XOB": (sp >= 2).sum(axis=1) / n * 100,
+        "XOS": (sp <= -2).sum(axis=1) / n * 100,
+    })
+    calc = calc[calc["N"] >= len(tick) * 0.5].round(2)   # skip warm-up / thin days
+    calc.index = calc.index.strftime("%Y-%m-%d")
+
+    # ---- freeze history: keep stored rows, recompute only from the last stored date on
+    if os.path.exists(BREADTH):
+        old = pd.read_csv(BREADTH, index_col="Date", dtype={"Source": str})
+        last = old.index.max()
+        keep = old[old.index < last]
+        new = calc[calc.index >= last].copy()
+        new["Source"] = "live"
+        merged = pd.concat([keep, new])
+    else:
+        merged = calc.copy()
+        merged["Source"] = "backfill"
+        merged.iloc[-1, merged.columns.get_loc("Source")] = "live"
+    merged.index.name = "Date"
+    merged.to_csv(BREADTH)
+
+    # ---- today's per-stock table
+    last_row = sp.iloc[-1]
+    rows = []
+    for t, y in tick.items():
+        if y in sp and pd.notna(last_row.get(y)):
+            rows.append([t, members[t], round(float(stocks[y].iloc[-1]), 4),
+                         round(float(last_row[y]), 3), round(float(pct[y].iloc[-1]), 2)])
+    rows.sort(key=lambda r: -r[3])
+    with open(LATEST, "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["TIDM", "Name", "Close", "Spread", "PctVs50"])
+        w.writerows(rows)
+
+    print(f"{len(members)} members, {len(rows)} with data, {len(failed)} failed: {failed}")
+    print("Latest breadth:", merged.iloc[-1].to_dict())
+    print("Latest index spread:", out.iloc[-1].to_dict())
+
+
+if __name__ == "__main__":
+    sys.exit(main())

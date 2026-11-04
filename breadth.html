@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FTSE 250 Breadth</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --ink:#0f1720; --paper:#f7f4ec; --panel:#fffdf8;
+  --line:#d9d2c2; --muted:#7a7362;
+  --pos:#1f8f4e; --posbg:#e3f3e8;
+  --neg:#c23b2e; --negbg:#f7e4e1;
+  --accent:#1a4d8f;
+  --xob:rgba(194,59,46,.30); --ob:rgba(194,59,46,.13);
+  --os:rgba(31,143,78,.13);  --xos:rgba(31,143,78,.30);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#ece7da; --paper:#14171c; --panel:#1b1f25; --line:#323842; --muted:#9a9384;
+    --pos:#4cc07c; --posbg:#18301f; --neg:#ee6b5c; --negbg:#3a1d1a; --accent:#7aa7e6;
+    --xob:rgba(238,107,92,.32); --ob:rgba(238,107,92,.14);
+    --os:rgba(76,192,124,.14);  --xos:rgba(76,192,124,.32);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#ece7da; --paper:#14171c; --panel:#1b1f25; --line:#323842; --muted:#9a9384;
+  --pos:#4cc07c; --posbg:#18301f; --neg:#ee6b5c; --negbg:#3a1d1a; --accent:#7aa7e6;
+  --xob:rgba(238,107,92,.32); --ob:rgba(238,107,92,.14);
+  --os:rgba(76,192,124,.14);  --xos:rgba(76,192,124,.32);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;line-height:1.5;padding:0 0 80px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{border-bottom:2px solid var(--ink);padding:34px 0 22px}
+.eyebrow,.mono{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+h1{font-size:clamp(30px,6vw,44px);font-weight:600;letter-spacing:-.5px;line-height:1.02}
+h1 em{font-style:italic;color:var(--accent)}
+.sub{margin-top:12px;color:var(--muted);font-size:15px;max-width:66ch}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 8px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.tile .k{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-size:28px;font-weight:600;line-height:1.15;margin-top:4px}
+.tile .d{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;color:var(--muted)}
+.pos{color:var(--pos)} .neg{color:var(--neg)}
+
+.toggle-row{display:flex;gap:8px;align-items:center;margin:22px 0 4px;flex-wrap:wrap}
+.tlabel{font-family:"SF Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.tbtn{font-family:"SF Mono",ui-monospace,monospace;font-size:12px;padding:6px 12px;border:1px solid var(--ink);
+  background:transparent;color:var(--ink);border-radius:3px;cursor:pointer}
+.tbtn.active{background:var(--ink);color:var(--paper)}
+
+section{margin-top:34px}
+.chart-title{font-size:22px;font-weight:600;letter-spacing:-.2px}
+.chart-sub{color:var(--muted);font-style:italic;font-size:14px;margin-bottom:12px}
+.chart-box{position:relative;height:340px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px}
+.chart-box.short{height:200px}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media (max-width:720px){.cols{grid-template-columns:1fr}.chart-box{height:280px}}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:"SF Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-align:left;border-bottom:1px solid var(--ink);padding:6px 6px}
+td{border-bottom:1px solid var(--line);padding:6px 6px}
+td.n{text-align:right;font-family:"SF Mono",ui-monospace,monospace;font-size:13px}
+th.n{text-align:right}
+td.t{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;font-size:13px;white-space:nowrap}
+td.nm{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);font-family:"SF Mono",ui-monospace,monospace}
+#err{display:none;margin-top:20px;padding:14px;border:1px solid var(--neg);background:var(--negbg);border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Market breadth &middot; 50-day spread</div>
+    <h1>FTSE 250 <em>overbought / oversold</em></h1>
+    <p class="sub">Spread = (close &minus; 50-day average) &divide; standard deviation of the last 50 closes.
+      &plusmn;1 SD is overbought/oversold, &plusmn;2 SD is extreme. The top chart is the index itself;
+      the lower chart is the share of members that are individually overbought or oversold.</p>
+  </header>
+
+  <div id="err"></div>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="toggle-row">
+    <span class="tlabel">Range</span>
+    <button class="tbtn" data-m="3">3M</button>
+    <button class="tbtn" data-m="6">6M</button>
+    <button class="tbtn active" data-m="12">12M</button>
+    <button class="tbtn" data-m="0">All</button>
+  </div>
+
+  <section>
+    <div class="chart-title">Index 50-day spread</div>
+    <div class="chart-sub">FTSE 250 (^FTMC), in standard deviations from its 50-day average</div>
+    <div class="chart-box"><canvas id="c1"></canvas></div>
+  </section>
+
+  <section>
+    <div class="chart-title">% of members overbought and oversold</div>
+    <div class="chart-sub">Red = % at +1 SD or more (OB) &middot; green = % at &minus;1 SD or less (OS)</div>
+    <div class="chart-box"><canvas id="c2"></canvas></div>
+  </section>
+
+  <section>
+    <div class="chart-title">Divergence</div>
+    <div class="chart-sub">Net breadth (% OB &minus; % OS) against the index spread. When they split, the index is being driven by a few names.</div>
+    <div class="chart-box short"><canvas id="c3"></canvas></div>
+  </section>
+
+  <section class="cols">
+    <div>
+      <div class="chart-title">Most extended</div>
+      <div class="chart-sub">Members at +2 SD or more today</div>
+      <div id="tOB"></div>
+    </div>
+    <div>
+      <div class="chart-title">Most oversold</div>
+      <div class="chart-sub">Members at &minus;2 SD or less today</div>
+      <div id="tOS"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="chart-title">Membership changes</div>
+    <div class="chart-sub">Logged when a new member list is uploaded. Breadth before the first change is a backfill using the current list.</div>
+    <div id="tLog"></div>
+  </section>
+
+  <footer id="foot">Data: Yahoo Finance via GitHub Action, weekdays after the close.</footer>
+</div>
+
+<script>
+const REPO='Markmark5/Database', BRANCH='main', DIR='data/breadth/';
+async function getCSV(name, optional){
+  const urls=[DIR+name, 'https://raw.githubusercontent.com/'+REPO+'/'+BRANCH+'/'+DIR+name];
+  for(const u of urls){
+    try{ const r=await fetch(u+'?t='+Date.now()); if(r.ok) return parse(await r.text()); }catch(e){}
+  }
+  if(optional) return [];
+  throw new Error('Could not load '+name);
+}
+function parse(txt){
+  const lines=txt.trim().split(/\r?\n/); if(lines.length<2) return [];
+  const head=splitLine(lines[0]);
+  return lines.slice(1).map(l=>{const c=splitLine(l),o={};head.forEach((h,i)=>{const v=c[i];o[h]=(v!==''&&!isNaN(v))?+v:v});return o;});
+}
+function splitLine(l){const out=[];let cur='',q=false;for(const ch of l){if(ch=='"'){q=!q}else if(ch==','&&!q){out.push(cur);cur=''}else cur+=ch}out.push(cur);return out;}
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmtD=s=>{const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// Band background for the index chart
+const bands={id:'bands',beforeDatasetsDraw(ch){
+  const {ctx,chartArea:a,scales:{y}}=ch; if(!a) return;
+  const zones=[[2,99,css('--xob')],[1,2,css('--ob')],[-2,-1,css('--os')],[-99,-2,css('--xos')]];
+  ctx.save();
+  for(const [lo,hi,col] of zones){
+    const t=Math.max(a.top,y.getPixelForValue(Math.min(hi,y.max))), b=Math.min(a.bottom,y.getPixelForValue(Math.max(lo,y.min)));
+    if(b>t){ctx.fillStyle=col;ctx.fillRect(a.left,t,a.right-a.left,b-t);}
+  }
+  ctx.restore();
+}};
+
+let IDX=[],BR=[],charts=[];
+function cut(rows,months){
+  if(!months||!rows.length) return rows;
+  const last=new Date(rows[rows.length-1].Date); last.setMonth(last.getMonth()-months);
+  const iso=last.toISOString().slice(0,10); return rows.filter(r=>r.Date>=iso);
+}
+function draw(months){
+  charts.forEach(c=>c.destroy()); charts=[];
+  const ink=css('--ink'),muted=css('--muted'),line=css('--line'),pos=css('--pos'),neg=css('--neg'),acc=css('--accent');
+  Chart.defaults.font.family='"SF Mono",ui-monospace,Menlo,monospace'; Chart.defaults.font.size=11; Chart.defaults.color=muted;
+  const idx=cut(IDX,months), br=cut(BR,months);
+  const xAxis={type:'category',ticks:{maxTicksLimit:8,autoSkip:true,maxRotation:0,callback(v){return fmtD(this.getLabelForValue(v))}},grid:{display:false}};
+  const tip={mode:'index',intersect:false,callbacks:{title:i=>fmtD(i[0].label)}};
+  const lim=Math.max(3,Math.ceil(Math.max(...idx.map(r=>Math.abs(r.Spread)))));
+  charts.push(new Chart(c1,{type:'line',plugins:[bands],
+    data:{labels:idx.map(r=>r.Date),datasets:[{label:'Spread',data:idx.map(r=>r.Spread),borderColor:ink,borderWidth:1.6,pointRadius:0,tension:.15}]},
+    options:{maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{...tip.callbacks,label:c=>' Spread '+c.parsed.y.toFixed(2)+' SD   (index '+idx[c.dataIndex].Close.toLocaleString('en-GB')+')'}}},
+      scales:{x:xAxis,y:{min:-lim,max:lim,ticks:{stepSize:1},grid:{color:line}}}}}));
+  charts.push(new Chart(c2,{type:'line',
+    data:{labels:br.map(r=>r.Date),datasets:[
+      {label:'OB %',data:br.map(r=>r.OB),borderColor:neg,borderWidth:1.6,pointRadius:0,tension:.15},
+      {label:'OS %',data:br.map(r=>r.OS),borderColor:pos,borderWidth:1.6,pointRadius:0,tension:.15}]},
+    options:{maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false},tooltip:{...tip,callbacks:{...tip.callbacks,label:c=>' '+c.dataset.label+' '+c.parsed.y.toFixed(1)+'%',
+        afterBody:i=>{const r=br[i[0].dataIndex];return ['  of '+r.N+' stocks'+(r.Source==='backfill'?' (backfill)':'')]}}}},
+      scales:{x:xAxis,y:{min:0,suggestedMax:70,ticks:{callback:v=>v+'%'},grid:{color:line}}}}}));
+  const sMap=Object.fromEntries(IDX.map(r=>[r.Date,r.Spread]));
+  charts.push(new Chart(c3,{type:'line',
+    data:{labels:br.map(r=>r.Date),datasets:[
+      {label:'Net breadth (OB−OS, %)',data:br.map(r=>+(r.OB-r.OS).toFixed(1)),borderColor:acc,borderWidth:1.5,pointRadius:0,yAxisID:'y',tension:.15},
+      {label:'Index spread (SD)',data:br.map(r=>sMap[r.Date]??null),borderColor:ink,borderWidth:1,borderDash:[4,3],pointRadius:0,yAxisID:'y2',tension:.15}]},
+    options:{maintainAspectRatio:false,animation:false,interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2}},tooltip:tip},
+      scales:{x:xAxis,y:{position:'left',ticks:{callback:v=>v+'%'},grid:{color:line}},y2:{position:'right',min:-lim,max:lim,grid:{display:false}}}}}));
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.toggle('active',+b.dataset.m===months));
+}
+
+function tiles(){
+  const i=IDX.at(-1), b=BR.at(-1), b5=BR.at(-6)||BR[0];
+  const zone=s=>s>=2?'Extreme OB':s>=1?'Overbought':s<=-2?'Extreme OS':s<=-1?'Oversold':'Neutral';
+  const cls=s=>s>=1?'neg':s<=-1?'pos':'';
+  const d=(a,bb)=>{const x=a-bb;return (x>=0?'+':'')+x.toFixed(1)+' vs 1w'};
+  tTiles.innerHTML=[
+    ['Index spread',`<span class="${cls(i.Spread)}">${i.Spread>=0?'+':''}${i.Spread.toFixed(2)}</span>`,zone(i.Spread)],
+    ['% Overbought',`<span class="neg">${b.OB.toFixed(1)}%</span>`,d(b.OB,b5.OB)],
+    ['% Oversold',`<span class="pos">${b.OS.toFixed(1)}%</span>`,d(b.OS,b5.OS)],
+    ['Extreme ±2',`${b.XOB.toFixed(1)} / ${b.XOS.toFixed(1)}%`,'% at +2 / −2 SD'],
+    ['Stocks counted',b.N,'as of '+fmtD(b.Date)]
+  ].map(([k,v,dd])=>`<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="d">${dd}</div></div>`).join('');
+}
+function table(rows,el){
+  if(!rows.length){el.innerHTML='<div class="empty">None today.</div>';return;}
+  el.innerHTML='<table><thead><tr><th>EPIC</th><th>Name</th><th class="n">SD</th><th class="n">vs 50DMA</th></tr></thead><tbody>'+
+    rows.map(r=>`<tr><td class="t">${esc(r.TIDM)}</td><td class="nm" title="${esc(r.Name)}">${esc(r.Name)}</td><td class="n ${r.Spread>0?'neg':'pos'}">${r.Spread.toFixed(2)}</td><td class="n">${r.PctVs50>0?'+':''}${r.PctVs50.toFixed(1)}%</td></tr>`).join('')+'</tbody></table>';
+}
+
+const tTiles=document.getElementById('tiles');
+(async()=>{
+  try{
+    [IDX,BR]=await Promise.all([getCSV('ftse250_index_spread.csv'),getCSV('ftse250_breadth.csv')]);
+    const [LAT,LOG]=await Promise.all([getCSV('ftse250_latest.csv',true),getCSV('membership_log.csv',true)]);
+    tiles(); draw(12);
+    table(LAT.filter(r=>r.Spread>=2),tOB);
+    table(LAT.filter(r=>r.Spread<=-2).sort((a,b)=>a.Spread-b.Spread),tOS);
+    tLog.innerHTML=LOG.length?'<table><thead><tr><th>Date</th><th>Change</th><th>EPIC</th><th>Name</th></tr></thead><tbody>'+
+      LOG.slice().reverse().map(r=>`<tr><td class="n" style="text-align:left">${fmtD(r.Date)}</td><td class="${r.Change==='joined'?'pos':'neg'}">${esc(r.Change)}</td><td class="t">${esc(r.TIDM)}</td><td class="nm">${esc(r.Name)}</td></tr>`).join('')+'</tbody></table>'
+      :'<div class="empty">No changes logged yet.</div>';
+    const bf=BR.filter(r=>r.Source==='backfill').at(-1);
+    document.getElementById('foot').textContent='Data: Yahoo Finance via GitHub Action, weekdays after the close. Last update '+fmtD(BR.at(-1).Date)+'.'+(bf?' Breadth up to '+fmtD(bf.Date)+' is backfilled from the current member list.':'');
+  }catch(e){const el=document.getElementById('err');el.style.display='block';el.textContent=e.message+'. Run the “FTSE 250 breadth daily” Action once to create the data.';}
+  document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>draw(+b.dataset.m));
+})();
+</script>
+</body>
+</html>
