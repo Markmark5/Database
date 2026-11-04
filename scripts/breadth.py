@@ -1,22 +1,28 @@
-"""FTSE 250 overbought/oversold breadth (Bespoke-style 50-day spread).
+"""Overbought/oversold breadth for UK indices (Bespoke-style 50-day spread).
+
+Run for every index in INDICES whose members file exists:
+  python scripts/breadth.py            all indices
+  python scripts/breadth.py smallcap   just one
 
 Spread = (Close - 50DMA) / SD of last 50 closes.
   >= +1  overbought (OB)      >= +2  extreme OB
   <= -1  oversold   (OS)      <= -2  extreme OS
 
+Files use the index key as prefix, e.g. ftse250_*, smallcap_*.
+
 Inputs
-  data/breadth/ftse250_members.csv   TIDM,Name  (a raw ShareScope list export works as-is;
+  data/breadth/<key>_members.csv   TIDM,Name  (a raw ShareScope list export works as-is;
                                      only the first two columns are read)
 
 Outputs (data/breadth/)
-  ftse250_index_spread.csv  Date,Close,Spread           index (^FTMC), rebuilt each run
-  ftse250_breadth.csv       Date,N,OB,OS,XOB,XOS,Source  % of members; history is FROZEN:
+  <key>_index_spread.csv  Date,Close,Spread           index, rebuilt each run
+  <key>_breadth.csv         Date,N,OB,OS,XOB,XOS,Source  % of members; history is FROZEN:
                             past rows are never recalculated, so each day keeps the
                             membership it had at the time. Source = backfill | live.
-  ftse250_latest.csv        TIDM,Name,Close,Spread,PctVs50   today's reading per stock
-  members_snapshot.csv      last membership seen (used to detect changes)
-  membership_log.csv        Date,Change,TIDM,Name    joiners / leavers each review
-  failed.txt                tickers Yahoo returned no usable data for
+  <key>_latest.csv          TIDM,Name,Close,Spread,PctVs50   today's reading per stock
+  <key>_members_snapshot.csv    last membership seen (used to detect changes)
+  <key>_membership_log.csv    Date,Change,TIDM,Name    joiners / leavers each review
+  <key>_failed.txt          tickers Yahoo returned no usable data for
 """
 import csv
 import datetime as dt
@@ -29,16 +35,12 @@ import yfinance as yf
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data", "breadth")
-MEMBERS = os.path.join(D, "ftse250_members.csv")
-SNAP = os.path.join(D, "members_snapshot.csv")
-LOG = os.path.join(D, "membership_log.csv")
-BREADTH = os.path.join(D, "ftse250_breadth.csv")
-INDEX = os.path.join(D, "ftse250_index_spread.csv")
-LATEST = os.path.join(D, "ftse250_latest.csv")
-FAILED = os.path.join(D, "failed.txt")
+INDICES = {
+    "ftse250":  {"name": "FTSE 250",      "yahoo": "^FTMC"},
+    "smallcap": {"name": "FTSE SmallCap", "yahoo": "^FTSC"},
+}
 
 WIN = 50
-INDEX_TICKER = "^FTMC"
 HISTORY_DAYS = 480          # ~12 months to plot + 50-day warm-up
 
 
@@ -59,7 +61,7 @@ def yahoo(tidm):
     return t + ".L"
 
 
-def log_membership(members, today):
+def log_membership(members, today, SNAP, LOG):
     old = read_members(SNAP) if os.path.exists(SNAP) else None
     if old is not None:
         joined = sorted(set(members) - set(old))
@@ -116,10 +118,16 @@ def spread(df):
     return (df - ma) / sd.replace(0, np.nan), (df / ma - 1) * 100
 
 
-def main():
+def run(key):
+    cfg = INDICES[key]
+    P = lambda n: os.path.join(D, f"{key}_{n}")
+    MEMBERS, SNAP, LOG = P("members.csv"), P("members_snapshot.csv"), P("membership_log.csv")
+    BREADTH, INDEX = P("breadth.csv"), P("index_spread.csv")
+    LATEST, FAILED = P("latest.csv"), P("failed.txt")
+    INDEX_TICKER = cfg["yahoo"]
     today = dt.date.today().isoformat()
     members = read_members(MEMBERS)
-    log_membership(members, today)
+    log_membership(members, today, SNAP, LOG)
 
     start = (dt.date.today() - dt.timedelta(days=HISTORY_DAYS)).isoformat()
     tick = {t: yahoo(t) for t in members}
@@ -185,9 +193,18 @@ def main():
         w.writerow(["TIDM", "Name", "Close", "Spread", "PctVs50"])
         w.writerows(rows)
 
-    print(f"{len(members)} members, {len(rows)} with data, {len(failed)} failed: {failed}")
+    print(f"[{cfg['name']}] {len(members)} members, {len(rows)} with data, {len(failed)} failed: {failed}")
     print("Latest breadth:", merged.iloc[-1].to_dict())
     print("Latest index spread:", out.iloc[-1].to_dict())
+
+
+def main():
+    keys = sys.argv[1:] or list(INDICES)
+    for key in keys:
+        if not os.path.exists(os.path.join(D, f"{key}_members.csv")):
+            print(f"[{key}] no members file yet, skipping")
+            continue
+        run(key)
 
 
 if __name__ == "__main__":
