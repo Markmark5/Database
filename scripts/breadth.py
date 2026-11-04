@@ -199,9 +199,57 @@ def run(key):
     print("Latest index spread:", out.iloc[-1].to_dict())
 
 
+# ---- sectors, bonds & commodities relative to the S&P 500 -------------------------
+# Ratio = ETF close / SPY close.  Pct = how far today's ratio is above/below its
+# own 50-day average.  Spread = same move in SDs (same yardstick as the breadth charts).
+RELATIVE = [
+    ("XLE", "Energy", "Sector"), ("XLV", "Health Care", "Sector"), ("XLP", "Staples", "Sector"),
+    ("XLU", "Utilities", "Sector"), ("XLB", "Materials", "Sector"), ("XLY", "Discretionary", "Sector"),
+    ("XLRE", "Real Estate", "Sector"), ("XLF", "Financials", "Sector"), ("XLI", "Industrials", "Sector"),
+    ("XLK", "Technology", "Sector"), ("XLC", "Communication", "Sector"),
+    ("TLT", "20+ yr Treasuries", "Other"), ("GLD", "Gold", "Other"), ("SLV", "Silver", "Other"),
+    ("BNO", "Brent oil", "Other"), ("USO", "WTI oil", "Other"), ("UNG", "Natural gas", "Other"),
+    ("CPER", "Copper", "Other"),
+]
+RELATIVE_BENCH = "SPY"
+# Indices are shown against their OWN 50-day average (vs SPY would make SPY always 0)
+ABSOLUTE = [("SPY", "S&P 500", "Index"), ("QQQ", "Nasdaq 100", "Index"), ("IWM", "Russell 2000", "Index")]
+
+
+def run_relative():
+    start = (dt.date.today() - dt.timedelta(days=200)).isoformat()
+    tick = [t for t, _, _ in RELATIVE]
+    absT = [t for t, _, _ in ABSOLUTE]
+    px = download(list(dict.fromkeys(tick + absT + [RELATIVE_BENCH])), start)
+    px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
+    px = px.sort_index().ffill(limit=3)
+    rel = px[[t for t in tick if t in px]].div(px[RELATIVE_BENCH], axis=0)
+    rel = pd.concat([px[[t for t in absT if t in px]].add_prefix("ABS:"), rel], axis=1)
+    ma = rel.rolling(WIN, min_periods=WIN).mean()
+    sd = rel.rolling(WIN, min_periods=WIN).std()
+    pct = (rel / ma - 1) * 100
+    spr = (rel - ma) / sd.replace(0, np.nan)
+    last = pct.index[-1]
+    wk = pct.index[max(0, len(pct.index) - 6)]
+    rows = []
+    for t, name, grp in [("ABS:" + a, b, c) for a, b, c in ABSOLUTE] + RELATIVE:
+        if t in pct and pd.notna(pct.at[last, t]):
+            rows.append([last.strftime("%Y-%m-%d"), t.replace("ABS:", ""), name, grp,
+                         round(float(pct.at[last, t]), 2), round(float(spr.at[last, t]), 2),
+                         round(float(pct.at[wk, t]), 2) if pd.notna(pct.at[wk, t]) else ""])
+    with open(os.path.join(D, "relative.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["Date", "Ticker", "Name", "Group", "Pct", "Spread", "Pct1w"])
+        w.writerows(rows)
+    print(f"[relative] {len(rows)}/{len(RELATIVE) + len(ABSOLUTE)} vs {RELATIVE_BENCH} as of {last.date()}")
+
+
 def main():
-    keys = sys.argv[1:] or list(INDICES)
+    keys = sys.argv[1:] or list(INDICES) + ["relative"]
     for key in keys:
+        if key == "relative":
+            run_relative()
+            continue
         if not os.path.exists(os.path.join(D, f"{key}_members.csv")):
             print(f"[{key}] no members file yet, skipping")
             continue
