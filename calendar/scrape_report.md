@@ -1,6 +1,6 @@
-# Calendar scrape - 2026-11-03
+# Calendar scrape - 2026-11-04
 
-**279 sources · 36 events staged for approval**
+**279 sources · 38 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
@@ -69,7 +69,7 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
+- Glencore (GLEN) - http 200, http - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
