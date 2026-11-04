@@ -1,6 +1,6 @@
 {
  "version": 1,
- "saved": "2026-11-03T10:38:42.124Z",
+ "saved": "2026-11-04T07:48:10.721Z",
  "events": [
   {
    "id": "emufqu1rrltk8",
@@ -363,36 +363,6 @@
    "note": ""
   },
   {
-   "id": "emufqu1rvdcp3",
-   "ticker": "TRN",
-   "company": "Trainline PLC",
-   "type": "H1 results",
-   "event": "H1 FY27 results",
-   "from": "2026-11-04",
-   "to": "2026-11-04",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-09-11",
-   "manual": false,
-   "note": ""
-  },
-  {
-   "id": "emufqu1rvzhw3",
-   "ticker": "BTRW",
-   "company": "Barratt Redrow PLC",
-   "type": "AGM",
-   "event": "AGM and trading update",
-   "from": "2026-11-04",
-   "to": "2026-11-04",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-09-16",
-   "manual": false,
-   "note": ""
-  },
-  {
    "id": "emufqu1rvxa5z",
    "ticker": "ASC",
    "company": "ASOS PLC",
@@ -666,22 +636,6 @@
    "added": 1790668012537
   },
   {
-   "id": "emumdi1a1qgss",
-   "ticker": "SNWS",
-   "company": "Smiths News PLC",
-   "type": "FY results",
-   "event": "FY2026 results",
-   "from": "2026-11-04",
-   "to": "2026-11-04",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-09-29",
-   "manual": false,
-   "note": "",
-   "added": 1790668012537
-  },
-  {
    "id": "emunp0z5vqimh",
    "ticker": "GNC",
    "company": "Greencore Group PLC",
@@ -809,22 +763,6 @@
    "manual": false,
    "note": "",
    "added": 1790837924808
-  },
-  {
-   "id": "emuqlh46was1i",
-   "ticker": "JDW",
-   "company": "Wetherspoon (JD) PLC",
-   "type": "Q1",
-   "event": "Q1 trading update",
-   "from": "2026-11-04",
-   "to": "2026-11-04",
-   "label": "",
-   "conf": "confirmed",
-   "src": "RNS",
-   "rns": "2026-10-02",
-   "manual": false,
-   "note": "",
-   "added": 1790923271289
   },
   {
    "id": "emuqlh46x66ne",
@@ -2258,6 +2196,86 @@
    "rns": "",
    "userAdded": true,
    "added": 1793702320616
+  },
+  {
+   "id": "emw1tecfqsln4",
+   "ticker": "JDW",
+   "company": "Wetherspoon (JD) PLC",
+   "type": "Trading update",
+   "event": "Q2 trading update",
+   "from": "2027-01-20",
+   "to": "2027-01-20",
+   "label": "",
+   "conf": "provisional",
+   "src": "RNS",
+   "rns": "2026-11-04",
+   "manual": false,
+   "note": "",
+   "added": 1793778489206
+  },
+  {
+   "id": "emw1tecfqfdbp",
+   "ticker": "ZTF",
+   "company": "Zotefoams PLC",
+   "type": "Pre-FY TU",
+   "event": "Full-year trading update",
+   "from": "2027-01-21",
+   "to": "2027-01-21",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-11-04",
+   "manual": false,
+   "note": "",
+   "added": 1793778489206
+  },
+  {
+   "id": "emw1tecfrimlp",
+   "ticker": "BTRW",
+   "company": "Barratt Redrow PLC",
+   "type": "H1 results",
+   "event": "Interim results",
+   "from": "2027-02-17",
+   "to": "2027-02-17",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-11-04",
+   "manual": false,
+   "note": "",
+   "added": 1793778489207
+  },
+  {
+   "id": "emw1tecfr3v7m",
+   "ticker": "SN.",
+   "company": "Smith & Nephew PLC",
+   "type": "FY results",
+   "event": "Q4 and full year results",
+   "from": "2027-03-01",
+   "to": "2027-03-01",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-11-04",
+   "manual": false,
+   "note": "",
+   "added": 1793778489207
+  },
+  {
+   "id": "emw1tecfrgk3r",
+   "ticker": "SNWS",
+   "company": "Smiths News PLC",
+   "type": "AGM",
+   "event": "AGM",
+   "from": "2027-01-27",
+   "to": "2027-01-27",
+   "label": "",
+   "conf": "confirmed",
+   "src": "RNS",
+   "rns": "2026-11-04",
+   "manual": false,
+   "note": "",
+   "added": 1793778489207
   }
  ],
  "stars": {
@@ -2602,6 +2620,16 @@
   "DOTD_2026_11_03": 1,
   "ABF_2026_11_03": 1,
   "FOXT_2026_11_03": 1,
-  "STX_2026_11_03": 1
+  "STX_2026_11_03": 1,
+  "TRN_2026_11_04": 1,
+  "JDW_2026_11_04": 1,
+  "BMS_2026_11_04": 1,
+  "MKS_2026_11_04": 1,
+  "FDM_2026_11_04": 1,
+  "ZTF_2026_11_04": 1,
+  "WEIR_2026_11_04": 1,
+  "BTRW_2026_11_04": 1,
+  "SN__2026_11_04": 1,
+  "SNWS_2026_11_04": 1
  }
 }
