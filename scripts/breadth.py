@@ -199,7 +199,7 @@ def run(key):
     print("Latest index spread:", out.iloc[-1].to_dict())
 
 
-# ---- sectors & commodities relative to the S&P 500 -------------------------
+# ---- sectors, bonds & commodities relative to the S&P 500 -------------------------
 # Ratio = ETF close / SPY close.  Pct = how far today's ratio is above/below its
 # own 50-day average.  Spread = same move in SDs (same yardstick as the breadth charts).
 RELATIVE = [
@@ -207,8 +207,9 @@ RELATIVE = [
     ("XLU", "Utilities", "Sector"), ("XLB", "Materials", "Sector"), ("XLY", "Discretionary", "Sector"),
     ("XLRE", "Real Estate", "Sector"), ("XLF", "Financials", "Sector"), ("XLI", "Industrials", "Sector"),
     ("XLK", "Technology", "Sector"), ("XLC", "Communication", "Sector"),
-    ("GLD", "Gold", "Commodity"), ("SLV", "Silver", "Commodity"), ("CPER", "Copper", "Commodity"),
-    ("USO", "Oil (WTI)", "Commodity"), ("UNG", "Natural Gas", "Commodity"),
+    ("TLT", "20+ yr Treasuries", "Other"), ("GLD", "Gold", "Other"), ("SLV", "Silver", "Other"),
+    ("BNO", "Brent oil", "Other"), ("USO", "WTI oil", "Other"), ("UNG", "Natural gas", "Other"),
+    ("CPER", "Copper", "Other"),
 ]
 RELATIVE_BENCH = "SPY"
 
