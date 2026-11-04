@@ -9510,7 +9510,7 @@ function fgRender(){
   }
   h+='</tbody></table></div></details>';
   h+='<div class="fg-src">Source: CNN Business Fear &amp; Greed Index, via the public mirror <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank">whit3rabbit/fear-greed-data</a> (refreshed weekdays after the US close). Pre-2021 history is reconstructed from third-party archives and is approximate. <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank">CNN live ↗</a></div>';
-  h+='<div id="br-body"></div>';
+  h='<div class="fg-sec"><div class="fg-sechead">&#128552; Fear &amp; Greed · daily score</div>'+h+'</div><div id="br-body"></div>';
   document.getElementById('fg-body').innerHTML=h;
   brRender();
 }
@@ -9524,8 +9524,15 @@ function fgRender(){
 #fg-body details.fg-drawer[open]>summary:after{transform:rotate(180deg)}
 #fg-body details.fg-drawer .fg-tbl{border:none;border-radius:0 0 6px 6px}
 #fg-body .fg-dsub{font-weight:400;letter-spacing:0;text-transform:none;color:#9a9a9a;margin-left:8px}
-#fg-body .br-sec{margin:28px -18px 0;padding:0 18px;border-top:1px solid #d8d8d8}
-#fg-body .br-sec>h4:first-child{margin:0 -18px 14px;padding:12px 18px;background:#f7f7f5;border-bottom:1px solid #e6e6e6}
+/* two outlined sections, each with a black title bar */
+#fg-body .fg-sec,#fg-body .br-sec{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;padding:0 16px 12px}
+#fg-body .br-sec{margin-top:18px}
+#fg-body .fg-sechead{margin:0 -16px 12px;padding:10px 16px;background:#14181c;color:#fff;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+#fg-body .br-sec>h4:first-child{margin:0 -16px 14px;padding:8px 16px;background:#14181c;border:none}
+#fg-body .br-sec>h4:first-child .br-title{color:#fff}
+#fg-body .br-sec>h4:first-child .fg-rng button{background:#14181c;color:#cfcfcf;border-color:#555}
+#fg-body .br-sec>h4:first-child .fg-rng button.on{background:#fff;color:#14181c;border-color:#fff}
+#fg-body .br-sec>h4:first-child .fg-rng .sep{background:#555}
 #fg-body .br-title{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#14181c;margin-bottom:10px}
 #fg-body .fg-rng .sep{display:inline-block;width:1px;height:14px;background:#ddd;margin:0 4px 0 8px;vertical-align:-3px}
 #fg-body td.tl{text-align:left}
@@ -9537,7 +9544,7 @@ function fgRender(){
 <script>
 /* Index breadth (Bespoke-style 50-day spread). Data is built by
    scripts/breadth.py (GitHub Action, weekdays 21:40 UTC) into data/breadth/. */
-var BR_IDX = {sp500:{btn:'SPX',name:'S&P 500'}, ftse250:{btn:'FTSE 250',name:'FTSE 250'}};
+var BR_IDX = {sp500:{btn:'SPX',name:'S&P 500'}, ftse250:{btn:'FTSE 250',name:'FTSE 250'}, smallcap:{btn:'SmallCap',name:'FTSE SmallCap'}};
 var BR_KEY = 'sp500', BR_RANGE = '1y', BR_CACHE = {}, BR_DRAW = {};
 /* meter / band colours — same palette as the F&G popup: red = overbought (sell side), green = oversold (buy side) */
 var BR_BANDS = [
@@ -9613,8 +9620,8 @@ function brSet(k,v){ if(k==='key')BR_KEY=v; else BR_RANGE=v; brRender(); }
 async function brRender(){
   var el=document.getElementById('br-body'); if(!el)return;
   var D=BR_CACHE[BR_KEY];
-  if(!D){ el.innerHTML='<div class="br-sec"><div style="color:#6b6b6b;font-size:12px">Loading breadth data…</div></div>'; D=await brLoad(BR_KEY); el=document.getElementById('br-body'); if(!el)return; }
-  if(!D){ el.innerHTML='<div class="br-sec"><div style="color:#6b6b6b;font-size:12px">Breadth data unavailable.</div></div>'; return; }
+  if(!D){ el.innerHTML='<div class="br-sec" style="padding-top:12px"><div style="color:#6b6b6b;font-size:12px">Loading breadth data…</div></div>'; D=await brLoad(BR_KEY); el=document.getElementById('br-body'); if(!el)return; }
+  if(!D){ el.innerHTML='<div class="br-sec" style="padding-top:12px"><div style="color:#6b6b6b;font-size:12px">Breadth data unavailable.</div></div>'; return; }
   var REL=await brRelLoad(); el=document.getElementById('br-body'); if(!el)return;
   var cfg=BR_IDX[BR_KEY], IX=D.idx, BRW=D.br, last=IX[IX.length-1].Date;
   var fd=function(s){return new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});};
