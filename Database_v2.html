@@ -9344,7 +9344,7 @@ function aaBBRender(yrs){
    are only a fallback if GitHub can't be reached. Refetched on every open. */
 var FG_ROWS = [["2026-03-13",16.7],["2026-03-16",23.9],["2026-03-17",22.9],["2026-03-18",13.6],["2026-03-19",18.3],["2026-03-20",8.4],["2026-03-23",11.6],["2026-03-24",10.4],["2026-03-25",16.5],["2026-03-26",10.3],["2026-03-27",8.2],["2026-03-30",5.8],["2026-03-31",14.9],["2026-04-01",15.9],["2026-04-02",18.3],["2026-04-06",21.9],["2026-04-07",21.6],["2026-04-08",29.2],["2026-04-09",33.8],["2026-04-10",38.1],["2026-04-13",41.0],["2026-04-14",47.3],["2026-04-15",56.2],["2026-04-16",61.5],["2026-04-17",68.6],["2026-04-20",70.0],["2026-04-21",67.6],["2026-04-22",68.5],["2026-04-23",66.2],["2026-04-24",65.4],["2026-04-27",66.3],["2026-04-28",67.4],["2026-04-29",66.2],["2026-04-30",69.5],["2026-05-01",71.2],["2026-05-04",66.9],["2026-05-05",67.3],["2026-05-06",68.7],["2026-05-07",67.3],["2026-05-08",67.3],["2026-05-11",66.6],["2026-05-12",65.7],["2026-05-13",65.0],["2026-05-14",65.9],["2026-05-15",63.2],["2026-05-18",62.1],["2026-05-19",59.3],["2026-05-20",60.5],["2026-05-21",57.5],["2026-05-22",58.2],["2026-05-26",59.8],["2026-05-27",60.6],["2026-05-28",60.7],["2026-05-29",60.5],["2026-06-01",59.5],["2026-06-02",57.0],["2026-06-03",54.6],["2026-06-04",54.6],["2026-06-05",41.9],["2026-06-08",39.4],["2026-06-09",33.8],["2026-06-10",27.3],["2026-06-11",29.7],["2026-06-12",33.5],["2026-06-15",40.1],["2026-06-16",39.5],["2026-06-17",32.9],["2026-06-18",37.3],["2026-06-22",33.9],["2026-06-23",28.5],["2026-06-24",26.5],["2026-06-25",25.4],["2026-06-26",24.7],["2026-06-29",26.9],["2026-06-30",30.0],["2026-07-01",31.6],["2026-07-02",32.5],["2026-07-06",41.7],["2026-07-07",39.8],["2026-07-08",38.6],["2026-07-09",44.7],["2026-07-10",46.8],["2026-07-13",40.9],["2026-07-14",41.1],["2026-07-15",44.4],["2026-07-16",41.9],["2026-07-17",37.0],["2026-07-20",36.0],["2026-07-21",42.8],["2026-07-22",44.4],["2026-07-23",40.9],["2026-07-24",40.8],["2026-07-27",38.2],["2026-07-28",37.1],["2026-07-29",25.6],["2026-07-30",38.1],["2026-07-31",39.6],["2026-08-03",46.1],["2026-08-04",59.0],["2026-08-05",60.2],["2026-08-06",59.7],["2026-08-07",65.1],["2026-08-10",64.4],["2026-08-11",60.1],["2026-08-12",61.7],["2026-08-13",66.1],["2026-08-14",64.3],["2026-08-17",59.1],["2026-08-18",54.6],["2026-08-19",56.6],["2026-08-20",51.4],["2026-08-21",54.7],["2026-08-24",55.0],["2026-08-25",59.6],["2026-08-26",53.9],["2026-08-27",57.3],["2026-08-28",53.7],["2026-08-31",49.2],["2026-09-01",44.9],["2026-09-02",46.1],["2026-09-03",47.5],["2026-09-04",45.2],["2026-09-08",39.1],["2026-09-09",38.2],["2026-09-10",32.2],["2026-09-11",32.7],["2026-09-14",31.0],["2026-09-15",28.0],["2026-09-16",27.3],["2026-09-17",28.7]];
 var FG_SRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/fear-greed.csv';
-var FG_RANGE = '1y', FG_DRAWER = false;
+var FG_RANGE = '1y', FG_DRAWER = false, FG_WIN = null, FG_TICKS = [];
 var FG_SP = null, FG_SPON = false, FG_SPFAIL = false;
 var FG_SPSRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/json/cnn_output.json';
 var FG_GRN = '#00a810', FG_RED = '#e02525', FG_INK = '#14181c', FG_AXIS = '#8a8a8a', FG_GRID = '#e2e2e2';
@@ -9389,6 +9389,7 @@ async function fgOpen(){
       if(out.length>100)FG_ROWS=out;
     }
   }catch(e){}
+  try{ await brLoad(BR_KEY); }catch(e){}
   fgRender();
 }
 function fgRender(){
@@ -9439,8 +9440,15 @@ function fgRender(){
   var S=R.filter(function(q){return q[0]>=key;});
   if(S.length<2)S=R.slice();
   if(S.length>900){ var step=Math.ceil(S.length/900), T=[]; for(var i=0;i<S.length;i+=step)T.push(S[i]); if(T[T.length-1]!==S[S.length-1])T.push(S[S.length-1]); S=T; }
-  var sn=S.length, W=1130,H=300,l=36,r=(FG_SPON&&FG_SP?66:52),t=10,b=22;
-  var x=function(i){return l+i*(W-l-r)/(sn-1);};
+  /* shared date window: the breadth charts below use the same start/end dates and
+     margins, so a given date sits at the same horizontal position in every chart */
+  var endD=last, bl=BR_CACHE[BR_KEY];
+  if(bl&&bl.idx.length){ var lb=bl.idx[bl.idx.length-1].Date; if(lb>endD)endD=lb; }
+  FG_WIN={a:S[0][0],b:endD}; FG_TICKS=[];
+  var sn=S.length, W=1130,H=300,l=36,r=86,t=10,b=22;
+  var tA=Date.parse(FG_WIN.a), tB=Date.parse(FG_WIN.b);
+  var xd=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);};
+  var x=function(i){return xd(S[i][0]);};
   var y=function(v){return t+(100-v)*(H-t-b)/100;};
   var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
   s+='<rect x="'+l+'" y="'+y(25).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(0)-y(25)).toFixed(1)+'" fill="'+FG_GRN+'" opacity=".16"/>';
@@ -9493,7 +9501,7 @@ function fgRender(){
       txt=lab;
     }
     if(lab===lastLab)return;
-    lastLab=lab;
+    lastLab=lab; FG_TICKS.push([q[0],txt]);
     s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
   });
   s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/></svg>';
@@ -9616,7 +9624,11 @@ function brRelSVG(R,mx,abs){
   s+='<text x="'+(mid+8)+'" y="'+(H-4)+'" font-size="9" font-weight="700" letter-spacing=".1em" fill="'+FG_RED+'">OVERBOUGHT</text>';
   return '<svg viewBox="0 0 '+W+' '+H+'" width="100%">'+s+'</svg>';
 }
-function brSet(k,v){ if(k==='key')BR_KEY=v; else BR_RANGE=v; brRender(); }
+async function brSet(k,v){
+  if(k!=='key'){ fgSetRange(v); return; }          // one range drives every chart
+  BR_KEY=v; try{ await brLoad(v); }catch(e){}
+  fgRender();                                      // re-render so the shared end date updates
+}
 async function brRender(){
   var el=document.getElementById('br-body'); if(!el)return;
   var D=BR_CACHE[BR_KEY];
@@ -9634,7 +9646,7 @@ async function brRender(){
   var h='<div class="br-sec"><h4 style="margin-top:0"><span class="br-title" style="margin:0">&#128202; Overbought / oversold · 50-day spread</span><span class="fg-rng">'
     +Object.keys(BR_IDX).map(function(k){return btn('key',k,BR_KEY===k,BR_IDX[k].btn);}).join('')
     +'<span class="sep"></span>'
-    +['3m','ytd','1y','all'].map(function(k){return btn('rng',k,BR_RANGE===k,k);}).join('')
+    +['3m','ytd','1y','5y','all'].map(function(k){return btn('rng',k,FG_RANGE===k,k);}).join('')
     +'</span></h4>';
   h+='<div class="fg-meta">Latest '+fd(last)+' · '+cfg.name+' · '+LB.N+' stocks · spread = (close − 50-day avg) ÷ SD of last 50 closes</div>';
   h+='<div class="fg-tiles">'
@@ -9653,23 +9665,15 @@ async function brRender(){
   var px=mx(LI.Spread);
   m+='<polygon points="'+(px-6)+',8 '+(px+6)+',8 '+px+',16" fill="'+FG_INK+'"/><line x1="'+px+'" x2="'+px+'" y1="12" y2="32" stroke="'+FG_INK+'" stroke-width="2"/></svg>';
   h+=m;
-  // window
-  var key;
-  if(BR_RANGE==='ytd') key=last.slice(0,4)+'-01-01';
-  else if(BR_RANGE==='all') key='0000';
-  else { var t0=new Date(last+'T00:00:00'); t0.setDate(t0.getDate()-({'3m':92,'1y':365})[BR_RANGE]); key=t0.toISOString().slice(0,10); }
-  var S=IX.filter(function(q){return q.Date>=key;}), sn=S.length;
+  // window — same dates, margins and tick positions as the Fear & Greed chart above
+  var WA=FG_WIN?FG_WIN.a:IX[0].Date, WZ=FG_WIN?FG_WIN.b:last;
+  var S=IX.filter(function(q){return q.Date>=WA&&q.Date<=WZ;}), sn=S.length;
   var W=1130,l=36,r=86,t=10,b=22;
-  var x=function(i,n){return l+i*(W-l-r)/((n||sn)-1);};
+  var tA=Date.parse(WA), tB=Date.parse(WZ);
+  var xd=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);};
   var axisX=function(arr,H){
-    var s='',lastLab='',n=arr.length;
-    arr.forEach(function(q,i){
-      if(i<4||i>n-8)return;
-      var dt=new Date(q.Date+'T00:00:00'), lab=q.Date.slice(0,7), txt=BR_RANGE==='3m'?dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):dt.toLocaleDateString('en-GB',{month:'short'})+(q.Date.slice(5,7)==='01'?" '"+q.Date.slice(2,4):'');
-      if(BR_RANGE==='3m'){ if(dt.getDay()!==1||(i%2))return; lab=q.Date; }
-      if(lab===lastLab)return; lastLab=lab;
-      s+='<text x="'+x(i,n).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
-    });
+    var s='';
+    FG_TICKS.forEach(function(tk){ s+='<text x="'+xd(tk[0]).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+tk[1]+'</text>'; });
     return s;
   };
   // chart 1 — index spread, fixed ±3 SD (values beyond are pinned to the edge)
@@ -9686,15 +9690,16 @@ async function brRender(){
     var c=v>=1?FG_RED:(v<=-1?FG_GRN:FG_AXIS);
     s+='<text x="'+(l-6)+'" y="'+(y1(v)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+c+'">'+(v>0?'+':'')+v+'</text>';
   });
-  s+='<polyline points="'+S.map(function(q,i){return x(i).toFixed(1)+','+y1(q.Spread).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
+  s+='<polyline points="'+S.map(function(q){return xd(q.Date).toFixed(1)+','+y1(q.Spread).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
   s+=axisX(S,H1);
-  s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y1(LI.Spread).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/></svg>';
+  if(sn)s+='<circle cx="'+xd(S[sn-1].Date).toFixed(1)+'" cy="'+y1(S[sn-1].Spread).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/>';
+  s+='</svg>';
   h+='<h4><span>'+cfg.name+' · index vs 50-day average (SD)</span></h4>'+s;
   // chart 2 — % of members OB / OS
-  var P=BRW.filter(function(q){return q.Date>=key;}), pn=P.length;
+  var P=BRW.filter(function(q){return q.Date>=WA&&q.Date<=WZ;}), pn=P.length;
   var top=Math.max(70,Math.ceil(Math.max.apply(null,P.map(function(q){return Math.max(q.OB,q.OS);}))/10)*10);
   var H2=220, y2=function(v){return t+(top-v)*(H2-t-b)/top;};
-  var px2=function(i){return x(i,pn);};
+  var px2=function(i){return xd(P[i].Date);};
   var s2='<svg viewBox="0 0 '+W+' '+H2+'" width="100%">';
   for(var g=0;g<=top;g+=10){
     s2+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y2(g).toFixed(1)+'" y2="'+y2(g).toFixed(1)+'" stroke="'+FG_GRID+'"'+(g&&g!==top?' stroke-dasharray="2 5"':'')+'/>';
