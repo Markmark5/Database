@@ -4,7 +4,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UK Index Breadth</title>
+<title>Index Breadth</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
@@ -142,7 +142,7 @@ footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-si
 
 <script>
 const REPO='Markmark5/Database', BRANCH='main', DIR='data/breadth/';
-const INDICES={ftse250:{name:'FTSE 250',yahoo:'^FTMC'},smallcap:{name:'FTSE SmallCap',yahoo:'^FTSC'}};
+const INDICES={ftse250:{name:'FTSE 250',yahoo:'^FTMC'},smallcap:{name:'FTSE SmallCap',yahoo:'^FTSC'},sp500:{name:'S&P 500',yahoo:'^GSPC'}};
 let KEY=new URLSearchParams(location.search).get('i'); if(!INDICES[KEY]) KEY='ftse250';
 async function getCSV(name, optional){
   name=KEY+'_'+name;

@@ -38,6 +38,7 @@ D = os.path.join(ROOT, "data", "breadth")
 INDICES = {
     "ftse250":  {"name": "FTSE 250",      "yahoo": "^FTMC"},
     "smallcap": {"name": "FTSE SmallCap", "yahoo": "^FTSC"},
+    "sp500":    {"name": "S&P 500",       "yahoo": "^GSPC", "suffix": ""},
 }
 
 WIN = 50
@@ -55,10 +56,10 @@ def read_members(path):
     return out
 
 
-def yahoo(tidm):
-    # "AO." -> "AO.L", "BT.A" -> "BT-A.L"
+def yahoo(tidm, suffix=".L"):
+    # LSE: "AO." -> "AO.L", "BT.A" -> "BT-A.L"   US (suffix ""): "BRK.B" -> "BRK-B"
     t = tidm.rstrip(".").replace(".", "-")
-    return t + ".L"
+    return t + suffix
 
 
 def log_membership(members, today, SNAP, LOG):
@@ -130,7 +131,7 @@ def run(key):
     log_membership(members, today, SNAP, LOG)
 
     start = (dt.date.today() - dt.timedelta(days=HISTORY_DAYS)).isoformat()
-    tick = {t: yahoo(t) for t in members}
+    tick = {t: yahoo(t, cfg.get("suffix", ".L")) for t in members}
     px = download(list(tick.values()) + [INDEX_TICKER], start)
     px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
     px = px.sort_index()
