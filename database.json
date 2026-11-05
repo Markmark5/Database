@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-11-05T07:48:44.217Z",
-    "savedAtLabel": "05 Nov 2026 07:48",
+    "savedAt": "2026-11-05T09:28:15.549Z",
+    "savedAtLabel": "05 Nov 2026 09:28",
     "source": "github-sync"
   },
   "scorecards": [
@@ -197479,6 +197479,318 @@
         ]
       },
       "entryPrice": 58.9
+    },
+    {
+      "id": "CRDA_2026_11_05",
+      "ticker": "CRDA",
+      "score": 59,
+      "company": "Croda International PLC",
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 100",
+      "signals": [
+        {
+          "pill": "Q3 SALES",
+          "type": "green",
+          "textHTML": "Q3 sales £449.9m, organic +6.6% (reported +5.9%), up from +4.6% in H1; nine-month organic growth of about 5.3% sits in the upper half of the 3–6% FY guide",
+          "textPlain": "Q3 sales £449.9m, organic +6.6% (reported +5.9%), up from +4.6% in H1; nine-month organic growth of about 5.3% sits in the upper half of the 3–6% FY guide"
+        },
+        {
+          "pill": "BEAUTY",
+          "type": "green",
+          "textHTML": "Beauty was exceptionally strong: Actives +19% and Beauty Care +13% organic on innovation demand from global brands; Consumer Care +10.8%, Home Care +10%",
+          "textPlain": "Beauty was exceptionally strong: Actives +19% and Beauty Care +13% organic on innovation demand from global brands; Consumer Care +10.8%, Home Care +10%"
+        },
+        {
+          "pill": "GUIDE",
+          "type": "amber",
+          "textHTML": "FY26 adjusted operating profit expectations held unchanged for a fourth time despite the stronger Q3; Q4 sales flagged as seasonally lower than Q3 at constant currency",
+          "textPlain": "FY26 adjusted operating profit expectations held unchanged for a fourth time despite the stronger Q3; Q4 sales flagged as seasonally lower than Q3 at constant currency"
+        },
+        {
+          "pill": "CROP",
+          "type": "red",
+          "textHTML": "Crop Protection sales fell 9% against a restocking-driven comparator, with farm incomes under pressure; F&amp;F slowed to +4% on Middle East and China transfer disruption",
+          "textPlain": "Crop Protection sales fell 9% against a restocking-driven comparator, with farm incomes under pressure; F&F slowed to +4% on Middle East and China transfer disruption"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "This CEO/CFO regime landed FY25 PBT inside its £265–295m range and Q1 26 on guide; the 2023 profit cuts sit under the prior regime; FY28 margin target of &gt;20% reiterated",
+          "textPlain": "This CEO/CFO regime landed FY25 PBT inside its £265–295m range and Q1 26 on guide; the 2023 profit cuts sit under the prior regime; FY28 margin target of >20% reiterated"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY26 EPS",
+          "val": "~flat",
+          "sub": "158.4p→158.4p held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 EPS",
+          "val": "na",
+          "sub": "177.4p→na",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY26 Revenue",
+          "val": "~flat",
+          "sub": "£1.77bn→£1.77bn held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "na",
+          "sub": "£1.86bn→na",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "−0.6%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "−0.3%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+3.0%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "Year End: Dec 2026 · 35 weeks",
+      "sparkSVG": "<svg id=\"spark-CRDA\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-CRDA\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV H2",
+          "mark": "🔬",
+          "dev": "+2.7pp",
+          "state": "hyp"
+        },
+        {
+          "lbl": "EPS H2",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-11-05T09:28:04.483Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar 26",
+          "eps": 157.9,
+          "price": 29.85
+        },
+        {
+          "d": "06 Mar 26",
+          "eps": 157.9,
+          "price": 27.67
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 157.5,
+          "price": 26.76
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 157.5,
+          "price": 25.18
+        },
+        {
+          "d": "27 Mar 26",
+          "eps": 158.8,
+          "price": 28.29
+        },
+        {
+          "d": "03 Apr 26",
+          "eps": 158.8,
+          "price": 28.77
+        },
+        {
+          "d": "10 Apr 26",
+          "eps": 158.8,
+          "price": 29.67
+        },
+        {
+          "d": "17 Apr 26",
+          "eps": 158.8,
+          "price": 29.79
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 158.1,
+          "price": 29.73
+        },
+        {
+          "d": "08 May 26",
+          "eps": 158.4,
+          "price": 28.11
+        },
+        {
+          "d": "15 May 26",
+          "eps": 158.4,
+          "price": 27.66
+        },
+        {
+          "d": "22 May 26",
+          "eps": 158.4,
+          "price": 28.68
+        },
+        {
+          "d": "02 Jun 26",
+          "eps": 158.4,
+          "price": 29.9
+        },
+        {
+          "d": "05 Jun 26",
+          "eps": 158.4,
+          "price": 29.38
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 158.9,
+          "price": 30.31
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 159,
+          "price": 31.49
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 158.1,
+          "price": 31.75
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 158.1,
+          "price": 30.14
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 158.1,
+          "price": 28.52
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 158.1,
+          "price": 29.29
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 158.1,
+          "price": 28.59
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 159.3,
+          "price": 32.71
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 159.3,
+          "price": 32.81
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 159.3,
+          "price": 32.85
+        },
+        {
+          "d": "21 Aug 26",
+          "eps": 158.7,
+          "price": 33.35
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 158.7,
+          "price": 34.29
+        },
+        {
+          "d": "07 Sept 26",
+          "eps": 158.6,
+          "price": 33.32
+        },
+        {
+          "d": "11 Sept 26",
+          "eps": 158.6,
+          "price": 31.77
+        },
+        {
+          "d": "18 Sept 26",
+          "eps": 158.6,
+          "price": 31.63
+        },
+        {
+          "d": "25 Sept 26",
+          "eps": 158.6,
+          "price": 32.27
+        },
+        {
+          "d": "02 Oct 26",
+          "eps": 158.5,
+          "price": 32.74
+        },
+        {
+          "d": "09 Oct 26",
+          "eps": 158.5,
+          "price": 33.44
+        },
+        {
+          "d": "16 Oct 26",
+          "eps": 158.5,
+          "price": 35.89
+        },
+        {
+          "d": "23 Oct 26",
+          "eps": 158.4,
+          "price": 36.25
+        },
+        {
+          "d": "30 Oct 26",
+          "eps": 158.4,
+          "price": 36.13
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "Full year 2026 results",
+            "type": "FY results",
+            "from": "2027-02-23",
+            "to": "2027-02-23",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      },
+      "entryPrice": 3613.0000000000005
     }
   ],
   "scorecardIndex": [
@@ -209499,6 +209811,230 @@
       "arc": null
     },
     {
+      "id": "NXT_2026_11_05",
+      "ticker": "NXT",
+      "company": "Next PLC",
+      "score": 58,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FT 30, FTSE 100",
+      "entryPrice": 15605.000000000002,
+      "importedAt": "2026-11-05T07:48:32.238Z",
+      "arc": null
+    },
+    {
+      "id": "HWDN_2026_11_05",
+      "ticker": "HWDN",
+      "company": "Howden Joinery Group PLC",
+      "score": 57,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 100",
+      "entryPrice": 840.5,
+      "importedAt": "2026-11-05T07:48:32.240Z",
+      "arc": null
+    },
+    {
+      "id": "FOXT_2026_11_05",
+      "ticker": "FOXT",
+      "company": "Foxtons Group PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE Small Cap",
+      "entryPrice": 35.95,
+      "importedAt": "2026-11-05T07:48:32.240Z",
+      "arc": null
+    },
+    {
+      "id": "SOS_2026_11_05",
+      "ticker": "SOS",
+      "company": "Sosandar PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "AIM All-Share",
+      "entryPrice": 10,
+      "importedAt": "2026-11-05T07:48:32.242Z",
+      "arc": null
+    },
+    {
+      "id": "DGE_2026_11_05",
+      "ticker": "DGE",
+      "company": "Diageo PLC",
+      "score": 55,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "Q1 TU",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 100",
+      "entryPrice": 1814,
+      "importedAt": "2026-11-05T07:48:32.242Z",
+      "arc": null
+    },
+    {
+      "id": "BT_A_2026_11_05",
+      "ticker": "BT.A",
+      "company": "BT Group PLC",
+      "score": 54,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 100, techMARK",
+      "entryPrice": 231.6,
+      "importedAt": "2026-11-05T07:48:32.243Z",
+      "arc": null
+    },
+    {
+      "id": "AUTO_2026_11_05",
+      "ticker": "AUTO",
+      "company": "Autotrader Group PLC",
+      "score": 51,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 100",
+      "entryPrice": 570.8,
+      "importedAt": "2026-11-05T07:48:32.243Z",
+      "arc": null
+    },
+    {
+      "id": "TATE_2026_11_05",
+      "ticker": "TATE",
+      "company": "Tate & Lyle PLC",
+      "score": 39,
+      "verdict": "Hold and wait",
+      "date": "2026-11-05",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 250",
+      "entryPrice": 565,
+      "importedAt": "2026-11-05T07:48:32.243Z",
+      "arc": null
+    },
+    {
+      "id": "VTY_2026_11_05",
+      "ticker": "VTY",
+      "company": "Vistry Group PLC",
+      "score": 31,
+      "verdict": "Downgrades probable",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 290,
+      "importedAt": "2026-11-05T07:48:32.244Z",
+      "arc": null
+    },
+    {
+      "id": "VSVS_2026_11_05",
+      "ticker": "VSVS",
+      "company": "Vesuvius PLC",
+      "score": 30,
+      "verdict": "Downgrades probable",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 469,
+      "importedAt": "2026-11-05T07:48:32.244Z",
+      "arc": null
+    },
+    {
+      "id": "ASC_2026_11_05",
+      "ticker": "ASC",
+      "company": "ASOS PLC",
+      "score": 81,
+      "verdict": "Upgrade likely",
+      "date": "2026-11-05",
+      "rnsType": "FY Results",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 422,
+      "importedAt": "2026-11-05T07:48:32.254Z",
+      "arc": null
+    },
+    {
+      "id": "MGAM_2026_11_05",
+      "ticker": "MGAM",
+      "company": "Morgan Advanced Materials PLC",
+      "score": 76,
+      "verdict": "Upgrade likely",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 259,
+      "importedAt": "2026-11-05T07:48:32.254Z",
+      "arc": null
+    },
+    {
+      "id": "MGNS_2026_11_05",
+      "ticker": "MGNS",
+      "company": "Morgan Sindall PLC",
+      "score": 75,
+      "verdict": "Upgrade likely",
+      "date": "2026-11-05",
+      "rnsType": "Pre-FY TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 4140,
+      "importedAt": "2026-11-05T07:48:32.255Z",
+      "arc": null
+    },
+    {
+      "id": "RS1_2026_11_05",
+      "ticker": "RS1",
+      "company": "RS Group PLC",
+      "score": 63,
+      "verdict": "Modest upgrade",
+      "date": "2026-11-05",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "entryPrice": 760,
+      "importedAt": "2026-11-05T07:48:32.255Z",
+      "arc": null
+    },
+    {
+      "id": "HIK_2026_11_05",
+      "ticker": "HIK",
+      "company": "Hikma Pharmaceuticals PLC",
+      "score": 61,
+      "verdict": "Modest upgrade",
+      "date": "2026-11-05",
+      "rnsType": "Q3 TU",
+      "mode": "Q2",
+      "index": "FTSE 250",
+      "entryPrice": 1762,
+      "importedAt": "2026-11-05T07:48:32.255Z",
+      "arc": null
+    },
+    {
+      "id": "TIME_2026_11_05",
+      "ticker": "TIME",
+      "company": "Time Finance PLC",
+      "score": 44,
+      "verdict": "Under offer",
+      "date": "2026-11-05",
+      "rnsType": "FY Results",
+      "mode": "Q2",
+      "index": "AIM All-Share",
+      "entryPrice": 58.9,
+      "importedAt": "2026-11-05T07:48:32.256Z",
+      "arc": null
+    },
+    {
       "id": "ALFA_2026_04_30",
       "ticker": "ALFA",
       "company": "Alfa Financial Software Holdings PLC",
@@ -212490,227 +213026,17 @@
       "arc": "2026-03"
     },
     {
-      "id": "NXT_2026_11_05",
-      "ticker": "NXT",
-      "company": "Next PLC",
-      "score": 58,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FT 30, FTSE 100",
-      "entryPrice": 15605.000000000002,
-      "importedAt": "2026-11-05T07:48:32.238Z",
-      "arc": null
-    },
-    {
-      "id": "HWDN_2026_11_05",
-      "ticker": "HWDN",
-      "company": "Howden Joinery Group PLC",
-      "score": 57,
+      "id": "CRDA_2026_11_05",
+      "ticker": "CRDA",
+      "company": "Croda International PLC",
+      "score": 59,
       "verdict": "Hold and wait",
       "date": "2026-11-05",
       "rnsType": "Q3 TU",
       "mode": "Q2",
       "index": "FTSE 100",
-      "entryPrice": 840.5,
-      "importedAt": "2026-11-05T07:48:32.240Z",
-      "arc": null
-    },
-    {
-      "id": "FOXT_2026_11_05",
-      "ticker": "FOXT",
-      "company": "Foxtons Group PLC",
-      "score": 56,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE Small Cap",
-      "entryPrice": 35.95,
-      "importedAt": "2026-11-05T07:48:32.240Z",
-      "arc": null
-    },
-    {
-      "id": "SOS_2026_11_05",
-      "ticker": "SOS",
-      "company": "Sosandar PLC",
-      "score": 56,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "AIM All-Share",
-      "entryPrice": 10,
-      "importedAt": "2026-11-05T07:48:32.242Z",
-      "arc": null
-    },
-    {
-      "id": "DGE_2026_11_05",
-      "ticker": "DGE",
-      "company": "Diageo PLC",
-      "score": 55,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "Q1 TU",
-      "mode": "Q4",
-      "index": "FT 30, FTSE 100",
-      "entryPrice": 1814,
-      "importedAt": "2026-11-05T07:48:32.242Z",
-      "arc": null
-    },
-    {
-      "id": "BT_A_2026_11_05",
-      "ticker": "BT.A",
-      "company": "BT Group PLC",
-      "score": 54,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "FT 30, FTSE 100, techMARK",
-      "entryPrice": 231.6,
-      "importedAt": "2026-11-05T07:48:32.243Z",
-      "arc": null
-    },
-    {
-      "id": "AUTO_2026_11_05",
-      "ticker": "AUTO",
-      "company": "Autotrader Group PLC",
-      "score": 51,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "FTSE 100",
-      "entryPrice": 570.8,
-      "importedAt": "2026-11-05T07:48:32.243Z",
-      "arc": null
-    },
-    {
-      "id": "TATE_2026_11_05",
-      "ticker": "TATE",
-      "company": "Tate & Lyle PLC",
-      "score": 39,
-      "verdict": "Hold and wait",
-      "date": "2026-11-05",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "FT 30, FTSE 250",
-      "entryPrice": 565,
-      "importedAt": "2026-11-05T07:48:32.243Z",
-      "arc": null
-    },
-    {
-      "id": "VTY_2026_11_05",
-      "ticker": "VTY",
-      "company": "Vistry Group PLC",
-      "score": 31,
-      "verdict": "Downgrades probable",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 290,
-      "importedAt": "2026-11-05T07:48:32.244Z",
-      "arc": null
-    },
-    {
-      "id": "VSVS_2026_11_05",
-      "ticker": "VSVS",
-      "company": "Vesuvius PLC",
-      "score": 30,
-      "verdict": "Downgrades probable",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 469,
-      "importedAt": "2026-11-05T07:48:32.244Z",
-      "arc": null
-    },
-    {
-      "id": "ASC_2026_11_05",
-      "ticker": "ASC",
-      "company": "ASOS PLC",
-      "score": 81,
-      "verdict": "Upgrade likely",
-      "date": "2026-11-05",
-      "rnsType": "FY Results",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 422,
-      "importedAt": "2026-11-05T07:48:32.254Z",
-      "arc": null
-    },
-    {
-      "id": "MGAM_2026_11_05",
-      "ticker": "MGAM",
-      "company": "Morgan Advanced Materials PLC",
-      "score": 76,
-      "verdict": "Upgrade likely",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 259,
-      "importedAt": "2026-11-05T07:48:32.254Z",
-      "arc": null
-    },
-    {
-      "id": "MGNS_2026_11_05",
-      "ticker": "MGNS",
-      "company": "Morgan Sindall PLC",
-      "score": 75,
-      "verdict": "Upgrade likely",
-      "date": "2026-11-05",
-      "rnsType": "Pre-FY TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 4140,
-      "importedAt": "2026-11-05T07:48:32.255Z",
-      "arc": null
-    },
-    {
-      "id": "RS1_2026_11_05",
-      "ticker": "RS1",
-      "company": "RS Group PLC",
-      "score": 63,
-      "verdict": "Modest upgrade",
-      "date": "2026-11-05",
-      "rnsType": "H1 Results",
-      "mode": "Q4",
-      "index": "FTSE 250",
-      "entryPrice": 760,
-      "importedAt": "2026-11-05T07:48:32.255Z",
-      "arc": null
-    },
-    {
-      "id": "HIK_2026_11_05",
-      "ticker": "HIK",
-      "company": "Hikma Pharmaceuticals PLC",
-      "score": 61,
-      "verdict": "Modest upgrade",
-      "date": "2026-11-05",
-      "rnsType": "Q3 TU",
-      "mode": "Q2",
-      "index": "FTSE 250",
-      "entryPrice": 1762,
-      "importedAt": "2026-11-05T07:48:32.255Z",
-      "arc": null
-    },
-    {
-      "id": "TIME_2026_11_05",
-      "ticker": "TIME",
-      "company": "Time Finance PLC",
-      "score": 44,
-      "verdict": "Under offer",
-      "date": "2026-11-05",
-      "rnsType": "FY Results",
-      "mode": "Q2",
-      "index": "AIM All-Share",
-      "entryPrice": 58.9,
-      "importedAt": "2026-11-05T07:48:32.256Z",
+      "entryPrice": 3613.0000000000005,
+      "importedAt": "2026-11-05T09:28:04.483Z",
       "arc": null
     }
   ],
