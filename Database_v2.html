@@ -9647,7 +9647,7 @@ async function brRender(){
     +'<span class="sep"></span>'
     +['3m','ytd','1y','5y','all'].map(function(k){return btn('rng',k,FG_RANGE===k,k);}).join('')
     +'</span></h4>';
-  h+='<div class="fg-meta">Latest '+fd(last)+' · '+cfg.name+' · '+LB.N+' stocks · spread = (close − 50-day avg) ÷ SD of last 50 closes</div>';
+  h+='<div class="fg-meta">Latest close '+fd(last)+' · '+cfg.name+' · '+LB.N+' stocks · spread = (close − 50-day avg) ÷ SD of last 50 closes</div>';
   h+='<div class="fg-tiles">'
     +tile(cfg.btn+' spread',sgn(LI.Spread,2),B[2],'<b style="color:'+B[2]+'">'+B[3]+'</b> · index '+LI.Close.toLocaleString('en-GB'),true)
     +tile('% overbought',LB.OB.toFixed(1)+'%',FG_RED,sgn(LB.OB-WB.OB)+' vs 1w · '+LB.XOB.toFixed(1)+'% at +2 SD')
@@ -9726,7 +9726,7 @@ async function brRender(){
         +(RI.length?'<div class="fg-lab">Indices<span class="fg-dsub">vs their own 50-day average</span></div>'+brRelSVG(RI,mxOf(RI),true)+'<div style="height:8px"></div>':'')
         +'<div class="fg-lab">Bonds &amp; commodities<span class="fg-dsub">vs the S&amp;P 500</span></div>'+brRelSVG(RO,mxOf(RO))+'</div>'
       +'</div>';
-    h+='<div class="fg-stat">Sectors, bonds &amp; commodities: ratio = ETF ÷ SPY vs its 50-day average · indices: price vs own 50-day average · as of '+fd(REL[0].Date)+' · hover a row for the SD reading · each box has its own scale</div>';
+    h+='<div class="fg-stat">Sectors, bonds &amp; commodities: ratio = ETF ÷ SPY vs its 50-day average · indices: price vs own 50-day average · as of close '+fd(REL[0].Date)+' · hover a row for the SD reading · each box has its own scale</div>';
   }
   // drawer — today's ±2 SD names
   var X=D.lat.filter(function(q){return Math.abs(q.Spread)>=2;}).sort(function(a,b){return b.Spread-a.Spread;});
