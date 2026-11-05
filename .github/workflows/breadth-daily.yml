@@ -3,6 +3,7 @@ name: Index breadth daily
 on:
   workflow_dispatch:          # "Run workflow" button in the Actions tab
   push:
+    branches: [main]
     paths:
       - data/breadth/*_members.csv   # re-run as soon as a new member list is uploaded
   schedule:
