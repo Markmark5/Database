@@ -9511,13 +9511,12 @@ function fgRender(){
   var vals=S.map(function(q){return q[1];});
   var avg=vals.reduce(function(a,c){return a+c;},0)/sn, mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
   h+='<div class="fg-stat">'+fd(S[0][0])+' – '+fd(S[sn-1][0])+' · '+sn+' points · average '+avg.toFixed(1)+' · low '+mn.toFixed(1)+' ('+fd(S[vals.indexOf(mn)][0])+') · high '+mx.toFixed(1)+' ('+fd(S[vals.indexOf(mx)][0])+')'+spNote+'</div>';
-  h+='<details class="fg-drawer"'+(FG_DRAWER?' open':'')+' ontoggle="FG_DRAWER=this.open"><summary><span>Recent readings<span class="fg-dsub">last 40 trading days</span></span></summary><div class="fg-tbl"><table><thead><tr><th>Date</th><th>Score</th><th>Chg</th><th>Rating</th></tr></thead><tbody>';
+  h+='<h4><span>Recent readings</span></h4><div class="fg-tbl"><table><thead><tr><th>Date</th><th>Score</th><th>Chg</th><th>Rating</th></tr></thead><tbody>';
   for(var i=n-1;i>=Math.max(0,n-40);i--){
     var q=R[i], pv=i>0?R[i-1][1]:q[1], bd=fgBand(q[1]), ch=q[1]-pv;
     h+='<tr'+(i===n-1?' class="hi"':'')+'><td>'+fd(q[0])+'</td><td>'+q[1].toFixed(1)+'</td><td style="color:'+(ch>=0?FG_GRN:FG_RED)+'">'+sgn(ch)+'</td><td style="color:'+bd[2]+';font-weight:700">'+bd[3]+'</td></tr>';
   }
-  h+='</tbody></table></div></details>';
-  h+='<div class="fg-src">Source: CNN Business Fear &amp; Greed Index, via the public mirror <a href="https://github.com/whit3rabbit/fear-greed-data" target="_blank">whit3rabbit/fear-greed-data</a> (refreshed weekdays after the US close). Pre-2021 history is reconstructed from third-party archives and is approximate. <a href="https://edition.cnn.com/markets/fear-and-greed" target="_blank">CNN live ↗</a></div>';
+  h+='</tbody></table></div>';
   h='<div class="fg-sec"><div class="fg-sechead">&#128552; Fear &amp; Greed · daily score</div>'+h+'</div><div id="br-body"></div>';
   document.getElementById('fg-body').innerHTML=h;
   brRender();
