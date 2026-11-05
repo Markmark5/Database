@@ -9647,7 +9647,7 @@ async function brRender(){
     +'<span class="sep"></span>'
     +['3m','ytd','1y','5y','all'].map(function(k){return btn('rng',k,FG_RANGE===k,k);}).join('')
     +'</span></h4>';
-  h+='<div class="fg-meta">Latest close '+fd(last)+' · '+cfg.name+' · '+LB.N+' stocks · spread = (close − 50-day avg) ÷ SD of last 50 closes</div>';
+  h+='<div class="fg-meta">Latest close '+fd(LB.Date>last?LB.Date:last)+(LB.Date>last?' (index level to '+fd(last)+')':'')+' · '+cfg.name+' · '+LB.N+' stocks · spread = (close − 50-day avg) ÷ SD of last 50 closes</div>';
   h+='<div class="fg-tiles">'
     +tile(cfg.btn+' spread',sgn(LI.Spread,2),B[2],'<b style="color:'+B[2]+'">'+B[3]+'</b> · index '+LI.Close.toLocaleString('en-GB'),true)
     +tile('% overbought',LB.OB.toFixed(1)+'%',FG_RED,sgn(LB.OB-WB.OB)+' vs 1w · '+LB.XOB.toFixed(1)+'% at +2 SD')

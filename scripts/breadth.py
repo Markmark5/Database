@@ -138,6 +138,18 @@ def run(key):
 
     # ---- index panel (no membership issue: rebuild every run)
     idx = px[INDEX_TICKER].dropna()
+    # Yahoo sometimes publishes UK index levels hours after the constituents' closes.
+    # If the index is behind the stocks, ask for it again on its own.
+    last_stock = px.drop(columns=[INDEX_TICKER]).dropna(how="all").index.max()
+    if idx.index.max() < last_stock:
+        try:
+            h = yf.Ticker(INDEX_TICKER).history(start=start, auto_adjust=True)["Close"]
+            h.index = pd.to_datetime(h.index).tz_localize(None).normalize()
+            idx = idx.combine_first(h.dropna()).sort_index()
+        except Exception as e:  # noqa: BLE001
+            print("index retry failed", INDEX_TICKER, e)
+        if idx.index.max() < last_stock:
+            print(f"[{cfg['name']}] index level only to {idx.index.max().date()}, stocks to {last_stock.date()}")
     isp, _ = spread(idx.to_frame())
     out = pd.DataFrame({"Close": idx.round(2), "Spread": isp.iloc[:, 0].round(3)}).dropna()
     out.index.name = "Date"

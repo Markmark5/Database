@@ -8,6 +8,7 @@ on:
       - data/breadth/*_members.csv   # re-run as soon as a new member list is uploaded
   schedule:
     - cron: "40 21 * * 1-5"   # 21:40 UTC weekdays, after both the LSE and US closes
+    - cron: "10 6 * * 2-6"    # 06:10 UTC Tue-Sat, before the LSE open: picks up any late Yahoo data
 
 permissions:
   contents: write
