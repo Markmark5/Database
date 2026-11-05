@@ -1,12 +1,12 @@
-# Calendar scrape - 2026-11-04
+# Calendar scrape - 2026-11-05
 
-**280 sources · 40 events staged for approval**
+**280 sources · 38 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 142 | read OK, upcoming events found |
-| EMPTY | 127 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 137 | read OK, upcoming events found |
+| EMPTY | 131 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
@@ -43,6 +43,7 @@
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
 - FRP Advisory (FRP) - http 200, http - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
+- Hikma (HIK) - http 200, browser - https://www.hikma.com/investors/financial-calendar/
 - Ibstock (IBST) - http 200, http - https://www.ibstock.co.uk/investors/shareholder-information#1gY6zxya09eYS9cTEUwppI
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
@@ -83,6 +84,7 @@
 - Boku Inc (BOKU) - http 200, http - https://investors.boku.com/events/
 - Boot (Henry) (BOOT) - http 200, http - https://www.henryboot.co.uk/investors/financial-calendar/
 - BP (BP.) - http 200, browser - https://www.bp.com/investors/shareholder-and-dividend-information/financial-calendar
+- Barratt Redrow (BTRW) - http 200, http - https://www.barrattredrow.co.uk/investors/financial-calendar
 - Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
 - Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
@@ -133,12 +135,18 @@
 - Team Internet Group (TIG) - http 200, http - https://teaminternet.com/investors/
 - Tullow Oil (TLW) - http 200, http - https://www.tullowoil.com/investors/events/
 - Titon (TON) - http 200, http - https://www.titon.com/shareholder-information
+- Trainline (TRN) - http 200, http - https://www.trainlinegroup.com/investors/shareholder-centre/financial-calendar/
 - Victoria (VCP) - http 200, http - https://www.victoriaplc.com/financial-calendar/
 - Vertu Motors (VTU) - http 200, http - https://investors.vertumotors.com/investors/
 - Watkin Jones (WJG) - http 200, http - https://watkinjonesplc.com/investors/shareholder-centre/financial-calendar/
 - WPP (WPP) - http 200, browser - https://www.wpp.com/en/investors/calendar-and-events
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
+- FDM Group (FDM) - http 200, http - https://www.fdmgroup.com/investors-hub/
+
+## UNREADABLE
+
+- Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 
 ## BLOCKED
 
