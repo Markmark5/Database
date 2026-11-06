@@ -9389,6 +9389,13 @@ function fgHoverAt(T){
     if(p&&Math.abs(Date.parse(p.Date)-T)<5*864e5){ set('ob',p.Date,[O.y(p.OB),O.y(p.OS)]);
       rows.push('<b style="color:'+FG_RED+'">'+p.OB.toFixed(1)+'% OB</b> · <b style="color:'+FG_GRN+'">'+p.OS.toFixed(1)+'% OS</b> <span style="color:#9a9a9a">of '+p.N+'</span>'+(p.Date!==day?' <span style="color:#9a9a9a">('+fd(p.Date)+')</span>':''));
     } else set('ob',null,[]); }
+  [['rsi',(FG_HV.brName||'')+' RSI',''],['rsib','RSI breadth','%'],['ma','Above '+BR_MA+'-day avg','%']].forEach(function(z){
+    var Z=FG_HV[z[0]]; if(!Z||!Z.S||!Z.S.length||!document.querySelector('#fg-body svg.fg-hv[data-k="'+z[0]+'"]'))return;
+    var q=fgNear(Z.S,function(r){return r.Date;},T);
+    if(q&&Math.abs(Date.parse(q.Date)-T)<5*864e5){ var v=+q[Z.val], c=v>=Z.hi?FG_RED:(v<=Z.lo?FG_GRN:'#14181c');
+      set(z[0],q.Date,[Z.y(v)]); rows.push(z[1]+' <b style="color:'+c+'">'+v.toFixed(1)+z[2]+'</b>');
+    } else set(z[0],null,[]);
+  });
   return day?'<div style="font-weight:700;margin-bottom:4px">'+fd(day)+'</div>'+rows.join('<br>'):null;
 }
 function fgHoverOff(){
@@ -9581,9 +9588,11 @@ function fgRender(){
       txt=lab;
     }
     if(lab===lastLab)return;
+    /* a label too close to the previous one replaces it (e.g. a stub "2021" before "2022") */
+    if(FG_TICKS.length&&x(i)-xd(FG_TICKS[FG_TICKS.length-1][0])<40)FG_TICKS.pop();
     lastLab=lab; FG_TICKS.push([q[0],txt]);
-    s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
   });
+  FG_TICKS.forEach(function(tk){ s+='<text x="'+xd(tk[0]).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+tk[1]+'</text>'; });
   s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/>';
   s+=fgLastDate(W,r,H,S[sn-1][0])+fgCurEls(t,H-b,1)+'</svg>';
   var rb='<button class="'+(FG_SPON?'on':'')+'" style="'+(FG_SPON?'background:#2a78d6;border-color:#2a78d6;':'color:#2a78d6;border-color:#2a78d6aa;')+'" onclick="fgToggleSP()">S&amp;P overlay</button> ' + ['3m','ytd','1y','5y','all'].map(function(k){return '<button class="'+(FG_RANGE===k?'on':'')+'" onclick="fgSetRange(\''+k+'\')">'+k+'</button>';}).join('');
@@ -9635,6 +9644,12 @@ function fgRender(){
    scripts/breadth.py (GitHub Action, weekdays 21:40 UTC) into data/breadth/. */
 var BR_IDX = {sp500:{btn:'SPX',name:'S&P 500'}, ftse250:{btn:'FTSE 250',name:'FTSE 250'}, smallcap:{btn:'SmallCap',name:'FTSE SmallCap'}};
 var BR_KEY = 'sp500', BR_RANGE = '1y', BR_CACHE = {}, BR_DRAW = {};
+/* % above a moving average: 50/100/200-day button; bands set from 4 years of S&P history
+   so each is reached on roughly 5-10% of days */
+var BR_MA = 200, BR_MA_BANDS = {50:[80,25], 100:[80,35], 200:[80,40]};
+function brSetMA(w){ BR_MA=w; brRender(); }
+/* RSI colours: strong at 70/30, light at 65/35, grey in between */
+function brRsiCol(v){ return v>=70?'#e02525':v>=65?'#f08c8c':v<=30?'#00a810':v<=35?'#7fcf86':'#9a9a9a'; }
 /* meter / band colours — same palette as the F&G popup: red = overbought (sell side), green = oversold (buy side) */
 var BR_BANDS = [
   [-9, -2, '#00a810', 'Extreme oversold',   '#00a810'],
@@ -9678,7 +9693,7 @@ async function brRelLoad(){
 function brRelSVG(R,mx,abs){
   /* axis fitted to the data (like the Bespoke-style chart): zero sits wherever the
      range puts it, so bars use the full width; room is kept at each end for labels */
-  var W=560, rowH=30, padT=6, lab=160, pad=56;
+  var W=560, rowH=30, padT=24, lab=205, pad=56;
   var vals=[0]; R.forEach(function(q){vals.push(q.Pct); if(q.Pct1w!==''&&q.Pct1w!=null)vals.push(+q.Pct1w);});
   var lo=Math.min.apply(null,vals), hi=Math.max.apply(null,vals), span=(hi-lo)||1;
   var cx0=lab+(lo<0?pad:6), cx1=W-(hi>0?pad:6);
@@ -9689,10 +9704,11 @@ function brRelSVG(R,mx,abs){
   for(var g=Math.ceil(lo/stp)*stp;g<=hi;g+=stp){ if(!g)continue; var gx=sc(g).toFixed(1); s+='<line x1="'+gx+'" x2="'+gx+'" y1="'+padT+'" y2="'+bot+'" stroke="'+FG_GRID+'" stroke-dasharray="2 4"/>'; s+='<text x="'+gx+'" y="'+(bot+12)+'" text-anchor="middle" font-size="9" fill="'+FG_AXIS+'">'+(g>0?'+':'')+g+'%</text>'; }
   R.forEach(function(q){
     var c=q.Pct>=0?FG_RED:FG_GRN, x0=sc(Math.min(0,q.Pct)), x1=sc(Math.max(0,q.Pct)), cy=y+rowH/2;
-    s+='<g><title>'+q.Ticker+' '+q.Name+': '+(q.Pct>0?'+':'')+q.Pct.toFixed(1)+(abs?'% vs its 50-day avg (':'% vs 50-day relative avg (')+(q.Spread>0?'+':'')+q.Spread.toFixed(1)+' SD)'+(q.Pct1w!==''?' · 1 week ago '+(q.Pct1w>0?'+':'')+(+q.Pct1w).toFixed(1)+'%':'')+'</title>';
+    s+='<g><title>'+q.Ticker+' '+q.Name+': '+(q.Pct>0?'+':'')+q.Pct.toFixed(1)+(abs?'% vs its 50-day avg (':'% vs 50-day relative avg (')+(q.Spread>0?'+':'')+q.Spread.toFixed(1)+' SD)'+(q.Pct1w!==''?' · 1 week ago '+(q.Pct1w>0?'+':'')+(+q.Pct1w).toFixed(1)+'%':'')+(q.RSI!==''&&q.RSI!=null?' · RSI (14) '+(+q.RSI).toFixed(1):'')+'</title>';
     s+='<rect x="0" y="'+y+'" width="'+W+'" height="'+rowH+'" fill="transparent"/>';
     s+='<text x="0" y="'+(cy+4).toFixed(1)+'" font-size="12" font-weight="700" fill="'+FG_INK+'">'+q.Ticker+'</text>';
     s+='<text x="50" y="'+(cy+4).toFixed(1)+'" font-size="12" fill="#6b6b6b">'+q.Name+'</text>';
+    if(q.RSI!==''&&q.RSI!=null&&!isNaN(q.RSI))s+='<text x="192" y="'+(cy+4).toFixed(1)+'" text-anchor="end" font-size="11" font-weight="700" fill="'+brRsiCol(+q.RSI)+'">'+Math.round(q.RSI)+'</text>';
     s+='<rect x="'+x0.toFixed(1)+'" y="'+(y+5)+'" width="'+Math.max(2,x1-x0).toFixed(1)+'" height="'+(rowH-10)+'" fill="'+c+'" opacity=".88"/>';
     if(q.Pct1w!==''&&q.Pct1w!=null){ var wx=sc(q.Pct1w); s+='<line x1="'+wx.toFixed(1)+'" x2="'+wx.toFixed(1)+'" y1="'+(y+3)+'" y2="'+(y+rowH-3)+'" stroke="'+FG_INK+'" stroke-width="1.5" opacity=".45"/>'; }
     var lx=q.Pct>=0?x1+6:x0-6, an=q.Pct>=0?'start':'end';
@@ -9700,6 +9716,7 @@ function brRelSVG(R,mx,abs){
     y+=rowH;
   });
   s+='<line x1="'+mid+'" x2="'+mid+'" y1="'+padT+'" y2="'+bot+'" stroke="'+FG_INK+'" stroke-width="1.5"/>';
+  s+='<text x="192" y="14" text-anchor="end" font-size="9" font-weight="700" letter-spacing=".08em" fill="#6b6b6b">RSI</text>';
   if(abs){ return '<svg viewBox="0 0 '+W+' '+(bot+18)+'" width="100%">'+s+'</svg>'; }
   s+='<text x="'+(mid-8)+'" y="'+(H-4)+'" text-anchor="end" font-size="9" font-weight="700" letter-spacing=".1em" fill="'+FG_GRN+'">OVERSOLD</text>';
   s+='<text x="'+(mid+8)+'" y="'+(H-4)+'" font-size="9" font-weight="700" letter-spacing=".1em" fill="'+FG_RED+'">OVERBOUGHT</text>';
@@ -9801,6 +9818,33 @@ async function brRender(){
   h+='<h4><span>% of '+cfg.name+' stocks overbought and oversold</span><span class="fg-leg" style="margin:0"><span><i style="background:'+FG_RED+'"></i>OB · +1 SD or more</span><span><i style="background:'+FG_GRN+'"></i>OS · −1 SD or less</span></span></h4>'+s2;
   var bf=BRW.filter(function(q){return q.Source==='backfill';});
   h+='<div class="fg-stat">'+fd(P[0].Date)+' – '+fd(LP.Date)+' · '+pn+' points · avg OB '+(P.reduce(function(a,q){return a+q.OB;},0)/pn).toFixed(1)+'% · avg OS '+(P.reduce(function(a,q){return a+q.OS;},0)/pn).toFixed(1)+'%'+(bf.length?' · up to '+fd(bf[bf.length-1].Date)+' uses today’s member list':'')+'</div>';
+  /* single-line 0-100 charts, on the same date axis and hover line as the charts above */
+  var lineChart=function(k,rows,val,hi,lo,title,extra){
+    var H=240, yv=function(v){return t+(100-v)*(H-t-b)/100;};
+    var S2=rows.filter(function(q){return q.Date>=WA&&q.Date<=WZ&&q[val]!==''&&q[val]!=null&&!isNaN(q[val]);});
+    FG_HV[k]={S:S2,y:yv,val:val,hi:hi,lo:lo};
+    if(S2.length<2)return '';
+    var sv='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="fg-hv" data-k="'+k+'">';
+    sv+='<rect x="'+l+'" y="'+yv(100)+'" width="'+(W-l-r)+'" height="'+(yv(hi)-yv(100))+'" fill="'+FG_RED+'" opacity=".16"/>';
+    sv+='<rect x="'+l+'" y="'+yv(lo)+'" width="'+(W-l-r)+'" height="'+(yv(0)-yv(lo))+'" fill="'+FG_GRN+'" opacity=".16"/>';
+    sv+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yv(hi)+'" y2="'+yv(hi)+'" stroke="'+FG_RED+'" opacity=".6"/><line x1="'+l+'" x2="'+(W-r)+'" y1="'+yv(lo)+'" y2="'+yv(lo)+'" stroke="'+FG_GRN+'" opacity=".6"/>';
+    [0,100].forEach(function(v){sv+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yv(v)+'" y2="'+yv(v)+'" stroke="'+FG_GRID+'"/>';});
+    sv+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yv(50)+'" y2="'+yv(50)+'" stroke="'+FG_AXIS+'" stroke-dasharray="2 5" opacity=".8"/>';
+    [[0,FG_AXIS],[lo,FG_GRN],[50,FG_AXIS],[hi,FG_RED],[100,FG_AXIS]].forEach(function(z){sv+='<text x="'+(l-6)+'" y="'+(yv(z[0])+3)+'" text-anchor="end" font-size="10" fill="'+z[1]+'">'+z[0]+'</text>';});
+    sv+='<text x="'+(W-r+6)+'" y="'+((yv(100)+yv(hi))/2+3)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">OVERBOUGHT</text>';
+    sv+='<text x="'+(W-r+6)+'" y="'+((yv(lo)+yv(0))/2+3)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">OVERSOLD</text>';
+    sv+='<polyline points="'+S2.map(function(q){return xd(q.Date).toFixed(1)+','+yv(+q[val]).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
+    var Lq=S2[S2.length-1], Lv=+Lq[val], Lc=Lv>=hi?FG_RED:(Lv<=lo?FG_GRN:'#d99a00');
+    sv+='<circle cx="'+xd(Lq.Date).toFixed(1)+'" cy="'+yv(Lv).toFixed(1)+'" r="3.5" fill="'+Lc+'"/>';
+    sv+='<text x="'+(xd(Lq.Date)-8).toFixed(1)+'" y="'+(yv(Lv)-8).toFixed(1)+'" text-anchor="end" font-size="11" font-weight="700" fill="'+FG_INK+'" stroke="#fff" stroke-width="4" paint-order="stroke">'+Lv.toFixed(1)+'</text>';
+    sv+=axisX(S2,H)+fgLastDate(W,r,H,Lq.Date)+fgCurEls(t,H-b,1)+'</svg>';
+    return '<h4><span>'+title+'</span><span class="fg-leg" style="margin:0"><span><i style="background:'+FG_RED+'"></i>'+hi+'+ overbought</span><span><i style="background:'+FG_GRN+'"></i>'+lo+' or less oversold</span></span>'+(extra||'')+'</h4>'+sv;
+  };
+  var mb=BR_MA_BANDS[BR_MA];
+  h+=lineChart('rsi',IX,'RSI',70,30,cfg.name+' · RSI (14)');
+  h+=lineChart('rsib',BRW,'RSI50',70,30,'RSI breadth · % of '+cfg.name+' stocks with RSI (14) above 50');
+  h+=lineChart('ma',BRW,'A'+BR_MA,mb[0],mb[1],'% of '+cfg.name+' stocks above their '+BR_MA+'-day moving average',
+       '<span class="fg-rng">'+[50,100,200].map(function(w){return '<button class="'+(w===BR_MA?'on':'')+'" onclick="brSetMA('+w+')">'+w+'-day</button>';}).join('')+'</span>');
   if(BR_KEY==='sp500'&&REL&&REL.length){
     var mxOf=function(A){return Math.max(5,Math.ceil(Math.max.apply(null,A.map(function(q){return Math.max(Math.abs(q.Pct),Math.abs(+q.Pct1w||0));}))/5)*5);};
     var RS=REL.filter(function(q){return q.Group==='Sector';}), RO=REL.filter(function(q){return q.Group==='Other';}), RI=REL.filter(function(q){return q.Group==='Index';});
@@ -9816,12 +9860,12 @@ async function brRender(){
   // drawer — today's ±2 SD names
   var X=D.lat.filter(function(q){return Math.abs(q.Spread)>=2;}).sort(function(a,b){return b.Spread-a.Spread;});
   var nOB=X.filter(function(q){return q.Spread>0;}).length;
-  h+='<details class="fg-drawer"'+(BR_DRAW.x?' open':'')+' ontoggle="BR_DRAW.x=this.open"><summary><span>Most extended today<span class="fg-dsub">'+nOB+' at +2 SD · '+(X.length-nOB)+' at −2 SD</span></span></summary><div class="fg-tbl"><table><thead><tr><th>Ticker</th><th style="text-align:left">Name</th><th>SD</th><th>vs 50-day</th><th>Close</th></tr></thead><tbody>';
+  h+='<details class="fg-drawer"'+(BR_DRAW.x?' open':'')+' ontoggle="BR_DRAW.x=this.open"><summary><span>Most extended today<span class="fg-dsub">'+nOB+' at +2 SD · '+(X.length-nOB)+' at −2 SD</span></span></summary><div class="fg-tbl"><table><thead><tr><th>Ticker</th><th style="text-align:left">Name</th><th>SD</th><th>vs 50-day</th><th>Close</th><th>RSI (14)</th></tr></thead><tbody>';
   X.forEach(function(q){
     var c=q.Spread>0?FG_RED:FG_GRN;
-    h+='<tr><td><b>'+q.TIDM+'</b></td><td class="tl" style="color:#6b6b6b">'+q.Name+'</td><td style="color:'+c+';font-weight:700">'+sgn(q.Spread,2)+'</td><td>'+sgn(q.PctVs50)+'%</td><td>'+(+q.Close).toLocaleString('en-GB',{maximumFractionDigits:2})+'</td></tr>';
+    h+='<tr><td><b>'+q.TIDM+'</b></td><td class="tl" style="color:#6b6b6b">'+q.Name+'</td><td style="color:'+c+';font-weight:700">'+sgn(q.Spread,2)+'</td><td>'+sgn(q.PctVs50)+'%</td><td>'+(+q.Close).toLocaleString('en-GB',{maximumFractionDigits:2})+'</td><td style="color:'+(q.RSI===''||q.RSI==null?'#9a9a9a':brRsiCol(+q.RSI))+';font-weight:700">'+(q.RSI===''||q.RSI==null?'–':Math.round(q.RSI))+'</td></tr>';
   });
-  if(!X.length)h+='<tr><td colspan="5" style="text-align:left;color:#9a9a9a">None today.</td></tr>';
+  if(!X.length)h+='<tr><td colspan="6" style="text-align:left;color:#9a9a9a">None today.</td></tr>';
   h+='</tbody></table></div></details>';
   h+='<div class="fg-src">Source: Yahoo Finance daily closes, calculated by the Database breadth Action (weekdays 21:40 UTC). Overbought/oversold = 1+ SD above/below the 50-day average; extreme = 2+ SD. <a href="breadth.html?i='+BR_KEY+'" target="_blank">Full page ↗</a></div></div>';
   el.innerHTML=h;

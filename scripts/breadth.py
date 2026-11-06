@@ -15,11 +15,22 @@ Inputs
                                      only the first two columns are read)
 
 Outputs (data/breadth/)
-  <key>_index_spread.csv  Date,Close,Spread           index, rebuilt each run
-  <key>_breadth.csv         Date,N,OB,OS,XOB,XOS,Source  % of members; history is FROZEN:
+  <key>_index_spread.csv  Date,Close,Spread,RSI       index, rebuilt each run
+  <key>_breadth.csv         Date,N,OB,OS,XOB,XOS,RSI50,A50,A100,A200,Source
+                            % of members; history is FROZEN:
                             past rows are never recalculated, so each day keeps the
                             membership it had at the time. Source = backfill | live.
-  <key>_latest.csv          TIDM,Name,Close,Spread,PctVs50   today's reading per stock
+  <key>_latest.csv          TIDM,Name,Close,Spread,PctVs50,RSI   today's reading per stock
+
+  RSI50 = % of members with RSI(14) above 50; A50/A100/A200 = % above that moving average.
+  RSI is the standard 14-day Wilder RSI.
+
+Price store
+  Daily closes are kept between runs in $PRICE_STORE (default .price-store/), which the
+  Action fetches from / saves back to the "price-data" GitHub release. Each run tops the
+  store up with the last few weeks; a ticker whose stored prices no longer match Yahoo's
+  (split, dividend adjustment, correction) is re-downloaded in full, and the whole store
+  is re-downloaded once a week.
   <key>_members_snapshot.csv    last membership seen (used to detect changes)
   <key>_membership_log.csv    Date,Change,TIDM,Name    joiners / leavers each review
   <key>_failed.txt          tickers Yahoo returned no usable data for
@@ -42,7 +53,11 @@ INDICES = {
 }
 
 WIN = 50
-HISTORY_DAYS = 480          # ~12 months to plot + 50-day warm-up
+HISTORY_DAYS = 5 * 365 + 10     # 5 years: enough for 200-day averages and the 5Y view
+STORE = os.environ.get("PRICE_STORE", os.path.join(ROOT, ".price-store"))
+TOP_UP_DAYS = 15                # each run re-fetches this many recent days
+FULL_REFRESH_DAYS = 7           # re-download everything at least this often
+MATCH_TOL = 0.005               # stored vs fresh price gap that triggers a re-download
 
 
 def read_members(path):
@@ -135,6 +150,18 @@ def hourly_fill(df, tickers, market, days=7):
     FTSE stock on 5 Nov 2026) while its hourly feed has it; the last hourly
     price of a finished session equals that day's close."""
     tz, close = MARKETS[market]
+    # only needed when a recent finished session is missing prices that the ticker
+    # normally has (or the newest session is missing altogether)
+    recent = df.loc[df.index >= df.index.max() - pd.Timedelta(days=days), [t for t in tickers if t in df]]
+    before = df[[t for t in tickers if t in df]].iloc[:-len(recent) or None].iloc[-40:]
+    had = before.notna().mean() > 0.8          # tickers that normally have a price
+    gaps = int((recent.isna() & had).sum().sum())
+    now = pd.Timestamp.now(tz=tz)
+    expect = now.date() if now.time() >= close else (now - pd.Timedelta(days=1)).date()
+    while expect.weekday() >= 5:
+        expect -= dt.timedelta(days=1)
+    if gaps == 0 and len(df) and df.index.max().date() >= expect:
+        return df
     try:
         h = yf.download(tickers, period=f"{days}d", interval="1h", progress=False,
                         auto_adjust=False, threads=True)["Close"]
@@ -182,6 +209,65 @@ def fill_gaps(df):
     return out
 
 
+def rsi(df, n=14):
+    """Wilder's RSI (the standard 14-day RSI used by ShareScope and most charting tools)."""
+    d = df.diff()
+    up = d.clip(lower=0).ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
+    dn = (-d).clip(lower=0).ewm(alpha=1 / n, adjust=False, min_periods=n).mean()
+    return 100 - 100 / (1 + up / dn.replace(0, np.nan))
+
+
+def _store_paths(name):
+    return os.path.join(STORE, f"{name}.csv.gz"), os.path.join(STORE, "meta.json")
+
+
+def load_prices(name, tickers, start):
+    """Daily closes for `tickers` from the store, topped up from Yahoo.
+
+    Full download when there is no store, it is over a week old, or FULL_REFRESH
+    is set; otherwise only the last few weeks are fetched, and any ticker whose
+    stored prices disagree with Yahoo's on the overlapping days is re-fetched in full."""
+    import json
+    path, meta_path = _store_paths(name)
+    meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
+    last_full = meta.get(name, {}).get("full")
+    stale = not last_full or (dt.date.today() - dt.date.fromisoformat(last_full)).days >= FULL_REFRESH_DAYS
+    if os.environ.get("FULL_REFRESH") or stale or not os.path.exists(path):
+        print(f"  [{name}] full download from {start}")
+        px = download(tickers, start)
+        px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
+        meta.setdefault(name, {})["full"] = dt.date.today().isoformat()
+    else:
+        store = pd.read_csv(path, index_col=0, parse_dates=True)
+        recent = download(tickers, (dt.date.today() - dt.timedelta(days=TOP_UP_DAYS)).isoformat())
+        recent.index = pd.to_datetime(recent.index).tz_localize(None).normalize()
+        ov = recent.index.intersection(store.index)
+        redo = [t for t in tickers if t not in store or store[t].count() == 0]
+        for t in tickers:
+            if t in store and t in recent and t not in redo:
+                a, b = store.loc[ov, t], recent.loc[ov, t]
+                m = a.notna() & b.notna() & (a != 0)
+                if m.any() and ((b[m] / a[m] - 1).abs() > MATCH_TOL).any():
+                    redo.append(t)
+        if redo:
+            print(f"  [{name}] re-downloading full history for {len(redo)}: {redo[:12]}{' …' if len(redo) > 12 else ''}")
+            hist = download(redo, start)
+            hist.index = pd.to_datetime(hist.index).tz_localize(None).normalize()
+            store = pd.concat([store.drop(columns=[c for c in redo if c in store]), hist], axis=1)
+        px = recent.combine_first(store.reindex(columns=tickers))
+        print(f"  [{name}] topped up {len(recent.index)} recent days from store ({len(store.index)} days)")
+    meta.setdefault(name, {})["updated"] = dt.date.today().isoformat()
+    return px.sort_index().loc[start:].reindex(columns=tickers), meta
+
+
+def save_prices(name, px, meta):
+    import json
+    os.makedirs(STORE, exist_ok=True)
+    path, meta_path = _store_paths(name)
+    px.round(4).to_csv(path, date_format="%Y-%m-%d", compression="gzip")
+    json.dump(meta, open(meta_path, "w"), indent=1)
+
+
 def spread(df):
     ma = df.rolling(WIN, min_periods=WIN).mean()
     sd = df.rolling(WIN, min_periods=WIN).std()
@@ -201,11 +287,12 @@ def run(key):
 
     start = (dt.date.today() - dt.timedelta(days=HISTORY_DAYS)).isoformat()
     tick = {t: yahoo(t, cfg.get("suffix", ".L")) for t in members}
-    px = download(list(tick.values()) + [INDEX_TICKER], start)
-    px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
+    allT = list(tick.values()) + [INDEX_TICKER]
+    px, meta = load_prices(key, allT, start)
     market = cfg.get("market", "UK")
-    px = drop_open_session(px.sort_index(), market)
-    px = drop_open_session(hourly_fill(px, list(tick.values()) + [INDEX_TICKER], market), market)
+    px = drop_open_session(px, market)
+    px = drop_open_session(hourly_fill(px, allT, market), market)
+    save_prices(key, px, meta)          # finished sessions only
 
     # ---- index panel (no membership issue: rebuild every run)
     idx = px[INDEX_TICKER].dropna()
@@ -222,7 +309,8 @@ def run(key):
         if idx.index.max() < last_stock:
             print(f"[{cfg['name']}] index level only to {idx.index.max().date()}, stocks to {last_stock.date()}")
     isp, _ = spread(idx.to_frame())
-    out = pd.DataFrame({"Close": idx.round(2), "Spread": isp.iloc[:, 0].round(3)}).dropna()
+    out = pd.DataFrame({"Close": idx.round(2), "Spread": isp.iloc[:, 0].round(3),
+                        "RSI": rsi(idx).round(2)}).dropna(subset=["Spread"])
     out.index.name = "Date"
     out.to_csv(INDEX, date_format="%Y-%m-%d")
 
@@ -245,6 +333,14 @@ def run(key):
         "XOB": (sp >= 2).sum(axis=1) / n * 100,
         "XOS": (sp <= -2).sum(axis=1) / n * 100,
     })
+    r = rsi(stocks)
+    nr = r.notna().sum(axis=1)
+    calc["RSI50"] = ((r > 50).sum(axis=1) / nr * 100).where(nr >= len(tick) * 0.5)
+    for w in (50, 100, 200):
+        ma = stocks.rolling(w, min_periods=w).mean()
+        ok = ma.notna() & stocks.notna()
+        nw = ok.sum(axis=1)
+        calc[f"A{w}"] = (((stocks > ma) & ok).sum(axis=1) / nw * 100).where(nw >= len(tick) * 0.5)
     calc = calc[calc["N"] >= len(tick) * 0.5].round(2)   # skip warm-up / thin days
     calc.index = calc.index.strftime("%Y-%m-%d")
 
@@ -255,7 +351,13 @@ def run(key):
         keep = old[old.index < last]
         new = calc[calc.index >= last].copy()
         new["Source"] = "live"
-        merged = pd.concat([keep, new])
+        earlier = calc[calc.index < old.index.min()].copy()      # longer history: backfill
+        earlier["Source"] = "backfill"
+        merged = pd.concat([earlier, keep, new])
+        # fill columns added later (RSI50, A50 ...) and any missing days from today's members
+        merged = merged.combine_first(calc).sort_index()
+        merged["Source"] = merged["Source"].fillna("backfill")
+        merged = merged[list(calc.columns) + ["Source"]]
     else:
         merged = calc.copy()
         merged["Source"] = "backfill"
@@ -265,15 +367,17 @@ def run(key):
 
     # ---- today's per-stock table
     last_row = sp.iloc[-1]
+    last_rsi = r.iloc[-1]
     rows = []
     for t, y in tick.items():
         if y in sp and pd.notna(last_row.get(y)):
             rows.append([t, members[t], round(float(stocks[y].iloc[-1]), 4),
-                         round(float(last_row[y]), 3), round(float(pct[y].iloc[-1]), 2)])
+                         round(float(last_row[y]), 3), round(float(pct[y].iloc[-1]), 2),
+                         round(float(last_rsi[y]), 1) if pd.notna(last_rsi.get(y)) else ""])
     rows.sort(key=lambda r: -r[3])
     with open(LATEST, "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["TIDM", "Name", "Close", "Spread", "PctVs50"])
+        w.writerow(["TIDM", "Name", "Close", "Spread", "PctVs50", "RSI"])
         w.writerows(rows)
 
     print(f"[{cfg['name']}] {len(members)} members, {len(rows)} with data, {len(failed)} failed: {failed}")
@@ -317,15 +421,17 @@ def run_relative():
     spr = (rel - ma) / sd.replace(0, np.nan)
     last = pct.index[-1]
     wk = pct.index[max(0, len(pct.index) - 6)]
+    own = rsi(px)                                  # RSI of each ETF's own price
     rows = []
     for t, name, grp in [("ABS:" + a, b, c) for a, b, c in ABSOLUTE] + RELATIVE:
         if t in pct and pd.notna(pct.at[last, t]):
             rows.append([last.strftime("%Y-%m-%d"), t.replace("ABS:", ""), name, grp,
                          round(float(pct.at[last, t]), 2), round(float(spr.at[last, t]), 2),
-                         round(float(pct.at[wk, t]), 2) if pd.notna(pct.at[wk, t]) else ""])
+                         round(float(pct.at[wk, t]), 2) if pd.notna(pct.at[wk, t]) else "",
+                         round(float(own.at[last, t.replace("ABS:", "")]), 1)])
     with open(os.path.join(D, "relative.csv"), "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["Date", "Ticker", "Name", "Group", "Pct", "Spread", "Pct1w"])
+        w.writerow(["Date", "Ticker", "Name", "Group", "Pct", "Spread", "Pct1w", "RSI"])
         w.writerows(rows)
     print(f"[relative] {len(rows)}/{len(RELATIVE) + len(ABSOLUTE)} vs {RELATIVE_BENCH} as of {last.date()}")
 

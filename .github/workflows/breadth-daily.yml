@@ -20,7 +20,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -31,8 +31,29 @@ jobs:
       - name: Install
         run: pip install --quiet yfinance pandas numpy
 
+      # Daily closes are kept between runs as files on the "price-data" release, so
+      # each run only tops them up (see scripts/breadth.py). No release yet = full download.
+      - name: Fetch stored prices
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p .price-store
+          gh release download price-data -D .price-store --clobber || echo "No stored prices yet: this run downloads full history"
+
       - name: Compute breadth
+        env:
+          PRICE_STORE: .price-store
         run: python scripts/breadth.py
+
+      - name: Save stored prices
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view price-data >/dev/null 2>&1 || gh release create price-data --latest=false \
+            --title "Breadth price data" \
+            --notes "Daily closing prices used by scripts/breadth.py. Replaced automatically by the Index breadth Action on every run; not a software release."
+          gh release upload price-data .price-store/* --clobber
 
       - name: Commit results
         run: |
