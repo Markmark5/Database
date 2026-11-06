@@ -113,6 +113,28 @@ def download(tickers, start):
     return df
 
 
+def complete_days(df, need=0.8):
+    """Drop trailing days that too few tickers have reported yet.
+
+    Yahoo publishes closes in batches; a run soon after the close can see the
+    newest day for only some tickers. Those days are left for a later run."""
+    rep = df.notna().sum(axis=1)
+    full = rep.max()
+    while len(df) and rep.iloc[-1] < need * full:
+        print(f"  skipping {df.index[-1].date()}: only {int(rep.iloc[-1])}/{int(full)} tickers reported")
+        df, rep = df.iloc[:-1], rep.iloc[:-1]
+    return df
+
+
+def fill_gaps(df):
+    """Forward-fill short gaps inside the history (holidays, suspensions) but never
+    the newest day: a ticker with no price for the latest day is left out of it
+    instead of being counted at yesterday's price."""
+    out = df.ffill(limit=3)
+    out.iloc[-1] = df.iloc[-1]
+    return out
+
+
 def spread(df):
     ma = df.rolling(WIN, min_periods=WIN).mean()
     sd = df.rolling(WIN, min_periods=WIN).std()
@@ -157,8 +179,7 @@ def run(key):
 
     # ---- constituents
     stocks = px[[v for v in tick.values() if v in px]].copy()
-    # forward-fill only short gaps (holidays/suspensions); stale names drop out naturally
-    stocks = stocks.apply(fix_units).ffill(limit=3)
+    stocks = fill_gaps(complete_days(stocks.apply(fix_units)))
     stocks = stocks.loc[idx.index.min():]
     sp, pct = spread(stocks)
 
@@ -234,7 +255,9 @@ def run_relative():
     absT = [t for t, _, _ in ABSOLUTE]
     px = download(list(dict.fromkeys(tick + absT + [RELATIVE_BENCH])), start)
     px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
-    px = px.sort_index().ffill(limit=3)
+    px = px.sort_index()
+    px = px[px[RELATIVE_BENCH].notna()]          # every ratio needs that day's SPY close
+    px = fill_gaps(complete_days(px))
     rel = px[[t for t in tick if t in px]].div(px[RELATIVE_BENCH], axis=0)
     rel = pd.concat([px[[t for t in absT if t in px]].add_prefix("ABS:"), rel], axis=1)
     ma = rel.rolling(WIN, min_periods=WIN).mean()
