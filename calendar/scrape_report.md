@@ -4,11 +4,11 @@
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 134 | read OK, upcoming events found |
-| EMPTY | 133 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 135 | read OK, upcoming events found |
+| EMPTY | 134 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| BLOCKED | 7 | 401/403/429 - bot protection or login |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -52,6 +52,7 @@
 - MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
+- Next 15 (NFG) - http 200, http - https://www.next15.com/investors/financial-calendar/
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
 - Personal Group (PGH) - http 200, browser - https://www.personalgroup.com/financial-calendar
 - Ramsdens (RFX) - http 200, http - https://www.ramsdensplc.com/investor-relations/financial-calendar
@@ -70,13 +71,13 @@
 - Vp (VP.) - http 200, http - https://www.vpplc.com/investors/financial-calendar/
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
-- Glencore (GLEN) - http 200, http - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
+- Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
-- Avation (AVAP) - http 200, browser - https://www.avation.net/results.html
+- Avation (AVAP) - http 200, http - https://www.avation.net/results.html
 - Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
 - AstraZeneca (AZN) - http 200, browser - https://www.astrazeneca.com/investor-relations/shareholder-information.html
 - Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
@@ -158,7 +159,6 @@
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
-- Next 15 (NFG) - http 403, chrome - https://www.next15.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
@@ -166,11 +166,9 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
-- Empresaria (EMR) - http None, chrome - https://www.empresaria.com/shareholder-information/financial-calendar
 
 ## Approved events not re-verified tonight
 
-- Empresaria Trading update 2027-01-28
 - Princes Group Q3 2026-11-10
 - Wise H1 results 2026-11-12
 - Time Finance AGM 2026-11-30
