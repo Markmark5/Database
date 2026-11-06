@@ -9468,6 +9468,8 @@ async function fgOpen(){
   }catch(e){}
   try{ await brLoad(BR_KEY); }catch(e){}
   fgRender();
+  /* load the other indices in the background so their buttons switch instantly */
+  Object.keys(BR_IDX).forEach(function(k){ if(k!==BR_KEY) brLoad(k).catch(function(){}); });
 }
 function fgRender(){
   var R=FG_ROWS, n=R.length, L=R[n-1], last=L[0], B=fgBand(L[1]);
