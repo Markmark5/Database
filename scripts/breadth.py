@@ -38,7 +38,7 @@ D = os.path.join(ROOT, "data", "breadth")
 INDICES = {
     "ftse250":  {"name": "FTSE 250",      "yahoo": "^FTMC"},
     "smallcap": {"name": "FTSE SmallCap", "yahoo": "^FTSC"},
-    "sp500":    {"name": "S&P 500",       "yahoo": "^GSPC", "suffix": ""},
+    "sp500":    {"name": "S&P 500",       "yahoo": "^GSPC", "suffix": "", "market": "US"},
 }
 
 WIN = 50
@@ -113,6 +113,53 @@ def download(tickers, start):
     return df
 
 
+# exchange time zone and the time after which that day's closes are final
+MARKETS = {"UK": ("Europe/London", dt.time(16, 40)), "US": ("America/New_York", dt.time(16, 10))}
+
+
+def drop_open_session(df, market):
+    """Remove today's row while that market is still trading (a late-starting run
+    would otherwise count part of a session as a close)."""
+    tz, close = MARKETS[market]
+    now = pd.Timestamp.now(tz=tz)
+    if len(df) and df.index[-1].date() == now.date() and now.time() < close:
+        print(f"  ignoring {now.date()}: {market} market not closed yet")
+        df = df.iloc[:-1]
+    return df
+
+
+def hourly_fill(df, tickers, market, days=7):
+    """Fill missing recent daily closes from Yahoo's hourly prices.
+
+    Yahoo's daily feed sometimes skips a day for many stocks (seen for every
+    FTSE stock on 5 Nov 2026) while its hourly feed has it; the last hourly
+    price of a finished session equals that day's close."""
+    tz, close = MARKETS[market]
+    try:
+        h = yf.download(tickers, period=f"{days}d", interval="1h", progress=False,
+                        auto_adjust=False, threads=True)["Close"]
+    except Exception as e:  # noqa: BLE001
+        print("  hourly fetch failed", e)
+        return df
+    if isinstance(h, pd.Series):
+        h = h.to_frame(tickers[0])
+    if not len(h):
+        return df
+    h.index = h.index.tz_convert(tz)
+    now = pd.Timestamp.now(tz=tz)
+    finished = [d for d in sorted(set(h.index.date)) if d < now.date() or now.time() >= close]
+    rows = {pd.Timestamp(d): h[h.index.date == d].ffill().iloc[-1] for d in finished}
+    if not rows:
+        return df
+    hd = pd.DataFrame(rows).T.reindex(columns=df.columns)
+    before = int(df.reindex(hd.index)[tickers].notna().sum().sum())
+    out = df.combine_first(hd).sort_index()
+    after = int(out.reindex(hd.index)[tickers].notna().sum().sum())
+    if after > before:
+        print(f"  filled {after - before} missing closes from hourly prices")
+    return out
+
+
 def complete_days(df, need=0.8):
     """Drop trailing days that too few tickers have reported yet.
 
@@ -156,7 +203,9 @@ def run(key):
     tick = {t: yahoo(t, cfg.get("suffix", ".L")) for t in members}
     px = download(list(tick.values()) + [INDEX_TICKER], start)
     px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
-    px = px.sort_index()
+    market = cfg.get("market", "UK")
+    px = drop_open_session(px.sort_index(), market)
+    px = drop_open_session(hourly_fill(px, list(tick.values()) + [INDEX_TICKER], market), market)
 
     # ---- index panel (no membership issue: rebuild every run)
     idx = px[INDEX_TICKER].dropna()
@@ -256,6 +305,8 @@ def run_relative():
     px = download(list(dict.fromkeys(tick + absT + [RELATIVE_BENCH])), start)
     px.index = pd.to_datetime(px.index).tz_localize(None).normalize()
     px = px.sort_index()
+    allT = list(dict.fromkeys(tick + absT + [RELATIVE_BENCH]))
+    px = drop_open_session(hourly_fill(drop_open_session(px, "US"), allT, "US"), "US")
     px = px[px[RELATIVE_BENCH].notna()]          # every ratio needs that day's SPY close
     px = fill_gaps(complete_days(px))
     rel = px[[t for t in tick if t in px]].div(px[RELATIVE_BENCH], axis=0)
