@@ -9345,6 +9345,83 @@ function aaBBRender(yrs){
 var FG_ROWS = [["2026-03-13",16.7],["2026-03-16",23.9],["2026-03-17",22.9],["2026-03-18",13.6],["2026-03-19",18.3],["2026-03-20",8.4],["2026-03-23",11.6],["2026-03-24",10.4],["2026-03-25",16.5],["2026-03-26",10.3],["2026-03-27",8.2],["2026-03-30",5.8],["2026-03-31",14.9],["2026-04-01",15.9],["2026-04-02",18.3],["2026-04-06",21.9],["2026-04-07",21.6],["2026-04-08",29.2],["2026-04-09",33.8],["2026-04-10",38.1],["2026-04-13",41.0],["2026-04-14",47.3],["2026-04-15",56.2],["2026-04-16",61.5],["2026-04-17",68.6],["2026-04-20",70.0],["2026-04-21",67.6],["2026-04-22",68.5],["2026-04-23",66.2],["2026-04-24",65.4],["2026-04-27",66.3],["2026-04-28",67.4],["2026-04-29",66.2],["2026-04-30",69.5],["2026-05-01",71.2],["2026-05-04",66.9],["2026-05-05",67.3],["2026-05-06",68.7],["2026-05-07",67.3],["2026-05-08",67.3],["2026-05-11",66.6],["2026-05-12",65.7],["2026-05-13",65.0],["2026-05-14",65.9],["2026-05-15",63.2],["2026-05-18",62.1],["2026-05-19",59.3],["2026-05-20",60.5],["2026-05-21",57.5],["2026-05-22",58.2],["2026-05-26",59.8],["2026-05-27",60.6],["2026-05-28",60.7],["2026-05-29",60.5],["2026-06-01",59.5],["2026-06-02",57.0],["2026-06-03",54.6],["2026-06-04",54.6],["2026-06-05",41.9],["2026-06-08",39.4],["2026-06-09",33.8],["2026-06-10",27.3],["2026-06-11",29.7],["2026-06-12",33.5],["2026-06-15",40.1],["2026-06-16",39.5],["2026-06-17",32.9],["2026-06-18",37.3],["2026-06-22",33.9],["2026-06-23",28.5],["2026-06-24",26.5],["2026-06-25",25.4],["2026-06-26",24.7],["2026-06-29",26.9],["2026-06-30",30.0],["2026-07-01",31.6],["2026-07-02",32.5],["2026-07-06",41.7],["2026-07-07",39.8],["2026-07-08",38.6],["2026-07-09",44.7],["2026-07-10",46.8],["2026-07-13",40.9],["2026-07-14",41.1],["2026-07-15",44.4],["2026-07-16",41.9],["2026-07-17",37.0],["2026-07-20",36.0],["2026-07-21",42.8],["2026-07-22",44.4],["2026-07-23",40.9],["2026-07-24",40.8],["2026-07-27",38.2],["2026-07-28",37.1],["2026-07-29",25.6],["2026-07-30",38.1],["2026-07-31",39.6],["2026-08-03",46.1],["2026-08-04",59.0],["2026-08-05",60.2],["2026-08-06",59.7],["2026-08-07",65.1],["2026-08-10",64.4],["2026-08-11",60.1],["2026-08-12",61.7],["2026-08-13",66.1],["2026-08-14",64.3],["2026-08-17",59.1],["2026-08-18",54.6],["2026-08-19",56.6],["2026-08-20",51.4],["2026-08-21",54.7],["2026-08-24",55.0],["2026-08-25",59.6],["2026-08-26",53.9],["2026-08-27",57.3],["2026-08-28",53.7],["2026-08-31",49.2],["2026-09-01",44.9],["2026-09-02",46.1],["2026-09-03",47.5],["2026-09-04",45.2],["2026-09-08",39.1],["2026-09-09",38.2],["2026-09-10",32.2],["2026-09-11",32.7],["2026-09-14",31.0],["2026-09-15",28.0],["2026-09-16",27.3],["2026-09-17",28.7]];
 var FG_SRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/fear-greed.csv';
 var FG_RANGE = '1y', FG_DRAWER = false, FG_WIN = null, FG_TICKS = [];
+/* ---- shared hover: one vertical line through every chart (they share a date axis) ---- */
+var FG_HV = {};
+function fgLastDate(W,r,H,d){
+  var t=new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  return '<text x="'+(W-r+6)+'" y="'+(H-5)+'" font-size="10" font-weight="700" fill="#14181c">'+t+'</text>';
+}
+function fgCurEls(y0,y1,dots){
+  var s='<line class="hv-cur" x1="0" x2="0" y1="'+y0+'" y2="'+y1+'" stroke="#14181c" stroke-width="1" stroke-dasharray="3 3" opacity="0" pointer-events="none"/>';
+  for(var i=0;i<dots;i++)s+='<circle class="hv-dot" r="3.5" cx="0" cy="0" fill="#fff" stroke="#14181c" stroke-width="1.5" opacity="0" pointer-events="none"/>';
+  s+='<rect class="hv-hit" x="0" y="0" width="100%" height="100%" fill="transparent"/>';
+  return s;
+}
+function fgNear(arr,get,T){           /* nearest row by date (arrays are sorted) */
+  if(!arr||!arr.length)return null;
+  var lo=0,hi=arr.length-1;
+  while(hi-lo>1){var m=(lo+hi)>>1; if(Date.parse(get(arr[m]))<T)lo=m; else hi=m;}
+  return Math.abs(Date.parse(get(arr[lo]))-T)<=Math.abs(Date.parse(get(arr[hi]))-T)?arr[lo]:arr[hi];
+}
+function fgHoverAt(T){
+  var G=FG_HV.fg; if(!G)return null;
+  var xd=function(d){return G.l+(Date.parse(d)-G.tA)/((G.tB-G.tA)||1)*(G.W-G.l-G.r);};
+  var fd=function(d){return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});};
+  var set=function(k,d,ys){
+    var svg=document.querySelector('#fg-body svg.fg-hv[data-k="'+k+'"]'); if(!svg)return;
+    var c=svg.querySelector('.hv-cur'), x=d?xd(d):0;
+    c.setAttribute('x1',x); c.setAttribute('x2',x); c.setAttribute('opacity',d?.55:0);
+    svg.querySelectorAll('.hv-dot').forEach(function(dot,i){
+      if(d&&ys[i]!=null){dot.setAttribute('cx',x);dot.setAttribute('cy',ys[i]);dot.setAttribute('opacity',1);} else dot.setAttribute('opacity',0);
+    });
+  };
+  var f=fgNear(G.S,function(q){return q[0];},T);
+  var day=f?f[0]:null, rows=[];
+  if(f){ set('fg',f[0],[G.y(f[1])]); var bd=fgBand(f[1]);
+    rows.push('Fear &amp; Greed <b style="color:'+bd[2]+'">'+f[1].toFixed(1)+'</b> <span style="color:'+bd[2]+'">'+bd[3]+'</span>');
+    if(FG_SPON&&FG_SP&&FG_SP[f[0]]!=null)rows.push('S&amp;P 500 <b>'+Math.round(FG_SP[f[0]]).toLocaleString()+'</b>'); }
+  var I=FG_HV.idx, O=FG_HV.ob;
+  if(I&&I.S.length){ var q=fgNear(I.S,function(r){return r.Date;},T);
+    if(q&&Math.abs(Date.parse(q.Date)-T)<5*864e5){ set('idx',q.Date,[I.y(q.Spread)]); var b2=brBand(q.Spread);
+      rows.push(FG_HV.brName+' <b>'+q.Close.toLocaleString('en-GB')+'</b> · <b style="color:'+b2[2]+'">'+(q.Spread>0?'+':'')+q.Spread.toFixed(2)+' SD</b>'+(q.Date!==day?' <span style="color:#9a9a9a">('+fd(q.Date)+')</span>':''));
+    } else set('idx',null,[]); }
+  if(O&&O.S.length){ var p=fgNear(O.S,function(r){return r.Date;},T);
+    if(p&&Math.abs(Date.parse(p.Date)-T)<5*864e5){ set('ob',p.Date,[O.y(p.OB),O.y(p.OS)]);
+      rows.push('<b style="color:'+FG_RED+'">'+p.OB.toFixed(1)+'% OB</b> · <b style="color:'+FG_GRN+'">'+p.OS.toFixed(1)+'% OS</b> <span style="color:#9a9a9a">of '+p.N+'</span>'+(p.Date!==day?' <span style="color:#9a9a9a">('+fd(p.Date)+')</span>':''));
+    } else set('ob',null,[]); }
+  return day?'<div style="font-weight:700;margin-bottom:4px">'+fd(day)+'</div>'+rows.join('<br>'):null;
+}
+function fgHoverOff(){
+  document.querySelectorAll('#fg-body svg.fg-hv').forEach(function(svg){
+    svg.querySelectorAll('.hv-cur,.hv-dot').forEach(function(e){e.setAttribute('opacity',0);});
+  });
+  var tip=document.getElementById('fg-tip'); if(tip)tip.style.display='none';
+}
+function fgBindHover(){
+  var tip=document.getElementById('fg-tip');
+  if(!tip){ tip=document.createElement('div'); tip.id='fg-tip';
+    tip.style.cssText='position:fixed;z-index:3000;display:none;pointer-events:none;background:#fff;border:1px solid #14181c;border-radius:6px;padding:7px 10px;font:12px/1.5 var(--mono);color:#14181c;box-shadow:0 2px 8px #0003;white-space:nowrap';
+    document.body.appendChild(tip); }
+  document.querySelectorAll('#fg-body svg.fg-hv').forEach(function(svg){
+    if(svg._hv)return; svg._hv=1;
+    var move=function(e){
+      var G=FG_HV.fg; if(!G)return;
+      var bb=svg.getBoundingClientRect(), sx=(e.clientX-bb.left)*G.W/bb.width;
+      if(sx<G.l||sx>G.W-G.r){fgHoverOff();return;}
+      var T=G.tA+(sx-G.l)/(G.W-G.l-G.r)*(G.tB-G.tA), html=fgHoverAt(T);
+      if(!html){fgHoverOff();return;}
+      tip.innerHTML=html; tip.style.display='block';
+      var lx=e.clientX+16; if(lx+tip.offsetWidth>innerWidth-8)lx=e.clientX-16-tip.offsetWidth;
+      var ty=e.clientY-tip.offsetHeight-12; if(ty<8)ty=e.clientY+16;
+      tip.style.left=Math.max(8,lx)+'px'; tip.style.top=ty+'px';
+    };
+    svg.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse')move(e); });
+    svg.addEventListener('pointerdown',move);                 /* tap on phones */
+    svg.addEventListener('pointerleave',function(e){ if(e.pointerType==='mouse')fgHoverOff(); });
+  });
+  var body=document.getElementById('fg-body');
+  if(body&&!body._hvScroll){ body._hvScroll=1; body.addEventListener('scroll',fgHoverOff,{passive:true}); }
+}
 var FG_SP = null, FG_SPON = false, FG_SPFAIL = false;
 var FG_SPSRC = 'https://raw.githubusercontent.com/whit3rabbit/fear-greed-data/main/json/cnn_output.json';
 var FG_GRN = '#00a810', FG_RED = '#e02525', FG_INK = '#14181c', FG_AXIS = '#8a8a8a', FG_GRID = '#e2e2e2';
@@ -9450,7 +9527,8 @@ function fgRender(){
   var xd=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);};
   var x=function(i){return xd(S[i][0]);};
   var y=function(v){return t+(100-v)*(H-t-b)/100;};
-  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  FG_HV.fg={S:S,y:y,W:W,l:l,r:r,tA:tA,tB:tB};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="fg-hv" data-k="fg">';
   s+='<rect x="'+l+'" y="'+y(25).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(0)-y(25)).toFixed(1)+'" fill="'+FG_GRN+'" opacity=".16"/>';
   s+='<rect x="'+l+'" y="'+y(100).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(75)-y(100)).toFixed(1)+'" fill="'+FG_RED+'" opacity=".16"/>';
   if(!(FG_SPON&&FG_SP))s+='<text x="'+(W-r+6)+'" y="'+((y(25)+y(0))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">BUY</text>';
@@ -9504,7 +9582,8 @@ function fgRender(){
     lastLab=lab; FG_TICKS.push([q[0],txt]);
     s+='<text x="'+x(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+FG_AXIS+'">'+txt+'</text>';
   });
-  s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/></svg>';
+  s+='<circle cx="'+x(sn-1).toFixed(1)+'" cy="'+y(L[1]).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/>';
+  s+=fgLastDate(W,r,H,S[sn-1][0])+fgCurEls(t,H-b,1)+'</svg>';
   var rb='<button class="'+(FG_SPON?'on':'')+'" style="'+(FG_SPON?'background:#2a78d6;border-color:#2a78d6;':'color:#2a78d6;border-color:#2a78d6aa;')+'" onclick="fgToggleSP()">S&amp;P overlay</button> ' + ['3m','ytd','1y','5y','all'].map(function(k){return '<button class="'+(FG_RANGE===k?'on':'')+'" onclick="fgSetRange(\''+k+'\')">'+k+'</button>';}).join('');
   h+='<h4><span>History · daily score</span><span class="fg-rng">'+rb+'</span></h4>';
   h+=s;
@@ -9519,6 +9598,7 @@ function fgRender(){
   h+='</tbody></table></div>';
   h='<div class="fg-sec"><div class="fg-sechead">&#128552; Fear &amp; Greed · daily score</div>'+h+'</div><div id="br-body"></div>';
   document.getElementById('fg-body').innerHTML=h;
+  fgBindHover();
   brRender();
 }
 </script>
@@ -9677,7 +9757,8 @@ async function brRender(){
   };
   // chart 1 — index spread, fixed ±3 SD (values beyond are pinned to the edge)
   var H1=260, y1=function(v){v=Math.max(-3,Math.min(3,v));return t+(3-v)*(H1-t-b)/6;};
-  var s='<svg viewBox="0 0 '+W+' '+H1+'" width="100%">';
+  FG_HV.idx={S:S,y:y1};
+  var s='<svg viewBox="0 0 '+W+' '+H1+'" width="100%" class="fg-hv" data-k="idx">';
   [[2,3,FG_RED,.30],[1,2,FG_RED,.14],[-2,-1,FG_GRN,.14],[-3,-2,FG_GRN,.30]].forEach(function(z){
     s+='<rect x="'+l+'" y="'+y1(z[1]).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y1(z[0])-y1(z[1])).toFixed(1)+'" fill="'+z[2]+'" opacity="'+z[3]+'"/>';
   });
@@ -9692,14 +9773,16 @@ async function brRender(){
   s+='<polyline points="'+S.map(function(q){return xd(q.Date).toFixed(1)+','+y1(q.Spread).toFixed(1);}).join(' ')+'" fill="none" stroke="'+FG_INK+'" stroke-width="1.4" stroke-linejoin="round"/>';
   s+=axisX(S,H1);
   if(sn)s+='<circle cx="'+xd(S[sn-1].Date).toFixed(1)+'" cy="'+y1(S[sn-1].Spread).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/>';
-  s+='</svg>';
+  if(sn)s+=fgLastDate(W,r,H1,S[sn-1].Date);
+  s+=fgCurEls(t,H1-b,1)+'</svg>';
   h+='<h4><span>'+cfg.name+' · index vs 50-day average (SD)</span></h4>'+s;
   // chart 2 — % of members OB / OS
   var P=BRW.filter(function(q){return q.Date>=WA&&q.Date<=WZ;}), pn=P.length;
   var top=Math.max(70,Math.ceil(Math.max.apply(null,P.map(function(q){return Math.max(q.OB,q.OS);}))/10)*10);
   var H2=220, y2=function(v){return t+(top-v)*(H2-t-b)/top;};
   var px2=function(i){return xd(P[i].Date);};
-  var s2='<svg viewBox="0 0 '+W+' '+H2+'" width="100%">';
+  FG_HV.ob={S:P,y:y2,name:cfg.name};
+  var s2='<svg viewBox="0 0 '+W+' '+H2+'" width="100%" class="fg-hv" data-k="ob">';
   for(var g=0;g<=top;g+=10){
     s2+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y2(g).toFixed(1)+'" y2="'+y2(g).toFixed(1)+'" stroke="'+FG_GRID+'"'+(g&&g!==top?' stroke-dasharray="2 5"':'')+'/>';
     if(g%20===0||g===top)s2+='<text x="'+(l-6)+'" y="'+(y2(g)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+FG_AXIS+'">'+g+'</text>';
@@ -9712,7 +9795,7 @@ async function brRender(){
   s2+='<circle cx="'+px2(pn-1).toFixed(1)+'" cy="'+y2(LP.OB).toFixed(1)+'" r="3" fill="'+FG_RED+'"/><circle cx="'+px2(pn-1).toFixed(1)+'" cy="'+y2(LP.OS).toFixed(1)+'" r="3" fill="'+FG_GRN+'"/>';
   s2+='<text x="'+(W-r+8)+'" y="'+(yOB-1).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">OB,</text><text x="'+(W-r+8)+'" y="'+(yOB+10).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_RED+'">'+LP.OB.toFixed(1)+'</text>';
   s2+='<text x="'+(W-r+8)+'" y="'+(yOS-1).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">OS,</text><text x="'+(W-r+8)+'" y="'+(yOS+10).toFixed(1)+'" font-size="10" font-weight="700" fill="'+FG_GRN+'">'+LP.OS.toFixed(1)+'</text>';
-  s2+=axisX(P,H2)+'</svg>';
+  s2+=axisX(P,H2)+(pn?fgLastDate(W,r,H2,P[pn-1].Date):'')+fgCurEls(t,H2-b,2)+'</svg>';
   h+='<h4><span>% of '+cfg.name+' stocks overbought and oversold</span><span class="fg-leg" style="margin:0"><span><i style="background:'+FG_RED+'"></i>OB · +1 SD or more</span><span><i style="background:'+FG_GRN+'"></i>OS · −1 SD or less</span></span></h4>'+s2;
   var bf=BRW.filter(function(q){return q.Source==='backfill';});
   h+='<div class="fg-stat">'+fd(P[0].Date)+' – '+fd(LP.Date)+' · '+pn+' points · avg OB '+(P.reduce(function(a,q){return a+q.OB;},0)/pn).toFixed(1)+'% · avg OS '+(P.reduce(function(a,q){return a+q.OS;},0)/pn).toFixed(1)+'%'+(bf.length?' · up to '+fd(bf[bf.length-1].Date)+' uses today’s member list':'')+'</div>';
@@ -9740,6 +9823,8 @@ async function brRender(){
   h+='</tbody></table></div></details>';
   h+='<div class="fg-src">Source: Yahoo Finance daily closes, calculated by the Database breadth Action (weekdays 21:40 UTC). Overbought/oversold = 1+ SD above/below the 50-day average; extreme = 2+ SD. <a href="breadth.html?i='+BR_KEY+'" target="_blank">Full page ↗</a></div></div>';
   el.innerHTML=h;
+  FG_HV.brName=cfg.name; FG_HV.brKey=BR_KEY;
+  fgBindHover();
 }
 </script>
 
