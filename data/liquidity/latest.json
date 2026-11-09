@@ -1,0 +1,71 @@
+{
+ "date": "2026-11-09",
+ "gauge": -19.7,
+ "band": "Neutral",
+ "week_ago": -12.16,
+ "month_ago": 12.74,
+ "year_low": -45.9,
+ "year_high": 96.72,
+ "inputs": {
+  "ig": {
+   "z": -0.674,
+   "week_ago_z": -0.759
+  },
+  "funding": {
+   "z": -0.63,
+   "week_ago_z": -0.306
+  },
+  "reserves": {
+   "z": -1.309,
+   "week_ago_z": -1.5
+  },
+  "fed": {
+   "z": 0.721,
+   "week_ago_z": 0.807
+  },
+  "yield": {
+   "z": 0.691,
+   "week_ago_z": 0.868
+  },
+  "dollar": {
+   "z": -0.694,
+   "week_ago_z": -0.783
+  },
+  "move": {
+   "z": 0.198,
+   "week_ago_z": -0.547
+  },
+  "dxyvol": {
+   "z": 0.121,
+   "week_ago_z": 1.248
+  }
+ },
+ "raw": {
+  "ig_oas": 0.93,
+  "sofr_effr_bp": 1.0,
+  "reserves_bn": 2930.0,
+  "fed_assets_bn": 6748.0,
+  "us10y": 4.84,
+  "dxy": 101.82,
+  "move": 87.25,
+  "dxyvol_pct": 5.56
+ },
+ "bands": [
+  [
+   -100,
+   -35,
+   "Tight"
+  ],
+  [
+   -35,
+   35,
+   "Neutral"
+  ],
+  [
+   35,
+   101,
+   "Loose"
+  ]
+ ],
+ "updated": "2026-11-09T19:07:50Z"
+}

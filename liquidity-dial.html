@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liquidity dial</title>
+<style>
+body{margin:0;background:#fff;font-family:-apple-system,"Segoe UI",sans-serif;color:#1b2740;padding:20px}
+.card{max-width:760px;margin:0 auto}
+h2{font-size:26px;margin:0 0 6px}
+.sub{color:#5b6475;font-size:16px;margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:16px;margin-top:10px;color:#5b6475}
+.row b{font-size:20px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.tile{background:#f4f5f7;border-radius:10px;padding:14px 16px}
+.tile .l{color:#5b6475;font-size:15px}
+.tile .v{font-size:26px;font-weight:700;margin:4px 0 2px}
+.tile .s{color:#5b6475;font-size:14px}
+.src{color:#8a93a3;font-size:13px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>Liquidity gauge</h2>
+  <div class="sub" id="sub">Macro liquidity, −100 tight … +100 loose</div>
+  <div id="dial"></div>
+  <div class="row" id="trend"></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="src">Composite of 8 macro liquidity factors (credit spreads, SOFR funding, bank reserves, Fed balance sheet, yields, dollar, bond and dollar volatility), each a 3-year z-score.</div>
+</div>
+<script>
+/* liquidityDial(value, opts) -> SVG string. Same geometry as the FTSE 250 dial in the
+   morning brief: five labelled segments, dotted tick ring, needle, value underneath.
+   value runs -100..+100; segments split at -60/-35/+35/+60. */
+function liquidityDial(v, o){
+  o=o||{}; var W=o.width||720, cx=W/2, cy=W*0.48, R1=W*0.46, R0=W*0.335, Rt=W*0.30, ink=o.ink||'#1b2740';
+  var SEG=[[-100,-60,'EXTREME\nTIGHT'],[-60,-35,'TIGHT'],[-35,35,'NEUTRAL'],[35,60,'LOOSE'],[60,100,'EXTREME\nLOOSE']];
+  var a=function(x){return Math.PI*(1-(Math.max(-100,Math.min(100,x))+100)/200);};   // value -> angle (rad), 180° at -100
+  var P=function(r,t){return [cx+r*Math.cos(t), cy-r*Math.sin(t)];};
+  var arc=function(lo,hi,r0,r1){var t0=a(lo),t1=a(hi),A=P(r1,t0),B=P(r1,t1),C=P(r0,t1),D=P(r0,t0);
+    return 'M'+A+' A'+r1+' '+r1+' 0 0 1 '+B+' L'+C+' A'+r0+' '+r0+' 0 0 0 '+D+' Z';};
+  var s='<svg viewBox="0 0 '+W+' '+(cy+W*0.12)+'" width="100%" style="display:block;overflow:visible">';
+  SEG.forEach(function(g){
+    var on=v>=g[0]&&v<g[1]||(v>=100&&g[1]===100);
+    s+='<path d="'+arc(g[0]+0.6,g[1]-0.6,R0,R1)+'" fill="'+(on?'#e9ecf2':'#f4f5f7')+'" stroke="'+(on?'#5b6475':'none')+'" stroke-width="1.5"/>';
+    var mid=a((g[0]+g[1])/2), rm=(R0+R1)/2, p=P(rm,mid), rot=90-mid*180/Math.PI, lines=g[2].split('\n');
+    if(rot>90)rot-=180; if(rot<-90)rot+=180;
+    s+='<text transform="translate('+p[0].toFixed(1)+','+p[1].toFixed(1)+') rotate('+rot.toFixed(1)+')" text-anchor="middle" font-size="'+(W*0.024).toFixed(1)+'" font-weight="700" letter-spacing=".08em" fill="'+ink+'">';
+    lines.forEach(function(L,i){s+='<tspan x="0" dy="'+(i?1.15:(lines.length>1?-0.1:0.35))+'em">'+L+'</tspan>';});
+    s+='</text>';
+  });
+  for(var x=-100;x<=100;x+=5){var p=P(Rt,a(x)),big=(x%35===0&&Math.abs(x)!==70&&x!==105)||x===-100||x===100||x===0;s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(big?3:2.2)+'" fill="'+ink+'" opacity="'+(big?.9:.55)+'"/>';}
+  [-100,-35,0,35,100].forEach(function(x){var p=P(Rt-W*0.07,a(x));s+='<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+5).toFixed(1)+'" text-anchor="middle" font-size="'+(W*0.026).toFixed(1)+'" fill="#5b6475">'+(x>0?'+':'')+x+'</text>';});
+  var t=a(v), tip=P(R0-W*0.012,t), bl=P(W*0.018,t+Math.PI/2), br=P(W*0.018,t-Math.PI/2), tail=P(W*0.025,t+Math.PI);
+  s+='<path d="M'+tip+' L'+bl+' L'+tail+' L'+br+' Z" fill="'+ink+'"/><circle cx="'+cx+'" cy="'+cy+'" r="'+(W*0.012)+'" fill="'+ink+'"/>';
+  s+='<text x="'+cx+'" y="'+(cy+W*0.10).toFixed(1)+'" text-anchor="middle" font-size="'+(W*0.055).toFixed(1)+'" font-weight="700" fill="'+ink+'">'+(v>0?'+':'')+v.toFixed(2)+'</text>';
+  return s+'</svg>';
+}
+(async function(){
+  var urls=['data/liquidity/latest.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/liquidity/latest.json'],j=null;
+  for(var i=0;i<urls.length&&!j;i++){try{var r=await fetch(urls[i]+'?t='+Date.now(),{cache:'no-store'});if(r.ok)j=await r.json();}catch(e){}}
+  if(!j){document.getElementById('dial').textContent='Liquidity data unavailable.';return;}
+  var d=new Date(j.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  document.getElementById('sub').textContent='Macro liquidity · −100 tight … +100 loose · '+d;
+  document.getElementById('dial').innerHTML=liquidityDial(j.gauge);
+  var dw=j.gauge-j.week_ago, arrow=dw<-1?'<span style="color:#b03030">&#9660;</span>':dw>1?'<span style="color:#2f7d32">&#9650;</span>':'<span style="color:#5b6475">&#9654;</span>';
+  document.getElementById('trend').innerHTML='<span><b style="color:#1b2740">'+j.band+'</b> '+arrow+'</span><span>from '+(j.week_ago>0?'+':'')+j.week_ago.toFixed(2)+' a week ago · '+(j.month_ago>0?'+':'')+j.month_ago.toFixed(2)+' a month ago</span>';
+  var I=j.inputs,R=j.raw,fz=function(z){return (z>0?'+':'')+z.toFixed(2)+'σ';};
+  var t=function(l,v,s){return '<div class="tile"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';};
+  document.getElementById('tiles').innerHTML=
+    t('Bank reserves','$'+(R.reserves_bn/1000).toFixed(2)+'tn',fz(I.reserves.z)+' vs 3-year norm')+
+    t('SOFR − Fed Funds',R.sofr_effr_bp.toFixed(0)+' bp',fz(I.funding.z)+' · 20-day average')+
+    t('IG credit spread',R.ig_oas.toFixed(2)+'%',fz(I.ig.z)+' · wider = tighter')+
+    t('Bond volatility','MOVE '+R.move.toFixed(0),fz(I.move.z)+' · 3-year z-score');
+})();
+</script>
+</body>
+</html>

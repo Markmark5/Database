@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Liquidity Gauge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--mono:'Inter',sans-serif;--ink:#14181c;--grn:#00a810;--red:#e02525;--axis:#8a8a8a;--grid:#e2e2e2}
+*{box-sizing:border-box}
+body{margin:0;background:#000000dd;font-family:var(--mono);color:var(--ink);display:flex;align-items:flex-start;justify-content:center;padding:20px;min-height:100vh}
+.wrap{background:#fff;border:1px solid #d8d8d8;border-radius:8px;width:1240px;max-width:calc(100vw - 20px);overflow:hidden}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #e6e6e6;background:#f7f7f5}
+.hd span{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.hd a{color:#888;text-decoration:none;font-size:18px}
+#body{padding:16px 18px 22px;background:#fff}
+.fg-meta{font-size:11px;color:#6b6b6b;margin-bottom:10px}
+.fg-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.fg-tile{background:#f7f7f5;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px}
+.fg-tile.now{border-color:#b9b9b9}
+.fg-lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b}
+.fg-val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+.fg-sub{font-size:11px;color:#8a8a8a}
+h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;margin:14px 0 6px;display:flex;justify-content:space-between;align-items:center}
+.fg-rng button{font-family:var(--mono);font-size:10px;padding:3px 8px;margin-left:4px;border-radius:4px;cursor:pointer;background:#fff;border:1px solid #ddd;color:#777;text-transform:uppercase;letter-spacing:.06em}
+.fg-rng button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+th{background:#f0f0ee;color:#6b6b6b;font-weight:600;text-align:right;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+td{text-align:right;padding:5px 8px;border-bottom:1px solid #eee}
+th:first-child,td:first-child{text-align:left}
+td.z b{display:inline-block;min-width:44px}
+.bar{display:inline-block;height:8px;vertical-align:middle;border-radius:2px}
+.fg-tbl{border:1px solid #e6e6e6;border-radius:6px;overflow:hidden}
+.fg-src{font-size:10px;color:#9a9a9a;margin-top:10px;line-height:1.5}
+.fg-src a{color:#2a78d6}
+@media (max-width:760px){.fg-tiles{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><span>&#128167; Liquidity Gauge</span><a href="Database_v2.html" title="Back to Database">&#10005;</a></div>
+  <div id="body"><div style="color:#6b6b6b;font-size:12px">Loading liquidity data…</div></div>
+</div>
+<script>
+/* Macro liquidity gauge, -100 (tight) … +100 (loose). Daily CSV written by
+   scripts/liquidity.py via the "Liquidity gauge daily" Action. Same palette and
+   layout as the Fear & Greed / breadth popups in Database_v2.html. */
+var LQ_SRC=['data/liquidity/liquidity.csv','https://raw.githubusercontent.com/Markmark5/Database/main/data/liquidity/liquidity.csv'];
+var LQ_RANGE='1y', LQ=null;
+/* [lo, hi, text colour, label, meter fill] — strong colour at the extremes, light inside */
+var LQ_BANDS=[
+  [-101,-60,'#b00000','Very tight','#e02525'],
+  [-60, -35,'#e02525','Tight',     '#fad4d4'],
+  [-35,  35,'#d99a00','Neutral',   '#f2dfa8'],
+  [ 35,  60,'#2fb81f','Loose',     '#d6f0d8'],
+  [ 60, 101,'#00a810','Very loose','#00a810']
+];
+var LQ_IN=[
+  ['z_reserves','Bank reserves','reserves_bn',function(v){return '$'+(v/1000).toFixed(2)+'tn';},'level vs 3y'],
+  ['z_funding','SOFR − Fed Funds','sofr_effr_bp',function(v){return v.toFixed(0)+' bp';},'20-day avg'],
+  ['z_ig','IG credit spread','ig_oas',function(v){return v.toFixed(2)+'%';},'OAS level'],
+  ['z_fed','Fed balance sheet','fed_assets_bn',function(v){return '$'+(v/1000).toFixed(2)+'tn';},'3-month change'],
+  ['z_yield','10-year yield','us10y',function(v){return v.toFixed(2)+'%';},'1-week change'],
+  ['z_dollar','Dollar (DXY)','dxy',function(v){return v.toFixed(1);},'3-month change'],
+  ['z_move','Bond volatility','move',function(v){return 'MOVE '+v.toFixed(0);},'level'],
+  ['z_dxyvol','Dollar volatility','dxyvol_pct',function(v){return v.toFixed(1)+'% ann.';},'10-day realised']
+];
+function lqBand(v){for(var i=0;i<LQ_BANDS.length;i++){if(v>=LQ_BANDS[i][0]&&v<LQ_BANDS[i][1])return LQ_BANDS[i];}return LQ_BANDS[2];}
+function lqCSV(txt){
+  var L=txt.trim().split(/\r?\n/),H=L[0].split(','),out=[];
+  for(var i=1;i<L.length;i++){var c=L[i].split(','),o={};for(var j=0;j<H.length;j++)o[H[j]]=j?parseFloat(c[j]):c[j];out.push(o);}
+  return out;
+}
+async function lqLoad(){
+  for(var i=0;i<LQ_SRC.length;i++){try{var r=await fetch(LQ_SRC[i]+'?t='+Date.now(),{cache:'no-store'});if(r.ok)return lqCSV(await r.text());}catch(e){}}
+  return null;
+}
+function lqSetRange(r){LQ_RANGE=r;lqRender();}
+function fd(d){return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function sgn(v,dp){return (v>0?'+':'')+v.toFixed(dp==null?1:dp);}
+function dAgo(d){return Math.round((Date.parse(LQ[LQ.length-1].Date)-Date.parse(d))/864e5);}
+function lqRender(){
+  var R=LQ,n=R.length,last=R[n-1],L=last.Gauge,B=lqBand(L);
+  var at=function(days){var t=Date.parse(last.Date)-days*864e5;for(var i=n-1;i>=0;i--)if(Date.parse(R[i].Date)<=t)return R[i];return R[0];};
+  var wk=at(7),mo=at(30),yr=R.filter(function(q){return dAgo(q.Date)<=365;});
+  var lo=yr.reduce(function(a,q){return q.Gauge<a.Gauge?q:a;}),hi=yr.reduce(function(a,q){return q.Gauge>a.Gauge?q:a;});
+  var h='<div class="fg-meta">Composite of 8 macro liquidity factors (credit, funding, reserves, Fed balance sheet, yields, dollar, volatility), each a 3-year z-score. Higher = looser, lower = tighter. Last update '+fd(last.Date)+'.</div>';
+  var tile=function(lab,val,col,sub,now){return '<div class="fg-tile'+(now?' now':'')+'"><div class="fg-lab">'+lab+'</div><div class="fg-val" style="color:'+col+'">'+sgn(val,2)+'</div><div class="fg-sub">'+sub+'</div></div>';};
+  h+='<div class="fg-tiles">'
+    +tile('Now',L,B[2],'<b style="color:'+B[2]+'">'+B[3]+'</b> · 1w ago '+sgn(wk.Gauge,2)+' · 1m ago '+sgn(mo.Gauge,2),true)
+    +tile('1 year low',lo.Gauge,lqBand(lo.Gauge)[2],sgn(L-lo.Gauge)+' above · '+fd(lo.Date)+' ('+dAgo(lo.Date)+'d ago)')
+    +tile('1 year high',hi.Gauge,lqBand(hi.Gauge)[2],sgn(L-hi.Gauge)+' below · '+fd(hi.Date)+' ('+dAgo(hi.Date)+'d ago)')
+    +'</div>';
+  // meter, -100 … +100
+  var MW=1130,MH=54,mx=function(v){return (Math.max(-100,Math.min(100,v))+100)/200*MW;};
+  var m='<svg viewBox="0 0 '+MW+' '+MH+'" width="100%">';
+  LQ_BANDS.forEach(function(bd){
+    var x0=mx(bd[0]),x1=mx(bd[1]),on=(bd===B);
+    m+='<rect x="'+x0+'" y="14" width="'+(x1-x0)+'" height="16" fill="'+bd[4]+'"/>';
+    m+='<text x="'+((x0+x1)/2)+'" y="46" text-anchor="middle" font-size="10" font-weight="'+(on?700:400)+'" fill="'+(on?bd[2]:'#8a8a8a')+'">'+bd[3]+'</text>';
+  });
+  [-100,-35,0,35,100].forEach(function(v){var a=v===-100?'start':v===100?'end':'middle';m+='<text x="'+mx(v)+'" y="10" text-anchor="'+a+'" font-size="9" fill="#8a8a8a">'+v+'</text>';});
+  var px=mx(L);
+  m+='<polygon points="'+(px-6)+',8 '+(px+6)+',8 '+px+',16" fill="#14181c"/><line x1="'+px+'" x2="'+px+'" y1="12" y2="32" stroke="#14181c" stroke-width="2"/></svg>';
+  h+=m;
+  // history chart — tight band under -35, loose band over +35, dotted zero
+  var cut={'3m':92,'1y':365,'all':99999}[LQ_RANGE];
+  var S=R.filter(function(q){return dAgo(q.Date)<=cut;}); if(S.length<2)S=R.slice();
+  var W=1130,H=300,l=40,r=86,t=10,b=22,tA=Date.parse(S[0].Date),tB=Date.parse(last.Date);
+  var xd=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);};
+  var y=function(v){return t+(100-v)*(H-t-b)/200;};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%">';
+  s+='<rect x="'+l+'" y="'+y(-35).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(-100)-y(-35)).toFixed(1)+'" fill="#e02525" opacity=".16"/>';
+  s+='<rect x="'+l+'" y="'+y(100).toFixed(1)+'" width="'+(W-l-r)+'" height="'+(y(35)-y(100)).toFixed(1)+'" fill="#00a810" opacity=".16"/>';
+  s+='<text x="'+(W-r+6)+'" y="'+((y(-35)+y(-100))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="#e02525">TIGHT</text>';
+  s+='<text x="'+(W-r+6)+'" y="'+((y(100)+y(35))/2+3).toFixed(1)+'" font-size="10" font-weight="700" fill="#00a810">LOOSE</text>';
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(-35).toFixed(1)+'" y2="'+y(-35).toFixed(1)+'" stroke="#e02525" stroke-width="1" opacity=".6"/>';
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(35).toFixed(1)+'" y2="'+y(35).toFixed(1)+'" stroke="#00a810" stroke-width="1" opacity=".6"/>';
+  [-100,100].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'" stroke="#e2e2e2"/>';});
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(0).toFixed(1)+'" y2="'+y(0).toFixed(1)+'" stroke="#8a8a8a" stroke-dasharray="2 5" opacity=".8"/>';
+  [-100,-35,0,35,100].forEach(function(v){var c=(v===-35?'#e02525':(v===35?'#00a810':'#8a8a8a'));s+='<text x="'+(l-6)+'" y="'+(y(v)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+c+'">'+v+'</text>';});
+  // month ticks
+  var seen={};S.forEach(function(q){var k=q.Date.slice(0,7);if(seen[k])return;seen[k]=1;var d=new Date(q.Date+'T00:00:00');if(S.length>400&&d.getMonth()%3)return;s+='<text x="'+xd(q.Date).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="#8a8a8a">'+d.toLocaleDateString('en-GB',{month:'short'})+(d.getMonth()===0?' '+String(d.getFullYear()).slice(2):'')+'</text>';});
+  s+='<polyline points="'+S.map(function(q){return xd(q.Date).toFixed(1)+','+y(q.Gauge).toFixed(1);}).join(' ')+'" fill="none" stroke="#14181c" stroke-width="1.4" stroke-linejoin="round"/>';
+  s+='<circle cx="'+xd(last.Date).toFixed(1)+'" cy="'+y(L).toFixed(1)+'" r="3.5" fill="'+B[2]+'"/>';
+  s+='<text x="'+(W-r+6)+'" y="'+(H-5)+'" font-size="10" font-weight="700" fill="#14181c">'+new Date(last.Date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})+'</text>';
+  s+='</svg>';
+  h+='<h4><span>Liquidity gauge · daily</span><span class="fg-rng">'+['3m','1y','all'].map(function(k){return '<button class="'+(k===LQ_RANGE?'on':'')+'" onclick="lqSetRange(\''+k+'\')">'+k+'</button>';}).join('')+'</span></h4>'+s;
+  // inputs table
+  var rows=LQ_IN.map(function(d){
+    var zv=last[d[0]],zw=wk[d[0]],col=zv<=-1?'#e02525':zv>=1?'#00a810':'#14181c',w=Math.min(3,Math.abs(zv))/3*60;
+    var bar='<svg width="124" height="12" style="vertical-align:middle"><line x1="62" x2="62" y1="0" y2="12" stroke="#c8c8c8"/><rect x="'+(zv<0?62-w:62)+'" y="2" width="'+w.toFixed(1)+'" height="8" rx="2" fill="'+(zv<0?'#e02525':'#00a810')+'"/></svg>';
+    return '<tr><td>'+d[1]+' <span style="color:#9a9a9a">· '+d[4]+'</span></td><td>'+d[3](last[d[2]])+'</td><td class="z"><b style="color:'+col+'">'+sgn(zv,2)+'</b></td><td>'+sgn(zw,2)+'</td><td>'+sgn(zv-zw,2)+'</td><td>'+bar+'</td></tr>';
+  }).join('');
+  h+='<h4><span>Inputs · z-score vs 3-year history (negative = tighter)</span></h4><div class="fg-tbl"><table><tr><th>Input</th><th>Latest</th><th>z now</th><th>z 1w ago</th><th>Change</th><th>Tight ← → Loose</th></tr>'+rows+'</table></div>';
+  h+='<div class="fg-src">Source: FRED (IG OAS, SOFR, EFFR, reserves, Fed assets, 10Y) and Yahoo Finance (MOVE, DXY), calculated by the Database liquidity Action (weekdays 21:50 UTC). Gauge = average of the 8 z-scores × 100, capped at ±100; below −35 tight, above +35 loose. Reserves and Fed assets are weekly (Wednesday) and update on Thursdays.</div>';
+  document.getElementById('body').innerHTML=h;
+}
+(async function(){LQ=await lqLoad();if(!LQ||LQ.length<2){document.getElementById('body').innerHTML='<div style="color:#b00000;font-size:12px">Liquidity data unavailable.</div>';return;}lqRender();})();
+</script>
+</body>
+</html>
