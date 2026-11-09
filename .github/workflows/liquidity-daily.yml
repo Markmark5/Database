@@ -1,0 +1,40 @@
+name: Liquidity gauge daily
+
+on:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  schedule:
+    - cron: "50 21 * * 1-5"   # 21:50 UTC weekdays, after the US close and the Thursday Fed H.4.1 release
+
+permissions:
+  contents: write
+
+concurrency:
+  group: liquidity-daily
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install --quiet yfinance pandas numpy
+
+      - name: Compute liquidity gauge
+        run: python scripts/liquidity.py
+
+      - name: Commit results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/liquidity
+          git diff --staged --quiet && exit 0
+          git commit -m "Liquidity gauge $(date -u +%F)"
+          git pull --rebase -X theirs
+          git push
