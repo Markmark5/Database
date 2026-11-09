@@ -133,7 +133,7 @@ function lqRender(){
     return '<tr><td>'+d[1]+' <span style="color:#9a9a9a">· '+d[4]+'</span></td><td>'+d[3](last[d[2]])+'</td><td class="z"><b style="color:'+col+'">'+sgn(zv,2)+'</b></td><td>'+sgn(zw,2)+'</td><td>'+sgn(zv-zw,2)+'</td><td>'+bar+'</td></tr>';
   }).join('');
   h+='<h4><span>Inputs · z-score vs 3-year history (negative = tighter)</span></h4><div class="fg-tbl"><table><tr><th>Input</th><th>Latest</th><th>z now</th><th>z 1w ago</th><th>Change</th><th>Tight ← → Loose</th></tr>'+rows+'</table></div>';
-  h+='<div class="fg-src">Source: FRED (IG OAS, SOFR, EFFR, reserves, Fed assets, 10Y) and Yahoo Finance (MOVE, DXY), calculated by the Database liquidity Action (weekdays 21:50 UTC). Gauge = average of the 8 z-scores × 100, capped at ±100; below −35 tight, above +35 loose. A reconstruction of the SimpleVisor liquidity index fitted to its 9 Nov 2026 readings; inputs and windows are an estimate, not their published method. Reserves and Fed assets are weekly (Wednesday) and update on Thursdays.</div>';
+  h+='<div class="fg-src">Source: FRED (IG OAS, SOFR, EFFR, reserves, Fed assets, 10Y) and Yahoo Finance (MOVE, DXY), calculated by the Database liquidity Action (weekdays 21:50 UTC). Gauge = average of the 8 z-scores × 100, capped at ±100; below −35 tight, above +35 loose. Reserves and Fed assets are weekly (Wednesday) and update on Thursdays.</div>';
   document.getElementById('body').innerHTML=h;
 }
 (async function(){LQ=await lqLoad();if(!LQ||LQ.length<2){document.getElementById('body').innerHTML='<div style="color:#b00000;font-size:12px">Liquidity data unavailable.</div>';return;}lqRender();})();

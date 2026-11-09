@@ -1,10 +1,8 @@
 """Macro liquidity gauge (-100 tight ... +100 loose).
 
-A replica of the SimpleVisor "Liquidity Regime" index: 8 macro liquidity inputs,
-each turned into a 3-year z-score, signed so that negative = tighter, averaged
-with equal weights and scaled x100 (an average of -1 SD reads -100). Fitted to
-the published readings of 9 Nov 2026 (-18.73 / -13.66 a week earlier / +5.23 a
-month earlier); the inputs and windows are a reconstruction, not their spec.
+8 macro liquidity inputs, each turned into a 3-year z-score, signed so that
+negative = tighter, averaged with equal weights and scaled x100 (an average of
+-1 SD reads -100). Below -35 is tight, above +35 loose.
 
   python scripts/liquidity.py
 
