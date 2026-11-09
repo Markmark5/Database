@@ -1,12 +1,12 @@
-# Calendar scrape - 2026-11-06
+# Calendar scrape - 2026-11-09
 
-**280 sources · 40 events staged for approval**
+**280 sources · 35 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 135 | read OK, upcoming events found |
-| EMPTY | 134 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 133 | read OK, upcoming events found |
+| EMPTY | 137 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
@@ -30,6 +30,7 @@
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
+- Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
@@ -49,6 +50,7 @@
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
+- Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
 - MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
@@ -127,6 +129,7 @@
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
+- Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
 - Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
@@ -146,10 +149,6 @@
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
 - FDM Group (FDM) - http 200, http - https://www.fdmgroup.com/investors-hub/
-
-## UNREADABLE
-
-- Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 
 ## BLOCKED
 
