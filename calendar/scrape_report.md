@@ -1,11 +1,11 @@
 # Calendar scrape - 2026-11-10
 
-**280 sources · 37 events staged for approval**
+**280 sources · 41 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 134 | read OK, upcoming events found |
-| EMPTY | 136 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 136 | read OK, upcoming events found |
+| EMPTY | 134 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
@@ -42,7 +42,6 @@
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
-- Diageo (DGE) - http 200, http - https://www.diageo.com/en/investors/results-reports-and-events/financial-calendar
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
 - Foxtons (FOXT) - http 200, http - https://www.foxtonsgroup.co.uk/investor-relations/financial-calendar
 - FRP Advisory (FRP) - http 200, http - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
@@ -92,7 +91,6 @@
 - Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
 - CLS (CLI) - http 200, http - https://clsholdings.com/investors/financial-calendar
-- Calnex Solutions (CLX) - http 200, http - https://investors.calnexsol.com/investors/financial-calendar/
 - Northcoders (CODE) - http 200, http - https://investors.northcodersgroup.com/investors/financial-calendar.asp
 - Chesnara plc · Life Insurance (CSN) - http 200, http - https://www.chesnara.co.uk/investors/financial-calendar
 - Christie (CTG) - http 200, http - https://www.christiegroup.com/investors/shareholder-information/financial-calendar
