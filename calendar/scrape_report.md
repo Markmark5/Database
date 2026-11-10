@@ -1,17 +1,18 @@
-# Calendar scrape - 2026-11-09
+# Calendar scrape - 2026-11-10
 
 **280 sources · 37 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 134 | read OK, upcoming events found |
-| EMPTY | 132 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 4 | page loaded but little text (JS-rendered even in browser) |
+| EMPTY | 136 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
+- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
@@ -22,6 +23,7 @@
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
 - Made Tech (MTEC) - http 200, http - https://investors.madetech.com/share-information/
+- NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
@@ -47,8 +49,8 @@
 - Hikma (HIK) - http 200, browser - https://www.hikma.com/investors/financial-calendar/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
+- Kainos (KNOS) - http 200, http - https://www.kainos.com/investor-relations/regulatory-news-and-events
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
-- Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
 - MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
@@ -74,6 +76,7 @@
 - Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
+- AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
 - Avation (AVAP) - http 200, http - https://www.avation.net/results.html
@@ -125,6 +128,7 @@
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
+- Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
 - Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
@@ -144,13 +148,6 @@
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
 - FDM Group (FDM) - http 200, http - https://www.fdmgroup.com/investors-hub/
-
-## UNREADABLE
-
-- Cake Box (CBOX) - http 202, browser - https://cakeboxinvestors.com/investor-hub/financial-calendar/
-- NIOX (NIOX) - http 202, browser - https://investors.niox.com/investors/financial-calendar/
-- AEP Plantations (AEP) - http 202, browser - https://aepplantations.com/investors/notices-and-financial-calendar/
-- Smiths News (SNWS) - http 202, browser - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 
 ## BLOCKED
 
