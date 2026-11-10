@@ -92,14 +92,14 @@ function lqRender(){
     +tile('1 year high',hi.Gauge,lqBand(hi.Gauge)[2],sgn(L-hi.Gauge)+' below · '+fd(hi.Date)+' ('+dAgo(hi.Date)+'d ago)')
     +'</div>';
   // meter, -100 … +100
-  var MW=1130,MH=54,mx=function(v){return (Math.max(-100,Math.min(100,v))+100)/200*MW;};
+  var MW=1130,MH=54,mx=function(v){return (100-Math.max(-100,Math.min(100,v)))/200*MW;};   /* loose (+100) on the left, like Fear / Oversold on the other meters */
   var m='<svg viewBox="0 0 '+MW+' '+MH+'" width="100%">';
   LQ_BANDS.forEach(function(bd){
-    var x0=mx(bd[0]),x1=mx(bd[1]),on=(bd===B);
+    var x0=mx(bd[1]),x1=mx(bd[0]),on=(bd===B);
     m+='<rect x="'+x0+'" y="14" width="'+(x1-x0)+'" height="16" fill="'+bd[4]+'"/>';
     m+='<text x="'+((x0+x1)/2)+'" y="46" text-anchor="middle" font-size="10" font-weight="'+(on?700:400)+'" fill="'+(on?bd[2]:'#8a8a8a')+'">'+bd[3]+'</text>';
   });
-  [-100,-35,0,35,100].forEach(function(v){var a=v===-100?'start':v===100?'end':'middle';m+='<text x="'+mx(v)+'" y="10" text-anchor="'+a+'" font-size="9" fill="#8a8a8a">'+v+'</text>';});
+  [-100,-35,0,35,100].forEach(function(v){var a=v===100?'start':v===-100?'end':'middle';m+='<text x="'+mx(v)+'" y="10" text-anchor="'+a+'" font-size="9" fill="#8a8a8a">'+(v>0?'+':'')+v+'</text>';});
   var px=mx(L);
   m+='<polygon points="'+(px-6)+',8 '+(px+6)+',8 '+px+',16" fill="#14181c"/><line x1="'+px+'" x2="'+px+'" y1="12" y2="32" stroke="#14181c" stroke-width="2"/></svg>';
   h+=m;

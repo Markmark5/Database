@@ -22,7 +22,7 @@ h2{font-size:26px;margin:0 0 6px}
 <body>
 <div class="card">
   <h2>Liquidity gauge</h2>
-  <div class="sub" id="sub">Macro liquidity, −100 tight … +100 loose</div>
+  <div class="sub" id="sub">Macro liquidity, +100 loose … −100 tight</div>
   <div id="dial"></div>
   <div class="row" id="trend"></div>
   <div class="tiles" id="tiles"></div>
@@ -35,9 +35,9 @@ h2{font-size:26px;margin:0 0 6px}
 function liquidityDial(v, o){
   o=o||{}; var W=o.width||720, cx=W/2, cy=W*0.48, R1=W*0.46, R0=W*0.335, Rt=W*0.30, ink=o.ink||'#1b2740';
   var SEG=[[-100,-60,'EXTREME\nTIGHT'],[-60,-35,'TIGHT'],[-35,35,'NEUTRAL'],[35,60,'LOOSE'],[60,100,'EXTREME\nLOOSE']];
-  var a=function(x){return Math.PI*(1-(Math.max(-100,Math.min(100,x))+100)/200);};   // value -> angle (rad), 180° at -100
+  var a=function(x){return Math.PI*(Math.max(-100,Math.min(100,x))+100)/200;};   // value -> angle (rad): +100 loose on the left, -100 tight on the right, like the other dials
   var P=function(r,t){return [cx+r*Math.cos(t), cy-r*Math.sin(t)];};
-  var arc=function(lo,hi,r0,r1){var t0=a(lo),t1=a(hi),A=P(r1,t0),B=P(r1,t1),C=P(r0,t1),D=P(r0,t0);
+  var arc=function(lo,hi,r0,r1){var t0=a(hi),t1=a(lo),A=P(r1,t0),B=P(r1,t1),C=P(r0,t1),D=P(r0,t0);
     return 'M'+A+' A'+r1+' '+r1+' 0 0 1 '+B+' L'+C+' A'+r0+' '+r0+' 0 0 0 '+D+' Z';};
   var s='<svg viewBox="0 0 '+W+' '+(cy+W*0.12)+'" width="100%" style="display:block;overflow:visible">';
   SEG.forEach(function(g){
@@ -61,7 +61,7 @@ function liquidityDial(v, o){
   for(var i=0;i<urls.length&&!j;i++){try{var r=await fetch(urls[i]+'?t='+Date.now(),{cache:'no-store'});if(r.ok)j=await r.json();}catch(e){}}
   if(!j){document.getElementById('dial').textContent='Liquidity data unavailable.';return;}
   var d=new Date(j.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  document.getElementById('sub').textContent='Macro liquidity · −100 tight … +100 loose · '+d;
+  document.getElementById('sub').textContent='Macro liquidity · +100 loose … −100 tight · '+d;
   document.getElementById('dial').innerHTML=liquidityDial(j.gauge);
   var dw=j.gauge-j.week_ago, arrow=dw<-1?'<span style="color:#b03030">&#9660;</span>':dw>1?'<span style="color:#2f7d32">&#9650;</span>':'<span style="color:#5b6475">&#9654;</span>';
   document.getElementById('trend').innerHTML='<span><b style="color:#1b2740">'+j.band+'</b> '+arrow+'</span><span>from '+(j.week_ago>0?'+':'')+j.week_ago.toFixed(2)+' a week ago · '+(j.month_ago>0?'+':'')+j.month_ago.toFixed(2)+' a month ago</span>';
