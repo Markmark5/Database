@@ -72,8 +72,12 @@ def main():
     raw["MOVE"] = yahoo("^MOVE", "MOVE")
     raw["DXY"] = yahoo("DX-Y.NYB", "DXY")
     f = pd.DataFrame({k: v.reindex(idx).ffill() for k, v in raw.items()})
-    # drop trailing days where nothing new has arrived yet (weekends, today before the close)
-    last_real = max(v.dropna().index.max() for v in raw.values())
+    # End on the last COMPLETED US session. MOVE only has a close once the US day is over;
+    # DXY trades overnight, so its "today" bar exists before the US open and must not count.
+    # A run before 21:00 UTC never includes today (GitHub can start the 21:50 job hours late).
+    now = dt.datetime.now(dt.timezone.utc)
+    cutoff = pd.Timestamp(now.date() if now.hour >= 21 else now.date() - dt.timedelta(days=1))
+    last_real = min(raw["MOVE"].dropna().index.max(), cutoff)
     f = f[f.index <= last_real]
 
     spr = (f.SOFR - f.EFFR) * 100
