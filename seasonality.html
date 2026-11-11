@@ -227,6 +227,16 @@ footer{margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font
       <button class="tbtn active" id="modeRank">Rank in month</button>
       <button class="tbtn" id="modePeak">Peak month</button>
     </div>
+    <div class="toggle-row" id="ixRow">
+      <span class="tlabel">Index</span>
+      <button class="tbtn ixb active" data-ix="all">All</button>
+      <button class="tbtn ixb" data-ix="100">FTSE 100</button>
+      <button class="tbtn ixb" data-ix="250">FTSE 250</button>
+      <button class="tbtn ixb" data-ix="sc" title="FTSE SmallCap, Fledgling, techMARK and main-market stocks in no index">FTSE SmallCap</button>
+      <button class="tbtn ixb" data-ix="aim100" title="AIM 100 (includes AIM UK 50)">AIM 100</button>
+      <button class="tbtn ixb" data-ix="aim" title="Every AIM stock, AIM 100 included">AIM</button>
+      <span class="tlabel" id="ixNote" style="margin-left:10px;text-transform:none;letter-spacing:0"></span>
+    </div>
     <div class="lb-grid">
       <div class="lb-col best"><h3 id="bestHead">Best</h3><table class="lb-table"><tbody id="bestBody"></tbody></table></div>
       <div class="lb-col worst"><h3 id="worstHead">Worst</h3><table class="lb-table"><tbody id="worstBody"></tbody></table></div>
@@ -455,6 +465,42 @@ function valClass(v){
   return v>=0?'pos':'neg';
 }
 
+/* ---- index filter: membership from File 2 ("Index membership"), via the Database page or database.json ---- */
+let lbIx='all', IXMAP=null;
+function ixGroup(x){
+  x=String(x||'').toUpperCase();
+  if(/FTSE\s*100/.test(x)) return '100';
+  if(/FTSE\s*250/.test(x)) return '250';
+  if(/\bAIM\b/.test(x)) return /AIM\s*(100|UK\s*50)/.test(x) ? 'aim100' : 'aim';
+  return 'sc'; /* SmallCap, Fledgling, techMARK or no index */
+}
+function ixOk(tidm){
+  if(lbIx==='all') return true;
+  if(!IXMAP) return false;
+  const g=IXMAP[tidm]; if(!g) return false;
+  return lbIx==='aim' ? (g==='aim'||g==='aim100') : g===lbIx;
+}
+function ixSet(raw){
+  IXMAP={}; let n=0;
+  for(const t in raw){ IXMAP[String(t).trim().toUpperCase()]=ixGroup(raw[t]); n++; }
+  document.getElementById('ixNote').textContent='';
+  renderLB();
+}
+function ixLoad(){
+  try{ const f=window.parent&&window.parent!==window&&window.parent.dbIndexMembership; const raw=f&&f(); if(raw&&Object.keys(raw).length){ ixSet(raw); return; } }catch(e){}
+  document.getElementById('ixNote').textContent='loading index list\u2026';
+  fetch('database.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{
+    const raw={}; ((d.uploadZone||{}).rows2||[]).forEach(r=>{ if(r&&r.TIDM) raw[r.TIDM]=r['Index membership']||''; });
+    ixSet(raw);
+  }).catch(()=>{ document.getElementById('ixNote').textContent='index list unavailable'; });
+}
+document.querySelectorAll('#ixRow .ixb').forEach(b=>b.addEventListener('click',()=>{
+  lbIx=b.dataset.ix;
+  document.querySelectorAll('#ixRow .ixb').forEach(c=>c.classList.toggle('active',c===b));
+  renderLB();
+}));
+function ixLabel(){ const b=document.querySelector('#ixRow .ixb.active'); return lbIx==='all'?'':' \u00b7 '+b.textContent; }
+
 function renderLB(){
   const measure = lbRank==='avg'?'avg':(lbRank==='median'?'median':'hit rate');
 
@@ -462,6 +508,7 @@ function renderLB(){
     // for each qualifying stock, find its best & worst month by the chosen metric
     const bestList=[], worstList=[];
     for(const tidm in INDEX){
+      if(!ixOk(tidm)) continue;
       const rec=INDEX[tidm];
       // metric per month (only months with >=MIN_YEARS data)
       const mm=[];
@@ -483,8 +530,8 @@ function renderLB(){
     }
     bestList.sort((a,b)=>b.m-a.m);
     worstList.sort((a,b)=>a.m-b.m);
-    document.getElementById('bestHead').textContent = lbMonth+' is their best month \u2014 by '+measure+' ('+bestList.length+')';
-    document.getElementById('worstHead').textContent = lbMonth+' is their worst month \u2014 by '+measure+' ('+worstList.length+')';
+    document.getElementById('bestHead').textContent = lbMonth+' is their best month \u2014 by '+measure+' ('+bestList.length+')'+ixLabel();
+    document.getElementById('worstHead').textContent = lbMonth+' is their worst month \u2014 by '+measure+' ('+worstList.length+')'+ixLabel();
     fillLB('bestBody', bestList.slice(0,50));
     fillLB('worstBody', worstList.slice(0,50));
     return;
@@ -493,6 +540,7 @@ function renderLB(){
   // default: rank all stocks by their value in the selected month
   const rows=[];
   for(const tidm in INDEX){
+    if(!ixOk(tidm)) continue;
     const bm=INDEX[tidm].byMonth[lbMonth];
     if(!bm) continue;
     const nums=bm.vals.filter(v=>v!==null && v!==undefined);
@@ -502,8 +550,8 @@ function renderLB(){
   rows.sort((a,b)=>b.m-a.m);
   const best=rows.slice(0,50);
   const worst=rows.slice(-50).reverse();
-  document.getElementById('bestHead').textContent = 'Best '+lbMonth+' \u2014 top 50 by '+measure;
-  document.getElementById('worstHead').textContent = 'Worst '+lbMonth+' \u2014 bottom 50 by '+measure;
+  document.getElementById('bestHead').textContent = 'Best '+lbMonth+' \u2014 top 50 by '+measure+ixLabel();
+  document.getElementById('worstHead').textContent = 'Worst '+lbMonth+' \u2014 bottom 50 by '+measure+ixLabel();
   fillLB('bestBody',best);
   fillLB('worstBody',worst);
 }
@@ -524,6 +572,7 @@ function fillLB(id,rows){
   });
 }
 renderLB();
+ixLoad();
 </script>
 </body>
 </html>
