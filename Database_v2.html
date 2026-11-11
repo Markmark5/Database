@@ -2996,6 +2996,8 @@ function toast(msg,type,ms){
    UPLOAD ZONE — 5 slots, feeds Extractor + Screener
 ══════════════════════════════════════════════════ */
 const slotState={1:null,2:null,3:null,4:null};
+/* Seasonality popup reads index membership from here (File 2) */
+window.dbIndexMembership=function(){var m={};(slotState[2]||[]).forEach(function(r){var t=String((r&&r.TIDM)||'').trim().toUpperCase();if(t)m[t]=r['Index membership']||'';});return m;};
 
 function splitCSVLine(line){
   const result=[];let cur='';let inQ=false;
