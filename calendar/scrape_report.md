@@ -1,14 +1,14 @@
 # Calendar scrape - 2026-11-11
 
-**280 sources · 42 events staged for approval**
+**279 sources · 36 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 134 | read OK, upcoming events found |
+| CLEAN | 132 | read OK, upcoming events found |
 | EMPTY | 135 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| ERROR | 5 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -79,7 +79,7 @@
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
-- Avation (AVAP) - http 200, http - https://www.avation.net/results.html
+- Avation (AVAP) - http 200, browser - https://www.avation.net/results.html
 - Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
 - AstraZeneca (AZN) - http 200, browser - https://www.astrazeneca.com/investor-relations/shareholder-information.html
 - Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
@@ -163,10 +163,12 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+- Empresaria (EMR) - http None, chrome - https://www.empresaria.com/shareholder-information/financial-calendar
 - Judges Scientific (JDG) - http None, chrome - https://www.judges.uk.com/financial-performance/financial-calendar.html
 
 ## Approved events not re-verified tonight
 
+- Empresaria Trading update 2027-01-28
 - Wise H1 results 2026-11-12
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
