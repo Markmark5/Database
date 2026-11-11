@@ -1,14 +1,14 @@
-# Calendar scrape - 2026-11-10
+# Calendar scrape - 2026-11-11
 
-**280 sources · 41 events staged for approval**
+**280 sources · 42 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 136 | read OK, upcoming events found |
-| EMPTY | 134 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 134 | read OK, upcoming events found |
+| EMPTY | 135 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 3 | timeout, DNS or server error |
+| ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -20,6 +20,7 @@
 - Gateley (GTLY) - http 200, http - https://gateleyplc.com/investors/
 - Hercules (HERC) - http 200, http - https://hercules-construction.co.uk/share-information/
 - Winking Works (WKS) - http 200, http - https://investor.winkingworks.com/financial-calendar
+- 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
 - Made Tech (MTEC) - http 200, http - https://investors.madetech.com/share-information/
@@ -50,6 +51,7 @@
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
 - Kainos (KNOS) - http 200, http - https://www.kainos.com/investor-relations/regulatory-news-and-events
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
+- Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
 - MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mortgage Advice Bureau (MAB1) - http 200, http - https://www.mortgageadvicebureau.com/investor-relations/investor-hub/
@@ -73,7 +75,6 @@
 - Wickes (WIX) - http 200, http - https://www.wickesplc.co.uk/investors/investors-overview/financial-calendar/
 - Wynnstay (WYN) - http 200, http - https://www.wynnstayplc.co.uk/investor-relations/financial-calendar-and-events
 - Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
-- Bridgepoint (BPT) - http 200, chrome - https://www.bridgepointgroup.com/shareholders/financial-information/financial-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
@@ -85,7 +86,6 @@
 - Beeks Financial Cloud (BKS) - http 200, http - https://beeksgroup.com/investor-relations/shareholder-information/
 - Boku Inc (BOKU) - http 200, http - https://investors.boku.com/events/
 - Boot (Henry) (BOOT) - http 200, http - https://www.henryboot.co.uk/investors/financial-calendar/
-- BP (BP.) - http 200, browser - https://www.bp.com/investors/shareholder-and-dividend-information/financial-calendar
 - Barratt Redrow (BTRW) - http 200, http - https://www.barrattredrow.co.uk/investors/financial-calendar
 - Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
 - Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
@@ -96,6 +96,7 @@
 - Christie (CTG) - http 200, http - https://www.christiegroup.com/investors/shareholder-information/financial-calendar
 - CVS (CVSG) - http 200, http - https://www.cvsukltd.co.uk/investor-centre/financial-calendar/
 - Ceres Power (CWR) - http 200, http - https://www.ceres.tech/investors/financial-calendar/
+- Dialight (DIA) - http 200, http - https://www.dialight.com/ir/shareholder-information/
 - Diales (DIAL) - http 200, http - https://www.diales.com/en/investors/financial-calendar
 - Man (EMG) - http 200, http - https://www.man.com/shareholder-relations
 - Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
@@ -109,7 +110,6 @@
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
-- Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
 - Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
 - Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
@@ -123,6 +123,7 @@
 - Nexteq (NXQ) - http 200, http - https://nexteqplc.com/investor-hub/
 - One Health (OHGR) - http 200, http - https://www.onehealth.co.uk/investor-events
 - Ondo Insurtech (ONDO) - http 200, http - https://www.ondoplc.com/investors/financial-calendar/
+- Oxford Instruments (OXIG) - http 200, http - https://www.oxinst.com/investors/financial-calendar
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
@@ -162,10 +163,10 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+- Judges Scientific (JDG) - http None, chrome - https://www.judges.uk.com/financial-performance/financial-calendar.html
 
 ## Approved events not re-verified tonight
 
-- Princes Group Q3 2026-11-10
 - Wise H1 results 2026-11-12
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
