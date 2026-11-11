@@ -4368,18 +4368,21 @@ document.getElementById('ex-tickerInput').addEventListener('keydown', function(e
 });
 
 /* ── Helpers ── */
+/* ShareScope writes big numbers with a thousands comma ("3,438.76"); parseFloat alone stops at the comma */
+function exNum(v) { return parseFloat(String(v || '').replace(/,/g, '').trim()); }
+
 function exFmt(val, dec) {
   dec = dec === undefined ? 1 : dec;
   const v = String(val || '').trim();
   if (!v) return '-';
-  const f = parseFloat(v);
+  const f = exNum(v);
   if (isNaN(f)) return v;
   return f.toLocaleString('en-GB', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
 
 function exFyDA(h1, h2) {
-  const a = parseFloat(String(h1 || '').trim());
-  const b = parseFloat(String(h2 || '').trim());
+  const a = exNum(h1);
+  const b = exNum(h2);
   if (isNaN(a) || isNaN(b)) return '-';
   return (a + b).toLocaleString('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
@@ -4446,16 +4449,16 @@ function exExtractWeekly(rows4, ticker) {
 
 function exCalcH1Split(h1_3y, h2_3y, h1_2y, h2_2y, h1_1y, h2_1y, h1_cur, h2_cur) {
   // If current year has both H1 and H2 valid, use current+1y+2y; otherwise fall back to 1y+2y+3y
-  const curA = parseFloat(String(h1_cur || '').trim());
-  const curB = parseFloat(String(h2_cur || '').trim());
+  const curA = exNum(h1_cur);
+  const curB = exNum(h2_cur);
   const curValid = !isNaN(curA) && !isNaN(curB) && curA >= 0 && curB >= 0 && Math.abs(curA + curB) >= 0.0001;
   const years = curValid
     ? [[h1_cur,h2_cur],[h1_1y,h2_1y],[h1_2y,h2_2y]]
     : [[h1_3y,h2_3y],[h1_2y,h2_2y],[h1_1y,h2_1y]];
   const pcts = [];
   for (let i = 0; i < years.length; i++) {
-    const a = parseFloat(String(years[i][0] || '').trim());
-    const b = parseFloat(String(years[i][1] || '').trim());
+    const a = exNum(years[i][0]);
+    const b = exNum(years[i][1]);
     if (isNaN(a) || isNaN(b)) continue;
     const full = a + b;
     if (Math.abs(full) < 0.0001) continue;
@@ -4511,16 +4514,16 @@ function h1calcRun(){
   var metrics = [
     { key:'rev', label:'Revenue', unit:'m', dec:1,
       avg: h1calcAvgPct(r1['3y ago H1 Turnover (m)'],r1['3y ago H2 Turnover (m)'],r1['2y ago H1 Turnover (m)'],r1['2y ago H2 Turnover (m)'],r1['1y ago H1 Turnover (m)'],r1['1y ago H2 Turnover (m)'],r1['H1 Turnover (m)'],r1['H2 Turnover (m)']),
-      fyfc: parseFloat(String(r1['fc Turnover (m)']||'').trim()) },
+      fyfc: exNum(r1['fc Turnover (m)']) },
     { key:'eps', label:'EPS', unit:'p', dec:2,
       avg: h1calcAvgPct(r1['3y ago H1 EPS'],r1['3y ago H2 EPS'],r1['2y ago H1 EPS'],r1['2y ago H2 EPS'],r1['1y ago H1 EPS'],r1['1y ago H2 EPS'],r1['H1 EPS'],r1['H2 EPS']),
-      fyfc: parseFloat(String(r1['fc EPS']||'').trim()) },
+      fyfc: exNum(r1['fc EPS']) },
     { key:'ebitda', label:'EBITDA', unit:'m', dec:1,
       avg: h1calcAvgPct(r2['3y ago H1 EBITDA (m)'],r2['3y ago H2 EBITDA (m)'],r2['2y ago H1 EBITDA (m)'],r2['2y ago H2 EBITDA (m)'],r2['1y ago H1 EBITDA (m)'],r2['1y ago H2 EBITDA (m)'],r2['H1 EBITDA (m)'],r2['H2 EBITDA (m)']),
-      fyfc: parseFloat(String(r2['fc EBITDA (m)']||'').trim()) },
+      fyfc: exNum(r2['fc EBITDA (m)']) },
     { key:'pbt', label:'PBT', unit:'m', dec:1,
       avg: h1calcAvgPct(r2['3y ago H1 Pre-tax profit (m)'],r2['3y ago H2 Pre-tax profit (m)'],r2['2y ago H1 Pre-tax profit (m)'],r2['2y ago H2 Pre-tax profit (m)'],r2['1y ago H1 Pre-tax profit (m)'],r2['1y ago H2 Pre-tax profit (m)'],r2['H1 Pre-tax profit (m)'],r2['H2 Pre-tax profit (m)']),
-      fyfc: parseFloat(String(r2['fc Pre-tax profit (m)']||'').trim()) }
+      fyfc: exNum(r2['fc Pre-tax profit (m)']) }
   ];
 
   var cards = [];
@@ -4575,9 +4578,9 @@ function h1calcCard(m, repH1, fy, fySource){
 }
 
 function exFyFlag(h1Raw, h2Raw, fyRaw) {
-  const h1 = parseFloat(String(h1Raw || '').trim());
-  const h2 = parseFloat(String(h2Raw || '').trim());
-  const fy = parseFloat(String(fyRaw || '').trim());
+  const h1 = exNum(h1Raw);
+  const h2 = exNum(h2Raw);
+  const fy = exNum(fyRaw);
   if (isNaN(h1) || isNaN(h2) || isNaN(fy) || Math.abs(fy) < 0.0001) return '';
   if (Math.abs(h2 - fy) < 0.0001) return '  ⚠ GLITCH? H2 = FY';
   const implied = h1 + h2;
