@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "savedAt": "2026-11-12T15:43:19.073Z",
+    "savedAt": "2026-11-12T15:43:57.352Z",
     "savedAtLabel": "12 Nov 2026 15:43",
     "source": "github-sync"
   },
@@ -211692,6 +211692,323 @@
         "events": []
       },
       "entryPrice": 279
+    },
+    {
+      "id": "QQ__2026_11_12",
+      "ticker": "QQ.",
+      "score": 41,
+      "company": "QinetiQ Group PLC",
+      "verdict": "Rebase cut",
+      "date": "2026-11-12",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "GUIDE",
+          "type": "amber",
+          "textHTML": "FY27 guide confirmed: revenue <span class=\"val-fl\">+3–5%</span>, margin 11.0–11.5%, EPS <span class=\"val-fl\">+8–10%</span> → 33.5–34.1p vs 33.9p consensus. Unchanged since May, so no upgrade trigger in today's RNS.",
+          "textPlain": "FY27 guide confirmed: revenue +3–5%, margin 11.0–11.5%, EPS +8–10% → 33.5–34.1p vs 33.9p consensus. Unchanged since May, so no upgrade trigger in today's RNS."
+        },
+        {
+          "pill": "H1 BEAT",
+          "type": "green",
+          "textHTML": "H1 underlying EPS <span class=\"val-up\">+18.6%</span> to 16.6p on margin <span class=\"val-up\">11.9%</span> (+120bps); 49.0% of FY consensus vs 46.1% clean norm (<span class=\"val-up\">+2.9pp</span>). H2 EPS needs only +1.8% YoY to hit 33.9p.",
+          "textPlain": "H1 underlying EPS +18.6% to 16.6p on margin 11.9% (+120bps); 49.0% of FY consensus vs 46.1% clean norm (+2.9pp). H2 EPS needs only +1.8% YoY to hit 33.9p."
+        },
+        {
+          "pill": "US SALE",
+          "type": "red",
+          "textHTML": "US sold to Serco for $292m; it runs $385m revenue at c.7% margin. FY28 EPS rebase <span class=\"val-dn\">−2–5%</span> after the £200m extra buyback; FY28 revenue <span class=\"val-dn\">−12–15%</span> on continuing ops.",
+          "textPlain": "US sold to Serco for $292m; it runs $385m revenue at c.7% margin. FY28 EPS rebase −2–5% after the £200m extra buyback; FY28 revenue −12–15% on continuing ops."
+        },
+        {
+          "pill": "CASH",
+          "type": "amber",
+          "textHTML": "H1 cash conversion <span class=\"val-dn\">64%</span> (85% PY), FCF −£3.4m, net debt £274m (0.8x) vs &gt;90% FY target; revenue cover <span class=\"val-fl\">84%</span> vs 89% a year ago leaves more of H2 still to win.",
+          "textPlain": "H1 cash conversion 64% (85% PY), FCF −£3.4m, net debt £274m (0.8x) vs >90% FY target; revenue cover 84% vs 89% a year ago leaves more of H2 still to win."
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "Regime record: <span class=\"val-dn\">3 guides missed</span> (FY25 warning, £2.4bn FY27 target, FY26 revenue) vs 2 beaten; today repeats the May and July guidance with no raise despite H1 beat.",
+          "textPlain": "Regime record: 3 guides missed (FY25 warning, £2.4bn FY27 target, FY26 revenue) vs 2 beaten; today repeats the May and July guidance with no raise despite H1 beat."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "+0–1%",
+          "sub": "33.9p → 33.9–34.2p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "−2–5%",
+          "sub": "37.8p → 35.9–37.0p",
+          "color": "var(--red)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£2.01bn → £2.01bn held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "−12–15%",
+          "sub": "£2.12bn → £1.80–1.86bn",
+          "color": "var(--red)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+3.1%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "Year End: Mar 2027 · 36 weeks",
+      "sparkSVG": "<svg id=\"spark-QQ\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-QQ\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+2.9pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-11-12T15:43:21.501Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar 26",
+          "eps": 30.6,
+          "price": 513.5
+        },
+        {
+          "d": "06 Mar 26",
+          "eps": 30.6,
+          "price": 503
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 30.6,
+          "price": 510
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 30.6,
+          "price": 495
+        },
+        {
+          "d": "27 Mar 26",
+          "eps": 30.6,
+          "price": 462.6
+        },
+        {
+          "d": "03 Apr 26",
+          "eps": 30.6,
+          "price": 481
+        },
+        {
+          "d": "10 Apr 26",
+          "eps": 30.6,
+          "price": 477.1
+        },
+        {
+          "d": "17 Apr 26",
+          "eps": 30.5,
+          "price": 480.1
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 30.5,
+          "price": 460.1
+        },
+        {
+          "d": "08 May 26",
+          "eps": 30.5,
+          "price": 433.1
+        },
+        {
+          "d": "15 May 26",
+          "eps": 31.2,
+          "price": 417
+        },
+        {
+          "d": "22 May 26",
+          "eps": 33.7,
+          "price": 465.6
+        },
+        {
+          "d": "02 Jun 26",
+          "eps": 33.9,
+          "price": 482.4
+        },
+        {
+          "d": "05 Jun 26",
+          "eps": 33.9,
+          "price": 470
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 33.9,
+          "price": 483
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 33.9,
+          "price": 439.8
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 33.9,
+          "price": 416.8
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 33.9,
+          "price": 478
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 33.9,
+          "price": 462.6
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 33.9,
+          "price": 445.6
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 33.9,
+          "price": 482.4
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 33.9,
+          "price": 497.6
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 33.9,
+          "price": 547
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 33.8,
+          "price": 560
+        },
+        {
+          "d": "21 Aug 26",
+          "eps": 33.8,
+          "price": 536
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 33.8,
+          "price": 512
+        },
+        {
+          "d": "07 Sep 26",
+          "eps": 33.8,
+          "price": 480.4
+        },
+        {
+          "d": "11 Sep 26",
+          "eps": 34,
+          "price": 472.4
+        },
+        {
+          "d": "18 Sep 26",
+          "eps": 34,
+          "price": 497.8
+        },
+        {
+          "d": "25 Sep 26",
+          "eps": 34,
+          "price": 489.8
+        },
+        {
+          "d": "02 Oct 26",
+          "eps": 33.9,
+          "price": 481
+        },
+        {
+          "d": "09 Oct 26",
+          "eps": 33.9,
+          "price": 454
+        },
+        {
+          "d": "16 Oct 26",
+          "eps": 33.9,
+          "price": 477.6
+        },
+        {
+          "d": "23 Oct 26",
+          "eps": 33.9,
+          "price": 486
+        },
+        {
+          "d": "30 Oct 26",
+          "eps": 33.9,
+          "price": 538.5
+        },
+        {
+          "d": "06 Nov 26",
+          "eps": 33.9,
+          "price": 525
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "FY27 preliminary results",
+            "type": "FY results",
+            "from": "2027-05-01",
+            "to": "2027-05-31",
+            "label": "May 2027",
+            "conf": "implied",
+            "src": "RNS"
+          }
+        ]
+      },
+      "entryPrice": 523
     }
   ],
   "scorecardIndex": [
@@ -227694,6 +228011,20 @@
       "index": "FTSE 250",
       "entryPrice": 279,
       "importedAt": "2026-11-12T13:17:36.442Z",
+      "arc": null
+    },
+    {
+      "id": "QQ__2026_11_12",
+      "ticker": "QQ.",
+      "company": "QinetiQ Group PLC",
+      "score": 41,
+      "verdict": "Rebase cut",
+      "date": "2026-11-12",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "entryPrice": 523,
+      "importedAt": "2026-11-12T15:43:21.501Z",
       "arc": null
     }
   ],
