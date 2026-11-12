@@ -1,14 +1,14 @@
-# Calendar scrape - 2026-11-11
+# Calendar scrape - 2026-11-12
 
-**279 sources · 36 events staged for approval**
+**279 sources · 37 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 132 | read OK, upcoming events found |
-| EMPTY | 135 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 129 | read OK, upcoming events found |
+| EMPTY | 139 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 5 | timeout, DNS or server error |
+| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -44,6 +44,7 @@
 - Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
+- Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
 - Foxtons (FOXT) - http 200, http - https://www.foxtonsgroup.co.uk/investor-relations/financial-calendar
 - FRP Advisory (FRP) - http 200, http - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
 - Hikma (HIK) - http 200, browser - https://www.hikma.com/investors/financial-calendar/
@@ -61,6 +62,7 @@
 - Ramsdens (RFX) - http 200, http - https://www.ramsdensplc.com/investor-relations/financial-calendar
 - RELX (REL) - http 200, http - https://www.relx.com/investors/financial-calendar
 - Restore (RST) - http 200, browser - https://www.restoreplc.com/investors/financial-calendar/
+- Rolls-Royce (RR.) - http 200, http - https://www.rolls-royce.com/investors/financial-calendar.aspx
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
@@ -79,7 +81,7 @@
 - AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
-- Avation (AVAP) - http 200, browser - https://www.avation.net/results.html
+- Avation (AVAP) - http 200, http - https://www.avation.net/results.html
 - Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
 - AstraZeneca (AZN) - http 200, browser - https://www.astrazeneca.com/investor-relations/shareholder-information.html
 - Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
@@ -110,6 +112,7 @@
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
+- Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
 - Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
 - Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
@@ -129,6 +132,7 @@
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
 - Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
+- Spirax (SPX) - http 200, browser - https://www.spiraxgroup.com/en/investors/investment-case/events-calendar
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
 - Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
 - Tate & Lyle (TATE) - http 200, browser - https://www.tateandlyle.com/investors/financial-calendar
@@ -156,6 +160,7 @@
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
@@ -163,12 +168,10 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
-- Empresaria (EMR) - http None, chrome - https://www.empresaria.com/shareholder-information/financial-calendar
-- Judges Scientific (JDG) - http None, chrome - https://www.judges.uk.com/financial-performance/financial-calendar.html
 
 ## Approved events not re-verified tonight
 
-- Empresaria Trading update 2027-01-28
+- Peel Hunt H1 results 2026-11-18
 - Wise H1 results 2026-11-12
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
