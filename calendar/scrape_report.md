@@ -1,13 +1,13 @@
 # Calendar scrape - 2026-11-12
 
-**279 sources · 37 events staged for approval**
+**279 sources · 38 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 129 | read OK, upcoming events found |
-| EMPTY | 139 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 131 | read OK, upcoming events found |
+| EMPTY | 138 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 8 | 401/403/429 - bot protection or login |
+| BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
@@ -124,7 +124,6 @@
 - Nichols (NICL) - http 200, browser - https://www.nicholsplc.co.uk/investors/events/
 - NWF (NWF) - http 200, http - https://www.nwf.co.uk/investors/financial-calendar/
 - Nexteq (NXQ) - http 200, http - https://nexteqplc.com/investor-hub/
-- One Health (OHGR) - http 200, http - https://www.onehealth.co.uk/investor-events
 - Ondo Insurtech (ONDO) - http 200, http - https://www.ondoplc.com/investors/financial-calendar/
 - Oxford Instruments (OXIG) - http 200, http - https://www.oxinst.com/investors/financial-calendar
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
@@ -160,7 +159,6 @@
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
-- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
@@ -171,7 +169,6 @@
 
 ## Approved events not re-verified tonight
 
-- Peel Hunt H1 results 2026-11-18
 - Wise H1 results 2026-11-12
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
