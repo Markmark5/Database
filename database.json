@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-11-12T13:17:32.979Z",
-    "savedAtLabel": "12 Nov 2026 13:17",
+    "savedAt": "2026-11-12T13:18:09.825Z",
+    "savedAtLabel": "12 Nov 2026 13:18",
     "source": "github-sync"
   },
   "scorecards": [
@@ -211702,6 +211702,313 @@
         "events": []
       },
       "entryPrice": 63.4
+    },
+    {
+      "id": "BME_2026_11_12",
+      "ticker": "BME",
+      "score": 70,
+      "company": "B&M European Value Retail PLC",
+      "verdict": "Modest upgrades",
+      "date": "2026-11-12",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "signals": [
+        {
+          "pill": "H1 BEAT",
+          "type": "green",
+          "textHTML": "H1 adj PBT <span class=\"val-up\">£121m</span>, up <span class=\"val-up\">16.6%</span> on £103m; adj diluted EPS <span class=\"val-up\">8.9p</span> (+24.3%). EPS at 41.2% of FY1 cons vs 38.9% norm, <span class=\"val-up\">+2.3pp</span> MILD BUY; revenue +3.6% to £2,848m.",
+          "textPlain": "H1 adj PBT £121m, up 16.6% on £103m; adj diluted EPS 8.9p (+24.3%). EPS at 41.2% of FY1 cons vs 38.9% norm, +2.3pp MILD BUY; revenue +3.6% to £2,848m."
+        },
+        {
+          "pill": "GUIDANCE",
+          "type": "amber",
+          "textHTML": "First FY27 PBT guide <span class=\"val-fl\">£280–330m</span> brackets £294.3m consensus; midpoint £305m is <span class=\"val-up\">+3.6%</span> above. The range is wide and its low end sits below FY26's £284m: a soft anchor.",
+          "textPlain": "First FY27 PBT guide £280–330m brackets £294.3m consensus; midpoint £305m is +3.6% above. The range is wide and its low end sits below FY26's £284m: a soft anchor."
+        },
+        {
+          "pill": "SOFT H2",
+          "type": "green",
+          "textHTML": "Consensus needs H2 adj PBT of <span class=\"val-up\">£173m</span>, <span class=\"val-up\">4.3%</span> below last H2, after H1 grew 16.6%. 12m PBT of £302m already tops FY1 consensus by +2.6%; early Golden Quarter positive.",
+          "textPlain": "Consensus needs H2 adj PBT of £173m, 4.3% below last H2, after H1 grew 16.6%. 12m PBT of £302m already tops FY1 consensus by +2.6%; early Golden Quarter positive."
+        },
+        {
+          "pill": "UK LFL",
+          "type": "amber",
+          "textHTML": "B&amp;M UK LFL back to growth: H1 <span class=\"val-up\">+0.4%</span>, Q2 <span class=\"val-up\">+3.2%</span>, FMCG positive into Q3. FMCG trading margin still below last year; France LFL +5.9% with EBITDA margin up to 7.9%.",
+          "textPlain": "B&M UK LFL back to growth: H1 +0.4%, Q2 +3.2%, FMCG positive into Q3. FMCG trading margin still below last year; France LFL +5.9% with EBITDA margin up to 7.9%."
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "FY26 EBITDA guide was cut twice (Oct 25, Jan 26) before landing at £459m. Regime since Jun 26 delivered the promised PBT guide but cut UK store openings to 15–20.",
+          "textPlain": "FY26 EBITDA guide was cut twice (Oct 25, Jan 26) before landing at £459m. Regime since Jun 26 delivered the promised PBT guide but cut UK store openings to 15–20."
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "+2–6%",
+          "sub": "21.6p → 22.0–22.9p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "+1–3%",
+          "sub": "23.6p → 23.8–24.3p",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "~flat",
+          "sub": "£5.96bn → £5.96bn held",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "~flat",
+          "sub": "£6.19bn → £6.19bn held",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "−0.5%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "+0.0%",
+          "style": "color:var(--amber)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+7.8%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "Year End: Mar 2027 · 36 weeks",
+      "sparkSVG": "\n        <svg id=\"spark-BME\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg>\n        <div class=\"spark-tt\" id=\"tt-BME\"></div>\n      ",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+2.3pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-11-12T13:17:36.442Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar 26",
+          "eps": 20.1,
+          "price": 189.84
+        },
+        {
+          "d": "06 Mar 26",
+          "eps": 20.1,
+          "price": 179.96
+        },
+        {
+          "d": "13 Mar 26",
+          "eps": 20.1,
+          "price": 179
+        },
+        {
+          "d": "20 Mar 26",
+          "eps": 20.1,
+          "price": 166.5
+        },
+        {
+          "d": "27 Mar 26",
+          "eps": 20.1,
+          "price": 157
+        },
+        {
+          "d": "03 Apr 26",
+          "eps": 20.1,
+          "price": 184
+        },
+        {
+          "d": "10 Apr 26",
+          "eps": 20.2,
+          "price": 174.5
+        },
+        {
+          "d": "17 Apr 26",
+          "eps": 20.2,
+          "price": 173.8
+        },
+        {
+          "d": "24 Apr 26",
+          "eps": 20.2,
+          "price": 174
+        },
+        {
+          "d": "08 May 26",
+          "eps": 20.2,
+          "price": 173.3
+        },
+        {
+          "d": "15 May 26",
+          "eps": 20.2,
+          "price": 161.3
+        },
+        {
+          "d": "22 May 26",
+          "eps": 20.2,
+          "price": 170.1
+        },
+        {
+          "d": "02 Jun 26",
+          "eps": 20.2,
+          "price": 168.4
+        },
+        {
+          "d": "05 Jun 26",
+          "eps": 21.8,
+          "price": 208.2
+        },
+        {
+          "d": "12 Jun 26",
+          "eps": 21.7,
+          "price": 197.8
+        },
+        {
+          "d": "19 Jun 26",
+          "eps": 21.6,
+          "price": 186.8
+        },
+        {
+          "d": "26 Jun 26",
+          "eps": 21.6,
+          "price": 206.8
+        },
+        {
+          "d": "03 Jul 26",
+          "eps": 21.9,
+          "price": 193.1
+        },
+        {
+          "d": "10 Jul 26",
+          "eps": 21.9,
+          "price": 196.7
+        },
+        {
+          "d": "17 Jul 26",
+          "eps": 21.7,
+          "price": 200
+        },
+        {
+          "d": "24 Jul 26",
+          "eps": 21.7,
+          "price": 212.2
+        },
+        {
+          "d": "31 Jul 26",
+          "eps": 21.7,
+          "price": 225.4
+        },
+        {
+          "d": "07 Aug 26",
+          "eps": 21.7,
+          "price": 234.4
+        },
+        {
+          "d": "14 Aug 26",
+          "eps": 21.7,
+          "price": 235.6
+        },
+        {
+          "d": "21 Aug 26",
+          "eps": 21.7,
+          "price": 233.8
+        },
+        {
+          "d": "28 Aug 26",
+          "eps": 21.7,
+          "price": 244
+        },
+        {
+          "d": "07 Sep 26",
+          "eps": 21.7,
+          "price": 222.8
+        },
+        {
+          "d": "11 Sep 26",
+          "eps": 21.7,
+          "price": 224.8
+        },
+        {
+          "d": "18 Sep 26",
+          "eps": 21.7,
+          "price": 235.2
+        },
+        {
+          "d": "25 Sep 26",
+          "eps": 21.7,
+          "price": 245.8
+        },
+        {
+          "d": "02 Oct 26",
+          "eps": 21.7,
+          "price": 251.8
+        },
+        {
+          "d": "09 Oct 26",
+          "eps": 21.8,
+          "price": 257
+        },
+        {
+          "d": "16 Oct 26",
+          "eps": 21.8,
+          "price": 279.6
+        },
+        {
+          "d": "23 Oct 26",
+          "eps": 21.6,
+          "price": 275.2
+        },
+        {
+          "d": "30 Oct 26",
+          "eps": 21.6,
+          "price": 272.6
+        },
+        {
+          "d": "06 Nov 26",
+          "eps": 21.6,
+          "price": 283.8
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": []
+      },
+      "entryPrice": 279
     }
   ],
   "scorecardIndex": [
@@ -227704,6 +228011,20 @@
       "index": "FTSE 250",
       "entryPrice": 63.4,
       "importedAt": "2026-11-12T08:50:01.582Z",
+      "arc": null
+    },
+    {
+      "id": "BME_2026_11_12",
+      "ticker": "BME",
+      "company": "B&M European Value Retail PLC",
+      "score": 70,
+      "verdict": "Modest upgrades",
+      "date": "2026-11-12",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 250",
+      "entryPrice": 279,
+      "importedAt": "2026-11-12T13:17:36.442Z",
       "arc": null
     }
   ],
