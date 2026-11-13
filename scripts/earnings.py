@@ -138,11 +138,19 @@ def clip_mean(xs):
 def index_prices(dates):
     try:
         import yfinance as yf
-        px = yf.download([g[1] for g in GROUPS], start=(dates[0] - dt.timedelta(days=10)).isoformat(),
-                         progress=False, auto_adjust=True)['Close'].ffill()
+        start = (dates[0] - dt.timedelta(days=10)).isoformat()
+        px = yf.download([g[1] for g in GROUPS], start=start, progress=False, auto_adjust=True)['Close'].ffill()
         out = {}
         for name, tick, _ in GROUPS:
-            s = px[tick].dropna()
+            s = px[tick].dropna() if tick in px else []
+            if not len(s):                      # Yahoo sometimes drops one index from a batch: ask again
+                try:
+                    s = yf.Ticker(tick).history(start=start, auto_adjust=True)['Close'].dropna()
+                    s.index = s.index.tz_localize(None)
+                except Exception as e:  # noqa: BLE001
+                    print('retry failed', tick, e)
+            if not len(s):
+                continue
             vals = []
             for d in dates:
                 sub = s[s.index.date <= d]
@@ -154,11 +162,25 @@ def index_prices(dates):
         return {}
 
 
+def carry(old, dates):
+    """Index prices from the previous summary, when Yahoo gave none this run."""
+    if not old or not old.get('px') or not any(v is not None for v in old['px']):
+        return None
+    m = dict(zip(old['dates'], old['px']))
+    print('  index prices carried forward from the previous run')
+    return [m.get(d.isoformat()) for d in dates]
+
+
 def main():
     weeks, last_live = load_weeks()
     meta, meta_date = load_meta()
     dates = sorted(weeks)
     px_idx = index_prices(dates)
+    prev = {}
+    try:
+        prev = json.load(open(os.path.join(D, 'summary.json')))['groups']
+    except Exception:  # noqa: BLE001
+        pass
     out = dict(updated=dt.date.today().isoformat(), latest=dates[-1].isoformat(), meta=meta_date, groups={})
     for g, _, pxname in GROUPS:
         mem = [t for t, m in meta.items() if m['group'] == g and not m['excl']]
@@ -205,7 +227,7 @@ def main():
         out['groups'][g] = dict(
             dates=[d.isoformat() for d in dates], fy1=[round(x, 2) for x in i1],
             fy2=[round(x, 2) if x else None for x in i2], breadth=brd, growth=grw,
-            px=px_idx.get(g), pxname=pxname, companies=len(mem),
+            px=px_idx.get(g) or carry(prev.get(g), dates), pxname=pxname, companies=len(mem),
             with_fc=sum(t in last for t in mem), loss=sum(1 for t in mem if t in last and last[t][0] <= 0))
         f2 = [x for x in i2 if x]
         print(f"{g:18s} {len(mem):4d} companies | FY1 {i1[-1]-100:+.1f}% | FY2 {(f2[-1]-100 if f2 else 0):+.1f}% | breadth {brd[-1]} | growth {grw[-1]}")
