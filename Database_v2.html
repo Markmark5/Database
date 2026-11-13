@@ -1229,6 +1229,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 @keyframes hxFlip{0%{transform:rotateX(0)}50%{transform:rotateX(180deg)}100%{transform:rotateX(360deg)}}
 @keyframes hxSweep{0%,100%{transform:rotate(0)}30%{transform:rotate(-22deg) translateX(-2px)}70%{transform:rotate(18deg) translateX(2px)}}
 @keyframes hxRustle{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-7deg) scale(1.1)}50%{transform:rotate(5deg) scale(1.05)}75%{transform:rotate(-4deg) scale(1.1)}}
+@keyframes hxCash{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-3px) rotate(-10deg)}40%{transform:translateY(0) rotate(6deg) scale(1.1)}60%{transform:translateY(-2px) rotate(-6deg)}80%{transform:translateY(0) rotate(8deg)}}
 @keyframes hxDown{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
 @keyframes hxUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes hxDrift{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
@@ -1237,6 +1238,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .db-actbtn:hover .hx-wobble{animation:hxWobble .7s ease-in-out infinite}
 .db-actbtn:hover .hx-flip{animation:hxFlip .9s ease-in-out infinite}
 .db-actbtn:hover .hx-sweep{animation:hxSweep .7s ease-in-out infinite;transform-origin:70% 20%}
+.db-actbtn:hover .hx-cash{animation:hxCash .8s ease-in-out infinite}
 .db-actbtn:hover .hx-rustle{animation:hxRustle .6s ease-in-out infinite}
 .db-actbtn:hover .hx-down{animation:hxDown .6s ease-in-out infinite}
 .db-actbtn:hover .hx-up{animation:hxUp .6s ease-in-out infinite}
@@ -1324,6 +1326,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
     <button class="db-actbtn season-btn" onclick="openWebPopup('https://markmark5.github.io/Database/seasonality.html','Seasonality')"><span class="sc hx hx-flip">&#128197;</span><span class="s1">SEASON</span><span class="s2">ality</span></button>
     <button class="db-actbtn" onclick="fgOpen()" style="background:#1a0a1a;color:#cc44ff;border:1px solid #cc44ff55;"><span class="bi hx hx-fear">&#128552;</span>Fear &amp; Greed</button>
     <button class="db-actbtn" onclick="aaiiOpen()" style="background:#0a1a12;color:#3fd68a;border:1px solid #3fd68a55;"><span class="bi hx hx-fear">&#128552;</span>AAII</button>
+    <button class="db-actbtn" onclick="egOpen()" style="background:#141a06;color:#b6e03a;border:1px solid #b6e03a55;" title="UK earnings forecast revisions: FTSE 100, FTSE 250, main market small caps and AIM"><span class="bi hx hx-cash">&#128183;</span>Earnings</button>
     <button class="db-actbtn" onclick="rcalOpen()" style="background:#1a1400;color:#d4a000;border:1px solid #d4a00055;" title="RNS results and trading update calendar"><span class="bi hx hx-flip" style="font-size:17px">&#128467;&#65039;</span>Calendar</button>
     <button class="db-actbtn" onclick="cycOpen()" style="background:#00140a;color:#00d97e;border:1px solid #00d97e55;" title="Cycles: 10/20/40-week moving-average regimes, live"><span class="bi cyc-bike" style="font-size:25px;margin:-4px 0">&#128690;</span><span style="font-style:italic;letter-spacing:.1em"><span style="color:#00d97e">CYC</span><span style="color:#ff4757">LES</span></span></button>
     <button class="db-actbtn" onclick="window.open('https://claude.ai/artifact/PwaQPjo3LcFvGWqWAHXDjw','_blank','noopener')" style="background:#001a1a;color:#2ad4c8;border:1px solid #2ad4c855;" title="Morning sweep (opens in a new tab)"><span class="bi hx hx-sweep">&#129529;</span>Sweep</button>
@@ -3047,6 +3050,7 @@ function loadSlot(num,input){
     try{localStorage.setItem('db_slot'+num+'_name',file.name);localStorage.setItem('db_slot'+num+'_date',now.toISOString());}catch(ex){}
     if(typeof exSyncSlot==='function') exSyncSlot(num, rows, file.name);
     if(typeof applyFilters==='function') applyFilters();
+    if((num===2||num===3)&&typeof egQueueMeta==='function') egQueueMeta();
     toast('✓ Slot '+num+' loaded — '+rows.length+' rows','ok');
   };
   reader.readAsText(file);
@@ -3102,6 +3106,7 @@ function loadDailyScreener(input){
     dbFilePut(5,{id:'slot5',name:file.name,text,date:now.toISOString(),rows:rows.length});
     try{localStorage.setItem('db_slot5_name',file.name);localStorage.setItem('db_slot5_date',now.toISOString());}catch(ex){}
     exState.rows5 = rows;
+    if(typeof egQueueMeta==='function') egQueueMeta();
     toast('✓ EPS Bridge data loaded — '+rows.length+' rows','inf');
   };
   reader.readAsText(file);
@@ -9305,6 +9310,183 @@ function aaBBRender(yrs){
       tip.innerHTML=`<b>${fd(q[0])}</b><br>Bull ${q[1].toFixed(1)}% · Bear ${q[2].toFixed(1)}%<br>Ratio <b style="color:${CY}">${rat(q).toFixed(2)}</b> · Spread <b style="color:${spr(q)<0?RD:G}">${sgn(spr(q))}</b>`+(q[3]!=null?`<br><span style="color:var(--text-dim)">8-wk avg ${sgn(q[3])}</span>`:'')+(q[4]!=null?`<br>S&amp;P <b style="color:${GO}">${q[4].toLocaleString()}</b>`:'');
       tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8)+'px';tip.style.top=(e.clientY-10)+'px'};
     el.onmouseleave=()=>{tip.style.display='none';cur(0,0)}});
+}
+</script>
+
+<!-- ── UK EARNINGS REVISIONS MODAL (white). Data: data/earnings/summary.json, built by
+     scripts/earnings.py (earnings-weekly Action). Loaded only when the modal is opened. ── -->
+<div id="eg-overlay" onclick="if(event.target===this)egClose()" style="display:none;position:fixed;inset:0;background:#000000dd;z-index:2000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border:1px solid #d8d8d8;border-radius:8px;width:1240px;max-width:calc(100vw - 20px);max-height:calc(100vh - 24px);display:flex;flex-direction:column;overflow:hidden;color:#14181c;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid #e6e6e6;background:#f7f7f5;">
+      <span style="font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">&#128183; UK Earnings Revisions</span>
+      <button onclick="egClose()" style="background:none;border:none;color:#888;font-size:18px;cursor:pointer;">✕</button>
+    </div>
+    <div id="eg-body" style="padding:16px 18px 22px;overflow-y:auto;font-family:var(--mono);color:#14181c;background:#fff;"></div>
+  </div>
+</div>
+<style>
+#eg-body .eg-sec{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;padding:0 16px 12px}
+#eg-body .eg-bar{margin:0 -16px 14px;padding:8px 16px;background:#14181c;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#eg-body .eg-bar .t{color:#fff;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+#eg-body .eg-rng button{font-family:var(--mono);font-size:10px;padding:3px 8px;margin-left:4px;border-radius:4px;cursor:pointer;background:#14181c;color:#cfcfcf;border:1px solid #555;text-transform:uppercase;letter-spacing:.06em}
+#eg-body .eg-rng button.on{background:#fff;color:#14181c;border-color:#fff}
+#eg-body .eg-meta{font-size:11px;color:#6b6b6b;margin-bottom:10px}
+#eg-body .eg-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+#eg-body .eg-tile{background:#f7f7f5;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px}
+#eg-body .eg-lab{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b}
+#eg-body .eg-val{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px}
+#eg-body .eg-sub{font-size:11px;color:#8a8a8a}
+#eg-body h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;margin:16px 0 6px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#eg-body .eg-leg{display:flex;gap:14px;font-size:10px;color:#6b6b6b;align-items:center;flex-wrap:wrap}
+#eg-body .eg-leg i{display:inline-block;width:12px;height:3px;margin-right:4px;vertical-align:2px}
+#eg-body .eg-ovb{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;background:#fff;border:1px solid #2a78d6aa;color:#2a78d6;text-transform:uppercase;letter-spacing:.06em}
+#eg-body .eg-ovb.on{background:#2a78d6;border-color:#2a78d6;color:#fff}
+#eg-body .eg-note{font-size:11px;color:#6b6b6b;margin-top:8px}
+@media (max-width:760px){#eg-body .eg-tiles{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+var EG={data:null,g:'FTSE 100',ov:{rev:true,brd:true,gro:true},hv:null};
+try{var _egov=JSON.parse(localStorage.getItem('eg_ov')||'null');if(_egov)EG.ov=_egov;}catch(e){}
+function egClose(){document.getElementById('eg-overlay').style.display='none';var t=document.getElementById('eg-tip');if(t)t.style.display='none';}
+function egTog(k){EG.ov[k]=!EG.ov[k];try{localStorage.setItem('eg_ov',JSON.stringify(EG.ov));}catch(e){}egRender();}
+function egSet(g){EG.g=g;egRender();}
+async function egOpen(){
+  var el=document.getElementById('eg-body');
+  document.getElementById('eg-overlay').style.display='flex';
+  if(!EG.data)el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading earnings data…</div>';
+  var urls=['data/earnings/summary.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/earnings/summary.json'];
+  for(var i=0;i<urls.length;i++){
+    try{var r=await fetch(urls[i]+'?t='+Date.now(),{cache:'no-store'});if(r.ok){EG.data=await r.json();break;}}catch(e){}
+  }
+  if(!EG.data){el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Earnings data unavailable.</div>';return;}
+  egRender();
+}
+function egRender(){
+  var D=EG.data.groups; if(!D[EG.g])EG.g=Object.keys(D)[0];
+  var g=D[EG.g], dts=g.dates, n=dts.length, W=1130,l=40,r=86,t=10,b=22;
+  var tA=Date.parse(dts[0]), tB=Date.parse(dts[n-1]);
+  var x=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);};
+  var fd=function(s){return new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});};
+  var sg=function(v,d){return (v>0?'+':'')+v.toFixed(d==null?1:d);};
+  var GRN='#00a810',RED='#e02525',INK='#14181c',AX='#8a8a8a',GRID='#e2e2e2',BLU='#2a78d6';
+  var ticks=function(H){var s='',last='';dts.forEach(function(d,i){var m=d.slice(0,7);if(m!==last&&i>1&&i<n-3&&+d.slice(5,7)%2===1){var dt=new Date(d+'T00:00:00');s+='<text x="'+x(d).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+AX+'">'+dt.toLocaleDateString('en-GB',{month:'short'})+(m.slice(5)==='01'?" '"+m.slice(2,4):'')+'</text>';}last=m;});
+    return s+'<text x="'+(W-r+6)+'" y="'+(H-5)+'" font-size="10" font-weight="700" fill="'+INK+'">'+new Date(dts[n-1]+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})+'</text>';};
+  var line=function(vals,y,col,w,dash){var p=[];vals.forEach(function(v,i){if(v!=null)p.push(x(dts[i]).toFixed(1)+','+y(v).toFixed(1));});return '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="'+(w||1.6)+'"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linejoin="round"/>';};
+  var endlab=function(v,y,txt){return '<text x="'+(W-r-6)+'" y="'+(y(v)-7).toFixed(1)+'" text-anchor="end" font-size="11" font-weight="700" fill="'+INK+'" stroke="#fff" stroke-width="4" paint-order="stroke">'+txt+'</text>';};
+  var hasPx=g.px&&g.px.some(function(v){return v!=null;});
+  var ovl=function(k,H){ if(!EG.ov[k]||!hasPx)return '';
+    var v=g.px.filter(function(q){return q!=null;}), mn=Math.min.apply(null,v), mx=Math.max.apply(null,v), pad=(mx-mn)*.05||1; mn-=pad; mx+=pad;
+    var ys=function(q){return t+(mx-q)*(H-t-b)/(mx-mn);}, p=[], first=null;
+    g.px.forEach(function(q,i){if(q!=null){if(first==null)first=i;p.push(x(dts[i]).toFixed(1)+','+ys(q).toFixed(1));}});
+    var o='<polygon points="'+x(dts[first]).toFixed(1)+','+(H-b)+' '+p.join(' ')+' '+x(dts[n-1]).toFixed(1)+','+(H-b)+'" fill="'+BLU+'" opacity=".08"/><polyline points="'+p.join(' ')+'" fill="none" stroke="'+BLU+'" stroke-width="1.3" opacity=".8"/>';
+    [0,.5,1].forEach(function(f){var q=mn+(mx-mn)*f;o+='<text x="'+(W-8)+'" y="'+(ys(q)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+BLU+'">'+Math.round(q).toLocaleString()+'</text>';});
+    return o; };
+  var ovbtn=function(k){return hasPx?'<button class="eg-ovb'+(EG.ov[k]?' on':'')+'" onclick="egTog(\''+k+'\')">'+g.pxname+' overlay</button>':'';};
+  var cur=function(H){return '<line class="eg-cur" x1="0" x2="0" y1="'+t+'" y2="'+(H-b)+'" stroke="'+INK+'" stroke-dasharray="3 3" opacity="0" pointer-events="none"/><rect class="eg-hit" x="0" y="0" width="100%" height="100%" fill="transparent"/>';};
+  var lastOf=function(a){for(var i=a.length-1;i>=0;i--)if(a[i]!=null)return a[i];return null;};
+  // tiles
+  var m=g.fy1, i13=Math.max(0,n-14), c3=(m[n-1]/m[i13]-1)*100, f2=lastOf(g.fy2), br=lastOf(g.breadth), gr=lastOf(g.growth);
+  var f2start=null; for(var k=0;k<n;k++){if(g.fy2[k]!=null){f2start=dts[k];break;}}
+  var col=function(v){return v>=0?GRN:RED;};
+  var tile=function(lab,val,c,sub){return '<div class="eg-tile"><div class="eg-lab">'+lab+'</div><div class="eg-val" style="color:'+c+'">'+val+'</div><div class="eg-sub">'+sub+'</div></div>';};
+  var h='<div class="eg-sec"><div class="eg-bar"><span class="t">Forecast revisions · '+EG.g+'</span><span class="eg-rng">'+Object.keys(D).map(function(k){return '<button class="'+(k===EG.g?'on':'')+'" onclick="egSet(\''+k+'\')">'+k+'</button>';}).join('')+'</span></div>';
+  h+='<div class="eg-meta">Latest snapshot '+fd(dts[n-1])+' · '+g.companies+' companies ('+g.with_fc+' with forecasts, '+g.loss+' loss-making) · funds, trusts, REITs and property companies excluded</div>';
+  h+='<div class="eg-tiles">'
+    +tile('This-year forecasts · 3 months',sg(c3)+'%',col(c3),'average company · '+sg(m[n-1]-100)+'% since '+fd(dts[0]))
+    +tile('Next-year forecasts'+(f2start?' · since '+new Date(f2start+'T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'2-digit'}):''),f2!=null?sg(f2-100)+'%':'–',f2!=null?col(f2-100):INK,'average company')
+    +tile('Revision breadth · 4 weeks',br!=null?sg(br,0):'–',br!=null?col(br):INK,'% upgraded − % downgraded')
+    +tile('Expected growth · next year',gr!=null?sg(gr)+'%':'–',INK,'median profitable company')
+    +'</div>';
+  // chart 1 — revision index
+  var all=m.concat(g.fy2.filter(function(v){return v!=null;}));
+  var lo=Math.floor(Math.min.apply(null,all)/2)*2-1, hi=Math.ceil(Math.max.apply(null,all)/2)*2+1, H=280;
+  var y1=function(v){return t+(hi-v)*(H-t-b)/(hi-lo);}, stp=(hi-lo)>20?5:2;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="eg-hv">';
+  for(var v=Math.ceil(lo/stp)*stp;v<=hi;v+=stp){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y1(v)+'" y2="'+y1(v)+'" stroke="'+(v===100?AX:GRID)+'"'+(v===100?' stroke-dasharray="2 5"':'')+'/><text x="'+(l-6)+'" y="'+(y1(v)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+v+'</text>';}
+  s+=ovl('rev',H)+line(g.fy2,y1,INK,1.4,true)+line(m,y1,INK,1.8)+endlab(m[n-1],y1,m[n-1].toFixed(1))+ticks(H)+cur(H)+'</svg>';
+  h+='<h4><span>Forecast revision index · 100 = '+fd(dts[0])+'</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>This-year forecasts, average company</span><span><i style="background:repeating-linear-gradient(90deg,#14181c 0 5px,transparent 5px 9px)"></i>Next-year forecasts</span>'+ovbtn('rev')+'</span></h4>'+s;
+  // chart 2 — breadth
+  var bv=g.breadth.filter(function(v){return v!=null;}), bm=Math.max(20,Math.ceil(Math.max.apply(null,bv.map(Math.abs))/10)*10);
+  var yb=function(v){return t+(bm-v)*(H-t-b)/(2*bm);};
+  s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="eg-hv">';
+  [-bm,-bm/2,0,bm/2,bm].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yb(v)+'" y2="'+yb(v)+'" stroke="'+(v===0?INK:GRID)+'"/><text x="'+(l-6)+'" y="'+(yb(v)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+(v>0?'+':'')+v+'</text>';});
+  s+=ovl('brd',H);
+  var bw=(W-l-r)/n*0.8;
+  g.breadth.forEach(function(v,i){if(v==null)return;var a=yb(0),c=yb(v);s+='<rect x="'+(x(dts[i])-bw/2).toFixed(1)+'" y="'+Math.min(a,c).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.abs(c-a).toFixed(1)+'" fill="'+(v>=0?GRN:RED)+'" opacity=".85"/>';});
+  if(!(EG.ov.brd&&hasPx))s+='<text x="'+(W-r+6)+'" y="'+(yb(bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+GRN+'">UPGRADES</text><text x="'+(W-r+6)+'" y="'+(yb(-bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+RED+'">DOWNGRADES</text>';
+  s+=ticks(H)+cur(H)+'</svg>';
+  h+='<h4><span>Revision breadth · % of companies upgraded minus % downgraded over 4 weeks</span><span class="eg-leg"><span><i style="background:'+GRN+'"></i>Upgrades</span><span><i style="background:'+RED+'"></i>Downgrades</span>'+ovbtn('brd')+'</span></h4>'+s;
+  // chart 3 — expected growth
+  var gv=g.growth.filter(function(v){return v!=null;});
+  if(gv.length>1){
+    var glo=Math.floor(Math.min.apply(null,gv)/2)*2-1, ghi=Math.ceil(Math.max.apply(null,gv)/2)*2+1;
+    var yg=function(v){return t+(ghi-v)*(H-t-b)/(ghi-glo);};
+    s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="eg-hv">';
+    for(var v2=Math.ceil(glo/2)*2;v2<=ghi;v2+=2){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yg(v2)+'" y2="'+yg(v2)+'" stroke="'+GRID+'"/><text x="'+(l-6)+'" y="'+(yg(v2)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+v2+'%</text>';}
+    s+=ovl('gro',H)+line(g.growth,yg,INK,1.8)+endlab(gr,yg,gr.toFixed(1)+'%')+ticks(H)+cur(H)+'</svg>';
+    h+='<h4><span>Expected growth · next year’s forecast EPS vs this year’s</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>Median company</span>'+ovbtn('gro')+'</span></h4>'+s;
+  }
+  h+='<div class="eg-note">Weekly snapshots from the Weekly Log. Each company’s forecast change is measured week to week against the size of its EPS (capped at ±15%) and averaged, loss-makers included. When a company rolls into a new financial year its new forecast is compared with the previous forecast for that same year (from Mar 2026; before that the results week is skipped). Companies are grouped by their current index. Companies taken over or delisted since May 2025 are missing from the history, which flatters it slightly. Updated '+fd(EG.data.updated)+'.</div></div>';
+  document.getElementById('eg-body').innerHTML=h;
+  EG.hv={g:g,x:x,l:l,r:r,W:W,tA:tA,tB:tB,fd:fd,sg:sg};
+  egBindHover();
+}
+function egBindHover(){
+  var tip=document.getElementById('eg-tip');
+  if(!tip){tip=document.createElement('div');tip.id='eg-tip';tip.style.cssText='position:fixed;z-index:3000;display:none;pointer-events:none;background:#fff;border:1px solid #14181c;border-radius:6px;padding:7px 10px;font:12px/1.5 var(--mono);color:#14181c;box-shadow:0 2px 8px #0003;white-space:nowrap';document.body.appendChild(tip);}
+  var off=function(){document.querySelectorAll('#eg-body .eg-cur').forEach(function(c){c.setAttribute('opacity',0);});tip.style.display='none';};
+  document.querySelectorAll('#eg-body svg.eg-hv').forEach(function(svg){
+    var move=function(e){
+      var H=EG.hv,g=H.g,bb=svg.getBoundingClientRect(),sx=(e.clientX-bb.left)*H.W/bb.width;
+      if(sx<H.l||sx>H.W-H.r){off();return;}
+      var T=H.tA+(sx-H.l)/(H.W-H.l-H.r)*(H.tB-H.tA),bi=0,bd=1e18;
+      g.dates.forEach(function(d,i){var dd=Math.abs(Date.parse(d)-T);if(dd<bd){bd=dd;bi=i;}});
+      var X=H.x(g.dates[bi]);
+      document.querySelectorAll('#eg-body .eg-cur').forEach(function(c){c.setAttribute('x1',X);c.setAttribute('x2',X);c.setAttribute('opacity',.55);});
+      var rows=['This-year forecasts <b>'+g.fy1[bi].toFixed(1)+'</b>'];
+      if(g.fy2[bi]!=null)rows.push('Next-year forecasts <b>'+g.fy2[bi].toFixed(1)+'</b>');
+      if(g.breadth[bi]!=null)rows.push('Breadth <b style="color:'+(g.breadth[bi]>=0?'#00a810':'#e02525')+'">'+H.sg(g.breadth[bi],0)+'</b>');
+      if(g.growth[bi]!=null)rows.push('Expected growth <b>'+H.sg(g.growth[bi])+'%</b>');
+      if(g.px&&g.px[bi]!=null)rows.push('<span style="color:#2a78d6">'+g.pxname+' <b>'+g.px[bi].toLocaleString('en-GB')+'</b></span>');
+      tip.innerHTML='<div style="font-weight:700;margin-bottom:4px">'+H.fd(g.dates[bi])+'</div>'+rows.join('<br>');
+      tip.style.display='block';
+      var lx=e.clientX+16;if(lx+tip.offsetWidth>innerWidth-8)lx=e.clientX-16-tip.offsetWidth;
+      var ty=e.clientY-tip.offsetHeight-12;if(ty<8)ty=e.clientY+16;
+      tip.style.left=Math.max(8,lx)+'px';tip.style.top=ty+'px';
+    };
+    svg.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')move(e);});
+    svg.addEventListener('pointerdown',move);
+    svg.addEventListener('pointerleave',function(e){if(e.pointerType==='mouse')off();});
+  });
+  var body=document.getElementById('eg-body');
+  if(body&&!body._egScroll){body._egScroll=1;body.addEventListener('scroll',off,{passive:true});}
+}
+/* When the Friday files are loaded into the upload zone, save each company's index, sector,
+   shares, close and last results date to data/earnings/meta.json. The earnings-weekly Action
+   re-runs on that push. Runs only on a fresh file load (not on page-load restore) and only
+   when a GitHub token is set. */
+var EG_META_T=null;
+function egQueueMeta(){ clearTimeout(EG_META_T); EG_META_T=setTimeout(egPushMeta,5000); }
+function egPushMeta(){
+  var pat=''; try{pat=(localStorage.getItem('gh_pat')||'').trim();}catch(e){}
+  if(!pat||typeof exState==='undefined'||!exState.rows2||!exState.rows3)return;
+  var sec={},pre={},c={};
+  exState.rows3.forEach(function(r){var t=(r['TIDM']||'').trim();if(t)sec[t]=r['Sector']||'';});
+  (exState.rows5||[]).forEach(function(r){var t=(r['TIDM']||'').trim();if(t)pre[t]=r['Prev prelim results announce']||'';});
+  exState.rows2.forEach(function(r){var t=(r['TIDM']||'').trim();if(!t||c[t])return;
+    c[t]=[r['Name']||'',r['Index membership']||'',sec[t]||'',r['Shares in issue (m)']||'',r['Close']||'',pre[t]||''];});
+  if(Object.keys(c).length<300||!('Index membership' in exState.rows2[0])||!('Sector' in exState.rows3[0]))return;
+  var cs=JSON.stringify(c), sig=cs.length+':'+cs.slice(0,200)+cs.slice(-200);
+  try{if(localStorage.getItem('eg_meta_sig')===sig)return;}catch(e){}
+  var body=JSON.stringify({updated:new Date().toISOString().slice(0,10),c:c});
+  var api='https://api.github.com/repos/Markmark5/Database/contents/data/earnings/meta.json', hd={'Authorization':'token '+pat,'Accept':'application/vnd.github.v3+json'};
+  fetch(api,{headers:hd}).then(function(r){return r.ok?r.json():null;}).then(function(m){
+    var b={message:'Earnings: company details from upload zone '+new Date().toISOString().slice(0,10),content:btoa(unescape(encodeURIComponent(body)))};
+    if(m&&m.sha)b.sha=m.sha;
+    return fetch(api,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},hd),body:JSON.stringify(b)});
+  }).then(function(r){
+    if(r.status===200||r.status===201){try{localStorage.setItem('eg_meta_sig',sig);}catch(e){} if(typeof toast==='function')toast('✓ Earnings data saved — chart updates in a few minutes','ok',3500);}
+  }).catch(function(){});
 }
 </script>
 
