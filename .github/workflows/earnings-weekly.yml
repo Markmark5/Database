@@ -1,0 +1,46 @@
+name: UK earnings revisions
+
+on:
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+  push:
+    branches: [main]
+    paths:
+      - data/earnings/meta.json     # saved by the Database page when the Friday files are loaded
+      - scripts/earnings.py
+  schedule:
+    - cron: "13 7 * * 6"      # Saturday 07:13 UTC, after Friday's weekly log
+    - cron: "13 7 * * 1"      # Monday 07:13 UTC, in case the log was added over the weekend
+
+permissions:
+  contents: write
+
+concurrency:
+  group: earnings-weekly
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install --quiet yfinance
+
+      - name: Build earnings summary
+        run: python scripts/earnings.py
+
+      - name: Commit results
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/earnings/summary.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Earnings revisions $(date -u +%F)"
+          git pull --rebase -X theirs
+          git push
