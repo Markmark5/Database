@@ -9390,7 +9390,7 @@ function egRender(){
   var col=function(v){return v>=0?GRN:RED;};
   var tile=function(lab,val,c,sub){return '<div class="eg-tile"><div class="eg-lab">'+lab+'</div><div class="eg-val" style="color:'+c+'">'+val+'</div><div class="eg-sub">'+sub+'</div></div>';};
   var h='<div class="eg-sec"><div class="eg-bar"><span class="t">Forecast revisions · '+EG.g+'</span><span class="eg-rng">'+Object.keys(D).map(function(k){return '<button class="'+(k===EG.g?'on':'')+'" onclick="egSet(\''+k+'\')">'+k+'</button>';}).join('')+'</span></div>';
-  h+='<div class="eg-meta">Latest snapshot '+fd(dts[n-1])+' · '+g.companies+' companies ('+g.with_fc+' with forecasts, '+g.loss+' loss-making) · funds, trusts, REITs and property companies excluded</div>';
+  h+='<div class="eg-meta">Latest snapshot '+fd(dts[n-1])+' · '+g.companies+' companies ('+g.with_fc+' with forecasts, '+g.loss+' loss-making) · funds, trusts, REITs and property investors excluded</div>';
   h+='<div class="eg-tiles">'
     +tile('This-year forecasts · 3 months',sg(c3)+'%',col(c3),'average company · '+sg(m[n-1]-100)+'% since '+fd(dts[0]))
     +tile('Next-year forecasts'+(f2start?' · since '+new Date(f2start+'T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'2-digit'}):''),f2!=null?sg(f2-100)+'%':'–',f2!=null?col(f2-100):INK,'average company')

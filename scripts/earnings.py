@@ -12,7 +12,7 @@ Output
   data/earnings/summary.json  small file the Earnings popup reads (weekly lines per group)
 
 Method
-  Companies only: investment vehicles, real estate, ETFs/VCTs/trusts/funds and overseas giants
+  Companies only: investment vehicles, REITs and property investors, ETFs/VCTs/trusts/funds and overseas giants
   with a secondary London listing are left out. Groups use the latest index membership.
   Revision = week-to-week change in a company's forecast EPS, measured against the size of its
   EPS (floor: 2% of share price, so loss-makers and near-zero EPS work), capped at +/-15% and
@@ -31,8 +31,12 @@ SHEET = ('https://docs.google.com/spreadsheets/d/1oov2nnwWUVcP4xTEi0wwkdqvr3uPqu
          '&headers=1&range=A2:Z&sheet=' + urllib.parse.quote('\U0001F4C5 Weekly Log'))
 GROUPS = [('FTSE 100', '^FTSE', 'FTSE 100'), ('FTSE 250', '^FTMC', 'FTSE 250'),
           ('Main market small', '^FTSC', 'FTSE SmallCap'), ('AIM', '^FTAI', 'AIM All-Share')]
-EXCL_SECTORS = ('Open End and Miscellaneous Investment Vehicles', 'Real Estate Investment and Services',
-                'Real Estate Investment Trusts', 'Closed End Investments')
+EXCL_SECTORS = ('Open End and Miscellaneous Investment Vehicles', 'Real Estate Investment Trusts',
+                'Closed End Investments')
+# "Real Estate Investment and Services" mixes trading companies (Rightmove, Savills, Foxtons, LSL,
+# Henry Boot, Winkworth ...), which are kept, with property investors whose earnings are driven by
+# property valuations, which are left out by ticker:
+PROPERTY_INVESTORS = {'CLI', 'HLCL', 'HWG', 'GR1T', 'HKLD', 'HKLJ', 'PLAZ', 'PNS', 'SPDI', 'WSP', 'CIC', 'CDFF', 'MFAI'}
 FUND = re.compile(r'\b(ETF|ETP|ETC|UCITS|VCT|Trust|Fund)\b', re.I)
 CAP, DROP = 0.15, 0.5
 
@@ -113,7 +117,7 @@ def load_meta():
         else:
             g = 'Main market small'
         cap = (num(shares) or 0) * (pence(close) or 0) / 100          # GBP m
-        ex = sector in EXCL_SECTORS or (not sector and FUND.search(name or '')) or \
+        ex = sector in EXCL_SECTORS or t in PROPERTY_INVESTORS or (not sector and FUND.search(name or '')) or \
             (g == 'Main market small' and cap > 1000 and not any(x in idx for x in ('Small Cap', 'Fledgling', 'techMARK')))
         p = pdate(prelim) if prelim else None
         out[t] = dict(group=g, excl=bool(ex), prelim=[p - dt.timedelta(days=365 * k) for k in range(3)] if p else [])
