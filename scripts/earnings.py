@@ -12,7 +12,7 @@ Output
   data/earnings/summary.json  small file the Earnings popup reads (weekly lines per group)
 
 Method
-  Companies only: investment vehicles, real estate, ETFs/VCTs/trusts/funds and overseas giants
+  Companies only: investment vehicles, REITs and property investors, ETFs/VCTs/trusts/funds and overseas giants
   with a secondary London listing are left out. Groups use the latest index membership.
   Revision = week-to-week change in a company's forecast EPS, measured against the size of its
   EPS (floor: 2% of share price, so loss-makers and near-zero EPS work), capped at +/-15% and
@@ -31,8 +31,12 @@ SHEET = ('https://docs.google.com/spreadsheets/d/1oov2nnwWUVcP4xTEi0wwkdqvr3uPqu
          '&headers=1&range=A2:Z&sheet=' + urllib.parse.quote('\U0001F4C5 Weekly Log'))
 GROUPS = [('FTSE 100', '^FTSE', 'FTSE 100'), ('FTSE 250', '^FTMC', 'FTSE 250'),
           ('Main market small', '^FTSC', 'FTSE SmallCap'), ('AIM', '^FTAI', 'AIM All-Share')]
-EXCL_SECTORS = ('Open End and Miscellaneous Investment Vehicles', 'Real Estate Investment and Services',
-                'Real Estate Investment Trusts', 'Closed End Investments')
+EXCL_SECTORS = ('Open End and Miscellaneous Investment Vehicles', 'Real Estate Investment Trusts',
+                'Closed End Investments')
+# "Real Estate Investment and Services" mixes trading companies (Rightmove, Savills, Foxtons, LSL,
+# Henry Boot, Winkworth ...), which are kept, with property investors whose earnings are driven by
+# property valuations, which are left out by ticker:
+PROPERTY_INVESTORS = {'CLI', 'HLCL', 'HWG', 'GR1T', 'HKLD', 'HKLJ', 'PLAZ', 'PNS', 'SPDI', 'WSP', 'CIC', 'CDFF', 'MFAI'}
 FUND = re.compile(r'\b(ETF|ETP|ETC|UCITS|VCT|Trust|Fund)\b', re.I)
 CAP, DROP = 0.15, 0.5
 
@@ -113,7 +117,7 @@ def load_meta():
         else:
             g = 'Main market small'
         cap = (num(shares) or 0) * (pence(close) or 0) / 100          # GBP m
-        ex = sector in EXCL_SECTORS or (not sector and FUND.search(name or '')) or \
+        ex = sector in EXCL_SECTORS or t in PROPERTY_INVESTORS or (not sector and FUND.search(name or '')) or \
             (g == 'Main market small' and cap > 1000 and not any(x in idx for x in ('Small Cap', 'Fledgling', 'techMARK')))
         p = pdate(prelim) if prelim else None
         out[t] = dict(group=g, excl=bool(ex), prelim=[p - dt.timedelta(days=365 * k) for k in range(3)] if p else [])
@@ -134,11 +138,19 @@ def clip_mean(xs):
 def index_prices(dates):
     try:
         import yfinance as yf
-        px = yf.download([g[1] for g in GROUPS], start=(dates[0] - dt.timedelta(days=10)).isoformat(),
-                         progress=False, auto_adjust=True)['Close'].ffill()
+        start = (dates[0] - dt.timedelta(days=10)).isoformat()
+        px = yf.download([g[1] for g in GROUPS], start=start, progress=False, auto_adjust=True)['Close'].ffill()
         out = {}
         for name, tick, _ in GROUPS:
-            s = px[tick].dropna()
+            s = px[tick].dropna() if tick in px else []
+            if not len(s):                      # Yahoo sometimes drops one index from a batch: ask again
+                try:
+                    s = yf.Ticker(tick).history(start=start, auto_adjust=True)['Close'].dropna()
+                    s.index = s.index.tz_localize(None)
+                except Exception as e:  # noqa: BLE001
+                    print('retry failed', tick, e)
+            if not len(s):
+                continue
             vals = []
             for d in dates:
                 sub = s[s.index.date <= d]
@@ -150,11 +162,25 @@ def index_prices(dates):
         return {}
 
 
+def carry(old, dates):
+    """Index prices from the previous summary, when Yahoo gave none this run."""
+    if not old or not old.get('px') or not any(v is not None for v in old['px']):
+        return None
+    m = dict(zip(old['dates'], old['px']))
+    print('  index prices carried forward from the previous run')
+    return [m.get(d.isoformat()) for d in dates]
+
+
 def main():
     weeks, last_live = load_weeks()
     meta, meta_date = load_meta()
     dates = sorted(weeks)
     px_idx = index_prices(dates)
+    prev = {}
+    try:
+        prev = json.load(open(os.path.join(D, 'summary.json')))['groups']
+    except Exception:  # noqa: BLE001
+        pass
     out = dict(updated=dt.date.today().isoformat(), latest=dates[-1].isoformat(), meta=meta_date, groups={})
     for g, _, pxname in GROUPS:
         mem = [t for t, m in meta.items() if m['group'] == g and not m['excl']]
@@ -201,7 +227,7 @@ def main():
         out['groups'][g] = dict(
             dates=[d.isoformat() for d in dates], fy1=[round(x, 2) for x in i1],
             fy2=[round(x, 2) if x else None for x in i2], breadth=brd, growth=grw,
-            px=px_idx.get(g), pxname=pxname, companies=len(mem),
+            px=px_idx.get(g) or carry(prev.get(g), dates), pxname=pxname, companies=len(mem),
             with_fc=sum(t in last for t in mem), loss=sum(1 for t in mem if t in last and last[t][0] <= 0))
         f2 = [x for x in i2 if x]
         print(f"{g:18s} {len(mem):4d} companies | FY1 {i1[-1]-100:+.1f}% | FY2 {(f2[-1]-100 if f2 else 0):+.1f}% | breadth {brd[-1]} | growth {grw[-1]}")
