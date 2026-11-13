@@ -9339,18 +9339,23 @@ function aaBBRender(yrs){
 #eg-body h4{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b6b6b;margin:16px 0 6px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 #eg-body .eg-leg{display:flex;gap:14px;font-size:10px;color:#6b6b6b;align-items:center;flex-wrap:wrap}
 #eg-body .eg-leg i{display:inline-block;width:12px;height:3px;margin-right:4px;vertical-align:2px}
+#eg-body .eg-rngl{margin-left:10px}
+#eg-body .eg-rngl button{background:#fff;color:#777;border:1px solid #ddd;margin-left:3px}
+#eg-body .eg-rngl button.on{background:#14181c;color:#fff;border-color:#14181c}
 #eg-body .eg-ovb{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;background:#fff;border:1px solid #2a78d6aa;color:#2a78d6;text-transform:uppercase;letter-spacing:.06em}
 #eg-body .eg-ovb.on{background:#2a78d6;border-color:#2a78d6;color:#fff}
 #eg-body .eg-note{font-size:11px;color:#6b6b6b;margin-top:8px}
 @media (max-width:760px){#eg-body .eg-tiles{grid-template-columns:1fr 1fr}}
 </style>
 <script>
-var EG={data:null,g:'FTSE 100',ov:{rev:true,brd:true,gro:true},hv:null};
+var EG={data:null,g:'FTSE 100',ov:{rev:true,brd:true,gro:true},hv:null,rng:'all'};
+function egRng(k){EG.rng=k;egRender();}
 try{var _egov=JSON.parse(localStorage.getItem('eg_ov')||'null');if(_egov)EG.ov=_egov;}catch(e){}
 function egClose(){document.getElementById('eg-overlay').style.display='none';var t=document.getElementById('eg-tip');if(t)t.style.display='none';}
 function egTog(k){EG.ov[k]=!EG.ov[k];try{localStorage.setItem('eg_ov',JSON.stringify(EG.ov));}catch(e){}egRender();}
 function egSet(g){EG.g=g;egRender();}
 async function egOpen(){
+  EG.rng='all';      /* every opening starts on the full history */
   var el=document.getElementById('eg-body');
   document.getElementById('eg-overlay').style.display='flex';
   if(!EG.data)el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading earnings data…</div>';
@@ -9397,14 +9402,42 @@ function egRender(){
     +tile('Revision breadth · 4 weeks',br!=null?sg(br,0):'–',br!=null?col(br):INK,'% upgraded − % downgraded')
     +tile('Expected growth · next year',gr!=null?sg(gr)+'%':'–',INK,'median profitable company')
     +'</div>';
-  // chart 1 — revision index
-  var all=m.concat(g.fy2.filter(function(v){return v!=null;}));
-  var lo=Math.floor(Math.min.apply(null,all)/2)*2-1, hi=Math.ceil(Math.max.apply(null,all)/2)*2+1, H=280;
-  var y1=function(v){return t+(hi-v)*(H-t-b)/(hi-lo);}, stp=(hi-lo)>20?5:2;
-  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="eg-hv">';
-  for(var v=Math.ceil(lo/stp)*stp;v<=hi;v+=stp){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y1(v)+'" y2="'+y1(v)+'" stroke="'+(v===100?AX:GRID)+'"'+(v===100?' stroke-dasharray="2 5"':'')+'/><text x="'+(l-6)+'" y="'+(y1(v)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+v+'</text>';}
-  s+=ovl('rev',H)+line(g.fy2,y1,INK,1.4,true)+line(m,y1,INK,1.8)+endlab(m[n-1],y1,m[n-1].toFixed(1))+ticks(H)+cur(H)+'</svg>';
-  h+='<h4><span>Forecast revision index · 100 = '+fd(dts[0])+'</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>This-year forecasts, average company</span><span><i style="background:repeating-linear-gradient(90deg,#14181c 0 5px,transparent 5px 9px)"></i>Next-year forecasts</span>'+ovbtn('rev')+'</span></h4>'+s;
+  // chart 1 — revision index; range buttons zoom this chart only and rebase it to 100
+  var i0=0;
+  if(EG.rng!=='all'){
+    var e=new Date(dts[n-1]+'T00:00:00'), st;
+    if(EG.rng==='ytd')st=new Date(e.getFullYear(),0,1); else {st=new Date(e);st.setMonth(st.getMonth()-({'3m':3,'6m':6,'1y':12})[EG.rng]);}
+    var sk=st.toISOString().slice(0,10); while(i0<n-2&&dts[i0]<sk)i0++;
+  }
+  var rd=dts.slice(i0), rn=rd.length, rA=Date.parse(rd[0]), rB=Date.parse(rd[rn-1]);
+  var xr=function(d){return l+(Date.parse(d)-rA)/((rB-rA)||1)*(W-l-r);};
+  var b1=m[i0], r1=m.slice(i0).map(function(v){return v/b1*100;});
+  /* next-year line: joins the this-year line where it starts, so both share a starting point */
+  var f2s=g.fy2.slice(i0), j0=-1; for(var j=0;j<f2s.length;j++){if(f2s[j]!=null){j0=j;break;}}
+  var r2=f2s.map(function(v){return (v==null||j0<0)?null:v/f2s[j0]*r1[j0];});
+  var rp=g.px?g.px.slice(i0):null;
+  var all=r1.concat(r2.filter(function(v){return v!=null;}));
+  var lo=Math.floor(Math.min.apply(null,all)*2)/2-.5, hi=Math.ceil(Math.max.apply(null,all)*2)/2+.5, H=280;
+  var y1=function(v){return t+(hi-v)*(H-t-b)/(hi-lo);}, stp=(hi-lo)>20?5:(hi-lo)>6?1:.5;
+  var rline=function(vals,col,w,dash){var p=[];vals.forEach(function(v,i){if(v!=null)p.push(xr(rd[i]).toFixed(1)+','+y1(v).toFixed(1));});return '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="'+(w||1.6)+'"'+(dash?' stroke-dasharray="5 4"':'')+' stroke-linejoin="round"/>';};
+  var rticks=function(){var s2='',last='',step=rn>40?2:1;rd.forEach(function(d,i){var mo=d.slice(0,7);if(mo!==last&&i>0&&i<rn-2&&(+d.slice(5,7)%step===(step===2?1:0)||step===1)){var dt=new Date(d+'T00:00:00');s2+='<text x="'+xr(d).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" font-size="10" fill="'+AX+'">'+dt.toLocaleDateString('en-GB',{month:'short'})+(mo.slice(5)==='01'?" '"+mo.slice(2,4):'')+'</text>';}last=mo;});
+    return s2+'<text x="'+(W-r+6)+'" y="'+(H-5)+'" font-size="10" font-weight="700" fill="'+INK+'">'+new Date(rd[rn-1]+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'})+'</text>';};
+  var rovl=function(){ if(!EG.ov.rev||!rp||!rp.some(function(q){return q!=null;}))return '';
+    var v=rp.filter(function(q){return q!=null;}), mn=Math.min.apply(null,v), mx=Math.max.apply(null,v), pad=(mx-mn)*.05||1; mn-=pad; mx+=pad;
+    var ys=function(q){return t+(mx-q)*(H-t-b)/(mx-mn);}, p=[], first=null;
+    rp.forEach(function(q,i){if(q!=null){if(first==null)first=i;p.push(xr(rd[i]).toFixed(1)+','+ys(q).toFixed(1));}});
+    var o='<polygon points="'+xr(rd[first]).toFixed(1)+','+(H-b)+' '+p.join(' ')+' '+xr(rd[rn-1]).toFixed(1)+','+(H-b)+'" fill="'+BLU+'" opacity=".08"/><polyline points="'+p.join(' ')+'" fill="none" stroke="'+BLU+'" stroke-width="1.3" opacity=".8"/>';
+    [0,.5,1].forEach(function(f){var q=mn+(mx-mn)*f;o+='<text x="'+(W-8)+'" y="'+(ys(q)+3).toFixed(1)+'" text-anchor="end" font-size="10" fill="'+BLU+'">'+Math.round(q).toLocaleString()+'</text>';});
+    return o; };
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" class="eg-hv" data-m="rev">';
+  for(var v=Math.ceil(lo/stp)*stp;v<=hi+1e-9;v+=stp){var vv=Math.round(v*10)/10;s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y1(vv)+'" y2="'+y1(vv)+'" stroke="'+(vv===100?AX:GRID)+'"'+(vv===100?' stroke-dasharray="2 5"':'')+'/><text x="'+(l-6)+'" y="'+(y1(vv)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+(stp<1?vv.toFixed(1):vv)+'</text>';}
+  var lastR2=null; for(var q2=r2.length-1;q2>=0;q2--){if(r2[q2]!=null){lastR2=r2[q2];break;}}
+  s+=rovl()+rline(r2,INK,1.4,true)+rline(r1,INK,1.8)+endlab(r1[rn-1],y1,r1[rn-1].toFixed(1));
+  if(lastR2!=null)s+='<text x="'+(W-r-6)+'" y="'+(y1(lastR2)+14).toFixed(1)+'" text-anchor="end" font-size="11" font-weight="700" fill="#6b6b6b" stroke="#fff" stroke-width="4" paint-order="stroke">'+lastR2.toFixed(1)+'</text>';
+  s+=rticks()+cur(H)+'</svg>';
+  var rbtn='<span class="eg-rng eg-rngl">'+[['3m','3M'],['6m','6M'],['ytd','YTD'],['1y','1Y'],['all','All']].map(function(z){return '<button class="'+(EG.rng===z[0]?'on':'')+'" onclick="egRng(\''+z[0]+'\')">'+z[1]+'</button>';}).join('')+'</span>';
+  h+='<h4><span>Forecast revision index · 100 = '+fd(rd[0])+' '+rbtn+'</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>This-year forecasts, average company</span><span><i style="background:repeating-linear-gradient(90deg,#14181c 0 5px,transparent 5px 9px)"></i>Next-year forecasts</span>'+ovbtn('rev')+'</span></h4>'+s;
+  EG.rev={i0:i0,r1:r1,r2:r2,xr:xr,rA:rA,rB:rB};
   // chart 2 — breadth
   var bv=g.breadth.filter(function(v){return v!=null;}), bm=Math.max(20,Math.ceil(Math.max.apply(null,bv.map(Math.abs))/10)*10);
   var yb=function(v){return t+(bm-v)*(H-t-b)/(2*bm);};
@@ -9437,14 +9470,17 @@ function egBindHover(){
   var off=function(){document.querySelectorAll('#eg-body .eg-cur').forEach(function(c){c.setAttribute('opacity',0);});tip.style.display='none';};
   document.querySelectorAll('#eg-body svg.eg-hv').forEach(function(svg){
     var move=function(e){
-      var H=EG.hv,g=H.g,bb=svg.getBoundingClientRect(),sx=(e.clientX-bb.left)*H.W/bb.width;
+      var H=EG.hv,g=H.g,R=EG.rev,isRev=svg.getAttribute('data-m')==='rev',bb=svg.getBoundingClientRect(),sx=(e.clientX-bb.left)*H.W/bb.width;
       if(sx<H.l||sx>H.W-H.r){off();return;}
-      var T=H.tA+(sx-H.l)/(H.W-H.l-H.r)*(H.tB-H.tA),bi=0,bd=1e18;
+      var a0=isRev?R.rA:H.tA, a1=isRev?R.rB:H.tB;
+      var T=a0+(sx-H.l)/(H.W-H.l-H.r)*(a1-a0),bi=0,bd=1e18;
       g.dates.forEach(function(d,i){var dd=Math.abs(Date.parse(d)-T);if(dd<bd){bd=dd;bi=i;}});
-      var X=H.x(g.dates[bi]);
-      document.querySelectorAll('#eg-body .eg-cur').forEach(function(c){c.setAttribute('x1',X);c.setAttribute('x2',X);c.setAttribute('opacity',.55);});
-      var rows=['This-year forecasts <b>'+g.fy1[bi].toFixed(1)+'</b>'];
-      if(g.fy2[bi]!=null)rows.push('Next-year forecasts <b>'+g.fy2[bi].toFixed(1)+'</b>');
+      document.querySelectorAll('#eg-body svg.eg-hv').forEach(function(sv){var c=sv.querySelector('.eg-cur');if(!c)return;
+        var rv=sv.getAttribute('data-m')==='rev', ok=!rv||bi>=R.i0, X=rv?R.xr(g.dates[bi]):H.x(g.dates[bi]);
+        c.setAttribute('x1',X);c.setAttribute('x2',X);c.setAttribute('opacity',ok?.55:0);});
+      var k=bi-R.i0, inR=k>=0;
+      var rows=['This-year forecasts <b>'+(inR?R.r1[k]:g.fy1[bi]/g.fy1[0]*100).toFixed(1)+'</b>'];
+      if(inR&&R.r2[k]!=null)rows.push('Next-year forecasts <b>'+R.r2[k].toFixed(1)+'</b>');
       if(g.breadth[bi]!=null)rows.push('Breadth <b style="color:'+(g.breadth[bi]>=0?'#00a810':'#e02525')+'">'+H.sg(g.breadth[bi],0)+'</b>');
       if(g.growth[bi]!=null)rows.push('Expected growth <b>'+H.sg(g.growth[bi])+'%</b>');
       if(g.px&&g.px[bi]!=null)rows.push('<span style="color:#2a78d6">'+g.pxname+' <b>'+g.px[bi].toLocaleString('en-GB')+'</b></span>');
