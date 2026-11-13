@@ -5,13 +5,14 @@
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 122 | read OK, upcoming events found |
-| EMPTY | 143 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 4 | page loaded but little text (JS-rendered even in browser) |
+| EMPTY | 147 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
+- Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
 - Fevara (FVA) - http 200, http - https://fevara.com/investors/financial-calendar/
@@ -24,6 +25,7 @@
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
 - Keller (KLR) - http 200, http - https://investors.keller.com/financial-calendar
 - Made Tech (MTEC) - http 200, http - https://investors.madetech.com/share-information/
+- NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
@@ -81,6 +83,7 @@
 - Glencore (GLEN) - http 200, browser - https://www.glencore.com/investors/shareholder-centre/corporate-calendar/
 - Bytes Technology (BYIT) - http 200, http - https://www.bytesplc.com/investors/financial-calendar/
 - Alfa Financial Software (ALFA) - http 200, http - https://www.alfasystems.com/en-eu/investors/financial-calendar
+- AEP Plantations (AEP) - http 200, http - https://aepplantations.com/investors/notices-and-financial-calendar/
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
 - Avation (AVAP) - http 200, http - https://www.avation.net/results.html
@@ -134,6 +137,7 @@
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
 - WH Smith (SMWH) - http 200, browser - https://www.whsmithplc.co.uk/investors/financial-calendar
+- Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
 - Spirax (SPX) - http 200, browser - https://www.spiraxgroup.com/en/investors/investment-case/events-calendar
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
@@ -155,13 +159,6 @@
 - YouGov (YOU) - http 200, http - https://corporate.yougov.com/investors/financial-calendar/
 - Yü (YU.) - http 200, http - https://yugroupplc.com/financial-calendar/
 - FDM Group (FDM) - http 200, http - https://www.fdmgroup.com/investors-hub/
-
-## UNREADABLE
-
-- Cake Box (CBOX) - http 202, browser - https://cakeboxinvestors.com/investor-hub/financial-calendar/
-- NIOX (NIOX) - http 202, browser - https://investors.niox.com/investors/financial-calendar/
-- AEP Plantations (AEP) - http 202, browser - https://aepplantations.com/investors/notices-and-financial-calendar/
-- Smiths News (SNWS) - http 202, browser - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 
 ## BLOCKED
 
