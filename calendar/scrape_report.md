@@ -1,14 +1,14 @@
-# Calendar scrape - 2026-11-13
+# Calendar scrape - 2026-11-16
 
-**279 sources · 36 events staged for approval**
+**279 sources · 40 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 122 | read OK, upcoming events found |
-| EMPTY | 147 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 124 | read OK, upcoming events found |
+| EMPTY | 143 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 3 | timeout, DNS or server error |
+| ERROR | 5 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -48,7 +48,6 @@
 - Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
 - Foxtons (FOXT) - http 200, http - https://www.foxtonsgroup.co.uk/investor-relations/financial-calendar
 - FRP Advisory (FRP) - http 200, http - https://www.frpadvisory.com/investors/financial-calendar-and-dividends/
-- Galliford Try (GFRD) - http 200, http - https://www.gallifordtry.co.uk/investors/financial-calendar/
 - Hikma (HIK) - http 200, browser - https://www.hikma.com/investors/financial-calendar/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
@@ -110,7 +109,6 @@
 - Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
 - Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
-- Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
 - Hostelworld (HSW) - http 200, http - https://www.hostelworldgroup.com/investors/financial-calendar
@@ -118,7 +116,6 @@
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
-- Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
 - Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
 - Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
@@ -135,7 +132,6 @@
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
 - Persimmon (PSN) - http 200, http - https://www.persimmonhomes.com/corporate/investors/financial-calendar
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
-- Sabre Insurance (SBRE) - http 200, http - https://sabreplc.co.uk/investors/financial-calendar/
 - WH Smith (SMWH) - http 200, browser - https://www.whsmithplc.co.uk/investors/financial-calendar
 - Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
@@ -174,7 +170,9 @@
 
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
+- Goodwin (GDWN) - http None, chrome - https://www.goodwin.co.uk/financial-calendar/
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+- Judges Scientific (JDG) - http 500, browser - https://www.judges.uk.com/financial-performance/financial-calendar.html
 
 ## Approved events not re-verified tonight
 
