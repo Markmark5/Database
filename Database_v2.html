@@ -10102,6 +10102,7 @@ async function brRender(){
 #fg-body .cta-sec{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;padding:0 16px 12px;margin-top:18px}
 #fg-body .cta-sec>h4:first-child{margin:0 -16px 12px;padding:8px 16px;background:#14181c;border:none;color:#fff;font-size:13px;letter-spacing:.08em}
 #fg-body .cta-sec>h4:first-child .fg-rng button{background:#14181c;color:#cfcfcf;border-color:#555}
+#fg-body .cta-sec>h4:first-child .fg-rng .sep{background:#555}
 #fg-body .cta-sec>h4:first-child .fg-rng button.on{background:#fff;color:#14181c;border-color:#fff}
 #fg-body .cta-sub{font-size:12px;font-weight:700;margin:14px 0 2px;display:flex;justify-content:space-between;align-items:baseline}
 #fg-body .cta-sub b{font-size:16px}
@@ -10113,7 +10114,7 @@ async function brRender(){
 <script>
 /* CTA positioning (modelled) — data/cta/cta.json, built by scripts/cta.py in the
    Index breadth Action. Fetched only when the Fear & Greed popup opens. */
-var CTA = {data:null, rng:'all', draw:{}};
+var CTA = {data:null, rng:'all', key:'sp500', draw:{}};
 async function ctaLoad(){
   if(CTA.data)return CTA.data;
   var urls=['data/cta/cta.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/cta/cta.json'];
@@ -10121,6 +10122,7 @@ async function ctaLoad(){
   return null;
 }
 function ctaRng(v){ CTA.rng=v; ctaRender(); }
+function ctaIdx(k){ CTA.key=k; ctaRender(); }
 function ctaZone(v,D){ return v>=D.hi?['Heavily long','#1f9d55']:v<=D.lo?['Heavily short','#d64545']:v>=0?['Net long','#2a49d6']:['Net short','#2a49d6']; }
 function ctaChart(key,D){
   var n=D.dates.length, last=D.dates[n-1], a=0;
@@ -10158,17 +10160,18 @@ async function ctaRender(){
   var el=document.getElementById('cta-body'); if(!el)return;
   var J=await ctaLoad(); el=document.getElementById('cta-body'); if(!el)return;
   if(!J||!J.idx){ el.innerHTML=''; return; }
+  var ib=function(v,lab){return '<button class="'+(CTA.key===v?'on':'')+'" onclick="ctaIdx(\''+v+'\')">'+lab+'</button>';};
   var rb=function(v,lab){return '<button class="'+(CTA.rng===v?'on':'')+'" onclick="ctaRng(\''+v+'\')">'+lab+'</button>';};
-  var h='<div class="cta-sec"><h4><span>&#129517; CTA positioning (modelled)</span><span class="fg-rng">'+rb('1y','1Y')+rb('3y','3Y')+rb('all','All')+'</span></h4>';
+  var h='<div class="cta-sec"><h4><span>&#129517; CTA positioning (modelled)</span><span class="fg-rng">'+ib('sp500','SPX')+ib('ftse250','FTSE 250')+'<span class="sep"></span>'+rb('1y','1Y')+rb('3y','3Y')+rb('all','All')+'</span></h4>';
   h+='<div class="fg-meta" style="margin-bottom:0">Estimated trend-following fund position, −100 fully short to +100 fully long · trend signals over 1, 3 and 6 months, scaled by volatility, smoothed over about 5 days</div>';
-  ['sp500','ftse250'].forEach(function(k){
+  [CTA.key].forEach(function(k){
     var D=J.idx[k]; if(!D)return;
     var L=D.pos[D.pos.length-1], z=ctaZone(L,D), fd=new Date(D.dates[D.dates.length-1]+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
     h+='<div class="cta-sub"><span>'+D.name+'</span><span style="color:'+z[1]+'"><b>'+(L>0?'+':'')+L.toFixed(0)+'</b> '+z[0]+' <span style="color:#8a8a8a;font-weight:400">· '+fd+'</span></span></div>';
     h+='<div class="cta-wrap">'+ctaChart(k,D)+'<div class="cta-tip"></div></div>';
   });
   h+='<div class="cta-leg"><span><i style="background:#2a49d6"></i>Modelled CTA position</span><span><i style="background:#9fb0ee"></i>Daily reading</span><span><i style="background:#e0602a"></i>Index (right scale)</span></div>';
-  h+='<div class="fg-src">Built from index closes only: each lookback’s trend strength (return ÷ volatility) is squashed to ±1, averaged, and scaled down when volatility rises, as trend-following funds do. Zones: top 15% / bottom 5% of readings since 2021. An estimate of how systematic funds are positioned, not their actual holdings. FTSE 250 futures are thinly traded, so read that chart as a trend gauge.</div></div>';
+  h+='<div class="fg-src">Built from index closes only: each lookback’s trend strength (return ÷ volatility) is squashed to ±1, averaged, and scaled down when volatility rises, as trend-following funds do. Zones: top 15% / bottom 5% of readings since 2021. An estimate of how systematic funds are positioned, not their actual holdings.'+(CTA.key==='ftse250'?' FTSE 250 futures are thinly traded, so read this chart as a trend gauge.':'')+'</div></div>';
   el.innerHTML=h;
   el.querySelectorAll('svg.cta-svg').forEach(function(svg){
     var G=CTA.draw[svg.getAttribute('data-k')], tip=svg.parentNode.querySelector('.cta-tip'), cur=svg.querySelector('.cta-cur'), dot=svg.querySelector('.cta-dot');
