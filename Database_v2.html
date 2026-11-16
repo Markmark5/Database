@@ -9831,10 +9831,11 @@ function fgRender(){
     h+='<tr'+(i===n-1?' class="hi"':'')+'><td>'+fd(q[0])+'</td><td>'+q[1].toFixed(1)+'</td><td style="color:'+(ch>=0?FG_GRN:FG_RED)+'">'+sgn(ch)+'</td><td style="color:'+bd[2]+';font-weight:700">'+bd[3]+'</td></tr>';
   }
   h+='</tbody></table></div>';
-  h='<div class="fg-sec"><div class="fg-sechead">&#128552; Fear &amp; Greed · daily score</div>'+h+'</div><div id="br-body"></div>';
+  h='<div class="fg-sec"><div class="fg-sechead">&#128552; Fear &amp; Greed · daily score</div>'+h+'</div><div id="br-body"></div><div id="cta-body"></div>';
   document.getElementById('fg-body').innerHTML=h;
   fgBindHover();
   brRender();
+  ctaRender();
 }
 </script>
 <style>
@@ -10095,6 +10096,98 @@ async function brRender(){
   el.innerHTML=h;
   FG_HV.brName=cfg.name; FG_HV.brKey=BR_KEY;
   fgBindHover();
+}
+</script>
+<style>
+#fg-body .cta-sec{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;padding:0 16px 12px;margin-top:18px}
+#fg-body .cta-sec>h4:first-child{margin:0 -16px 12px;padding:8px 16px;background:#14181c;border:none;color:#fff;font-size:13px;letter-spacing:.08em}
+#fg-body .cta-sec>h4:first-child .fg-rng button{background:#14181c;color:#cfcfcf;border-color:#555}
+#fg-body .cta-sec>h4:first-child .fg-rng .sep{background:#555}
+#fg-body .cta-sec>h4:first-child .fg-rng button.on{background:#fff;color:#14181c;border-color:#fff}
+#fg-body .cta-sub{font-size:12px;font-weight:700;margin:14px 0 2px;display:flex;justify-content:space-between;align-items:baseline}
+#fg-body .cta-sub b{font-size:16px}
+#fg-body .cta-wrap{position:relative}
+#fg-body .cta-tip{position:absolute;top:4px;pointer-events:none;background:#fff;border:1px solid #d8d8d8;border-radius:4px;padding:4px 7px;font-size:11px;white-space:nowrap;display:none;box-shadow:0 2px 6px #0001}
+#fg-body .cta-leg{display:flex;gap:14px;font-size:10px;color:#6b6b6b;letter-spacing:.06em;text-transform:uppercase;flex-wrap:wrap;margin-top:4px}
+#fg-body .cta-leg i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:2px}
+</style>
+<script>
+/* CTA positioning (modelled) — data/cta/cta.json, built by scripts/cta.py in the
+   Index breadth Action. Fetched only when the Fear & Greed popup opens. */
+var CTA = {data:null, rng:'all', key:'sp500', draw:{}};
+async function ctaLoad(){
+  if(CTA.data)return CTA.data;
+  var urls=['data/cta/cta.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/cta/cta.json'];
+  for(var i=0;i<urls.length;i++){try{var r=await fetch(urls[i]+'?t='+Date.now(),{cache:'no-store'}); if(r.ok){CTA.data=await r.json();return CTA.data;}}catch(e){}}
+  return null;
+}
+function ctaRng(v){ CTA.rng=v; ctaRender(); }
+function ctaIdx(k){ CTA.key=k; ctaRender(); }
+function ctaZone(v,D){ return v>=D.hi?['Heavily long','#1f9d55']:v<=D.lo?['Heavily short','#d64545']:v>=0?['Net long','#2a49d6']:['Net short','#2a49d6']; }
+function ctaChart(key,D){
+  var n=D.dates.length, last=D.dates[n-1], a=0;
+  if(CTA.rng!=='all'){ var t=new Date(last+'T00:00:00'); t.setFullYear(t.getFullYear()-(CTA.rng==='1y'?1:3)); var k=t.toISOString().slice(0,10); while(a<n-1&&D.dates[a]<k)a++; }
+  var ds=D.dates.slice(a), px=D.px.slice(a), raw=D.raw.slice(a), pos=D.pos.slice(a), m=ds.length;
+  var W=1130,H=340,l=40,r=62,t=8,b=22, tA=Date.parse(ds[0]), tB=Date.parse(ds[m-1]);
+  var x=function(d){return l+(Date.parse(d)-tA)/((tB-tA)||1)*(W-l-r);}, y=function(v){return t+(100-v)*(H-t-b)/200;};
+  var pv=px.filter(function(v){return v!=null;}), mn=Math.min.apply(null,pv), mx=Math.max.apply(null,pv), pad=(mx-mn)*.06; mn-=pad; mx+=pad;
+  var ys=function(v){return t+(mx-v)*(H-t-b)/((mx-mn)||1);};
+  var s='<svg class="cta-svg" data-k="'+key+'" viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block">';
+  s+='<rect x="'+l+'" y="'+y(100)+'" width="'+(W-l-r)+'" height="'+(y(D.hi)-y(100))+'" fill="#1f9d55" opacity=".10"/>';
+  s+='<rect x="'+l+'" y="'+y(D.lo)+'" width="'+(W-l-r)+'" height="'+(y(-100)-y(D.lo))+'" fill="#d64545" opacity=".10"/>';
+  s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(D.hi)+'" y2="'+y(D.hi)+'" stroke="#1f9d55" stroke-width=".8"/><line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(D.lo)+'" y2="'+y(D.lo)+'" stroke="#d64545" stroke-width=".8"/>';
+  s+='<text x="'+(l+8)+'" y="'+(y(100)+14)+'" font-size="10" font-weight="700" fill="#1f9d55" letter-spacing=".08em">HEAVILY LONG · ABOVE +'+D.hi+' (TOP 15%)</text>';
+  s+='<text x="'+(l+8)+'" y="'+(y(-100)-6)+'" font-size="10" font-weight="700" fill="#d64545" letter-spacing=".08em">HEAVILY SHORT · BELOW '+D.lo+' (BOTTOM 5%)</text>';
+  [-100,-50,0,50,100].forEach(function(v){ s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="'+(v===0?'#8a8a8a':'#e2e2e2')+'"'+(v===0?' stroke-dasharray="3 4"':'')+' opacity="'+(v===0?1:.7)+'"/><text x="'+(l-6)+'" y="'+(y(v)+3)+'" text-anchor="end" font-size="10" fill="#8a8a8a">'+(v>0?'+':'')+v+'</text>'; });
+  var st=Math.pow(10,Math.floor(Math.log10((mx-mn)/4))); [1,2,2.5,5,10].some(function(f){ if((mx-mn)/(st*f)<=6){st*=f;return true;} });
+  for(var q=Math.ceil(mn/st)*st;q<=mx;q+=st) s+='<text x="'+(W-r+6)+'" y="'+(ys(q)+3)+'" font-size="10" fill="#e0602a">'+Math.round(q).toLocaleString()+'</text>';
+  var span=tB-tA, yr='', mo='';
+  ds.forEach(function(d){
+    if(span>2.2*365*864e5){ var Y=d.slice(0,4); if(Y!==yr){ if(yr)s+='<line x1="'+x(d)+'" x2="'+x(d)+'" y1="'+t+'" y2="'+(H-b)+'" stroke="#eee"/>'; yr=Y; s+='<text x="'+x(d)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#8a8a8a">'+Y+'</text>'; } }
+    else { var M=d.slice(0,7); if(M!==mo){ mo=M; if(+M.slice(5)%(span>400*864e5?3:1)===0||!mo) s+='<text x="'+x(d)+'" y="'+(H-6)+'" text-anchor="middle" font-size="10" fill="#8a8a8a">'+new Date(d+'T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'2-digit'})+'</text>'; } }
+  });
+  var pl=function(arr,f){ var o=[]; for(var i=0;i<m;i++) if(arr[i]!=null) o.push(x(ds[i]).toFixed(1)+','+f(arr[i]).toFixed(1)); return o.join(' '); };
+  s+='<polyline points="'+pl(px,ys)+'" fill="none" stroke="#e0602a" stroke-width="1.3"/>';
+  s+='<polyline points="'+pl(raw,y)+'" fill="none" stroke="#9fb0ee" stroke-width="1" opacity=".8"/>';
+  s+='<polyline points="'+pl(pos,y)+'" fill="none" stroke="#2a49d6" stroke-width="1.8"/>';
+  var L=pos[m-1]; s+='<text x="'+(x(ds[m-1])-6)+'" y="'+(y(L)-8)+'" text-anchor="end" font-size="12" font-weight="700" fill="#2a49d6" stroke="#fff" stroke-width="4" paint-order="stroke">'+(L>0?'+':'')+L.toFixed(0)+'</text>';
+  s+='<line class="cta-cur" x1="0" x2="0" y1="'+t+'" y2="'+(H-b)+'" stroke="#14181c" stroke-dasharray="3 3" opacity="0"/><circle class="cta-dot" r="3.5" fill="#fff" stroke="#2a49d6" stroke-width="1.5" opacity="0"/>';
+  s+='<rect x="'+l+'" y="0" width="'+(W-l-r)+'" height="'+H+'" fill="transparent"/></svg>';
+  CTA.draw[key]={ds:ds,px:px,raw:raw,pos:pos,W:W,l:l,r:r,x:x,y:y,tA:tA,tB:tB,D:D};
+  return s;
+}
+async function ctaRender(){
+  var el=document.getElementById('cta-body'); if(!el)return;
+  var J=await ctaLoad(); el=document.getElementById('cta-body'); if(!el)return;
+  if(!J||!J.idx){ el.innerHTML=''; return; }
+  var ib=function(v,lab){return '<button class="'+(CTA.key===v?'on':'')+'" onclick="ctaIdx(\''+v+'\')">'+lab+'</button>';};
+  var rb=function(v,lab){return '<button class="'+(CTA.rng===v?'on':'')+'" onclick="ctaRng(\''+v+'\')">'+lab+'</button>';};
+  var h='<div class="cta-sec"><h4><span>&#129517; CTA positioning (modelled)</span><span class="fg-rng">'+ib('sp500','SPX')+ib('ftse250','FTSE 250')+'<span class="sep"></span>'+rb('1y','1Y')+rb('3y','3Y')+rb('all','All')+'</span></h4>';
+  h+='<div class="fg-meta" style="margin-bottom:0">Estimated trend-following fund position, −100 fully short to +100 fully long · trend signals over 1, 3 and 6 months, scaled by volatility, smoothed over about 5 days</div>';
+  [CTA.key].forEach(function(k){
+    var D=J.idx[k]; if(!D)return;
+    var L=D.pos[D.pos.length-1], z=ctaZone(L,D), fd=new Date(D.dates[D.dates.length-1]+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'});
+    h+='<div class="cta-sub"><span>'+D.name+'</span><span style="color:'+z[1]+'"><b>'+(L>0?'+':'')+L.toFixed(0)+'</b> '+z[0]+' <span style="color:#8a8a8a;font-weight:400">· '+fd+'</span></span></div>';
+    h+='<div class="cta-wrap">'+ctaChart(k,D)+'<div class="cta-tip"></div></div>';
+  });
+  h+='<div class="cta-leg"><span><i style="background:#2a49d6"></i>Modelled CTA position</span><span><i style="background:#9fb0ee"></i>Daily reading</span><span><i style="background:#e0602a"></i>Index (right scale)</span></div>';
+  h+='<div class="fg-src">Built from index closes only: each lookback’s trend strength (return ÷ volatility) is squashed to ±1, averaged, and scaled down when volatility rises, as trend-following funds do. Zones: top 15% / bottom 5% of readings since 2021. An estimate of how systematic funds are positioned, not their actual holdings.'+(CTA.key==='ftse250'?' FTSE 250 futures are thinly traded, so read this chart as a trend gauge.':'')+'</div></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('svg.cta-svg').forEach(function(svg){
+    var G=CTA.draw[svg.getAttribute('data-k')], tip=svg.parentNode.querySelector('.cta-tip'), cur=svg.querySelector('.cta-cur'), dot=svg.querySelector('.cta-dot');
+    svg.addEventListener('mousemove',function(ev){
+      var bx=svg.getBoundingClientRect(), sx=(ev.clientX-bx.left)/bx.width*G.W;
+      if(sx<G.l||sx>G.W-G.r){svg.dispatchEvent(new Event('mouseleave'));return;}
+      var T=G.tA+(sx-G.l)/(G.W-G.l-G.r)*(G.tB-G.tA), lo=0, hi=G.ds.length-1;
+      while(hi-lo>1){var md=(lo+hi)>>1; if(Date.parse(G.ds[md])<T)lo=md; else hi=md;}
+      var i=Math.abs(Date.parse(G.ds[lo])-T)<=Math.abs(Date.parse(G.ds[hi])-T)?lo:hi, xx=G.x(G.ds[i]), v=G.pos[i], z=ctaZone(v,G.D);
+      cur.setAttribute('x1',xx);cur.setAttribute('x2',xx);cur.setAttribute('opacity',.55);
+      dot.setAttribute('cx',xx);dot.setAttribute('cy',G.y(v));dot.setAttribute('opacity',1);
+      tip.innerHTML=new Date(G.ds[i]+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})+' · <b style="color:'+z[1]+'">'+(v>0?'+':'')+v.toFixed(0)+' '+z[0]+'</b> · daily '+(G.raw[i]>0?'+':'')+G.raw[i].toFixed(0)+' · '+G.D.name+' '+(G.px[i]!=null?Math.round(G.px[i]).toLocaleString():'–');
+      tip.style.display='block'; var px=xx/G.W*bx.width; tip.style.left=Math.min(Math.max(px+10,0),bx.width-tip.offsetWidth)+'px';
+    });
+    svg.addEventListener('mouseleave',function(){cur.setAttribute('opacity',0);dot.setAttribute('opacity',0);tip.style.display='none';});
+  });
 }
 </script>
 
