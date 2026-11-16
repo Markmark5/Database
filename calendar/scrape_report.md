@@ -1,14 +1,14 @@
 # Calendar scrape - 2026-11-16
 
-**279 sources · 40 events staged for approval**
+**279 sources · 42 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 124 | read OK, upcoming events found |
-| EMPTY | 143 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 126 | read OK, upcoming events found |
+| EMPTY | 142 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 5 | timeout, DNS or server error |
+| ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -28,7 +28,6 @@
 - NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
-- Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
@@ -42,7 +41,6 @@
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
 - ASA International (ASAI) - http 200, http - https://www.asa-international.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
-- Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
 - Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
@@ -116,6 +114,7 @@
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
+- Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
 - Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
 - Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
@@ -170,11 +169,16 @@
 
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
-- Goodwin (GDWN) - http None, chrome - https://www.goodwin.co.uk/financial-calendar/
+- Gattaca (GATC) - http None, chrome - https://www.gattacaplc.com/investors/financial-calendar/
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
-- Judges Scientific (JDG) - http 500, browser - https://www.judges.uk.com/financial-performance/financial-calendar.html
 
 ## Approved events not re-verified tonight
 
+- Gattaca AGM 2026-12-09
+- Gattaca Trading update 2027-02-11
+- Gattaca H1 results 2027-04-13
+- Gattaca Trading update 2027-08-16
+- Gattaca FY results 2027-11-02
+- Gattaca AGM 2027-12-08
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
