@@ -1551,6 +1551,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
                 <option value="cal-asc">Calendar date (soonest)</option>
                 <option value="wl">★ Watchlist</option>
                 <option value="cycle">Cycle (earliest first)</option>
+                <option value="peg">PEG 12m (lowest first)</option>
               </select>
             </div>
           </div>
@@ -3464,7 +3465,9 @@ function applyFilters(){
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   document.body.classList.add('due-on');
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
-  const newest=(fC30||calN||fWL||fPg||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
+  const pegM=sort==='peg'?{}:null;   /* PEG sort: one card per ticker (newest), only tickers with a PEG, lowest first */
+  const pegOf=function(t){t=String(t||'').toUpperCase();if(!(t in pegM))pegM[t]=rollPeg(t).peg;return pegM[t];};
+  const newest=(fC30||calN||fWL||fPg||pegM||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
     else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
@@ -3483,7 +3486,8 @@ function applyFilters(){
     if(fTD&&String(r.date).slice(0,10)!==tIso)return false;   /* Today's scorecards: dated today */
     if(fWL&&WL.indexOf(String(r.ticker||'').toUpperCase())<0)return false;
     if(fPg&&!pegOk(r.ticker))return false;   /* PEG 12m filter: ticker's current rolling PEG */
-    if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;   /* calendar sort: only tickers with an upcoming date */
+    if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;
+    if(pegM&&pegOf(r.ticker)==null)return false;   /* calendar sort: only tickers with an upcoming date */
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
     /* Today's RNS: today's scorecards, plus today's RNS with no scorecard yet (their previous card) */
@@ -3499,6 +3503,7 @@ function applyFilters(){
       case'score-desc':return c.score-a.score;
       case'score-asc':return a.score-c.score;
       case'ticker-asc':return a.ticker.localeCompare(c.ticker);
+      case'peg':return (pegOf(a.ticker)-pegOf(c.ticker))||a.ticker.localeCompare(c.ticker);
       case'cycle':{const x=cycleSlot(a)-cycleSlot(c);return x||c.date.localeCompare(a.date)||a.ticker.localeCompare(c.ticker);}
       case'cal-asc':{const x=calN[String(a.ticker||'').toUpperCase()]||'9999',y=calN[String(c.ticker||'').toUpperCase()]||'9999';
         return x.localeCompare(y)||a.ticker.localeCompare(c.ticker)||c.date.localeCompare(a.date);}
