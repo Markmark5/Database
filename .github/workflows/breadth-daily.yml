@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - data/breadth/*_members.csv   # re-run as soon as a new member list is uploaded
+      - scripts/cta.py               # first CTA data as soon as the script is merged
   schedule:
     - cron: "40 21 * * 1-5"   # 21:40 UTC weekdays, after both the LSE and US closes
     - cron: "10 6 * * 2-6"    # 06:10 UTC Tue-Sat, before the LSE open: picks up any late Yahoo data
@@ -22,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -45,6 +46,10 @@ jobs:
           PRICE_STORE: .price-store
         run: python scripts/breadth.py
 
+      - name: Compute CTA positioning
+        continue-on-error: true      # a failure here never blocks the breadth update
+        run: python scripts/cta.py
+
       - name: Save stored prices
         if: success()
         env:
@@ -59,7 +64,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/breadth
+          git add -A data/breadth data/cta
           git diff --staged --quiet && exit 0
           git commit -m "Index breadth $(date -u +%F)"
           git pull --rebase -X theirs
