@@ -1,6 +1,6 @@
 # Calendar scrape - 2026-11-17
 
-**279 sources · 43 events staged for approval**
+**279 sources · 40 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
@@ -38,9 +38,8 @@
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
-- Alumasc (ALU) - http 200, http - https://www.alumasc.co.uk/key-dates
+- Alumasc (ALU) - http 200, browser - https://www.alumasc.co.uk/key-dates
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
-- ASA International (ASAI) - http 200, http - https://www.asa-international.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
@@ -97,6 +96,7 @@
 - Cohort (CHRT) - http 200, http - https://www.cohortplc.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
 - CLS (CLI) - http 200, http - https://clsholdings.com/investors/financial-calendar
+- CML Microsystems (CML) - http 200, http - https://www.cmlmicroplc.com/shareholder-information-2/
 - Northcoders (CODE) - http 200, http - https://investors.northcodersgroup.com/investors/financial-calendar.asp
 - Chesnara plc · Life Insurance (CSN) - http 200, http - https://www.chesnara.co.uk/investors/financial-calendar
 - Christie (CTG) - http 200, http - https://www.christiegroup.com/investors/shareholder-information/financial-calendar
