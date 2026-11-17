@@ -3936,8 +3936,8 @@ function fcBox(el,tk,hd){
       '<tr><td>EPS</td><td>'+eps(e1)+'</td><td>'+gr(e0,e1,1)+'</td><td>'+eps(e2)+'</td><td>'+gr(e1,e2,1)+'</td></tr>'+
       '<tr><td>REV</td><td>'+money(v1)+'</td><td>'+gr(v0,v1)+'</td><td>'+money(v2)+'</td><td>'+gr(v1,v2)+'</td></tr>'+
       '<tr class="sep"><td colspan="5"><div></div></td></tr>'+
-      '<tr><td>fc PE</td><td><b style="color:#fff">'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+(pegWhy?' <span class="k">· '+pegWhy+'</span>':'')+'</td></tr>'+
-      ((mc!=null||dLab)?'<tr><td>Mkt cap</td><td><b style="color:#fff">'+money(mc)+'</b></td><td></td><td class="l2">'+dLab+'</td><td>'+dVal+'</td></tr>':'')+
+      '<tr><td>fc PE</td><td><b>'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+(pegWhy?' <span class="k">· '+pegWhy+'</span>':'')+'</td></tr>'+
+      ((mc!=null||dLab)?'<tr><td>Mkt cap</td><td><b>'+money(mc)+'</b></td><td></td><td class="l2">'+dLab+'</td><td>'+dVal+'</td></tr>':'')+
       ndRow+'</table>';
     if(getComputedStyle(host).position==='static')host.style.position='relative';
     if(hd){b.classList.add('hd');b.style.top=hd.offsetTop+'px';}
@@ -8677,6 +8677,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 .fcbox{position:absolute;top:6px;left:0;z-index:5;background:#0f0f15;border:1px solid #2c2c3a;border-radius:6px;padding:6px 10px;font:8px/1.5 'Inter',sans-serif;color:#d0d0e0;font-variant-numeric:tabular-nums;pointer-events:none}
 .fcbox table{border-collapse:collapse}.fcbox td{text-align:right;padding:0 0 0 12px;white-space:nowrap}.fcbox td:first-child,.fcbox td.l2{text-align:left;color:#8a8aa3}.fcbox td:first-child{padding-left:0}
 .fcbox.hd{left:50%;transform:translateX(-50%);line-height:1.35}
+.fcbox b{font-weight:400}   /* one weight and one white tone throughout; colour does the highlighting */
 #pp-mod .fcbox{font-size:10px}   /* ticker popup two sizes up from the Cycles cards (8px) */
 .fcbox .h td{color:#8a8aa3;font-size:.9em}.fcbox .k{color:#8a8aa3}.fcbox tr.sep td{padding:0}.fcbox tr.sep div{border-top:1px solid #2c2c3a;margin:4px 0}.fcbox td.why{color:#8a8aa3;font-size:.9em}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
