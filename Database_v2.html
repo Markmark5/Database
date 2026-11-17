@@ -3887,6 +3887,17 @@ document.getElementById('f-ty-box').innerHTML=TY_KEYS.map(function(k){
 /* Forecast box drawn top-left on every price chart (ticker popup + Cycles):
    EPS/REV forecasts with growth for both years, fc PE, PEG (forward FY1→FY2) and net debt/cash.
    EPS + price from the live sheets (File 1 if blank); revenue from File 1; debt from File 3; EBITDA from File 2. */
+/* Ticker popup: drop the header box so it straddles the chart's top grid line (bottom 20px past it), as on the Cycles cards,
+   but never above the ticker row */
+function ppBoxDrop(mod,pmb){
+  try{
+    var bx=mod.querySelector(':scope > .fcbox'), svg=pmb.querySelector('svg'); if(!bx||!svg)return;
+    var top=Infinity; [].forEach.call(svg.querySelectorAll('line'),function(l){if(l.getAttribute('y1')===l.getAttribute('y2')){var t=l.getBoundingClientRect().top;if(t<top)top=t;}});
+    if(!isFinite(top))return;
+    var mr=mod.getBoundingClientRect(), hd=mod.querySelector('.pmh'), y=top-mr.top+mod.scrollTop+20-bx.offsetHeight;
+    bx.style.top=Math.max(hd.offsetTop+6,Math.round(y))+'px';
+  }catch(e){}
+}
 /* hd: the header element to centre the box in (its top edge = the header's top); the box is placed in hd's offsetParent */
 function fcBox(el,tk,hd){
   try{
@@ -8666,7 +8677,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 .fcbox{position:absolute;top:6px;left:0;z-index:5;background:#0f0f15;border:1px solid #2c2c3a;border-radius:6px;padding:6px 10px;font:8px/1.5 'Inter',sans-serif;color:#d0d0e0;font-variant-numeric:tabular-nums;pointer-events:none}
 .fcbox table{border-collapse:collapse}.fcbox td{text-align:right;padding:0 0 0 12px;white-space:nowrap}.fcbox td:first-child,.fcbox td.l2{text-align:left;color:#8a8aa3}.fcbox td:first-child{padding-left:0}
 .fcbox.hd{left:50%;transform:translateX(-50%);line-height:1.35}
-#pp-mod .fcbox{font-size:9px}   /* ticker popup a size up from the Cycles cards (8px) */
+#pp-mod .fcbox{font-size:10px}   /* ticker popup two sizes up from the Cycles cards (8px) */
 .fcbox .h td{color:#8a8aa3;font-size:.9em}.fcbox .k{color:#8a8aa3}.fcbox tr.sep td{padding:0}.fcbox tr.sep div{border-top:1px solid #2c2c3a;margin:4px 0}.fcbox td.why{color:#8a8aa3;font-size:.9em}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
 #pp-ov.on{display:flex}
@@ -9098,7 +9109,7 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk); fcBox(pmb,tk,mod.querySelector('.pmh'));
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk); fcBox(pmb,tk,mod.querySelector('.pmh')); ppBoxDrop(mod,pmb);
         curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
