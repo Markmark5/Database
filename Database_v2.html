@@ -3887,9 +3887,10 @@ document.getElementById('f-ty-box').innerHTML=TY_KEYS.map(function(k){
 /* Forecast box drawn top-left on every price chart (ticker popup + Cycles):
    EPS/REV forecasts with growth for both years, fc PE, PEG (forward FY1→FY2) and net debt/cash.
    EPS + price from the live sheets (File 1 if blank); revenue from File 1; debt from File 3; EBITDA from File 2. */
-function fcBox(el,tk){
+/* hd: the header element to centre the box in (its top edge = the header's top); the box is placed in hd's offsetParent */
+function fcBox(el,tk,hd){
   try{
-    if(!el)return; var old=el.querySelector(':scope > .fcbox'); if(old)old.remove();
+    if(!el)return; var host=(hd&&hd.parentNode)||el; var old=host.querySelector(':scope > .fcbox'); if(old)old.remove();
     tk=String(tk||'').trim().toUpperCase();
     var row=function(n){var a=(typeof slotState!=='undefined'&&slotState[n])||[];for(var i=0;i<a.length;i++)if(String(a[i].TIDM||'').trim().toUpperCase()===tk)return a[i];return {};};
     var num=function(v){v=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(v)?null:v;};
@@ -3924,11 +3925,12 @@ function fcBox(el,tk){
       '<tr><td>EPS</td><td>'+eps(e1)+'</td><td>'+gr(e0,e1,1)+'</td><td>'+eps(e2)+'</td><td>'+gr(e1,e2,1)+'</td></tr>'+
       '<tr><td>REV</td><td>'+money(v1)+'</td><td>'+gr(v0,v1)+'</td><td>'+money(v2)+'</td><td>'+gr(v1,v2)+'</td></tr>'+
       '<tr class="sep"><td colspan="5"><div></div></td></tr>'+
-      '<tr><td>fc PE</td><td><b style="color:#fff">'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+'</td></tr>'+
+      '<tr><td>fc PE</td><td><b style="color:#fff">'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+(pegWhy?' <span class="k">· '+pegWhy+'</span>':'')+'</td></tr>'+
       ((mc!=null||dLab)?'<tr><td>Mkt cap</td><td><b style="color:#fff">'+money(mc)+'</b></td><td></td><td class="l2">'+dLab+'</td><td>'+dVal+'</td></tr>':'')+
-      ndRow+(pegWhy?'<tr><td colspan="5" class="why">PEG n/a: '+pegWhy+'</td></tr>':'')+'</table>';
-    if(getComputedStyle(el).position==='static')el.style.position='relative';
-    el.appendChild(b);
+      ndRow+'</table>';
+    if(getComputedStyle(host).position==='static')host.style.position='relative';
+    if(hd){b.classList.add('hd');b.style.top=hd.offsetTop+'px';}
+    host.appendChild(b);
   }catch(e){}
 }
 function indexClass(ix){
@@ -8653,6 +8655,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 #pp-mod .pmb{position:relative}
 .fcbox{position:absolute;top:6px;left:0;z-index:5;background:#0f0f15;border:1px solid #2c2c3a;border-radius:6px;padding:6px 10px;font:8px/1.5 'Inter',sans-serif;color:#d0d0e0;font-variant-numeric:tabular-nums;pointer-events:none}
 .fcbox table{border-collapse:collapse}.fcbox td{text-align:right;padding:0 0 0 12px;white-space:nowrap}.fcbox td:first-child,.fcbox td.l2{text-align:left;color:#8a8aa3}.fcbox td:first-child{padding-left:0}
+.fcbox.hd{left:50%;transform:translateX(-50%);line-height:1.35}
 .fcbox .h td{color:#8a8aa3;font-size:.9em}.fcbox .k{color:#8a8aa3}.fcbox tr.sep td{padding:0}.fcbox tr.sep div{border-top:1px solid #2c2c3a;margin:4px 0}.fcbox td.why{color:#8a8aa3;font-size:.9em}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
 #pp-ov.on{display:flex}
@@ -9084,7 +9087,7 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk); fcBox(pmb,tk);
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk); fcBox(pmb,tk,mod.querySelector('.pmh'));
         curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
@@ -10457,7 +10460,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
     var sc=window.PPSCORES?window.PPSCORES(tk):[];
     var lt=window.CYCTAIL(tk,x);
-    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk); fcBox(el,tk);
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk); var cc=el.closest('.cyc-card'); fcBox(el,tk,cc&&cc.querySelector('.cyc-h'));
     var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
     var px=(x.d.px||[]).concat(x.tail||[]);
     if(!line||px.length<12)return;
