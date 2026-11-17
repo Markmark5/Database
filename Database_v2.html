@@ -3909,7 +3909,10 @@ function fcBox(el,tk){
     var pe=(px!=null&&e1>0)?px/e1:null, g=(e1>0&&e2!=null)?(e2/e1-1)*100:null, peg=(pe!=null&&g>0)?pe/g:null;
     var pegTxt=peg!=null?'<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(2)+'</b>'
       :'<b class="k">n/a'+(e1!=null&&e1<=0||e2!=null&&e2<=0?' (loss)':(g!=null?' (EPS falling)':''))+'</b>';
-    var nd=num(r3['H2 Net borrowing (m)']); if(nd==null)nd=num(r3['H1 Net borrowing (m)']); if(nd==null)nd=num(r3['1y ago H2 Net borrowing (m)']);
+    /* ShareScope's "H2" Net borrowing is full year minus H1 (the change over H2), not the year-end balance:
+       year-end = H1 + H2. Latest reported = this year's year-end, else this year's H1, else last year's year-end */
+    var nb=function(p){var a=num(r3[p+'H1 Net borrowing (m)']),b=num(r3[p+'H2 Net borrowing (m)']);return {h1:a,ye:(a!=null&&b!=null)?a+b:null};};
+    var c0=nb(''),c1=nb('1y ago '), nd=c0.ye!=null?c0.ye:c0.h1!=null?c0.h1:c1.ye;
     var debt='';
     if(nd!=null&&nd<=0)debt='<span class="k">Net cash</span> <b style="color:#00c814">'+money(-nd)+'</b>';
     else if(nd!=null){var ra=num(r3['Net debt to EBITDA']);if(ra==null){var eb=num(r2['fc EBITDA (m)']);if(eb>0)ra=nd/eb;}
