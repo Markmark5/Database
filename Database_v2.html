@@ -4740,11 +4740,12 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('');
 
   lines.push('── BALANCE SHEET & DEBT ────────────────────────────');
-  lines.push('Net borrowing (m)  H1 / H2');
-  lines.push('3y ago             : ' + exFmt(r3['3y ago H1 Net borrowing (m)'],1) + ' / ' + exFmt(r3['3y ago H2 Net borrowing (m)'],1));
-  lines.push('2y ago             : ' + exFmt(r3['2y ago H1 Net borrowing (m)'],1) + ' / ' + exFmt(r3['2y ago H2 Net borrowing (m)'],1));
-  lines.push('1y ago             : ' + exFmt(r3['1y ago H1 Net borrowing (m)'],1) + ' / ' + exFmt(r3['1y ago H2 Net borrowing (m)'],1));
-  lines.push('Current            : ' + exFmt(r3['H1 Net borrowing (m)'],1) + ' / ' + exFmt(r3['H2 Net borrowing (m)'],1));
+  /* ShareScope's "H2" Net borrowing is full year minus H1 (the H2 change), so year-end balance = H1 + H2 */
+  const exNbYE = function(p) { const h1 = exNum(r3[p + 'H1 Net borrowing (m)']), h2 = exNum(r3[p + 'H2 Net borrowing (m)']); return (isNaN(h1) || isNaN(h2)) ? '' : String(h1 + h2); };
+  lines.push('Net borrowing (m)  H1 / Year-end   (negative = net cash)');
+  [['3y ago             : ', '3y ago '], ['2y ago             : ', '2y ago '], ['1y ago             : ', '1y ago '], ['Current            : ', '']].forEach(function(x) {
+    lines.push(x[0] + exFmt(r3[x[1] + 'H1 Net borrowing (m)'],1) + ' / ' + exFmt(exNbYE(x[1]),1));
+  });
   lines.push('fc  Net borrowing  : ' + exFmt(r3['fc Net borrowing (m)'],1) + 'm');
   lines.push('FY2 Net borrowing  : ' + exFmt(r3['2y fc Net borrowing (m)'],1) + 'm');
   lines.push('');
