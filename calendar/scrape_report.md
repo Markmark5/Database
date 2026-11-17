@@ -1,14 +1,14 @@
-# Calendar scrape - 2026-11-16
+# Calendar scrape - 2026-11-17
 
-**279 sources · 42 events staged for approval**
+**279 sources · 43 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 126 | read OK, upcoming events found |
-| EMPTY | 142 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| EMPTY | 143 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 4 | timeout, DNS or server error |
+| ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -28,6 +28,7 @@
 - NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
+- Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
@@ -37,7 +38,7 @@
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
 - AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
-- Alumasc (ALU) - http 200, browser - https://www.alumasc.co.uk/key-dates
+- Alumasc (ALU) - http 200, http - https://www.alumasc.co.uk/key-dates
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
 - ASA International (ASAI) - http 200, http - https://www.asa-international.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
@@ -99,7 +100,6 @@
 - Northcoders (CODE) - http 200, http - https://investors.northcodersgroup.com/investors/financial-calendar.asp
 - Chesnara plc · Life Insurance (CSN) - http 200, http - https://www.chesnara.co.uk/investors/financial-calendar
 - Christie (CTG) - http 200, http - https://www.christiegroup.com/investors/shareholder-information/financial-calendar
-- CVS (CVSG) - http 200, http - https://www.cvsukltd.co.uk/investor-centre/financial-calendar/
 - Ceres Power (CWR) - http 200, http - https://www.ceres.tech/investors/financial-calendar/
 - Dialight (DIA) - http 200, http - https://www.dialight.com/ir/shareholder-information/
 - Diales (DIAL) - http 200, http - https://www.diales.com/en/investors/financial-calendar
@@ -107,6 +107,7 @@
 - Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
 - Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
+- Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
 - Hostelworld (HSW) - http 200, http - https://www.hostelworldgroup.com/investors/financial-calendar
@@ -169,16 +170,9 @@
 
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
-- Gattaca (GATC) - http None, chrome - https://www.gattacaplc.com/investors/financial-calendar/
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
 
 ## Approved events not re-verified tonight
 
-- Gattaca AGM 2026-12-09
-- Gattaca Trading update 2027-02-11
-- Gattaca H1 results 2027-04-13
-- Gattaca Trading update 2027-08-16
-- Gattaca FY results 2027-11-02
-- Gattaca AGM 2027-12-08
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
