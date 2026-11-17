@@ -1504,6 +1504,13 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             </div>
           </div>
           <div class="sb-sec">
+            <div class="sb-lbl" title="Rolling 12-month PEG (as in the chart box): PE on the next 12 months' EPS ÷ next-12-month EPS growth. Live price, today's date. Newest card per ticker">Valuation</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-peg1" onchange="applyFilters()"><span class="band-chk-lbl">PEG 12m &lt; 1</span><span class="band-cnt" id="cnt-peg1">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:#ffc400"><input type="checkbox" id="f-peg15" onchange="applyFilters()"><span class="band-chk-lbl">PEG 12m &lt; 1.5</span><span class="band-cnt" id="cnt-peg15">0</span></label>
+            </div>
+          </div>
+          <div class="sb-sec">
             <div class="sb-lbl" title="Ticking more than one shows any match; none ticked shows all types">RNS Type</div>
             <div style="display:flex;flex-direction:column;gap:2px;" id="f-ty-box"></div>
           </div>
@@ -3451,11 +3458,13 @@ function applyFilters(){
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
   const fTD=document.getElementById('f-today').checked;
+  const fPg=document.getElementById('f-peg1').checked?1:document.getElementById('f-peg15').checked?1.5:0, pgC={};
+  const pegOk=function(t){t=String(t||'').toUpperCase();if(!(t in pgC)){var x=rollPeg(t);pgC[t]=x.peg!=null&&x.peg<fPg;}return pgC[t];};
   const tIso=cal30Iso(new Date());
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   document.body.classList.add('due-on');
   const fWL=document.getElementById('f-wl').checked||sort==='wl';
-  const newest=(fC30||calN||fWL||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
+  const newest=(fC30||calN||fWL||fPg||sort==='cycle')?calNewest():null;   /* calendar / watchlist views: one card per ticker, the newest */
   FILTERED=ALL.filter(function(r){
     if(window.EXACT_TICKER){ if(r.ticker!==window.EXACT_TICKER)return false; }
     else if(q&&!r.ticker.toLowerCase().includes(q)&&!(r.company||'').toLowerCase().includes(q))return false;
@@ -3473,6 +3482,7 @@ function applyFilters(){
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
     if(fTD&&String(r.date).slice(0,10)!==tIso)return false;   /* Today's scorecards: dated today */
     if(fWL&&WL.indexOf(String(r.ticker||'').toUpperCase())<0)return false;
+    if(fPg&&!pegOk(r.ticker))return false;   /* PEG 12m filter: ticker's current rolling PEG */
     if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;   /* calendar sort: only tickers with an upcoming date */
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
     if(NEW_ONLY&&nrTier(r)>2)return false;
@@ -3653,7 +3663,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-today','f-wl'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-today','f-wl','f-peg1','f-peg15'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
   applyFilters();
@@ -3852,6 +3862,9 @@ function updateBandCounts(){
   document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
   const tdI=cal30Iso(new Date());document.getElementById('cnt-today').textContent=ALL.filter(function(r){return String(r.date).slice(0,10)===tdI;}).length;
   document.getElementById('cnt-wl').textContent=WL.length;
+  const pgT={},pgN={p1:0,p15:0};ALL.forEach(function(r){const t=String(r.ticker||'').toUpperCase();if(!t||(t in pgT))return;const x=rollPeg(t);pgT[t]=1;
+    if(x.peg!=null){if(x.peg<1)pgN.p1++;if(x.peg<1.5)pgN.p15++;}});
+  document.getElementById('cnt-peg1').textContent=pgN.p1;document.getElementById('cnt-peg15').textContent=pgN.p15;
 }
 /* Hover text for H1 TRK / ACCEL marks */
 function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
@@ -3901,6 +3914,42 @@ function ppBoxDrop(mod,pmb){
     bx.style.top=Math.max(hd.offsetTop+6,Math.round(y))+'px';
   }catch(e){}
 }
+/* Rolling 12-month PE / PEG (Stockopedia style), used by the chart box and the scorecard PEG filters.
+   FY1 and FY2 blended by how far through its financial year the company is
+   (f = elapsed share of the year to File 1's 'Next year end date'; past that date FY1 counts as done, so f = 1).
+   next 12m EPS = (1-f)·FY1 + f·FY2 · last 12m EPS = (1-f)·last reported + f·FY1 · no FY2 forecast → FY1 vs last reported.
+   PE 12m = price ÷ next 12m EPS · EPS g 12m = next 12m ÷ last 12m − 1 · PEG 12m = PE 12m ÷ growth %.
+   EPS + price from the live sheets (File 1 if blank). why: n/a loss = forward loss · n/a ↓ = EPS falling ·
+   n/m = growth over 100% or from a loss (not meaningful) · n/a = missing data */
+var RP_IDX=(typeof WeakMap==='function')?new WeakMap():null;
+function rpRow1(tk){
+  var a=(typeof slotState!=='undefined'&&slotState[1])||[], m=RP_IDX&&RP_IDX.get(a);
+  if(!m||m.n!==a.length){m={n:a.length,map:Object.create(null)};
+    for(var i=0;i<a.length;i++){var t=String(a[i].TIDM||'').trim().toUpperCase();if(t&&!(t in m.map))m.map[t]=a[i];}
+    if(RP_IDX)RP_IDX.set(a,m);}
+  return m.map[tk]||{};
+}
+function rollPeg(tk,pre){
+  tk=String(tk||'').trim().toUpperCase();
+  var num=function(v){v=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(v)?null:v;};
+  var L,r1,e0,e1,e2,px;
+  if(pre){L=pre.L;r1=pre.r1;e0=pre.e0;e1=pre.e1;e2=pre.e2;px=pre.px;}
+  else{L=(typeof liveData!=='undefined'&&liveData[tk])||{};r1=rpRow1(tk);
+    e1=num(L.eps1); if(e1==null)e1=num(r1['fc EPS']);
+    e2=num(L.eps2); if(e2==null)e2=num(r1['2y fc EPS']);
+    e0=num(r1['FY EPS']); px=num(L.price);}
+  var yeP=String(r1['Next year end date']||'').split('/'), yeD=yeP.length===3?new Date(2000+(+yeP[2]%100),+yeP[1]-1,+yeP[0]):null;
+  var f=(yeD&&!isNaN(yeD))?1-(yeD-new Date())/(365.25*864e5):0; f=Math.max(0,Math.min(1,f)); if(e2==null)f=0;
+  var fwd=e1==null?null:(1-f)*e1+f*(e2==null?e1:e2), trl=(e0==null||e1==null)?null:(1-f)*e0+f*e1;
+  var pe=(px!=null&&fwd>0)?px/fwd:null, g=(trl>0&&fwd!=null)?(fwd/trl-1)*100:null, peg=null, why;
+  if(fwd!=null&&fwd<=0) why='n/a loss';
+  else if(trl!=null&&trl<=0&&fwd!=null) why='n/m';
+  else if(pe==null||g==null) why='n/a';
+  else if(g<=0) why='n/a ↓';
+  else if(g>100) why='n/m';
+  else peg=pe/g;
+  return {pe:pe,g:g,peg:peg,why:why||''};
+}
 /* hd: the header element to centre the box in (its top edge = the header's top); the box is placed in hd's offsetParent */
 function fcBox(el,tk,hd){
   try{
@@ -3921,21 +3970,10 @@ function fcBox(el,tk,hd){
     var eps=function(v){return v==null?'–':v.toFixed(1)+'p';};
     var gr=function(a,b,isEps){if(a==null||b==null)return '<span class="k">–</span>';if(isEps&&b<=0)return '<span style="color:#ff2040">loss</span>';if(a<=0)return '<span class="k">–</span>';
       var x=(b/a-1)*100;return '<span style="color:'+(x>=0?'#00c814':'#ff2040')+'">'+(x>=0?'+':'')+x.toFixed(1)+'%</span>';};
-    /* Rolling 12-month PE / PEG (Stockopedia style): FY1 and FY2 blended by how far through its financial year the company is
-       (f = elapsed share of the year to the 'Next year end date'; past that date FY1 counts as done, so f = 1).
-       next 12m EPS = (1-f)·FY1 + f·FY2 · last 12m EPS = (1-f)·last reported + f·FY1 · no FY2 forecast → FY1 vs last reported.
-       PE 12m = price ÷ next 12m EPS · EPS g 12m = next 12m ÷ last 12m − 1 · PEG 12m = PE 12m ÷ growth %.
-       n/a loss = forward loss · n/a ↓ = EPS falling · n/m = growth over 100% or from a loss (not meaningful) */
-    var yeP=String(r1['Next year end date']||'').split('/'), yeD=yeP.length===3?new Date(2000+(+yeP[2]%100),+yeP[1]-1,+yeP[0]):null;
-    var f=(yeD&&!isNaN(yeD))?1-(yeD-new Date())/(365.25*864e5):0; f=Math.max(0,Math.min(1,f)); if(e2==null)f=0;
-    var fwd=e1==null?null:(1-f)*e1+f*(e2==null?e1:e2), trl=(e0==null||e1==null)?null:(1-f)*e0+f*e1;
-    var pe=(px!=null&&fwd>0)?px/fwd:null, g=(trl>0&&fwd!=null)?(fwd/trl-1)*100:null, peg=null, pegV;
-    if(fwd!=null&&fwd<=0) pegV='<b class="k">n/a loss</b>';
-    else if(trl!=null&&trl<=0&&fwd!=null) pegV='<b class="k">n/m</b>';
-    else if(pe==null||g==null) pegV='<b class="k">n/a</b>';
-    else if(g<=0) pegV='<b class="k">n/a ↓</b>';
-    else if(g>100) pegV='<b class="k">n/m</b>';
-    else { peg=pe/g; pegV='<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(1)+'</b>'; }
+    /* Rolling 12-month PE / PEG — see rollPeg() */
+    var RP=rollPeg(tk,{L:L,r1:r1,e0:e0,e1:e1,e2:e2,px:px}), pe=RP.pe, g=RP.g, peg=RP.peg, pegV;
+    if(peg!=null) pegV='<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(1)+'</b>';
+    else pegV='<b class="k">'+RP.why+'</b>';
     var g12=g==null?'<span class="k">–</span>':'<span style="color:'+(g>=0?'#00c814':'#ff2040')+'">'+(g>=0?'+':'')+g.toFixed(1)+'%</span>';
     /* ShareScope's "H2" Net borrowing is full year minus H1 (the change over H2), not the year-end balance:
        year-end = H1 + H2. Latest reported = this year's year-end, else this year's H1, else last year's year-end */
@@ -7508,6 +7546,8 @@ function liveOnAllFetched(errors, total) {
   }
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
+  try{var pf1=document.getElementById('f-peg1'),pf2=document.getElementById('f-peg15');   /* PEG filters use live prices */
+    if((pf1&&pf1.checked)||(pf2&&pf2.checked))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
   try{
     var bwOv=document.getElementById('bw-fs');
     if(bwOv&&bwOv.classList.contains('open')&&typeof window.bwFsRender==='function')window.bwFsRender();
