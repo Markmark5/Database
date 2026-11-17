@@ -4464,42 +4464,52 @@ function exGetQ(ticker){
   return /^Q[1-4]$/.test(q)?q:null;
 }
 
-function exExtractWeekly(rows4, ticker) {
-  const escaped = ticker.toUpperCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp('(?:^|;)' + escaped + ',([^;]+)');
-  const entries = [];
-  for (let i = 0; i < rows4.length; i++) {
-    const row = rows4[i];
-    const snap = row['Snapshot'] || '';
-    const m = snap.match(re);
-    if (m) {
-      const fields = m[1].split(',');
-      /* New 6-field weekly format: fc EPS, 2y fc EPS, fc Turnover, 2y fc Turnover, Consensus target, Close price */
-      const eps   = (fields[0] || '').trim();
-      const eps2  = (fields[1] || '').trim();
-      const rev   = (fields[2] || '').trim();
-      const rev2  = (fields[3] || '').trim();
-      const price = (fields[4] || '').trim();
-      const close = (fields[5] || '').trim();
-      const q     = (fields[6] || '').trim();  /* 'Latest quarterly report' — logged from 11/09/2026 */
-      const raw   = (row['Date'] || '').split(' ')[0];
-      let dateStr = raw;
-      let dateMs  = 0;
-      try {
-        /* Weekly log dates: DD/MM/YYYY (UK, manual CSV) or YYYY-MM-DD (gviz feed) */
-        let d;
-        if (raw.indexOf('-') !== -1) {
-          const parts = raw.split('-');
-          d = new Date(+parts[0], +parts[1]-1, +parts[2]);
-        } else {
-          const parts = raw.split('/');
-          d = new Date(+parts[2], +parts[1]-1, +parts[0]);
-        }
-        dateStr = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' });
-        dateMs  = d.getTime();
-      } catch(e) {}
-      entries.push({ date: dateStr, eps: eps, eps2: eps2, rev: rev, rev2: rev2, price: price, close: close, q: q, ms: dateMs });
+/* Weekly snapshot index: each row's Snapshot ("TICK,f1,f2,…;TICK2,…") is split once into a ticker map and its date
+   formatted once, then reused for every ticker (was a regex scan of every snapshot per ticker: ~6s at start-up). */
+var EXW_IDX = (typeof WeakMap === 'function') ? new WeakMap() : null;
+function exWeeklyIndex(rows4) {
+  var c = EXW_IDX && EXW_IDX.get(rows4);
+  if (c && c.n === rows4.length) return c.rows;
+  var out = [];
+  for (var i = 0; i < rows4.length; i++) {
+    var row = rows4[i], snap = row['Snapshot'] || '', map = Object.create(null);
+    var parts = snap.split(';');
+    for (var j = 0; j < parts.length; j++) {
+      var part = parts[j], k = part.indexOf(',');
+      if (k < 0 || k === part.length - 1) continue;          /* regex needed "TICK," + at least one character */
+      var key = part.slice(0, k);
+      if (!(key in map)) map[key] = part.slice(k + 1);       /* first match wins, as with the regex */
     }
+    var raw = (row['Date'] || '').split(' ')[0], dateStr = raw, dateMs = 0;
+    try {
+      /* Weekly log dates: DD/MM/YYYY (UK, manual CSV) or YYYY-MM-DD (gviz feed) */
+      var d, pp;
+      if (raw.indexOf('-') !== -1) { pp = raw.split('-'); d = new Date(+pp[0], +pp[1]-1, +pp[2]); }
+      else { pp = raw.split('/'); d = new Date(+pp[2], +pp[1]-1, +pp[0]); }
+      dateStr = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' });
+      dateMs  = d.getTime();
+    } catch(e) {}
+    out.push({ map: map, date: dateStr, ms: dateMs });
+  }
+  if (EXW_IDX) EXW_IDX.set(rows4, { n: rows4.length, rows: out });
+  return out;
+}
+
+function exExtractWeekly(rows4, ticker) {
+  const key = String(ticker).toUpperCase();
+  const idx = exWeeklyIndex(rows4);
+  const entries = [];
+  for (let i = 0; i < idx.length; i++) {
+    const hit = idx[i].map[key];
+    if (hit === undefined) continue;
+    const fields = hit.split(',');
+    /* New 6-field weekly format: fc EPS, 2y fc EPS, fc Turnover, 2y fc Turnover, Consensus target, Close price */
+    entries.push({ date: idx[i].date,
+      eps:   (fields[0] || '').trim(), eps2: (fields[1] || '').trim(),
+      rev:   (fields[2] || '').trim(), rev2: (fields[3] || '').trim(),
+      price: (fields[4] || '').trim(), close: (fields[5] || '').trim(),
+      q:     (fields[6] || '').trim(),  /* 'Latest quarterly report' — logged from 11/09/2026 */
+      ms: idx[i].ms });
   }
   // Sort chronologically oldest→newest regardless of file row order
   entries.sort(function(a, b) { return a.ms - b.ms; });
