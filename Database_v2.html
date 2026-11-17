@@ -3921,9 +3921,15 @@ function fcBox(el,tk,hd){
     var eps=function(v){return v==null?'–':v.toFixed(1)+'p';};
     var gr=function(a,b,isEps){if(a==null||b==null)return '<span class="k">–</span>';if(isEps&&b<=0)return '<span style="color:#ff2040">loss</span>';if(a<=0)return '<span class="k">–</span>';
       var x=(b/a-1)*100;return '<span style="color:'+(x>=0?'#00c814':'#ff2040')+'">'+(x>=0?'+':'')+x.toFixed(1)+'%</span>';};
-    var pe=(px!=null&&e1>0)?px/e1:null, g=(e1>0&&e2!=null)?(e2/e1-1)*100:null, peg=(pe!=null&&g>0)?pe/g:null;
-    var pegV=peg!=null?'<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(1)+'</b>':'<b class="k">n/a</b>';
-    var pegWhy=peg!=null?'':(e1!=null&&e1<=0||e2!=null&&e2<=0?'loss':(g!=null?'EPS falling':''));
+    /* PEG the usual (Slater / Stockopedia) way: FY1 forecast PE ÷ FY1 forecast EPS growth (last reported FY EPS → FY1).
+       n/a loss = loss-making FY1 · n/a ↓ = EPS falling · n/m = growth over 100% or from a loss (PEG not meaningful) */
+    var pe=(px!=null&&e1>0)?px/e1:null, g=(e0>0&&e1!=null)?(e1/e0-1)*100:null, peg=null, pegV;
+    if(e1!=null&&e1<=0) pegV='<b class="k">n/a loss</b>';
+    else if(e0!=null&&e0<=0&&e1!=null) pegV='<b class="k">n/m</b>';
+    else if(pe==null||g==null) pegV='<b class="k">n/a</b>';
+    else if(g<=0) pegV='<b class="k">n/a ↓</b>';
+    else if(g>100) pegV='<b class="k">n/m</b>';
+    else { peg=pe/g; pegV='<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(1)+'</b>'; }
     /* ShareScope's "H2" Net borrowing is full year minus H1 (the change over H2), not the year-end balance:
        year-end = H1 + H2. Latest reported = this year's year-end, else this year's H1, else last year's year-end */
     var nb=function(p){var a=num(r3[p+'H1 Net borrowing (m)']),b=num(r3[p+'H2 Net borrowing (m)']);return {h1:a,ye:(a!=null&&b!=null)?a+b:null};};
@@ -3939,7 +3945,7 @@ function fcBox(el,tk,hd){
       '<tr><td>EPS</td><td>'+eps(e1)+'</td><td>'+gr(e0,e1,1)+'</td><td>'+eps(e2)+'</td><td>'+gr(e1,e2,1)+'</td></tr>'+
       '<tr><td>REV</td><td>'+money(v1)+'</td><td>'+gr(v0,v1)+'</td><td>'+money(v2)+'</td><td>'+gr(v1,v2)+'</td></tr>'+
       '<tr class="sep"><td colspan="5"><div></div></td></tr>'+
-      '<tr><td>fc PE</td><td><b>'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+(pegWhy?' <span class="k">· '+pegWhy+'</span>':'')+'</td></tr>'+
+      '<tr><td>fc PE</td><td><b>'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG</td><td>'+pegV+'</td></tr>'+
       ((mc!=null||dLab)?'<tr><td>Mkt cap</td><td><b>'+money(mc)+'</b></td><td></td><td class="l2">'+dLab+'</td><td>'+dVal+'</td></tr>':'')+
       ndRow+'</table>';
     if(getComputedStyle(host).position==='static')host.style.position='relative';
