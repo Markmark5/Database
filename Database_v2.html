@@ -3884,6 +3884,47 @@ const IX_KEYS=['100','250','sc','aim','oth'];
 const TY_KEYS=[[1,'Q1'],[2,'Pre-H1'],[3,'H1 AGM'],[4,'H1 Results'],[5,'Q3'],[6,'Pre-FY'],[7,'H2 AGM'],[8,'FY Results'],[9,'Other']];
 document.getElementById('f-ty-box').innerHTML=TY_KEYS.map(function(k){
   return '<label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-ty-'+k[0]+'" onchange="applyFilters()"><span class="band-chk-lbl">'+k[1]+'</span><span class="band-cnt" id="cnt-ty-'+k[0]+'">0</span></label>';}).join('');
+/* Forecast box drawn top-left on every price chart (ticker popup + Cycles):
+   EPS/REV forecasts with growth for both years, fc PE, PEG (forward FY1→FY2) and net debt/cash.
+   EPS + price from the live sheets (File 1 if blank); revenue from File 1; debt from File 3; EBITDA from File 2. */
+function fcBox(el,tk){
+  try{
+    if(!el)return; var old=el.querySelector(':scope > .fcbox'); if(old)old.remove();
+    tk=String(tk||'').trim().toUpperCase();
+    var row=function(n){var a=(typeof slotState!=='undefined'&&slotState[n])||[];for(var i=0;i<a.length;i++)if(String(a[i].TIDM||'').trim().toUpperCase()===tk)return a[i];return {};};
+    var num=function(v){v=parseFloat(String(v==null?'':v).replace(/,/g,''));return isNaN(v)?null:v;};
+    var L=(typeof liveData!=='undefined'&&liveData[tk])||{}, r1=row(1), r2=row(2), r3=row(3);
+    var e1=num(L.eps1); if(e1==null)e1=num(r1['fc EPS']);
+    var e2=num(L.eps2); if(e2==null)e2=num(r1['2y fc EPS']);
+    var v1=num(r1['fc Turnover (m)']), v2=num(r1['2y fc Turnover (m)']);
+    if(v1==null)v1=num(L.turn1y); if(v2==null)v2=num(L.turn2y);
+    if(e1==null&&e2==null&&v1==null&&v2==null)return;
+    var e0=num(r1['FY EPS']), v0=num(r1['FY Turnover (m)']), px=num(L.price);
+    var yy=+String(r1['Next year end date']||'').split('/')[2];
+    var y1=yy?'FY'+(yy%100):'FY1', y2=yy?'FY'+((yy+1)%100):'FY2';
+    var money=function(v){if(v==null)return '–';var a=Math.abs(v);return a>=1000?'£'+(a/1000).toFixed(2)+'bn':'£'+a.toFixed(0)+'m';};
+    var eps=function(v){return v==null?'–':v.toFixed(1)+'p';};
+    var gr=function(a,b,isEps){if(a==null||b==null)return '<span class="k">–</span>';if(isEps&&b<=0)return '<span style="color:#ff2040">loss</span>';if(a<=0)return '<span class="k">–</span>';
+      var x=(b/a-1)*100;return '<span style="color:'+(x>=0?'#00c814':'#ff2040')+'">'+(x>=0?'+':'')+x.toFixed(1)+'%</span>';};
+    var pe=(px!=null&&e1>0)?px/e1:null, g=(e1>0&&e2!=null)?(e2/e1-1)*100:null, peg=(pe!=null&&g>0)?pe/g:null;
+    var pegTxt=peg!=null?'<b style="color:'+(peg<1?'#00c814':peg<2?'#ffc400':'#ff2040')+'">'+peg.toFixed(2)+'</b>'
+      :'<b class="k">n/a'+(e1!=null&&e1<=0||e2!=null&&e2<=0?' (loss)':(g!=null?' (EPS falling)':''))+'</b>';
+    var nd=num(r3['H2 Net borrowing (m)']); if(nd==null)nd=num(r3['H1 Net borrowing (m)']); if(nd==null)nd=num(r3['1y ago H2 Net borrowing (m)']);
+    var debt='';
+    if(nd!=null&&nd<=0)debt='<span class="k">Net cash</span> <b style="color:#00c814">'+money(-nd)+'</b>';
+    else if(nd!=null){var ra=num(r3['Net debt to EBITDA']);if(ra==null){var eb=num(r2['fc EBITDA (m)']);if(eb>0)ra=nd/eb;}
+      var dc=ra==null?'#d0d0e0':ra>3?'#ff2040':ra>2?'#ffc400':'#d0d0e0';
+      debt='<span class="k">Net debt</span> <b style="color:'+dc+'">'+money(nd)+(ra!=null&&ra>0?' · '+ra.toFixed(1)+'x EBITDA':'')+'</b>';}
+    var b=document.createElement('div'); b.className='fcbox';
+    b.innerHTML='<table><tr class="h"><td></td><td>'+y1+'</td><td>growth</td><td class="g2">'+y2+'</td><td>growth</td></tr>'+
+      '<tr><td>EPS</td><td>'+eps(e1)+'</td><td>'+gr(e0,e1,1)+'</td><td class="g2">'+eps(e2)+'</td><td>'+gr(e1,e2,1)+'</td></tr>'+
+      '<tr><td>REV</td><td>'+money(v1)+'</td><td>'+gr(v0,v1)+'</td><td class="g2">'+money(v2)+'</td><td>'+gr(v1,v2)+'</td></tr></table>'+
+      '<div class="ln"><span><span class="k">fc PE</span> <b style="color:#fff">'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></span><span><span class="k">PEG</span> '+pegTxt+'</span></div>'+
+      (debt?'<div style="margin-top:2px">'+debt+'</div>':'');
+    if(getComputedStyle(el).position==='static')el.style.position='relative';
+    el.appendChild(b);
+  }catch(e){}
+}
 function indexClass(ix){
   ix=String(ix||'').toUpperCase();
   if(/FTSE\s*100/.test(ix))return '100';
@@ -8602,6 +8643,10 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeWebPopup
 .pp-leg{font-size:9px;color:#6a6a85;margin-top:5px}
 #pp-prev .ppf{font-size:9px;color:#4a9eff;margin-top:6px}
 #pp-mod .pmb g.dc-mk:has(text){cursor:pointer}
+#pp-mod .pmb{position:relative}
+.fcbox{position:absolute;top:6px;left:14px;z-index:5;background:rgba(14,14,20,.85);border:1px solid #2c2c3a;border-radius:6px;padding:7px 11px;font:12px/1.5 'Inter',sans-serif;color:#d0d0e0;font-variant-numeric:tabular-nums;pointer-events:none}
+.fcbox table{border-collapse:collapse}.fcbox td{text-align:right;padding-left:10px}.fcbox td:first-child{text-align:left;padding-left:0;color:#8a8aa3}.fcbox td.g2{padding-left:16px}.fcbox .h td{color:#8a8aa3;font-size:.9em}
+.fcbox .k{color:#8a8aa3}.fcbox .ln{border-top:1px solid #2c2c3a;margin-top:5px;padding-top:4px;display:flex;gap:18px}
 #pp-ov{position:fixed;inset:0;z-index:9500;background:#000b;display:none;align-items:center;justify-content:center;padding:16px}
 #pp-ov.on{display:flex}
 #pp-mod{width:1240px;max-width:calc(100vw - 20px);max-height:94vh;overflow-y:auto;background:#0f0f15;border:1px solid #3a3a50;border-radius:8px;padding:14px 18px 12px;
@@ -9032,7 +9077,7 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
         if(yrs){var c=new Date(lastIso+'T00:00:00Z');c.setUTCFullYear(c.getUTCFullYear()-yrs);c=c.toISOString().slice(0,10);
           var cut=allPx.filter(function(p){return p[0]>=c;});if(cut.length>=2)px=cut;}
         var d2=Object.assign({},x.d,{px:px,marks:(x.d.marks||[]).filter(function(m){return m.d>=px[0][0];})});
-        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk);
+        DC.render(pmb,d2,{theme:'dark',size:'modal',tail:lt,scores:scoresFor(tk),scoreLane:x.snap?null:'bottom'}); if(window.CYCLBL)CYCLBL(pmb,lt,tk); fcBox(pmb,tk);
         curY=yrs;
         [].forEach.call(pmr.querySelectorAll('button'),function(b){b.classList.toggle('on',+b.getAttribute('data-y')===yrs);});
       }
@@ -10405,7 +10450,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(!x||!DC){el.innerHTML='<div class="cyc-none">No weekly prices stored yet</div>';return;}
     var sc=window.PPSCORES?window.PPSCORES(tk):[];
     var lt=window.CYCTAIL(tk,x);
-    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk);
+    DC.render(el,x.d,{theme:'dark',size:'modal',tail:lt,scores:sc,scoreLane:x.snap?null:'bottom'}); window.CYCLBL(el,lt,tk); fcBox(el,tk);
     var svg=el.querySelector('svg'), line=svg&&[].filter.call(svg.querySelectorAll('polyline'),function(p){return !p.getAttribute('stroke-dasharray');})[0];
     var px=(x.d.px||[]).concat(x.tail||[]);
     if(!line||px.length<12)return;
