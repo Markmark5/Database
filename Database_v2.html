@@ -2618,7 +2618,10 @@ function bkcPrecompute(){
 }
 function bkcIndexOf(tk){
   if(!BKC.ixm){var m={};try{(slotState[2]||[]).forEach(function(r){var t=String(r.TIDM||'').trim().toUpperCase();if(t)m[t]=indexClass(r['Index membership']);});}catch(e){}
-    var c=indexMap();Object.keys(c).forEach(function(t){if(!m[t]||m[t]==='oth')m[t]=c[t];});BKC.ixm=m;}
+    var c=indexMap();Object.keys(c).forEach(function(t){if(!m[t]||m[t]==='oth')m[t]=c[t];});
+    /* still unplaced after File 2 + scorecards: "FT 30" is a FTSE 100 stock; blank, Fledgling and techMARK go to Small Cap */
+    try{(slotState[2]||[]).forEach(function(r){var t=String(r.TIDM||'').trim().toUpperCase();if(t&&m[t]==='oth')m[t]=/\bFT\s*30\b/i.test(r['Index membership']||'')?'100':'sc';});}catch(e){}
+    BKC.ixm=m;}
   return BKC.ixm[tk]||'oth';
 }
 function bkcCalc(tk){
