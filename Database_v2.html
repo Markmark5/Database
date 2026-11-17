@@ -1504,10 +1504,10 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             </div>
           </div>
           <div class="sb-sec">
-            <div class="sb-lbl" title="Rolling 12-month PEG (as in the chart box): PE on the next 12 months' EPS ÷ next-12-month EPS growth. Live price, today's date. Newest card per ticker">Valuation</div>
+            <div class="sb-lbl" title="PEG roll (as in the chart box): rolling 12-month PEG; sterling-priced, sterling-reporting companies only: PE on the next 12 months' EPS ÷ next-12-month EPS growth. Live price, today's date. Newest card per ticker">Valuation</div>
             <div style="display:flex;flex-direction:column;gap:2px;">
-              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-peg1" onchange="applyFilters()"><span class="band-chk-lbl">PEG 12m &lt; 1</span><span class="band-cnt" id="cnt-peg1">0</span></label>
-              <label class="band-chk rev-chk" style="--rc:#ffc400"><input type="checkbox" id="f-peg15" onchange="applyFilters()"><span class="band-chk-lbl">PEG 12m &lt; 1.5</span><span class="band-cnt" id="cnt-peg15">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-peg1" onchange="applyFilters()"><span class="band-chk-lbl">PEG roll &lt; 1</span><span class="band-cnt" id="cnt-peg1">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:#ffc400"><input type="checkbox" id="f-peg15" onchange="applyFilters()"><span class="band-chk-lbl">PEG roll &lt; 1.5</span><span class="band-cnt" id="cnt-peg15">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -1551,7 +1551,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
                 <option value="cal-asc">Calendar date (soonest)</option>
                 <option value="wl">★ Watchlist</option>
                 <option value="cycle">Cycle (earliest first)</option>
-                <option value="peg">PEG 12m (lowest first)</option>
+                <option value="peg">PEG roll (lowest first)</option>
               </select>
             </div>
           </div>
@@ -3485,7 +3485,7 @@ function applyFilters(){
     if(fC30&&!c30[String(r.ticker||'').toUpperCase()])return false;
     if(fTD&&String(r.date).slice(0,10)!==tIso)return false;   /* Today's scorecards: dated today */
     if(fWL&&WL.indexOf(String(r.ticker||'').toUpperCase())<0)return false;
-    if(fPg&&!pegOk(r.ticker))return false;   /* PEG 12m filter: ticker's current rolling PEG */
+    if(fPg&&!pegOk(r.ticker))return false;   /* PEG roll filter: ticker's current rolling PEG */
     if(calN&&!calN[String(r.ticker||'').toUpperCase()])return false;
     if(pegM&&pegOf(r.ticker)==null)return false;   /* calendar sort: only tickers with an upcoming date */
     if(newest&&newest[String(r.ticker||'').toUpperCase()]!==r)return false;
@@ -3923,7 +3923,7 @@ function ppBoxDrop(mod,pmb){
    FY1 and FY2 blended by how far through its financial year the company is
    (f = elapsed share of the year to File 1's 'Next year end date'; past that date FY1 counts as done, so f = 1).
    next 12m EPS = (1-f)·FY1 + f·FY2 · last 12m EPS = (1-f)·last reported + f·FY1 · no FY2 forecast → FY1 vs last reported.
-   PE 12m = price ÷ next 12m EPS · EPS g 12m = next 12m ÷ last 12m − 1 · PEG 12m = PE 12m ÷ growth %.
+   PE fc = price ÷ next 12m EPS · EPS g 12m = next 12m ÷ last 12m − 1 · PEG roll = PE fc ÷ growth %.
    EPS + price from the live sheets (File 1 if blank). why: n/a loss = forward loss · n/a ↓ = EPS falling ·
    n/m = growth over 100% or from a loss (not meaningful) · n/a = missing data */
 var RP_IDX=(typeof WeakMap==='function')?new WeakMap():null;
@@ -3933,6 +3933,18 @@ function rpRow1(tk){
     for(var i=0;i<a.length;i++){var t=String(a[i].TIDM||'').trim().toUpperCase();if(t&&!(t in m.map))m.map[t]=a[i];}
     if(RP_IDX)RP_IDX.set(a,m);}
   return m.map[tk]||{};
+}
+/* Sterling check from File 2: results in GBP and price quoted in pence or £. Others (USD/EUR/… results, $ or ¢ prices)
+   have EPS and price in different currencies, so their PE / PEG would be wrong: shown as n/a ccy for now. */
+var RP_IDX2=(typeof WeakMap==='function')?new WeakMap():null;
+function rpGbp(tk){
+  var a=(typeof slotState!=='undefined'&&slotState[2])||[], m=RP_IDX2&&RP_IDX2.get(a);
+  if(!m||m.n!==a.length){m={n:a.length,map:Object.create(null)};
+    for(var i=0;i<a.length;i++){var t=String(a[i].TIDM||'').trim().toUpperCase();if(t&&!(t in m.map))m.map[t]=a[i];}
+    if(RP_IDX2)RP_IDX2.set(a,m);}
+  var r=m.map[tk]; if(!r)return false;
+  var c=String(r['Currency (results)']||'').trim().toUpperCase(), pr=String(r['Price']||'').trim();
+  return c==='GBP' && (/p$/i.test(pr)||/^£/.test(pr));
 }
 function rollPeg(tk,pre){
   tk=String(tk||'').trim().toUpperCase();
@@ -3946,8 +3958,10 @@ function rollPeg(tk,pre){
   var yeP=String(r1['Next year end date']||'').split('/'), yeD=yeP.length===3?new Date(2000+(+yeP[2]%100),+yeP[1]-1,+yeP[0]):null;
   var f=(yeD&&!isNaN(yeD))?1-(yeD-new Date())/(365.25*864e5):0; f=Math.max(0,Math.min(1,f)); if(e2==null)f=0;
   var fwd=e1==null?null:(1-f)*e1+f*(e2==null?e1:e2), trl=(e0==null||e1==null)?null:(1-f)*e0+f*e1;
-  var pe=(px!=null&&fwd>0)?px/fwd:null, g=(trl>0&&fwd!=null)?(fwd/trl-1)*100:null, peg=null, why;
-  if(fwd!=null&&fwd<=0) why='n/a loss';
+  var gbp=rpGbp(tk);
+  var pe=(gbp&&px!=null&&fwd>0)?px/fwd:null, g=(trl>0&&fwd!=null)?(fwd/trl-1)*100:null, peg=null, why;
+  if(!gbp) why='n/a ccy';
+  else if(fwd!=null&&fwd<=0) why='n/a loss';
   else if(trl!=null&&trl<=0&&fwd!=null) why='n/m';
   else if(pe==null||g==null) why='n/a';
   else if(g<=0) why='n/a ↓';
@@ -3995,7 +4009,7 @@ function fcBox(el,tk,hd){
       '<tr><td>EPS</td><td>'+eps(e1)+'</td><td>'+gr(e0,e1,1)+'</td><td>'+eps(e2)+'</td><td>'+gr(e1,e2,1)+'</td></tr>'+
       '<tr><td>REV</td><td>'+money(v1)+'</td><td>'+gr(v0,v1)+'</td><td>'+money(v2)+'</td><td>'+gr(v1,v2)+'</td></tr>'+
       '<tr class="sep"><td colspan="5"><div></div></td></tr>'+
-      '<tr><td>PE 12m</td><td><b>'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG 12m</td><td>'+pegV+'</td></tr>'+
+      '<tr><td>PE fc</td><td><b>'+(pe!=null?pe.toFixed(1)+'x':'n/a')+'</b></td><td></td><td class="l2">PEG roll</td><td>'+pegV+'</td></tr>'+
       ((mc!=null||dLab)?'<tr><td>Mkt cap</td><td><b>'+money(mc)+'</b></td><td></td><td class="l2">'+dLab+'</td><td>'+dVal+'</td></tr>':'')+
       '<tr><td>EPS g 12m</td><td>'+g12+'</td><td></td>'+(ndRow||'<td></td><td></td>')+'</tr></table>';
     if(getComputedStyle(host).position==='static')host.style.position='relative';
