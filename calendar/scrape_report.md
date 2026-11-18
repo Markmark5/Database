@@ -1,13 +1,13 @@
-# Calendar scrape - 2026-11-17
+# Calendar scrape - 2026-11-18
 
-**279 sources · 40 events staged for approval**
+**279 sources · 42 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
 | CLEAN | 126 | read OK, upcoming events found |
-| EMPTY | 143 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| EMPTY | 142 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 7 | 401/403/429 - bot protection or login |
+| BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
 
 ## EMPTY
@@ -23,7 +23,6 @@
 - 4imprint (FOUR) - http 200, http - https://investors.4imprint.com/investors/financial-calendar/
 - ActiveOps (AOM) - http 200, http - https://investors.activeops.com/investors/financial-calendar/
 - GlobalData (DATA) - http 200, http - https://investors.globaldata.com/news-events-alerts/financial-calendar/
-- Keller (KLR) - http 200, http - https://investors.keller.com/financial-calendar
 - Made Tech (MTEC) - http 200, http - https://investors.madetech.com/share-information/
 - NIOX (NIOX) - http 200, http - https://investors.niox.com/investors/financial-calendar/
 - Plus500 (PLUS) - http 200, http - https://investors.plus500.com/Shareholder#financial-calendar
@@ -49,6 +48,7 @@
 - Hikma (HIK) - http 200, browser - https://www.hikma.com/investors/financial-calendar/
 - IG Group (IGG) - http 200, browser - https://www.iggroup.com/investors/financial-calendar
 - James Fisher (FSJ) - http 200, http - https://www.james-fisher.com/investors/results-centre/financial-calendar/
+- Jet2 (JET2) - http 200, browser - https://www.jet2plc.com/en/calendar
 - Kainos (KNOS) - http 200, http - https://www.kainos.com/investor-relations/regulatory-news-and-events
 - Keystone Law (KEYS) - http 200, http - https://www.keystonelaw-ir.co.uk/content/investors/financial-calendar.asp
 - Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
@@ -66,7 +66,6 @@
 - Senior (SNR) - http 200, http - https://www.seniorplc.com/investors/financial-calendar.aspx
 - Serabi Gold (SRB) - http 200, http - https://www.serabigold.com/investors/corporate-calendar/
 - SigmaRoc (SRC) - http 200, http - https://www.sigmaroc.com/investors/financial-calendar
-- Softcat (SCT) - http 200, http - https://www.softcat.com/about-us/investor-centre/calendar
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
 - Beauty Tech Group (TBTG) - http 200, http - https://www.thebeautytechgroup.com/financial-calendar
@@ -164,6 +163,7 @@
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
+- Peel Hunt (PEEL) - http 403, chrome - https://www.peelhunt.com/investors/financial-calendar/
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
@@ -174,5 +174,6 @@
 
 ## Approved events not re-verified tonight
 
+- Peel Hunt H1 results 2026-11-18
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
