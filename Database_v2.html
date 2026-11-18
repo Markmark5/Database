@@ -1545,6 +1545,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div style="display:flex;align-items:center;gap:5px;">
               <button style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber);cursor:pointer;" onclick="toggleRnsSidebar()" title="Show / hide filters">☰ FILTERS</button>
               <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
+              <button id="rns-cyc-btn" title="Open the tickers these filters show as Cycles charts" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="rnsToCycles()">▶ CYCLES</button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
                 <option value="date-desc">Date ↓</option>
@@ -3722,6 +3723,13 @@ function renderPagination(total){
   h+='<button class="pg-btn" '+(PAGE===pages?'disabled':'')+' onclick="goPage('+(PAGE+1)+')">›</button>';
   h+='<span class="pg-info">'+((PAGE-1)*PER_PAGE+1)+'–'+Math.min(PAGE*PER_PAGE,total)+' of '+total+'</span>';
   pg.innerHTML=h; if(pt)pt.innerHTML=h;
+}
+
+/* RNS Scorecards → Cycles: open the tickers the current filters show (each once, in list order) as Cycles charts */
+function rnsToCycles(){
+  var seen={},L=[];(FILTERED||[]).forEach(function(r){var t=String(r.ticker||'').trim().toUpperCase();if(t&&!seen[t]){seen[t]=1;L.push(t);}});
+  if(!L.length){toast('No tickers in the current filter','inf');return;}
+  if(typeof cycOpen==='function')cycOpen(L);
 }
 function goPage(p){PAGE=p;renderRows();var m=document.querySelector('.rns-main');if(m)m.scrollTop=0;}   /* new page starts at its first card */
 
@@ -10487,6 +10495,8 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
 .cyc-cnt{color:#6a6a85;font-size:12px;margin-left:auto}
 .cyc-note{color:#6a6a85;font-size:11.5px;margin:8px 0 0}
 #cyc-list{overflow:auto;padding:0 18px 12px}
+#cyc-pick{align-items:center;justify-content:space-between;gap:10px;margin:0 18px 8px;padding:6px 10px;border:1px solid #f0b42966;background:#1a1405;color:#ffd27a;border-radius:6px;font-size:11px}
+#cyc-pick button{background:none;border:1px solid #f0b42988;color:#ffd27a;border-radius:4px;padding:3px 8px;cursor:pointer;font-size:10px}
 .cyc-card{background:#0f0f15;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px 6px;margin:10px 0}
 .cyc-h{display:flex;gap:10px;align-items:baseline}
 .cyc-h .ticker-sym{font-size:17px;font-weight:700;color:#f2f2f8;cursor:pointer}
@@ -10504,6 +10514,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   <div class="cyc-top"><h2>&#128690; Cycles <span style="font-size:12px;font-weight:400;color:#6a6a85">10 / 20 / 40-week moving averages, each vs last week</span><span class="cyc-x" onclick="cycClose()">&#10005;</span></h2>
     <div class="cyc-bar" id="cyc-bar"></div>
     <div class="cyc-note" id="cyc-note"></div></div>
+  <div id="cyc-pick" style="display:none"></div>
   <div id="cyc-list"></div>
 </div></div>
 <script>
@@ -10511,7 +10522,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
   var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
   var COL={'ALL':'#c8c8d8','BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
-  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all';
+  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all', PICK=null;   /* PICK: tickers sent from RNS Scorecards */
   function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function csv(t){var R=[],r=[],f='',i=0,Q=false;
@@ -10702,7 +10713,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     if(show=='sd')return up30(d)&&l.c=='r'&&l.pc=='g';   /* first step down: red straight after green, 30w MA rising */
     return true;}
   function up30(d){return d.m30!=null&&d.m30>0;}
-  function base(d){return (!chartsOnly||lite(d.t))&&pass(d);}
+  function base(d){return (PICK?PICK.has(d.t):(!chartsOnly||lite(d.t)))&&pass(d);}
   function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){
       if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
@@ -10748,6 +10759,9 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function draw(){
     if(!D)return; var L=list();
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
+    var pk=document.getElementById('cyc-pick');
+    if(pk){pk.style.display=PICK?'flex':'none';
+      if(PICK)pk.innerHTML='<span>&#9776; From RNS Scorecards filters · <b>'+L.length+'</b> of '+PICK.size+' tickers'+(L.length<PICK.size?' <span style="opacity:.7">(others not in the live sheets or this regime/filter)</span>':'')+'</span><button onclick="cycPickClear()">✕ Show all</button>';}
     document.querySelectorAll('.cyc-btn').forEach(function(b){var r=b.dataset.r;
       b.querySelector('i').textContent=D.filter(function(d){return (r=='ALL'||d.r==r)&&base(d);}).length;b.classList.toggle('on',r==cur);});
     var box=document.getElementById('cyc-list'), html;
@@ -10768,7 +10782,8 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     box.querySelectorAll('.cyc-ch').forEach(function(el){IO.observe(el);});
   }
   var built=false;
-  window.cycOpen=function(){
+  window.cycOpen=function(pick){
+    PICK=pick&&pick.length?new Set(pick):null;
     if(!built){built=true;
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
@@ -10779,10 +10794,11 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
-    var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur='BULL';   /* always opens on every ticker, Bull regime, Text + G sort */
+    var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur=PICK?'ALL':'BULL';   /* always opens on every ticker, Bull regime (all regimes for a scorecard pick), Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>2*60000)load(); else note(BAD);   /* sheets refresh every 10 min: re-read after 2 min */
   };
+  window.cycPickClear=function(){PICK=null;cur='BULL';draw();};
   window.cycClose=function(){document.getElementById('cyc-ov').classList.remove('on');};
   window.addEventListener('keydown',function(e){
     var pp=document.getElementById('pp-ov');
