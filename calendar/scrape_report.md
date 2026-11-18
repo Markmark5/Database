@@ -1,6 +1,6 @@
 # Calendar scrape - 2026-11-18
 
-**279 sources · 42 events staged for approval**
+**279 sources · 39 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
