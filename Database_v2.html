@@ -6487,6 +6487,17 @@ function fcEventLog2(rows,field){var evts=[];var prevVal=null,prevRow=null;
   if(comp){var cTxt='—',cCol='color:var(--text-dim)';
     if(compPct!==null&&Math.abs(compPct)>=0.05){cTxt=(compPct>0?'+':'')+compPct.toFixed(1)+'%';cCol=compPct<0?'color:var(--red)':'color:var(--green)';}
     compHtml='<span style="font-weight:600;font-size:10px;min-width:40px;text-align:right;'+cCol+'" title="2yr fc move">'+cTxt+'</span>';}var val='';if(field==='eps'){val=p.eps.toFixed(1)+'p → '+c.eps.toFixed(1)+'p';}else if(field==='rev'){val='£'+p.rev.toFixed(0)+'m → £'+c.rev.toFixed(0)+'m';}else{val=fcFmtPence(p.tp)+' → '+fcFmtPence(c.tp);}evts.push('<div style="border-bottom:1px solid var(--border);padding:7px 10px;"><div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:'+col+';display:inline-block;flex-shrink:0"></span><span style="font-size:10px;color:var(--text-dim)">'+c.date+'</span><span style="margin-left:auto;font-weight:600;font-size:11px;'+fcChgColor(pct)+'">'+(dn?'':'+')+pct+'%</span>'+compHtml+'</div><div style="font-size:11px;color:var(--text-primary);margin-top:2px;padding-left:12px;">'+val+'</div></div>');}
+  /* today's live figure as the newest entry, until the next weekly snapshot replaces it */
+  if(field==='eps'||field==='rev'){var LVt=fcLive(rows._fcTicker,rows),lastI=-1;for(var j=rows.length-1;j>=0;j--){if(rows[j][field]!=null&&!isNaN(rows[j][field])){lastI=j;break;}}
+    if(LVt&&lastI>=0){var w=rows[lastI],lv=LVt[field],lv2=LVt[comp],m1=fcLiveMoved(lv,w[field]),m2=comp&&fcLiveMoved(lv2,w[comp]);
+      if(m1||m2){var pc1=m1?(lv-w[field])/Math.abs(w[field])*100:null,pc2=m2?(lv2-w[comp])/Math.abs(w[comp])*100:null;
+        var fv=function(v){return field==='eps'?(+v).toFixed(1)+'p':'£'+(+v).toFixed(0)+'m';};
+        var pcs=function(v){return v==null?'<span style="color:var(--text-dim)">—</span>':'<span style="color:'+(v<0?'var(--red)':'var(--green)')+'">'+(v>0?'+':'')+v.toFixed(1)+'%</span>';};
+        evts.push('<div style="border-bottom:1px solid var(--border);border-left:2px dashed #9a9ab5;padding:7px 10px;background:rgba(255,255,255,0.025);" title="Live sheets today, against the last weekly snapshot ('+w.date+'). Replaced by the next weekly upload.">'
+          +'<div style="display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;border:1.5px solid #9a9ab5;display:inline-block;flex-shrink:0"></span>'
+          +'<span style="font-size:10px;color:var(--text-primary)">'+LVt.date+' <span style="color:#9a9ab5">· live</span></span>'
+          +'<span style="margin-left:auto;font-weight:600;font-size:10px">'+pcs(pc1)+'</span>'+(comp?'<span style="font-weight:600;font-size:10px;min-width:40px;text-align:right">'+pcs(pc2)+'</span>':'')+'</div>'
+          +'<div style="font-size:11px;color:var(--text-secondary);margin-top:2px">'+(m1?fv(w[field])+' → '+fv(lv):'unchanged')+' <span style="color:var(--text-dim);font-size:9px">since '+w.date+'</span></div></div>');}}}
   if(!evts.length)return '<div style="padding:12px;color:var(--text-dim);font-size:11px">No significant moves detected</div>';
   return evts.reverse().join('');}
 /* Dashed vertical marker at the prelim/finals date, drawn between the two
@@ -6560,6 +6571,24 @@ function ignALoad(){
 }
 function ignA(tk){return IGN_A&&IGN_A[String(tk||'').trim().toUpperCase()]||null;}
 window.ignA=ignA;
+/* Today's forecasts for a ticker, for the "since Friday" step, the event log's live row and the scorecard's
+   "broker moves since card": EPS from the live sheets (Ignition Group A if blank), revenue from Ignition Group A.
+   null when the company published full-year results in (or since) the latest snapshot's week, because the forecast
+   year has probably rolled; Friday's snapshot puts it right. rows = the weekly broker rows (fcFetchFromExtractor). */
+function fcLive(tk,rows){
+  tk=String(tk||'').trim().toUpperCase(); if(!rows||!rows.length)return null;
+  var snapD=fcRowDate(rows[rows.length-1].date), fyD=(typeof fcFile5Date==='function')?fcFile5Date(tk,'Prev prelim results announce'):null;
+  if(snapD&&fyD&&fyD>snapD.dt-7*864e5)return null;
+  var L=(typeof liveData!=='undefined'&&liveData[tk])||{}, IG=ignA(tk);
+  var nz=function(a,b){return (a==null||a===''||isNaN(+a))?(b==null?null:+b):+a;};
+  var o={eps:nz(L.eps1,IG&&IG.e1),eps2:nz(L.eps2,IG&&IG.e2),rev:IG?IG.r1:null,rev2:IG?IG.r2:null,
+    lab:'Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}),
+    date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})};
+  return (o.eps==null&&o.rev==null)?null:o;
+}
+/* a live figure worth showing against the latest weekly one: moved, and not a glitch-size jump */
+function fcLiveMoved(lv,last){return lv!=null&&last!=null&&!isNaN(lv)&&!isNaN(last)&&+last!==0&&Math.abs(lv/last-1)>=0.0005&&Math.abs(lv/last-1)<=0.6;}
+try{setTimeout(function(){ignALoad();},4000);}catch(e){}
 function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
   var labels=rows.map(function(r){return r.date;});
   var datasets=[];
@@ -6714,12 +6743,9 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
      revenue from Ignition Group A ("fc Turnover (m)"; the Sectors sheets only carry last year's actual turnover).
      Left out when the company has published full-year results since (or in the week before) the snapshot: the forecast year has probably rolled,
      and Friday's snapshot puts it right. */
-  var IG=window.ignA?ignA(active):null, LV=(typeof liveData!=='undefined'&&liveData[active])||{}, lvLab='Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  var snapD=fcRowDate(rows[rows.length-1].date), fyD=fcFile5Date(active,'Prev prelim results announce'), fySince=!!(snapD&&fyD&&fyD>snapD.dt-7*864e5);   /* results in the week before the snapshot too: ShareScope can take a few days to roll the year */
-  var nz=function(a,b){return (a==null||a===''||isNaN(+a))?(b==null?null:+b):+a;};   /* first usable number */
-  var lvE=fySince?null:{v1:nz(LV.eps1,IG&&IG.e1),v2:nz(LV.eps2,IG&&IG.e2),lab:lvLab};
-  var lvR=(fySince||!IG)?null:{v1:IG.r1,v2:IG.r2,lab:lvLab};
-  if(window.ignA&&!IG&&!fySince&&!fcRenderInto._ignWait){fcRenderInto._ignWait=1;ignALoad().then(function(){fcRenderInto._ignWait=0;   /* first open: redraw once Ignition's sheets are in */
+  var LVt=fcLive(active,rows), IG=ignA(active);
+  var lvE=LVt&&{v1:LVt.eps,v2:LVt.eps2,lab:LVt.lab}, lvR=(LVt&&IG)?{v1:LVt.rev,v2:LVt.rev2,lab:LVt.lab}:null;
+  if(LVt&&!IG&&!fcRenderInto._ignWait){fcRenderInto._ignWait=1;ignALoad().then(function(){fcRenderInto._ignWait=0;   /* first open: redraw once Ignition's sheets are in */
     if(window.fcPrefixTk&&window.fcPrefixTk[chartPrefix]===active&&ignA(active))fcRenderInto(contentId,active,tab,chartPrefix,chartStore);});}
   fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events,live:lvR});
   fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events,live:lvE});
@@ -9112,7 +9138,8 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
       /* start point = the consensus figure the card itself quotes ("cons 887.9m → …"); if it gives none,
          the last weekly row before the card date. End point = the latest weekly row after the card. */
       if(rows)rows.forEach(function(r,i){var d=fcRowDate(r.date);if(d&&d.dt<cd)a=i;});
-      var why=!rows||rows.length<2?'no broker data':a>=z?'no broker update since card':'';
+      var LVc=rows?fcLive(tk,rows):null;   /* today's live forecasts are the end point when they exist */
+      var why=!rows||rows.length<2?'no broker data':(a>=z&&!LVc)?'no broker update since card':'';
       var rolled=!why&&fcComputeRollovers(rows,tk).slice(Math.max(a+1,0),z+1).some(Boolean);
       var cardStart=function(sub,eps){var m=String(sub||'').match(/^\s*(?:cons\.?\s*)?[£$€]?\s*(\d[\d,]*(?:\.\d+)?)\s*(bn|m|p|c)?\s*(?:→|->|>)/i);
         if(!m)return null;var v=+m[1].replace(/,/g,'');if(!eps&&/bn/i.test(m[2]||''))v*=1000;return isFinite(v)&&v?v:null;};
@@ -9129,16 +9156,17 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
       var pc=function(v){return '<span class="'+cls(v)+'">'+(v>0?'+':v<0?'−':'±')+Math.abs(v).toFixed(1)+'%</span>';};
       var MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],ds=String(L.date).slice(0,10),cdl=(+ds.slice(8))+' '+MO[+ds.slice(5,7)-1];
       var items=[['eps','EPS FC',/eps/i,0],['eps2','EPS FC1',/eps/i,1],['rev','REV FC',/rev/i,0],['rev2','REV FC1',/rev/i,1]].map(function(q){
-        var sc=pick(q[2],q[3]),from,to,sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
+        var sc=pick(q[2],q[3]),from,to,it_live=false,sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
         if(!why&&!(rolled&&q[3]===0)){
-          to=rows[z][rolled?q[0].slice(0,3):q[0]];
+          to=rows[z][rolled?q[0].slice(0,3):q[0]]; it_live=false;
+          if(LVc&&!rolled&&LVc[q[0]]!=null&&!isNaN(LVc[q[0]])&&(to==null||Math.abs(LVc[q[0]]/to-1)<=0.6)){to=LVc[q[0]];it_live=true;}
           var rf=a>=0?rows[a][q[0]]:null,cs=cardStart(sub,eps),num=function(v){return v!=null&&!isNaN(v)&&+v!==0;};
           /* card figure unless it's clearly a different unit / basis from the broker data */
           if(cs&&(num(rf)?cs/rf>0.8&&cs/rf<1.25:num(to)&&cs/to>0.5&&cs/to<2))from=cs;else from=rf;}
         var ok=from!=null&&to!=null&&!isNaN(from)&&!isNaN(to)&&+from!==0;
         var u=eps?(/\dc(\b|→)/.test(sub)?'c':'p'):(/\$/.test(sub)?'$':/€/.test(sub)?'€':'£');
         var f=function(v){v=+v;return eps?v.toFixed(1)+u:(Math.abs(v)>=1000?u+(v/1000).toFixed(2)+'bn':u+(v%1?v.toFixed(1):v.toFixed(0))+'m');};
-        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,txt:ok?f(from)+' → '+f(to):(why||(rolled&&q[3]===0?'year rolled — reported':a<0?'no broker data at card date':'no data')),u:u};});
+        return {lab:q[1],sc:sc,r:rng(sc),pct:ok?(to-from)/Math.abs(from)*100:null,live:it_live,txt:ok?f(from)+' → '+f(to)+(it_live?' · live '+LVc.date.slice(0,6):''):(why||(rolled&&q[3]===0?'year rolled — reported':a<0?'no broker data at card date':'no data')),u:u};});
       if(!revs.length&&items.every(function(it){return it.pct===null;}))return '';
       var tag=function(it){if(it.pct===null||!it.r)return '';var v=it.pct;
         if(v===0)return '<span class="tag nm">no move yet</span>';
