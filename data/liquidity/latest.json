@@ -1,60 +1,60 @@
 {
- "date": "2026-11-16",
- "gauge": -78.79,
+ "date": "2026-11-17",
+ "gauge": -67.34,
  "band": "Tight",
- "week_ago": -22.35,
+ "week_ago": -37.74,
  "month_ago": 15.51,
- "year_low": -78.79,
- "year_high": 97.09,
+ "year_low": -77.65,
+ "year_high": 97.15,
  "drift_1w": {
-  "value": -27.75,
-  "change": 51.04,
-  "driver": "the recent yield move",
-  "driver_change": 31.0,
+  "value": -29.38,
+  "change": 37.96,
+  "driver": "dollar volatility",
+  "driver_change": 20.4,
   "note": "where the gauge settles in a week if every input stays at today's level; historically within about 15 points of the actual reading and right on direction two weeks in three"
  },
  "inputs": {
   "ig": {
-   "z": -0.267,
-   "week_ago_z": -0.463
+   "z": -0.378,
+   "week_ago_z": -0.361
   },
   "funding": {
-   "z": -0.712,
-   "week_ago_z": -0.615
+   "z": -0.83,
+   "week_ago_z": -0.613
   },
   "reserves": {
-   "z": -1.149,
-   "week_ago_z": -1.309
+   "z": -1.146,
+   "week_ago_z": -1.306
   },
   "fed": {
-   "z": 0.929,
-   "week_ago_z": 0.721
+   "z": 0.927,
+   "week_ago_z": 0.719
   },
   "yield": {
-   "z": -2.404,
-   "week_ago_z": 0.325
+   "z": -1.21,
+   "week_ago_z": -0.222
   },
   "dollar": {
-   "z": -1.591,
-   "week_ago_z": -0.639
+   "z": -1.603,
+   "week_ago_z": -0.837
   },
   "move": {
-   "z": -0.624,
-   "week_ago_z": 0.271
+   "z": -0.66,
+   "week_ago_z": -0.104
   },
   "dxyvol": {
-   "z": -0.486,
-   "week_ago_z": -0.079
+   "z": -0.487,
+   "week_ago_z": -0.295
   }
  },
  "raw": {
-  "ig_oas": 0.89,
-  "sofr_effr_bp": 2.0,
+  "ig_oas": 0.9,
+  "sofr_effr_bp": 5.0,
   "reserves_bn": 2961.0,
   "fed_assets_bn": 6759.0,
-  "us10y": 5.15,
-  "dxy": 103.51,
-  "move": 101.28,
+  "us10y": 5.12,
+  "dxy": 103.64,
+  "move": 101.88,
   "dxyvol_pct": 6.87
  },
  "bands": [
@@ -74,5 +74,5 @@
    "Loose"
   ]
  ],
- "updated": "2026-11-17T04:12:45Z"
+ "updated": "2026-11-18T03:11:03Z"
 }
