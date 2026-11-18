@@ -4443,7 +4443,11 @@ function epEdit(id, uid) {
 
 async function deleteRec(id){
   openConfirm({icon:'⚠',t:'Delete this record?',s:'Permanently removes the record.',fn:async function(){
-    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();toast('Record deleted','inf');ghAutoPush();
+    var keepPage=PAGE, keepY=window.scrollY;   /* stay on the same page (and scroll spot) after deleting */
+    try{await dbDel(id);}catch(e){}ALL=ALL.filter(function(r){return r.id!==id;});FILTERED=ALL.slice();applyFilters();updateSidebar();renderBestWorst();
+    var last=Math.max(1,Math.ceil(FILTERED.length/PER_PAGE)); if(keepPage>1){PAGE=Math.min(keepPage,last);renderRows();}
+    window.scrollTo(0,keepY);
+    toast('Record deleted','inf');ghAutoPush();
   }});
 }
 
