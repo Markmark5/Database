@@ -9555,6 +9555,7 @@ async function egOpen(){
   EG.ov={rev:false,brd:false,gro:false};   /* and with the index overlays off */
   var el=document.getElementById('eg-body');
   document.getElementById('eg-overlay').style.display='flex';
+  el.scrollTop=0;   /* a fresh opening starts at the top (set once visible) */
   if(!EG.data)el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading earnings data…</div>';
   var urls=['data/earnings/summary.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/earnings/summary.json'];
   for(var i=0;i<urls.length;i++){
@@ -9657,7 +9658,8 @@ function egRender(){
     h+='<h4><span>Expected growth · next year’s forecast EPS vs this year’s</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>Median company</span>'+ovbtn('gro')+'</span></h4>'+s;
   }
   h+='<div class="eg-note">Weekly snapshots from the Weekly Log. Each company’s forecast change is measured week to week against the size of its EPS (capped at ±15%) and averaged, loss-makers included. When a company rolls into a new financial year its new forecast is compared with the previous forecast for that same year (from Mar 2026; before that the results week is skipped). Companies are grouped by their current index. Companies taken over or delisted since May 2025 are missing from the history, which flatters it slightly. Updated '+fd(EG.data.updated)+'.</div></div>';
-  egBkcIn(false); document.getElementById('eg-body').innerHTML=h; egBkcIn(true);
+  var egEl=document.getElementById('eg-body'), egY=egEl.scrollTop;   /* keep the scroll position when a button redraws the charts */
+  egBkcIn(false); egEl.innerHTML=h; egBkcIn(true); egEl.scrollTop=egY;
   EG.hv={g:g,x:x,l:l,r:r,W:W,tA:tA,tB:tB,fd:fd,sg:sg};
   egBindHover();
 }
