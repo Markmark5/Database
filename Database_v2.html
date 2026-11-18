@@ -9512,6 +9512,7 @@ function aaBBRender(yrs){
 </div>
 <style>
 #eg-body .eg-sec{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;padding:0 16px 12px}
+#eg-body #broker-section.in-eg{border:1.5px solid #14181c;border-radius:8px;overflow:hidden;margin:0 0 40px}   /* own outlined section above the earnings charts, 40px gap like Fear & Greed */
 #eg-body .eg-bar{margin:0 -16px 14px;padding:8px 16px;background:#14181c;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 #eg-body .eg-bar .t{color:#fff;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 #eg-body .eg-rng button{font-family:var(--mono);font-size:10px;padding:3px 8px;margin-left:4px;border-radius:4px;cursor:pointer;background:#14181c;color:#cfcfcf;border:1px solid #555;text-transform:uppercase;letter-spacing:.06em}
@@ -9537,7 +9538,17 @@ function aaBBRender(yrs){
 var EG={data:null,g:'FTSE 100',ov:{rev:true,brd:true,gro:true},hv:null,rng:'all'};
 function egRng(k){EG.rng=k;egRender();}
 try{var _egov=JSON.parse(localStorage.getItem('eg_ov')||'null');if(_egov)EG.ov=_egov;}catch(e){}
-function egClose(){document.getElementById('eg-overlay').style.display='none';var t=document.getElementById('eg-tip');if(t)t.style.display='none';}
+/* Broker Changes shown at the top of the Earnings popup: the page's own section is moved in while the popup is open
+   (same data, buttons and state) and put back in its place on close */
+function egBkcIn(on){
+  var sec=document.getElementById('broker-section'), body=document.getElementById('eg-body'); if(!sec||!body)return;
+  var home=document.getElementById('bkc-home');
+  if(!home){home=document.createElement('div');home.id='bkc-home';home.style.display='none';sec.parentNode.insertBefore(home,sec);}
+  if(on){sec.classList.add('in-eg');body.insertBefore(sec,body.firstChild);
+    if(!BKC.live&&!BKC.busy&&typeof bkcLoad==='function')bkcLoad(true);}
+  else{sec.classList.remove('in-eg');home.parentNode.insertBefore(sec,home.nextSibling);}
+}
+function egClose(){egBkcIn(false);document.getElementById('eg-overlay').style.display='none';var t=document.getElementById('eg-tip');if(t)t.style.display='none';}
 function egTog(k){EG.ov[k]=!EG.ov[k];try{localStorage.setItem('eg_ov',JSON.stringify(EG.ov));}catch(e){}egRender();}
 function egSet(g){EG.g=g;egRender();}
 async function egOpen(){
@@ -9646,7 +9657,7 @@ function egRender(){
     h+='<h4><span>Expected growth · next year’s forecast EPS vs this year’s</span><span class="eg-leg"><span><i style="background:'+INK+'"></i>Median company</span>'+ovbtn('gro')+'</span></h4>'+s;
   }
   h+='<div class="eg-note">Weekly snapshots from the Weekly Log. Each company’s forecast change is measured week to week against the size of its EPS (capped at ±15%) and averaged, loss-makers included. When a company rolls into a new financial year its new forecast is compared with the previous forecast for that same year (from Mar 2026; before that the results week is skipped). Companies are grouped by their current index. Companies taken over or delisted since May 2025 are missing from the history, which flatters it slightly. Updated '+fd(EG.data.updated)+'.</div></div>';
-  document.getElementById('eg-body').innerHTML=h;
+  egBkcIn(false); document.getElementById('eg-body').innerHTML=h; egBkcIn(true);
   EG.hv={g:g,x:x,l:l,r:r,W:W,tA:tA,tB:tB,fd:fd,sg:sg};
   egBindHover();
 }
