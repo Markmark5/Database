@@ -9648,7 +9648,10 @@ function egRender(){
   [-bm,-bm/2,0,bm/2,bm].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yb(v)+'" y2="'+yb(v)+'" stroke="'+(v===0?INK:GRID)+'"/><text x="'+(l-6)+'" y="'+(yb(v)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+(v>0?'+':'')+v+'</text>';});
   s+=ovl('brd',H);
   var bw=(W-l-r)/n*0.8;
-  g.breadth.forEach(function(v,i){if(v==null)return;var a=yb(0),c=yb(v);s+='<rect x="'+(x(dts[i])-bw/2).toFixed(1)+'" y="'+Math.min(a,c).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.abs(c-a).toFixed(1)+'" fill="'+(v>=0?GRN:RED)+'" opacity=".85"/>';});
+  g.breadth.forEach(function(v,i){if(v==null)return;var a=yb(0),c=yb(v);
+    /* bar no wider than 80% of the gap to its neighbours (uneven back-filled US points would overlap) */
+    var gp=Infinity; if(i>0)gp=Math.min(gp,x(dts[i])-x(dts[i-1])); if(i<n-1)gp=Math.min(gp,x(dts[i+1])-x(dts[i])); var w=Math.max(2,Math.min(bw,gp*0.8));
+    s+='<rect x="'+(x(dts[i])-w/2).toFixed(1)+'" y="'+Math.min(a,c).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.abs(c-a).toFixed(1)+'" fill="'+(v>=0?GRN:RED)+'" opacity=".85"/>';});
   if(!(EG.ov.brd&&hasPx))s+='<text x="'+(W-r+6)+'" y="'+(yb(bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+GRN+'">UPGRADES</text><text x="'+(W-r+6)+'" y="'+(yb(-bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+RED+'">DOWNGRADES</text>';
   s+=ticks(H)+cur(H)+'</svg>';
   h+='<h4><span>Revision breadth · % of companies upgraded minus % downgraded over 4 weeks</span><span class="eg-leg"><span><i style="background:'+GRN+'"></i>Upgrades</span><span><i style="background:'+RED+'"></i>Downgrades</span>'+ovbtn('brd')+'</span></h4>'+s;
