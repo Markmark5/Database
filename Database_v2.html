@@ -9535,9 +9535,8 @@ function aaBBRender(yrs){
 @media (max-width:760px){#eg-body .eg-tiles{grid-template-columns:1fr 1fr}}
 </style>
 <script>
-var EG={data:null,g:'FTSE 100',ov:{rev:true,brd:true,gro:true},hv:null,rng:'all'};
+var EG={data:null,g:'FTSE 100',ov:{rev:false,brd:false,gro:false},hv:null,rng:'all'};
 function egRng(k){EG.rng=k;egRender();}
-try{var _egov=JSON.parse(localStorage.getItem('eg_ov')||'null');if(_egov)EG.ov=_egov;}catch(e){}
 /* Broker Changes shown at the top of the Earnings popup: the page's own section is moved in while the popup is open
    (same data, buttons and state) and put back in its place on close */
 function egBkcIn(on){
@@ -9549,10 +9548,11 @@ function egBkcIn(on){
   else{sec.classList.remove('in-eg');home.parentNode.insertBefore(sec,home.nextSibling);}
 }
 function egClose(){egBkcIn(false);document.getElementById('eg-overlay').style.display='none';var t=document.getElementById('eg-tip');if(t)t.style.display='none';}
-function egTog(k){EG.ov[k]=!EG.ov[k];try{localStorage.setItem('eg_ov',JSON.stringify(EG.ov));}catch(e){}egRender();}
+function egTog(k){EG.ov[k]=!EG.ov[k];egRender();}
 function egSet(g){EG.g=g;egRender();}
 async function egOpen(){
   EG.rng='all';      /* every opening starts on the full history */
+  EG.ov={rev:false,brd:false,gro:false};   /* and with the index overlays off */
   var el=document.getElementById('eg-body');
   document.getElementById('eg-overlay').style.display='flex';
   if(!EG.data)el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Loading earnings data…</div>';
