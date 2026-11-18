@@ -10787,7 +10787,12 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     return true;}
   function up30(d){return d.m30!=null&&d.m30>0;}
   function base(d){return (PICK?PICK.has(d.t):(!chartsOnly||lite(d.t)))&&pass(d);}
-  function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
+  /* search: every ticker in the sheets, whatever regime, filter or 'whole market' setting; exact ticker first,
+     then tickers starting with it, then names with a word starting with it */
+  function srch(){var qq=q.replace(/\s+$/,''),qt=qq.replace(/\.$/,''),re=new RegExp('(^|[^a-z0-9])'+qq.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
+    var rk=function(d){var t=d.t.toLowerCase(),tt=t.replace(/\.$/,'');return (t===qq||tt===qt)?0:t.indexOf(qt)===0?1:re.test(d.n)?2:9;};
+    return D.filter(function(d){return rk(d)<9;}).sort(function(a,b){return rk(a)-rk(b)||a.t.localeCompare(b.t);});}
+  function list(){if(q)return srch();return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d);})
     .sort(function(a,b){
       if(PORD&&sortBy==='so')return (PORD[a.t]-PORD[b.t]);   /* charts from RNS Scorecards: the scorecard list's own order */
       if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
