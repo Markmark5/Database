@@ -323,6 +323,10 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
 .es-t{font-size:13px;color:var(--text-secondary);margin-bottom:4px;}
 .es-s{font-size:10px;color:var(--text-dim);}
 .pagination{display:flex;align-items:center;gap:5px;justify-content:center;margin-top:10px;}
+/* page buttons stay in view: a copy in the pinned sort bar, and the bottom row pinned to the foot of the list */
+.pagination.pg-top{margin-top:0;}
+.rns-main>#pagination{position:sticky;bottom:-14px;z-index:6;background:#0a0a0a;margin:6px -14px -14px;padding:8px 14px 10px;border-top:1px solid var(--border);}
+.rns-main>#pagination:empty{display:none;}
 .pg-btn{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:3px;background:var(--surface);border:1px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:all .1s;}
 .pg-btn:hover:not(:disabled){background:var(--surface2);color:var(--text-primary);}
 .pg-btn:disabled{opacity:.3;cursor:default;}
@@ -1537,6 +1541,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
               <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>50–74</div>
               <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>≤49</div>
             </div>
+            <div class="pagination pg-top" id="pagination-top"></div>
             <div style="display:flex;align-items:center;gap:5px;">
               <button style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber);cursor:pointer;" onclick="toggleRnsSidebar()" title="Show / hide filters">☰ FILTERS</button>
               <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
@@ -3679,7 +3684,7 @@ function renderRows(){
   const container=document.getElementById('rows-container');
   const empty=document.getElementById('empty-state');
   const total=FILTERED.length;
-  if(!total){container.innerHTML='';empty.style.display='block';document.getElementById('pagination').innerHTML='';return;}
+  if(!total){container.innerHTML='';empty.style.display='block';document.getElementById('pagination').innerHTML='';var pt0=document.getElementById('pagination-top');if(pt0)pt0.innerHTML='';return;}
   empty.style.display='none';
   const page=FILTERED.slice((PAGE-1)*PER_PAGE,PAGE*PER_PAGE);
   if(typeof arcHydrate==='function'){
@@ -3707,8 +3712,8 @@ function renderRows(){
   renderPagination(total);
 }
 function renderPagination(total){
-  const pages=Math.ceil(total/PER_PAGE),pg=document.getElementById('pagination');
-  if(pages<=1){pg.innerHTML='';return;}
+  const pages=Math.ceil(total/PER_PAGE),pg=document.getElementById('pagination'),pt=document.getElementById('pagination-top');
+  if(pages<=1){pg.innerHTML='';if(pt)pt.innerHTML='';return;}
   let h='<button class="pg-btn" '+(PAGE===1?'disabled':'')+' onclick="goPage('+(PAGE-1)+')">‹</button>';
   for(let i=1;i<=pages;i++){
     if(i===1||i===pages||Math.abs(i-PAGE)<=2)h+='<button class="pg-btn'+(i===PAGE?' active':'')+'" onclick="goPage('+i+')">'+i+'</button>';
@@ -3716,9 +3721,9 @@ function renderPagination(total){
   }
   h+='<button class="pg-btn" '+(PAGE===pages?'disabled':'')+' onclick="goPage('+(PAGE+1)+')">›</button>';
   h+='<span class="pg-info">'+((PAGE-1)*PER_PAGE+1)+'–'+Math.min(PAGE*PER_PAGE,total)+' of '+total+'</span>';
-  pg.innerHTML=h;
+  pg.innerHTML=h; if(pt)pt.innerHTML=h;
 }
-function goPage(p){PAGE=p;renderRows();}
+function goPage(p){PAGE=p;renderRows();var m=document.querySelector('.rns-main');if(m)m.scrollTop=0;}   /* new page starts at its first card */
 
 /* ── BEST/WORST ── */
 var bwLiveMode = false;
