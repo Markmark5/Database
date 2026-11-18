@@ -4015,7 +4015,7 @@ function fcBox(el,tk,hd){
     var e1=num(L.eps1); if(e1==null)e1=num(r1['fc EPS']);
     var e2=num(L.eps2); if(e2==null)e2=num(r1['2y fc EPS']);
     var v1=num(r1['fc Turnover (m)']), v2=num(r1['2y fc Turnover (m)']);
-    if(v1==null)v1=num(L.turn1y); if(v2==null)v2=num(L.turn2y);
+    var IGa=window.ignA?ignA(tk):null; if(v1==null&&IGa)v1=IGa.r1; if(v2==null)v2=IGa&&IGa.r2!=null?IGa.r2:num(L.turn2y);   /* not L.turn1y: that column is last year's actual */
     if(e1==null&&e2==null&&v1==null&&v2==null)return;
     var e0=num(r1['FY EPS']), v0=num(r1['FY Turnover (m)']), px=num(L.price);
     var yy=+String(r1['Next year end date']||'').split('/')[2];
@@ -6541,6 +6541,25 @@ var fcVLinePlugin={id:'fcVLine',afterDatasetsDraw:function(chart){
     ctx.fillText(v.label,px,ca.bottom-9);
   });
   ctx.restore();}};
+/* Ignition Group A live sheets (Turnover/EPS, 6 batches): this year's and next year's revenue and EPS forecasts,
+   read for the "since Friday" step on the broker forecast charts. Cached 10 minutes (the sheets refresh every 10). */
+var IGN_A_URLS=['1eNSRA7ZqVwTKEBkHwF2ThZSP8Pl0lyG_|1363531351','1kmKTGaWVUQx7o82qpFIgrzdfiFYLmSW7|258231997','1FklMZknU_eoYiFmVHVLbmuc7NExPPeld|1519647607',
+  '1cMwo7NHS_uj3Zveh1I7YL7yW-EdGgLps|141816251','1vYPAAhi3-yuRET85GSthXzGjH_igEveq|1088838943','1KMzQXwyrJnFDjmhR1ZcZuhYMFOOVWhYx|703214162'];
+var IGN_A=null, IGN_A_T=0, IGN_A_P=null;
+function ignALoad(){
+  if(IGN_A&&Date.now()-IGN_A_T<10*60000)return Promise.resolve(IGN_A);
+  if(IGN_A_P)return IGN_A_P;
+  IGN_A_P=Promise.all(IGN_A_URLS.map(function(k){var p=k.split('|');
+    return fetch('https://docs.google.com/spreadsheets/d/'+p[0]+'/gviz/tq?tqx=out:csv&headers=1&gid='+p[1]+'&_cb='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});}))
+  .then(function(txts){var m={},n=function(v){v=parseFloat(String(v==null?'':v).replace(/[,£$€p¢]/g,''));return isNaN(v)?null:v;};
+    txts.forEach(function(t){if(!t)return;var rows=parseCSVgeneric(t);rows.forEach(function(r){var tk=String(r.TIDM||'').trim().toUpperCase();if(!tk||tk.indexOf('#')>=0||!('fc Turnover (m)' in r))return;
+      m[tk]={r1:n(r['fc Turnover (m)']),r2:n(r['2y fc Turnover (m)']),e1:n(r['fc EPS']),e2:n(r['2y fc EPS'])};});});
+    if(Object.keys(m).length){IGN_A=m;IGN_A_T=Date.now();}IGN_A_P=null;return IGN_A;});
+  return IGN_A_P;
+}
+function ignA(tk){return IGN_A&&IGN_A[String(tk||'').trim().toUpperCase()]||null;}
+window.ignA=ignA;
 function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
   var labels=rows.map(function(r){return r.date;});
   var datasets=[];
@@ -6588,7 +6607,7 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   /* Since Friday's snapshot: one dashed step from the last weekly point to today's live-sheet figure (only when it moved) */
   if(cfg.live){var n0=labels.length,last=function(f){for(var k=n0-1;k>=0;k--){var v=rows[k][f];if(v!=null&&!isNaN(v))return {i:k,v:v};}return null;};
     var adds=[[cfg.f1,cfg.live.v1,cfg.c1,cfg.l1],[cfg.f2,cfg.live.v2,cfg.c2,cfg.l2]].map(function(q){var L=q[0]&&last(q[0]);
-      if(!L||q[1]==null||isNaN(q[1])||Math.abs(q[1]/L.v-1)<0.0005||Math.abs(q[1]/L.v-1)>0.25)return null;   /* unchanged, or a jump that is more likely a year-end roll */
+      if(!L||q[1]==null||isNaN(q[1])||Math.abs(q[1]/L.v-1)<0.0005||Math.abs(q[1]/L.v-1)>0.6)return null;   /* unchanged, or a jump big enough to be a data glitch */
       var d=new Array(n0+1).fill(null);d[L.i]=L.v;d[n0]=q[1];
       return {label:q[3]+' · since Fri',data:d,borderColor:q[2],backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],tension:0,fill:false,spanGaps:true,
         pointRadius:d.map(function(v,k){return k===n0?4:0;}),pointBackgroundColor:'#0f0f15',pointBorderColor:q[2],pointBorderWidth:2,yAxisID:'y'};}).filter(Boolean);
@@ -6691,9 +6710,19 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
       var faint=sc>=75?'rgba(0,200,20,0.18)':sc>=50?'rgba(245,179,47,0.18)':'rgba(224,37,37,0.18)';
       scoreEvents.push({x:x,kind:'score',label:sc,color:col,colorFaint:faint,yVal:tpY,pinned:pinned,date:r.date});});
     var _pinN=0;scoreEvents.filter(function(e){return e.pinned;}).sort(function(a,b){return String(b.date).localeCompare(String(a.date));}).forEach(function(e){e.pinIdx=_pinN++;});}
-  var LV=(typeof liveData!=='undefined'&&liveData[active])||null, lvLab='Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events,live:LV&&{v1:+LV.turn1y,v2:+LV.turn2y,lab:lvLab}});
-  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events,live:LV&&{v1:+LV.eps1,v2:+LV.eps2,lab:lvLab}});
+  /* Since Friday's snapshot: today's forecasts as a dashed step. EPS from the live sheets (Ignition Group A if blank);
+     revenue from Ignition Group A ("fc Turnover (m)"; the Sectors sheets only carry last year's actual turnover).
+     Left out when the company has published full-year results since (or in the week before) the snapshot: the forecast year has probably rolled,
+     and Friday's snapshot puts it right. */
+  var IG=window.ignA?ignA(active):null, LV=(typeof liveData!=='undefined'&&liveData[active])||{}, lvLab='Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  var snapD=fcRowDate(rows[rows.length-1].date), fyD=fcFile5Date(active,'Prev prelim results announce'), fySince=!!(snapD&&fyD&&fyD>snapD.dt-7*864e5);   /* results in the week before the snapshot too: ShareScope can take a few days to roll the year */
+  var nz=function(a,b){return (a==null||a===''||isNaN(+a))?(b==null?null:+b):+a;};   /* first usable number */
+  var lvE=fySince?null:{v1:nz(LV.eps1,IG&&IG.e1),v2:nz(LV.eps2,IG&&IG.e2),lab:lvLab};
+  var lvR=(fySince||!IG)?null:{v1:IG.r1,v2:IG.r2,lab:lvLab};
+  if(window.ignA&&!IG&&!fySince&&!fcRenderInto._ignWait){fcRenderInto._ignWait=1;ignALoad().then(function(){fcRenderInto._ignWait=0;   /* first open: redraw once Ignition's sheets are in */
+    if(window.fcPrefixTk&&window.fcPrefixTk[chartPrefix]===active&&ignA(active))fcRenderInto(contentId,active,tab,chartPrefix,chartStore);});}
+  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events,live:lvR});
+  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events,live:lvE});
   fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true,events:scoreEvents});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
@@ -7616,6 +7645,7 @@ function liveOnAllFetched(errors, total) {
   }
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
+  try{if(typeof ignALoad==='function')ignALoad();}catch(e){}   /* Ignition Group A forecasts for the charts' since-Friday step */
   try{var pf1=document.getElementById('f-peg1'),pf2=document.getElementById('f-peg15');   /* PEG filters use live prices */
     if((pf1&&pf1.checked)||(pf2&&pf2.checked))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
   try{
