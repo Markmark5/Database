@@ -9562,6 +9562,11 @@ async function egOpen(){
     try{var r=await fetch(urls[i]+'?t='+Date.now(),{cache:'no-store'});if(r.ok){EG.data=await r.json();break;}}catch(e){}
   }
   if(!EG.data){el.innerHTML='<div style="color:#6b6b6b;font-size:12px">Earnings data unavailable.</div>';return;}
+  /* S&P 500 / Nasdaq 100 groups (Yahoo consensus, scripts/earnings_us.py) shown after the UK ones */
+  if(!EG.us){var uu=['data/earnings/summary_us.json','https://raw.githubusercontent.com/Markmark5/Database/main/data/earnings/summary_us.json'];
+    for(var j=0;j<uu.length;j++){try{var r2=await fetch(uu[j]+'?t='+Date.now(),{cache:'no-store'});if(r2.ok){EG.us=await r2.json();break;}}catch(e){}}
+  }
+  if(EG.us&&EG.us.groups)Object.keys(EG.us.groups).forEach(function(k){EG.data.groups[k]=EG.us.groups[k];});
   egRender();
 }
 function egRender(){
@@ -9593,7 +9598,7 @@ function egRender(){
   var col=function(v){return v>=0?GRN:RED;};
   var tile=function(lab,val,c,sub){return '<div class="eg-tile"><div class="eg-lab">'+lab+'</div><div class="eg-val" style="color:'+c+'">'+val+'</div><div class="eg-sub">'+sub+'</div></div>';};
   var h='<div class="eg-sec"><div class="eg-bar"><span class="t">Forecast revisions · '+EG.g+'</span><span class="eg-rng">'+Object.keys(D).map(function(k){return '<button class="'+(k===EG.g?'on':'')+'" onclick="egSet(\''+k+'\')">'+k+'</button>';}).join('')+'</span></div>';
-  h+='<div class="eg-meta">Latest snapshot '+fd(dts[n-1])+' · '+g.companies+' companies ('+g.with_fc+' with forecasts, '+g.loss+' loss-making) · funds, trusts, REITs and property investors excluded</div>';
+  h+='<div class="eg-meta">Latest snapshot '+fd(dts[n-1])+' · '+g.companies+' companies ('+g.with_fc+' with forecasts, '+g.loss+' loss-making) · '+(g.note||'funds, trusts, REITs and property investors excluded')+'</div>';
   h+='<div class="eg-tiles">'
     +tile('This-year forecasts · 3 months',sg(c3)+'%',col(c3),'average company · '+sg(m[n-1]-100)+'% since '+fd(dts[0]))
     +tile('Next-year forecasts'+(f2start?' · since '+new Date(f2start+'T00:00:00').toLocaleDateString('en-GB',{month:'short',year:'2-digit'}):''),f2!=null?sg(f2-100)+'%':'–',f2!=null?col(f2-100):INK,'average company')
@@ -9643,7 +9648,10 @@ function egRender(){
   [-bm,-bm/2,0,bm/2,bm].forEach(function(v){s+='<line x1="'+l+'" x2="'+(W-r)+'" y1="'+yb(v)+'" y2="'+yb(v)+'" stroke="'+(v===0?INK:GRID)+'"/><text x="'+(l-6)+'" y="'+(yb(v)+3)+'" text-anchor="end" font-size="10" fill="'+AX+'">'+(v>0?'+':'')+v+'</text>';});
   s+=ovl('brd',H);
   var bw=(W-l-r)/n*0.8;
-  g.breadth.forEach(function(v,i){if(v==null)return;var a=yb(0),c=yb(v);s+='<rect x="'+(x(dts[i])-bw/2).toFixed(1)+'" y="'+Math.min(a,c).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.abs(c-a).toFixed(1)+'" fill="'+(v>=0?GRN:RED)+'" opacity=".85"/>';});
+  g.breadth.forEach(function(v,i){if(v==null)return;var a=yb(0),c=yb(v);
+    /* bar no wider than 80% of the gap to its neighbours (uneven back-filled US points would overlap) */
+    var gp=Infinity; if(i>0)gp=Math.min(gp,x(dts[i])-x(dts[i-1])); if(i<n-1)gp=Math.min(gp,x(dts[i+1])-x(dts[i])); var w=Math.max(2,Math.min(bw,gp*0.8));
+    s+='<rect x="'+(x(dts[i])-w/2).toFixed(1)+'" y="'+Math.min(a,c).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.abs(c-a).toFixed(1)+'" fill="'+(v>=0?GRN:RED)+'" opacity=".85"/>';});
   if(!(EG.ov.brd&&hasPx))s+='<text x="'+(W-r+6)+'" y="'+(yb(bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+GRN+'">UPGRADES</text><text x="'+(W-r+6)+'" y="'+(yb(-bm*0.6)+3)+'" font-size="10" font-weight="700" fill="'+RED+'">DOWNGRADES</text>';
   s+=ticks(H)+cur(H)+'</svg>';
   h+='<h4><span>Revision breadth · % of companies upgraded minus % downgraded over 4 weeks</span><span class="eg-leg"><span><i style="background:'+GRN+'"></i>Upgrades</span><span><i style="background:'+RED+'"></i>Downgrades</span>'+ovbtn('brd')+'</span></h4>'+s;
