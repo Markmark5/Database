@@ -1516,6 +1516,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div style="display:flex;flex-direction:column;gap:2px;">
               <label class="band-chk rev-chk" style="--rc:var(--green)"><input type="checkbox" id="f-peg1" onchange="applyFilters()"><span class="band-chk-lbl">PEG roll &lt; 1</span><span class="band-cnt" id="cnt-peg1">0</span></label>
               <label class="band-chk rev-chk" style="--rc:#ffc400"><input type="checkbox" id="f-peg15" onchange="applyFilters()"><span class="band-chk-lbl">PEG roll &lt; 1.5</span><span class="band-cnt" id="cnt-peg15">0</span></label>
+              <label class="band-chk rev-chk" style="--rc:#ff4757"><input type="checkbox" id="f-peg3" onchange="applyFilters()"><span class="band-chk-lbl" style="color:#ff4757">PEG roll &gt; 3</span><span class="band-cnt" id="cnt-peg3">0</span></label>
             </div>
           </div>
           <div class="sb-sec">
@@ -3468,8 +3469,9 @@ function applyFilters(){
   const ixMap=fIx.length?indexMap():null;
   const fC30=document.getElementById('f-cal30').checked,c30=fC30?cal30Set():null;
   const fTD=document.getElementById('f-today').checked;
-  const fPg=document.getElementById('f-peg1').checked?1:document.getElementById('f-peg15').checked?1.5:0, pgC={};
-  const pegOk=function(t){t=String(t||'').toUpperCase();if(!(t in pgC)){var x=rollPeg(t);pgC[t]=x.peg!=null&&x.peg<fPg;}return pgC[t];};
+  const fPl=document.getElementById('f-peg1').checked?1:document.getElementById('f-peg15').checked?1.5:0, fPh=document.getElementById('f-peg3').checked, fPg=!!(fPl||fPh), pgC={};
+  /* PEG roll filters: < 1 / < 1.5 (cheap) and > 3 (expensive); ticking a low and the high one shows either */
+  const pegOk=function(t){t=String(t||'').toUpperCase();if(!(t in pgC)){var x=rollPeg(t);pgC[t]=x.peg!=null&&((fPl&&x.peg<fPl)||(fPh&&x.peg>3));}return pgC[t];};
   const tIso=cal30Iso(new Date());
   const sort=document.getElementById('sort-sel').value,calN=sort==='cal-asc'?calNextMap():null;
   document.body.classList.add('due-on');
@@ -3678,7 +3680,7 @@ function sigWideToggle(){document.body.classList.toggle('sig-wide');sigWideLabel
 function clearFilters(){
   document.getElementById('search-inp').value='';
   ['f-green','f-amber','f-red'].forEach(function(id){document.getElementById(id).checked=true;});
-  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-today','f-wl','f-peg1','f-peg15'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
+  ['f-rev-up','f-rev-dn','f-rev-up2','f-rev-dn2','f-h1-ahead','f-h1-hyp','f-h1-fire','f-cal30','f-today','f-wl','f-peg1','f-peg15','f-peg3'].concat(IX_KEYS.map(function(k){return 'f-ix-'+k;}),TY_KEYS.map(function(k){return 'f-ty-'+k[0];})).forEach(function(id){document.getElementById(id).checked=false;});
   document.getElementById('f-from').value='';
   document.getElementById('f-to').value='';
   applyFilters();
@@ -3884,9 +3886,9 @@ function updateBandCounts(){
   document.getElementById('cnt-cal30').textContent=Object.keys(cal30Set()).length;
   const tdI=cal30Iso(new Date());document.getElementById('cnt-today').textContent=ALL.filter(function(r){return String(r.date).slice(0,10)===tdI;}).length;
   document.getElementById('cnt-wl').textContent=WL.length;
-  const pgT={},pgN={p1:0,p15:0};ALL.forEach(function(r){const t=String(r.ticker||'').toUpperCase();if(!t||(t in pgT))return;const x=rollPeg(t);pgT[t]=1;
-    if(x.peg!=null){if(x.peg<1)pgN.p1++;if(x.peg<1.5)pgN.p15++;}});
-  document.getElementById('cnt-peg1').textContent=pgN.p1;document.getElementById('cnt-peg15').textContent=pgN.p15;
+  const pgT={},pgN={p1:0,p15:0,p3:0};ALL.forEach(function(r){const t=String(r.ticker||'').toUpperCase();if(!t||(t in pgT))return;const x=rollPeg(t);pgT[t]=1;
+    if(x.peg!=null){if(x.peg<1)pgN.p1++;if(x.peg<1.5)pgN.p15++;if(x.peg>3)pgN.p3++;}});
+  document.getElementById('cnt-peg1').textContent=pgN.p1;document.getElementById('cnt-peg15').textContent=pgN.p15;document.getElementById('cnt-peg3').textContent=pgN.p3;
 }
 /* Hover text for H1 TRK / ACCEL marks */
 /* Entry price for display: £71.60 × 100 can come out as 7159.999999999999 — show at most 2 decimals, no trailing zeros */
@@ -3965,8 +3967,8 @@ var RP_IDX2=(typeof WeakMap==='function')?new WeakMap():null, FX=null;
   fetch('https://api.frankfurter.dev/v1/latest?base=GBP').then(function(r){return r.ok?r.json():null;}).then(function(j){
     if(!j||!j.rates)return; FX={rates:j.rates,date:j.date,got:today};
     try{localStorage.setItem('fx_gbp',JSON.stringify(FX));}catch(e){}
-    try{var a=document.getElementById('f-peg1'),b=document.getElementById('f-peg15'),s=document.getElementById('sort-sel');
-      if((a&&a.checked)||(b&&b.checked)||(s&&s.value==='peg'))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
+    try{var a=document.getElementById('f-peg1'),b=document.getElementById('f-peg15'),c3=document.getElementById('f-peg3'),s=document.getElementById('sort-sel');
+      if((a&&a.checked)||(b&&b.checked)||(c3&&c3.checked)||(s&&s.value==='peg'))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
   }).catch(function(){});
 })();
 function rpCcy(tk){
@@ -7672,8 +7674,8 @@ function liveOnAllFetched(errors, total) {
   liveRenderSectorButtons();
   if (liveActiveSector) liveRenderTable(liveActiveSector);
   try{if(typeof ignALoad==='function')ignALoad();}catch(e){}   /* Ignition Group A forecasts for the charts' since-Friday step */
-  try{var pf1=document.getElementById('f-peg1'),pf2=document.getElementById('f-peg15');   /* PEG filters use live prices */
-    if((pf1&&pf1.checked)||(pf2&&pf2.checked))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
+  try{var pf1=document.getElementById('f-peg1'),pf2=document.getElementById('f-peg15'),pf3=document.getElementById('f-peg3');   /* PEG filters use live prices */
+    if((pf1&&pf1.checked)||(pf2&&pf2.checked)||(pf3&&pf3.checked))applyFilters();else if(typeof updateBandCounts==='function')updateBandCounts();}catch(e){}
   try{
     var bwOv=document.getElementById('bw-fs');
     if(bwOv&&bwOv.classList.contains('open')&&typeof window.bwFsRender==='function')window.bwFsRender();
