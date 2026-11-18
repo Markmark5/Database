@@ -193,6 +193,9 @@ body{background:var(--bg);font-family:var(--mono);color:var(--text-primary);font
 .band-cnt{font-family:var(--mono);font-size:9px;color:var(--text-dim);margin-left:auto;}
 .rev-chk:has(input:checked){background:var(--surface3);box-shadow:inset 2px 0 0 var(--rc);}
 .rev-arr{font-family:var(--mono);font-size:10px;width:12px;text-align:center;flex-shrink:0;}
+.sb-launch{width:100%;margin:0 0 14px;padding:8px 10px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#00d97e;background:#00140a;border:1px solid #00d97e66;border-radius:5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.sb-launch:hover{background:#002414;border-color:#00d97e}
+.sb-launch span{font-weight:400;color:#7fe8b8}
 .sb-clr{width:100%;margin-top:5px;padding:4px;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--text-dim);border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all .15s;}
 .sb-clr:hover{color:var(--text-secondary);border-color:var(--border-bright);}
 .sb-stat{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);}
@@ -1461,6 +1464,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
         <!-- Sidebar -->
         <div class="rns-sidebar" id="rns-sidebar">
           <div class="sb-sec">
+            <button class="sb-launch" onclick="rnsToCycles()" title="Open every ticker in the filtered list as charts, in the same order">&#128200; Launch Filtered Charts <span id="cnt-launch"></span></button>
             <div class="sb-lbl">Search</div>
             <input class="sb-search" id="search-inp" placeholder="Ticker or company… (⌘K)" oninput="window.EXACT_TICKER=null;applyFilters()">
           </div>
@@ -1545,7 +1549,6 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
             <div style="display:flex;align-items:center;gap:5px;">
               <button style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--amber);border:1px solid var(--amber);cursor:pointer;" onclick="toggleRnsSidebar()" title="Show / hide filters">☰ FILTERS</button>
               <button id="sigwide-btn" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="sigWideToggle()">▶ FULL TEXT VIEW</button>
-              <button id="rns-cyc-btn" title="Open the tickers these filters show as Cycles charts" style="font-family:var(--mono);font-size:9px;padding:4px 9px;border-radius:3px;background:var(--surface2);color:var(--text-secondary);border:1px solid var(--border);cursor:pointer;margin-right:6px;" onclick="rnsToCycles()">▶ CYCLES</button>
               <span style="font-family:var(--mono);font-size:9px;color:var(--text-dim);">Sort:</span>
               <select class="sb-sel" id="sort-sel" style="margin-bottom:0;width:auto;" onchange="applyFilters()">
                 <option value="date-desc">Date ↓</option>
@@ -3517,6 +3520,7 @@ function applyFilters(){
     }
   });
   PAGE=1;renderRows();updateBandCounts();
+  var cl=document.getElementById('cnt-launch');if(cl){var u={};FILTERED.forEach(function(r){u[String(r.ticker||'').toUpperCase()]=1;});cl.textContent=Object.keys(u).length+' tickers';}
   const fs=document.getElementById('rns-fs');if(fs&&fs.classList.contains('open')&&window.rnsFsRender)window.rnsFsRender();
 }
 
@@ -10522,7 +10526,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   var URLS='https://raw.githubusercontent.com/Markmark5/Database/main/data/cycles_urls.json';
   var ORDER=['BULL','PULLBACK BULL','EARLY BULL','EARLY BEAR','PULLBACK BEAR','BEAR'];
   var COL={'ALL':'#c8c8d8','BULL':'#00d97e','PULLBACK BULL':'#7be3a8','EARLY BULL':'#4a9eff','EARLY BEAR':'#ffb020','PULLBACK BEAR':'#ff8c7a','BEAR':'#ff4757'};
-  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all', PICK=null;   /* PICK: tickers sent from RNS Scorecards */
+  var D=null, T=0, cur='BULL', chartsOnly=true, q='', IO=null, sortBy='tg', show='all', PICK=null, PORD=null;   /* PICK: tickers sent from RNS Scorecards */
   function title(r){return r.toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});}
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function csv(t){var R=[],r=[],f='',i=0,Q=false;
@@ -10716,6 +10720,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   function base(d){return (PICK?PICK.has(d.t):(!chartsOnly||lite(d.t)))&&pass(d);}
   function list(){return D.filter(function(d){return (cur=='ALL'||d.r==cur)&&base(d)&&(!q||d.t.toLowerCase().indexOf(q)==0||d.n.toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){
+      if(PORD&&sortBy==='so')return (PORD[a.t]-PORD[b.t]);   /* charts from RNS Scorecards: the scorecard list's own order */
       if(/^st/.test(show)){var p=stg(a.t), r=stg(b.t);   /* a stage shows the latest change into it first */
         if(p&&r&&p.d!==r.d)return p.d<r.d?1:-1;}
       else if(/^nd\d+$/.test(show)){var x=lastPr(a.t), y=lastPr(b.t), CR={g:0,r:1};   /* New Signals: newest day first; in each day green, then red, then neutral */
@@ -10761,7 +10766,7 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
     document.getElementById('cyc-cnt').textContent=L.length+' tickers';
     var pk=document.getElementById('cyc-pick');
     if(pk){pk.style.display=PICK?'flex':'none';
-      if(PICK)pk.innerHTML='<span>&#9776; From RNS Scorecards filters · <b>'+L.length+'</b> of '+PICK.size+' tickers'+(L.length<PICK.size?' <span style="opacity:.7">(others not in the live sheets or this regime/filter)</span>':'')+'</span><button onclick="cycPickClear()">✕ Show all</button>';}
+      if(PICK)pk.innerHTML='<span>&#128200; Filtered charts from RNS Scorecards, in scorecard order · <b>'+L.length+'</b> of '+PICK.size+' tickers'+(L.length<PICK.size?' <span style="opacity:.7">(others not in the live sheets or this regime/filter)</span>':'')+'</span><button onclick="cycPickClear()">✕ Show all</button>';}
     document.querySelectorAll('.cyc-btn').forEach(function(b){var r=b.dataset.r;
       b.querySelector('i').textContent=D.filter(function(d){return (r=='ALL'||d.r==r)&&base(d);}).length;b.classList.toggle('on',r==cur);});
     var box=document.getElementById('cyc-list'), html;
@@ -10783,22 +10788,26 @@ if(typeof window.dbRestoreApply==='function'&&!window.dbRestoreApply._rcal){
   }
   var built=false;
   window.cycOpen=function(pick){
-    PICK=pick&&pick.length?new Set(pick):null;
+    PICK=pick&&pick.length?new Set(pick):null; PORD=null;
+    if(PICK){PORD={};pick.forEach(function(t,i){PORD[t]=i;});}
     if(!built){built=true;
       var b=document.getElementById('cyc-bar'); b.innerHTML=bar();
       b.addEventListener('click',function(e){var x=e.target.closest('.cyc-btn');if(x){cur=x.dataset.r;draw();}});
       document.getElementById('cyc-co').onchange=function(){chartsOnly=!this.checked;draw();};
       document.getElementById('cyc-show').onchange=function(){var v=this.value;
-        if(v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
+        if(v=='so'||v=='tg'||v=='ma'||v=='tgb'){sortBy=v;show='all';}else{show=v;cur='ALL';}   /* a filter starts across all regimes */
         this.className='cyc-q'+(/^nd/.test(v)?' f-new':/^(early|g30|ac|f12|turn)$/.test(v)?' f-bull':/^(tgb|ca|r30|sd)$/.test(v)?' f-bear':/^st/.test(v)?' f-st':'');
         draw();};
       document.getElementById('cyc-q').oninput=function(){q=this.value.trim().toLowerCase();draw();};}
     document.getElementById('cyc-co').checked=false; chartsOnly=true;   /* opens on charted tickers only */
-    var f=document.getElementById('cyc-show'); f.value='tg'; f.onchange(); cur=PICK?'ALL':'BULL';   /* always opens on every ticker, Bull regime (all regimes for a scorecard pick), Text + G sort */
+    var f=document.getElementById('cyc-show'), so=f.querySelector('option[value="so"]');
+    if(PICK&&!so){so=document.createElement('option');so.value='so';so.textContent='Scorecard order';f.insertBefore(so,f.firstChild);}   /* only offered for a scorecard launch */
+    if(!PICK&&so)so.remove();
+    f.value=PICK?'so':'tg'; f.onchange(); cur=PICK?'ALL':'BULL';   /* always opens on every ticker, Bull regime (all regimes for a scorecard pick), Text + G sort */
     document.getElementById('cyc-ov').classList.add('on');
     if(!D||Date.now()-T>2*60000)load(); else note(BAD);   /* sheets refresh every 10 min: re-read after 2 min */
   };
-  window.cycPickClear=function(){PICK=null;cur='BULL';draw();};
+  window.cycPickClear=function(){PICK=null;PORD=null;cur='BULL';var f=document.getElementById('cyc-show'),so=f.querySelector('option[value="so"]');if(so)so.remove();f.value='tg';f.onchange();};
   window.cycClose=function(){document.getElementById('cyc-ov').classList.remove('on');};
   window.addEventListener('keydown',function(e){
     var pp=document.getElementById('pp-ov');
