@@ -2906,7 +2906,7 @@ function csStampBatch(batch){
     if(!haveToday){res.missing.push(rec.ticker);return;}
     var p=snap.prices[(rec.ticker||'').toUpperCase()];
     if(typeof p==='number'&&isFinite(p)&&p>0){
-      rec.entryPrice=p;
+      rec.entryPrice=+p.toFixed(p<1?4:2);
       res.stamped.push(rec.ticker);
     } else {
       res.missing.push(rec.ticker);            // not in snapshot
@@ -2939,7 +2939,7 @@ async function csStampExistingToday(){
     if(rec.entryPrice)return;              // never overwrite
     var p=snap.prices[(rec.ticker||'').toUpperCase()];
     if(typeof p==='number'&&isFinite(p)&&p>0){
-      rec.entryPrice=p;res.stamped.push(rec.ticker);toSave.push(rec);
+      rec.entryPrice=+p.toFixed(p<1?4:2);res.stamped.push(rec.ticker);toSave.push(rec);
     } else {
       res.missing.push(rec.ticker);
     }
@@ -3414,7 +3414,7 @@ function buildRow(rec){
   return '<div class="row-wrap" id="wrap-'+uid+'" data-id="'+rec.id+'"><div class="row c-'+b+(due?' has-due':'')+'">'
     +'<div class="cell-ticker">'+wlStar(rec.ticker)+'<div class="ticker-block"><div class="ticker-top-row"><div class="ticker-sym-group"><div class="ticker-sym">'+rec.ticker+'</div><div class="index-nm">'+(rec.index||'')+'</div></div><div class="score-cluster"><div class="score-line"><div class="score-big">'+rec.score+'</div><div class="score-denom">/100</div></div></div></div>'
     +'<div class="company-nm">'+(rec.company||'')+'</div>'+nrChip(rec)
-    +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?rec.entryPrice+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
+    +'<div class="verdict-row"><div class="verdict">'+(rec.verdict||bandVerdict(rec.score))+'</div><span class="ep-chip" id="ep-'+uid+'" onclick="event.stopPropagation();epEdit(\''+rec.id+'\',\''+uid+'\')" title="Entry price — click to set">'+(rec.entryPrice?epFmt(rec.entryPrice)+'p':'+ ep')+'</span><div class="rns-date">'+fmtDate(rec.date)+'</div></div>'
     +(function(){var ye=lookupYE(rec.ticker);return ye?'<div class="sc-ye">YE '+ye+'</div>':'';})()
     +'<div class="pill-row"><div class="rns-pill">'+(rec.rnsType||'RNS')+'</div><div class="mode-pill">'+(rec.mode||'')+'</div>'+(rec.calData&&rec.calData.double?'<div class="mode-pill">📈🔥 Double</div>':'')
     +'<button style="font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;background:var(--red-dim);color:var(--red);border:1px solid var(--red-mid);cursor:pointer;margin-left:auto;" onclick="event.stopPropagation();deleteRec(\''+rec.id+'\')">✕</button>'
@@ -3846,7 +3846,7 @@ function renderBestWorstLive(){
         + '<span class="bw-ticker"> ' + r.ticker + '</span></div>'
         + '<div style="display:flex;flex-direction:column;align-items:flex-end;">'
         + '<span style="font-family:var(--mono);font-size:13px;font-weight:700;color:' + col + ';">' + sign + e.pct.toFixed(1) + '%</span>'
-        + '<span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);">' + r.entryPrice + 'p → ' + e.currentPrice.toFixed(1) + 'p</span>'
+        + '<span style="font-family:var(--mono);font-size:8px;color:var(--text-dim);">' + epFmt(r.entryPrice) + 'p → ' + e.currentPrice.toFixed(1) + 'p</span>'
         + '</div></div>';
     }).join('');
   }
@@ -3877,6 +3877,8 @@ function updateBandCounts(){
   document.getElementById('cnt-peg1').textContent=pgN.p1;document.getElementById('cnt-peg15').textContent=pgN.p15;
 }
 /* Hover text for H1 TRK / ACCEL marks */
+/* Entry price for display: £71.60 × 100 can come out as 7159.999999999999 — show at most 2 decimals, no trailing zeros */
+function epFmt(v){v=+v;return isFinite(v)?String(+v.toFixed(v<1?4:2)):String(v);}   /* sub-penny prices keep 4 decimals */
 function tipEsc(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 function h1Tip(ind,rec){
   const lbl=String(ind.lbl||'').toUpperCase().replace(/🔬/g,''),h2=/H2/.test(lbl),name=/^REV/.test(lbl.trim())?'Revenue':(/EPS/.test(lbl)?'EPS':lbl.trim()||'Metric');
@@ -4430,12 +4432,12 @@ function epEdit(id, uid) {
   inp.select();
   function commit() {
     var val = parseFloat(inp.value.replace(/[^0-9.]/g,''));
-    if (!isNaN(val) && val > 0) { rec.entryPrice = val; dbPut(rec); }
+    if (!isNaN(val) && val > 0) { rec.entryPrice = +val.toFixed(val<1?4:2); dbPut(rec); }
     var newChip = document.createElement('span');
     newChip.className = 'ep-chip' + (rec.entryPrice ? ' set' : '');
     newChip.id = 'ep-'+uid;
     newChip.title = 'Entry price — click to edit';
-    newChip.textContent = rec.entryPrice ? rec.entryPrice+'p' : '+ ep';
+    newChip.textContent = rec.entryPrice ? epFmt(rec.entryPrice)+'p' : '+ ep';
     newChip.onclick = function(e){ e.stopPropagation(); epEdit(id, uid); };
     inp.replaceWith(newChip);
   }
