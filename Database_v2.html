@@ -6585,7 +6585,15 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   var scales={x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{maxTicksLimit:10,font:{family:'Inter',size:9},color:'#6a6a85',maxRotation:30}},
     y:{position:'left',grid:{color:'rgba(255,255,255,0.05)'},ticks:{font:{family:'Inter',size:9},color:cfg.c1,callback:cfg.fmt}}};
   if(!cfg.pxOnMain)scales.y2={position:'right',grid:{display:false},ticks:{font:{family:'Inter',size:9},color:'rgba(200,210,235,0.55)',callback:function(v){return fcFmtPence(v);}},title:{display:true,text:'Share price',font:{family:'Inter',size:8},color:'rgba(200,210,235,0.45)'}};
-  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;
+  /* Since Friday's snapshot: one dashed step from the last weekly point to today's live-sheet figure (only when it moved) */
+  if(cfg.live){var n0=labels.length,last=function(f){for(var k=n0-1;k>=0;k--){var v=rows[k][f];if(v!=null&&!isNaN(v))return {i:k,v:v};}return null;};
+    var adds=[[cfg.f1,cfg.live.v1,cfg.c1,cfg.l1],[cfg.f2,cfg.live.v2,cfg.c2,cfg.l2]].map(function(q){var L=q[0]&&last(q[0]);
+      if(!L||q[1]==null||isNaN(q[1])||Math.abs(q[1]/L.v-1)<0.0005||Math.abs(q[1]/L.v-1)>0.25)return null;   /* unchanged, or a jump that is more likely a year-end roll */
+      var d=new Array(n0+1).fill(null);d[L.i]=L.v;d[n0]=q[1];
+      return {label:q[3]+' · since Fri',data:d,borderColor:q[2],backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],tension:0,fill:false,spanGaps:true,
+        pointRadius:d.map(function(v,k){return k===n0?4:0;}),pointBackgroundColor:'#0f0f15',pointBorderColor:q[2],pointBorderWidth:2,yAxisID:'y'};}).filter(Boolean);
+    if(adds.length){labels.push(cfg.live.lab);datasets.forEach(function(d){d.data.push(null);});adds.forEach(function(d){datasets.push(d);});}}
+  store[id]=new Chart(ctx,{type:'line',data:{labels:labels,datasets:datasets},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:true,labels:{filter:function(it){return !/since Fri$/.test(it.text);},boxWidth:14,boxHeight:2,font:{family:'Inter',size:9},color:'#9a9ab5'}},tooltip:{backgroundColor:'#1a1a2a',borderColor:'var(--border)',borderWidth:1,titleColor:'#f2f2f8',bodyColor:'#9a9ab5',titleFont:{family:'Inter',size:9},bodyFont:{family:'Inter',size:9},callbacks:{label:function(c){var v=c.parsed.y;if(v===null)return null;
       if(d1&&c.dataset===d1){var ov=rows[c.dataIndex][cfg.f1];
         if(joinIdx[c.dataIndex])return ' '+c.dataset.label+': '+cfg.fmt(ov)+' (year reporting) \u00b7 2yr fc '+cfg.fmt(v)+' becomes fc';
         if(preFaint&&c.dataIndex<firstR-1)return ' old fc (year reporting): '+cfg.fmt(v);}
@@ -6683,8 +6691,9 @@ function fcRenderInto(contentId,active,tab,chartPrefix,chartStore){
       var faint=sc>=75?'rgba(0,200,20,0.18)':sc>=50?'rgba(245,179,47,0.18)':'rgba(224,37,37,0.18)';
       scoreEvents.push({x:x,kind:'score',label:sc,color:col,colorFaint:faint,yVal:tpY,pinned:pinned,date:r.date});});
     var _pinN=0;scoreEvents.filter(function(e){return e.pinned;}).sort(function(a,b){return String(b.date).localeCompare(String(a.date));}).forEach(function(e){e.pinIdx=_pinN++;});}
-  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events});
-  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events});
+  var LV=(typeof liveData!=='undefined'&&liveData[active])||null, lvLab='Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  fcBuildChart2(chartStore,chartPrefix+'cr',rows,{f1:'rev',l1:'Rev fc',c1:'#4a9eff',f2:'rev2',l2:'Rev 2yr fc',c2:'#ffb340',fmt:fmtRev,events:events,live:LV&&{v1:+LV.turn1y,v2:+LV.turn2y,lab:lvLab}});
+  fcBuildChart2(chartStore,chartPrefix+'ce',rows,{f1:'eps',l1:'EPS fc',c1:'#00c814',f2:'eps2',l2:'EPS 2yr fc',c2:'#ffb340',fmt:fmtEps,events:events,live:LV&&{v1:+LV.eps1,v2:+LV.eps2,lab:lvLab}});
   fcBuildChart2(chartStore,chartPrefix+'ct',rows,{f1:'tp',l1:'Consensus target',c1:'#c07ef7',f2:null,fmt:fmtTp,pxOnMain:true,events:scoreEvents});
 }
 function fcRender(){fcRenderInto('fc-content',fcActive,fcTab,'fc-',fcChartObjs);}
