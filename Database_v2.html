@@ -1634,7 +1634,7 @@ body.due-on #rns-fs-content .col-headers{padding-right:22px;}
       <div class="fc-paste-overlay" id="fc-overlay" onclick="fcHandleOverlay(event)">
         <div class="fc-modal">
           <div class="fc-modal-title">Paste ShareScope data block</div>
-          <textarea id="fc-pasteArea" placeholder="Paste your SHARESCOPE DATA BLOCK — TICKER text here…"></textarea>
+          <textarea id="fc-pasteArea" placeholder="Paste your DATABLOCK — TICKER text here…"></textarea>
           <div class="fc-modal-actions">
             <button class="fc-btn" onclick="fcClosePaste()">Cancel</button>
             <button class="fc-btn primary" onclick="fcSubmitPaste()">Load</button>
@@ -4786,13 +4786,49 @@ function exFyFlag(h1Raw, h2Raw, fyRaw) {
   return '';
 }
 
+/* Live lines for the datablock (scoring before the open): today's live price and the last trading day's close
+   from the live sheets (Price and % from Close), and today's live forecasts (EPS: live sheets; revenue: Ignition
+   Group A) beside the upload's FY1/FY2. Blank or n/a when the live data isn't loaded. */
+function exPx(v, r2){
+  if(v==null||isNaN(v))return '-';
+  var pr=String((r2&&r2['Price'])||'').trim();
+  if(/p$/i.test(pr)||/^£/.test(pr)||!pr)return v>=1000?'£'+(v/100).toFixed(2):(+v.toFixed(2))+'p';
+  var sym=(pr.match(/^[^\d\-.]+/)||[''])[0], suf=/¢$/.test(pr)?'¢':'';
+  return sym+(+v.toFixed(3))+suf;
+}
+function exPrevTradingDay(){
+  var d=new Date(), mins=d.getHours()*60+d.getMinutes();
+  if(!(mins>=16*60+35&&d.getDay()>=1&&d.getDay()<=5)){do{d.setDate(d.getDate()-1);}while(d.getDay()===0||d.getDay()===6);}
+  return d;
+}
+function exLivePriceLines(tk, r2){
+  var L=(typeof liveData!=='undefined'&&liveData[String(tk).toUpperCase()])||null, out=[];
+  var fd=function(d){return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});};
+  if(!L||L.price==null||isNaN(L.price)){out.push('Live price         : -');out.push('Prev close         : -');return out;}
+  var at=(typeof liveFetchedAt!=='undefined'&&liveFetchedAt)?new Date(liveFetchedAt):null;
+  out.push('Live price         : '+exPx(L.price,r2)+(at?'   ('+fd(at)+' '+String(at.getHours()).padStart(2,'0')+':'+String(at.getMinutes()).padStart(2,'0')+')':'   (cached, not refreshed this session)'));
+  var pc=(L.pct!=null&&!isNaN(L.pct))?L.price/(1+L.pct/100):null;
+  out.push('Prev close         : '+(pc!=null?exPx(pc,r2)+'   ('+fd(exPrevTradingDay())+')':'-'));
+  return out;
+}
+function exLiveFcLines(tk, weekly, field, fy1, fy2){
+  var lv=(typeof fcLive==='function')?fcLive(tk, weekly&&weekly.length?weekly:[{date:''}]):null, f2=field==='eps'?'eps2':'rev2';
+  var lab=field==='eps'?'EPS':'Revenue', dt=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  var pad=function(t){return (t+'                   ').slice(0,19)+': ';};
+  if(!lv)return [pad('Live fc '+lab)+'n/a (live data not loaded, or full-year results this week)'];
+  var chg=function(v,b){b=exNum(b);if(v==null||isNaN(b)||!b)return '';var x=(v/b-1)*100;return '  ('+(Math.abs(x)<0.05?'±0.0':(x>0?'+':'')+x.toFixed(1))+'% vs upload)';};
+  var fv=function(v){return v==null?'-':v.toLocaleString('en-GB',{minimumFractionDigits:1,maximumFractionDigits:1});};
+  var a=lv[field], b=lv[f2];
+  return [pad('FY1 fc '+lab+' live')+fv(a)+chg(a,fy1)+'  '+dt,
+          pad('FY2 fc '+lab+' live')+fv(b)+chg(b,fy2)+'  '+dt];
+}
 function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   const lines = [];
   const sep = '='.repeat(60);
   const r1 = row1 || {}, r2 = row2 || {}, r3 = row3 || {}, r5 = row5 || {};
 
   lines.push(sep);
-  lines.push('SHARESCOPE DATA BLOCK — ' + ticker.toUpperCase());
+  lines.push('DATABLOCK — ' + ticker.toUpperCase());
   lines.push(sep);
 
   const name = (r2['Name'] || r1['Name'] || '-').trim();
@@ -4808,7 +4844,8 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('');
 
   lines.push('── PRICE & CONSENSUS ──────────────────────────────');
-  lines.push('Close price        : ' + ((r2['Close']||'').trim() || '-'));
+  exLivePriceLines(ticker, r2).forEach(function(l){lines.push(l);});
+  lines.push('Close (upload)     : ' + ((r2['Close']||'').trim() || '-'));
   lines.push('Consensus TP       : ' + ((r2['Consensus target price']||'').trim() || '-'));
   lines.push('Shares in issue    : ' + exFmt(r2['Shares in issue (m)'],1) + 'm');
   lines.push('');
@@ -4820,6 +4857,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r1['H1 EPS']) + ' / ' + exFmt(r1['H2 EPS']) + (isQ4 ? '  → FY: ' + exFmt(r1['FY EPS']) + exFyFlag(r1['H1 EPS'],r1['H2 EPS'],r1['FY EPS']) : ''));
   lines.push('FY1 fc EPS         : ' + exFmt(r1['fc EPS']));
   lines.push('FY2 fc EPS         : ' + exFmt(r1['2y fc EPS']));
+  exLiveFcLines(ticker, weekly, 'eps', r1['fc EPS'], r1['2y fc EPS']).forEach(function(l){lines.push(l);});
   lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 EPS'],r1['3y ago H2 EPS'],r1['2y ago H1 EPS'],r1['2y ago H2 EPS'],r1['1y ago H1 EPS'],r1['1y ago H2 EPS'],r1['H1 EPS'],r1['H2 EPS']) + '  ← EPS H1 as % of full yr');
   lines.push('');
 
@@ -4830,6 +4868,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
   lines.push('Current H1 / H2    : ' + exFmt(r1['H1 Turnover (m)'],1) + ' / ' + exFmt(r1['H2 Turnover (m)'],1) + (isQ4 ? '  → FY: ' + exFmt(r1['FY Turnover (m)'],1) : ''));
   lines.push('FY1 fc Revenue     : ' + exFmt(r1['fc Turnover (m)'],1));
   lines.push('FY2 fc Revenue     : ' + exFmt(r1['2y fc Turnover (m)'],1));
+  exLiveFcLines(ticker, weekly, 'rev', r1['fc Turnover (m)'], r1['2y fc Turnover (m)']).forEach(function(l){lines.push(l);});
   lines.push('H1 avg split       : ' + exCalcH1Split(r1['3y ago H1 Turnover (m)'],r1['3y ago H2 Turnover (m)'],r1['2y ago H1 Turnover (m)'],r1['2y ago H2 Turnover (m)'],r1['1y ago H1 Turnover (m)'],r1['1y ago H2 Turnover (m)'],r1['H1 Turnover (m)'],r1['H2 Turnover (m)']) + '  ← Rev H1 as % of full yr');
   lines.push('');
 
@@ -4964,6 +5003,10 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
 
 /* ── Main extract ── */
 function exRun() {
+  /* live forecasts for the datablock: make sure Ignition's sheets are in first (once; 6s at most) */
+  if(typeof ignALoad==='function'&&!IGN_A&&!exRun._w){exRun._w=1;
+    Promise.race([ignALoad(),new Promise(function(r){setTimeout(r,6000);})]).then(function(){exRun();},function(){exRun();});return;}
+  exRun._w=0;
   const raw = document.getElementById('ex-tickerInput').value.toUpperCase();
   const tickers = raw.split(/[\s,\n]+/).map(function(t){return t.trim();}).filter(Boolean);
   if (!tickers.length) { exShowError('Enter at least one ticker symbol'); return; }
@@ -5205,8 +5248,8 @@ function scParseTxt(text) {
   const companies = [];
   for (let i=0; i<blocks.length-1; i++) {
     const hdr = blocks[i].trim();
-    if (!hdr.includes('SHARESCOPE DATA BLOCK')) continue;
-    const tickM = hdr.match(/SHARESCOPE DATA BLOCK\s*[—\-–]\s*(\S+)/);
+    if (!/SHARESCOPE DATA BLOCK|DATABLOCK/.test(hdr)) continue;   /* title renamed DATABLOCK; old title still read */
+    const tickM = hdr.match(/(?:SHARESCOPE DATA BLOCK|DATABLOCK)\s*[—\-–]\s*(\S+)/);
     const ticker = tickM ? tickM[1] : null;
     const data = blocks[i+1]||'';
     const nameM = data.match(/Name\s*:\s*(.+)/);
@@ -6223,7 +6266,7 @@ function fcLoadCache(){
   }catch(e){}
 }
 function fcSetLoaded(ok){var dot=document.getElementById('fc-statusDot'),txt=document.getElementById('fc-statusTxt');if(dot)dot.style.background=ok?'var(--green)':'var(--text-dim)';if(txt)txt.textContent=ok?(fcActive?fcActive+' loaded':'Data loaded'):'No data loaded';}
-function fcDetectTicker(txt){var m=txt.match(/SHARESCOPE DATA BLOCK\s*[—\-]+\s*(\w+)/i);return m?m[1].toUpperCase():null;}
+function fcDetectTicker(txt){var m=txt.match(/(?:SHARESCOPE DATA BLOCK|DATABLOCK)\s*[—\-]+\s*(\w+)/i);return m?m[1].toUpperCase():null;}
 function fcNum(v){if(v===undefined||v===null)return null;v=String(v).trim();if(!v||v==='-')return null;var n=parseFloat(v.replace(/[£,]/g,'').replace(/p$/i,''));return isNaN(n)?null:n;}
 /* Prices in the weekly file follow ShareScope's convention: '107p' = pence, plain '21.98' = pounds.
    Normalise everything to PENCE so target price and close price share one scale. */
