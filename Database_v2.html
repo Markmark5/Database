@@ -4811,6 +4811,18 @@ function exLivePriceLines(tk, r2){
   out.push('Prev close         : '+(pc!=null?exPx(pc,r2)+'   ('+fd(exPrevTradingDay())+')':'-'));
   return out;
 }
+/* Date of the close in the upload: File 2's "Close" is the last close at the time the files were loaded,
+   so a load before 16:35 (UK) holds the previous trading day's close */
+function exUploadCloseDate(){
+  var iso=null;try{iso=localStorage.getItem('db_slot2_date');}catch(e){}
+  if(!iso)return '';
+  var up=new Date(iso); if(isNaN(up))return '';
+  var uk=function(d,o){return d.toLocaleString('en-GB',Object.assign({timeZone:'Europe/London'},o));};
+  var hm=uk(up,{hour:'2-digit',minute:'2-digit',hour12:false}), mins=+hm.slice(0,2)*60+ +hm.slice(3,5);
+  var wd=uk(up,{weekday:'short'}), d=new Date(up);
+  if(!(mins>=16*60+35&&wd!=='Sat'&&wd!=='Sun')){do{d=new Date(d.getTime()-864e5);}while(/Sat|Sun/.test(uk(d,{weekday:'short'})));}
+  return '   ('+uk(d,{weekday:'short',day:'numeric',month:'short'}).replace(',','')+' close · files loaded '+uk(up,{day:'numeric',month:'short'})+' '+hm+')';
+}
 function exLiveFcLines(tk, weekly, field, fy1, fy2){
   var lv=(typeof fcLive==='function')?fcLive(tk, weekly&&weekly.length?weekly:[{date:''}]):null, f2=field==='eps'?'eps2':'rev2';
   var lab=field==='eps'?'EPS':'Revenue', dt=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
@@ -4845,7 +4857,7 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
 
   lines.push('── PRICE & CONSENSUS ──────────────────────────────');
   exLivePriceLines(ticker, r2).forEach(function(l){lines.push(l);});
-  lines.push('Close (upload)     : ' + ((r2['Close']||'').trim() || '-'));
+  lines.push('Close (upload)     : ' + ((r2['Close']||'').trim() || '-') + exUploadCloseDate());
   lines.push('Consensus TP       : ' + ((r2['Consensus target price']||'').trim() || '-'));
   lines.push('Shares in issue    : ' + exFmt(r2['Shares in issue (m)'],1) + 'm');
   lines.push('');
@@ -5003,9 +5015,18 @@ function exBuildBlock(ticker, row1, row2, row3, weekly, row5) {
 
 /* ── Main extract ── */
 function exRun() {
-  /* live forecasts for the datablock: make sure Ignition's sheets are in first (once; 6s at most) */
-  if(typeof ignALoad==='function'&&!IGN_A&&!exRun._w){exRun._w=1;
-    Promise.race([ignALoad(),new Promise(function(r){setTimeout(r,6000);})]).then(function(){exRun();},function(){exRun();});return;}
+  /* live data for the datablock, once per Extract click: refresh the live sheets if they're only from the cache
+     (prices / prev close), and load Ignition's sheets (live revenue) — 15s at most, then extract anyway */
+  if(!exRun._w){
+    var needLive=typeof csLiveIsFresh==='function'&&!csLiveIsFresh()&&typeof liveRefresh==='function'&&typeof liveGetUrls==='function'&&liveGetUrls().length;
+    var needIgn=typeof ignALoad==='function'&&!IGN_A;
+    if(needLive||needIgn){exRun._w=1;
+      var t0=liveFetchedAt, waits=[];
+      if(needIgn)waits.push(ignALoad().catch(function(){}));
+      if(needLive){liveRefresh();waits.push(new Promise(function(r){var k=setInterval(function(){if(liveFetchedAt&&liveFetchedAt!==t0){clearInterval(k);r();}},300);setTimeout(function(){clearInterval(k);r();},15000);}));}
+      var st=document.getElementById('ex-outputTitle');if(st)st.textContent='Refreshing live prices and forecasts…';
+      Promise.race([Promise.all(waits),new Promise(function(r){setTimeout(r,15000);})]).then(function(){exRun();});return;}
+  }
   exRun._w=0;
   const raw = document.getElementById('ex-tickerInput').value.toUpperCase();
   const tickers = raw.split(/[\s,\n]+/).map(function(t){return t.trim();}).filter(Boolean);
