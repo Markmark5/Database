@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "savedAt": "2026-11-19T08:06:01.479Z",
-    "savedAtLabel": "19 Nov 2026 08:06",
+    "savedAt": "2026-11-19T09:23:08.565Z",
+    "savedAtLabel": "19 Nov 2026 09:23",
     "source": "github-sync"
   },
   "scorecards": [
@@ -222381,6 +222381,684 @@
         "events": []
       },
       "entryPrice": 24.25
+    },
+    {
+      "id": "SSE_2026_11_18",
+      "ticker": "SSE",
+      "score": 64,
+      "company": "SSE PLC",
+      "verdict": "Hold and wait",
+      "date": "2026-11-18",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 100",
+      "signals": [
+        {
+          "pill": "H1 EPS",
+          "type": "green",
+          "textHTML": "H1 adjusted EPS <span class=\"val-up\">66.5p</span>, up 83% and 36.1% of the 184.0p FY consensus vs a 26.0% norm (<span class=\"val-up\">+10.1pp</span>); H2 now needs only 117.5p, flat on the prior year's 117.4p",
+          "textPlain": "H1 adjusted EPS 66.5p, up 83% and 36.1% of the 184.0p FY consensus vs a 26.0% norm (+10.1pp); H2 now needs only 117.5p, flat on the prior year's 117.4p"
+        },
+        {
+          "pill": "GUIDE",
+          "type": "amber",
+          "textHTML": "FY27 adjusted EPS guide 168–193p unchanged; the 184.0p consensus sits <span class=\"val-fl\">1.9%</span> above the 180.5p midpoint, with winter weather and power prices still ahead",
+          "textPlain": "FY27 adjusted EPS guide 168–193p unchanged; the 184.0p consensus sits 1.9% above the 180.5p midpoint, with winter weather and power prices still ahead"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "H1 was pre-released at 64–68p on 1 Oct, so today repeats it; the regime beat its FY26 range (153.5p vs 147–152p), which supports upper-half FY27 delivery",
+          "textPlain": "H1 was pre-released at 64–68p on 1 Oct, so today repeats it; the regime beat its FY26 range (153.5p vs 147–152p), which supports upper-half FY27 delivery"
+        },
+        {
+          "pill": "QUALITY",
+          "type": "amber",
+          "textHTML": "Adjusted tax of <span class=\"val-fl\">6.3%</span> vs 9.4% and weather-led Renewables profit +21% flatter H1; at 9.4% tax H1 EPS is ~63.8p, and Renewables is guided flat for the full year",
+          "textPlain": "Adjusted tax of 6.3% vs 9.4% and weather-led Renewables profit +21% flatter H1; at 9.4% tax H1 EPS is ~63.8p, and Renewables is guided flat for the full year"
+        },
+        {
+          "pill": "THERMAL",
+          "type": "green",
+          "textHTML": "Capacity Market income from 1 Oct lifts H2; Thermal and Transmission guided significantly higher, with record <span class=\"val-up\">£2.6bn</span> H1 capex and RAV up 26% to £17.9bn",
+          "textPlain": "Capacity Market income from 1 Oct lifts H2; Thermal and Transmission guided significantly higher, with record £2.6bn H1 capex and RAV up 26% to £17.9bn"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "+0–2%",
+          "sub": "184.0p → 184–188p",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "na",
+          "sub": "211.3p → na",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "+2–5%",
+          "sub": "£11.12bn→£11.34–11.67bn",
+          "color": "var(--green)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "na",
+          "sub": "£12.11bn → na",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "+0.5%",
+          "style": "color:var(--green)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "−0.1%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+1.1%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "Year End: Mar 2027 · 37 weeks",
+      "sparkSVG": "<svg id=\"spark-SSE\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-SSE\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "+5.4pp",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "+10.1pp",
+          "state": "pos"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "✓",
+          "dev": "",
+          "state": "pos"
+        }
+      ],
+      "importedAt": "2026-11-19T09:22:58.969Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 149.6,
+          "price": 2693
+        },
+        {
+          "d": "06 Mar",
+          "eps": 149.6,
+          "price": 2623
+        },
+        {
+          "d": "13 Mar",
+          "eps": 149.6,
+          "price": 2730
+        },
+        {
+          "d": "20 Mar",
+          "eps": 149.5,
+          "price": 2653
+        },
+        {
+          "d": "27 Mar",
+          "eps": 149.7,
+          "price": 2504
+        },
+        {
+          "d": "03 Apr",
+          "eps": 149.7,
+          "price": 2728
+        },
+        {
+          "d": "10 Apr",
+          "eps": 150.7,
+          "price": 2752.5
+        },
+        {
+          "d": "17 Apr",
+          "eps": 151.2,
+          "price": 2644.5
+        },
+        {
+          "d": "24 Apr",
+          "eps": 151.1,
+          "price": 2661.5
+        },
+        {
+          "d": "08 May",
+          "eps": 151,
+          "price": 2481.5
+        },
+        {
+          "d": "15 May",
+          "eps": 151,
+          "price": 2459
+        },
+        {
+          "d": "22 May",
+          "eps": 149.6,
+          "price": 2409
+        },
+        {
+          "d": "02 Jun",
+          "eps": 182.4,
+          "price": 2308
+        },
+        {
+          "d": "05 Jun",
+          "eps": 182.4,
+          "price": 2388
+        },
+        {
+          "d": "12 Jun",
+          "eps": 183.7,
+          "price": 2396
+        },
+        {
+          "d": "19 Jun",
+          "eps": 182.8,
+          "price": 2312
+        },
+        {
+          "d": "26 Jun",
+          "eps": 182.9,
+          "price": 2419
+        },
+        {
+          "d": "03 Jul",
+          "eps": 183.1,
+          "price": 2460
+        },
+        {
+          "d": "10 Jul",
+          "eps": 183.1,
+          "price": 2417
+        },
+        {
+          "d": "17 Jul",
+          "eps": 183.1,
+          "price": 2429
+        },
+        {
+          "d": "24 Jul",
+          "eps": 183.1,
+          "price": 2440
+        },
+        {
+          "d": "31 Jul",
+          "eps": 183.1,
+          "price": 2347
+        },
+        {
+          "d": "07 Aug",
+          "eps": 183.1,
+          "price": 2376
+        },
+        {
+          "d": "14 Aug",
+          "eps": 183.1,
+          "price": 2431
+        },
+        {
+          "d": "21 Aug",
+          "eps": 183.1,
+          "price": 2385
+        },
+        {
+          "d": "28 Aug",
+          "eps": 183.1,
+          "price": 2381
+        },
+        {
+          "d": "07 Sep",
+          "eps": 182.6,
+          "price": 2375
+        },
+        {
+          "d": "11 Sep",
+          "eps": 182.6,
+          "price": 2362
+        },
+        {
+          "d": "18 Sep",
+          "eps": 182.9,
+          "price": 2432
+        },
+        {
+          "d": "25 Sep",
+          "eps": 183.9,
+          "price": 2475
+        },
+        {
+          "d": "02 Oct",
+          "eps": 183.8,
+          "price": 2473
+        },
+        {
+          "d": "09 Oct",
+          "eps": 184.1,
+          "price": 2437
+        },
+        {
+          "d": "16 Oct",
+          "eps": 184.1,
+          "price": 2540
+        },
+        {
+          "d": "23 Oct",
+          "eps": 184.2,
+          "price": 2564
+        },
+        {
+          "d": "30 Oct",
+          "eps": 184.2,
+          "price": 2647
+        },
+        {
+          "d": "06 Nov",
+          "eps": 184,
+          "price": 2652
+        },
+        {
+          "d": "13 Nov",
+          "eps": 184,
+          "price": 2689
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "Q3 Trading Statement",
+            "type": "Q3",
+            "from": "2027-02-01",
+            "to": "2027-02-10",
+            "label": "Early Feb 2027",
+            "conf": "provisional",
+            "src": "RNS"
+          },
+          {
+            "event": "Trading Update",
+            "type": "Pre-FY TU",
+            "from": "2027-04-01",
+            "to": "2027-04-10",
+            "label": "Early Apr 2027",
+            "conf": "provisional",
+            "src": "RNS"
+          },
+          {
+            "event": "Preliminary results",
+            "type": "FY results",
+            "from": "2027-05-26",
+            "to": "2027-05-26",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      }
+    },
+    {
+      "id": "EXPN_2026_11_18",
+      "ticker": "EXPN",
+      "score": 56,
+      "company": "Experian PLC",
+      "verdict": "Hold and wait",
+      "date": "2026-11-18",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 100",
+      "signals": [
+        {
+          "pill": "GUIDE",
+          "type": "amber",
+          "textHTML": "FY27 benchmark EPS guided at c.12% (≈200.1c diluted) vs the 201.1c consensus (<span class=\"val-fl\">−0.5%</span>); EBIT growth c.10%, margin now at least +50bp, net interest c.$250m",
+          "textPlain": "FY27 benchmark EPS guided at c.12% (≈200.1c diluted) vs the 201.1c consensus (−0.5%); EBIT growth c.10%, margin now at least +50bp, net interest c.$250m"
+        },
+        {
+          "pill": "REVENUE",
+          "type": "red",
+          "textHTML": "Organic revenue guide trimmed to <span class=\"val-dn\">6–7%</span> from 6–8% on higher US mortgage rates; North America organic growth slowed to 5% in Q2 and Consumer NA fell 7% that quarter",
+          "textPlain": "Organic revenue guide trimmed to 6–7% from 6–8% on higher US mortgage rates; North America organic growth slowed to 5% in Q2 and Consumer NA fell 7% that quarter"
+        },
+        {
+          "pill": "H1 EPS",
+          "type": "green",
+          "textHTML": "H1 benchmark EPS <span class=\"val-up\">97.5c</span>, up 15% (+13% at constant FX), EBIT up 11% and margin 28.8% (+50bp); cash conversion 81% and a further $500m share buyback announced",
+          "textPlain": "H1 benchmark EPS 97.5c, up 15% (+13% at constant FX), EBIT up 11% and margin 28.8% (+50bp); cash conversion 81% and a further $500m share buyback announced"
+        },
+        {
+          "pill": "H1 TRACK",
+          "type": "amber",
+          "textHTML": "H1 EPS is 48.3% of the FY consensus vs a 48.1% seasonal norm (<span class=\"val-fl\">+0.2pp</span>, in line); H2 needs 104.0c (+10.5% YoY) against H1 growth of +14.8%, which is a fair bar",
+          "textPlain": "H1 EPS is 48.3% of the FY consensus vs a 48.1% seasonal norm (+0.2pp, in line); H2 needs 104.0c (+10.5% YoY) against H1 growth of +14.8%, which is a fair bar"
+        },
+        {
+          "pill": "HISTORY",
+          "type": "grey",
+          "textHTML": "First downward range trim in the set, after FY26 landed at the top of every range; the H2-weighted EBIT wording is unchanged from a year ago, so it is not a new caveat",
+          "textPlain": "First downward range trim in the set, after FY26 landed at the top of every range; the H2-weighted EBIT wording is unchanged from a year ago, so it is not a new caveat"
+        }
+      ],
+      "revisions": [
+        {
+          "lbl": "FY27 EPS",
+          "val": "−0–1%",
+          "sub": "201.1c → 199–201c",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 EPS",
+          "val": "na",
+          "sub": "227.2c → na",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY27 Revenue",
+          "val": "−0–1%",
+          "sub": "$9.17bn → $9.08–9.17bn",
+          "color": "var(--amber)"
+        },
+        {
+          "lbl": "FY28 Revenue",
+          "val": "na",
+          "sub": "$9.84bn → na",
+          "color": "var(--amber)"
+        }
+      ],
+      "sparkStats": [
+        {
+          "lbl": "3M EPS",
+          "val": "−0.3%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M REV",
+          "val": "−0.3%",
+          "style": "color:var(--red)"
+        },
+        {
+          "lbl": "3M TP",
+          "val": "+0.4%",
+          "style": "color:var(--green)"
+        }
+      ],
+      "sparkLabel": "Year End: Mar 2027 · 37 weeks",
+      "sparkSVG": "<svg id=\"spark-EXPN\" width=\"100%\" height=\"56\" viewBox=\"0 0 480 56\" preserveAspectRatio=\"none\"></svg><div class=\"spark-tt\" id=\"tt-EXPN\"></div>",
+      "h1Inds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "accelInds": [
+        {
+          "lbl": "REV",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        },
+        {
+          "lbl": "EPS",
+          "mark": "—",
+          "dev": "",
+          "state": "na"
+        }
+      ],
+      "importedAt": "2026-11-19T09:22:58.970Z",
+      "source": "html-dom",
+      "sparkData": [
+        {
+          "d": "03 Mar",
+          "eps": 177.9,
+          "price": 2727
+        },
+        {
+          "d": "06 Mar",
+          "eps": 177.9,
+          "price": 2759
+        },
+        {
+          "d": "13 Mar",
+          "eps": 177.9,
+          "price": 2738
+        },
+        {
+          "d": "20 Mar",
+          "eps": 177.9,
+          "price": 2667
+        },
+        {
+          "d": "27 Mar",
+          "eps": 177.9,
+          "price": 2545
+        },
+        {
+          "d": "03 Apr",
+          "eps": 177.9,
+          "price": 2592
+        },
+        {
+          "d": "10 Apr",
+          "eps": 177.8,
+          "price": 2568.5
+        },
+        {
+          "d": "17 Apr",
+          "eps": 177.9,
+          "price": 2810
+        },
+        {
+          "d": "24 Apr",
+          "eps": 177.9,
+          "price": 2779.5
+        },
+        {
+          "d": "08 May",
+          "eps": 177.9,
+          "price": 2690.5
+        },
+        {
+          "d": "15 May",
+          "eps": 178.1,
+          "price": 2564
+        },
+        {
+          "d": "22 May",
+          "eps": 201,
+          "price": 2645
+        },
+        {
+          "d": "02 Jun",
+          "eps": 201.8,
+          "price": 2676
+        },
+        {
+          "d": "05 Jun",
+          "eps": 201.8,
+          "price": 2610
+        },
+        {
+          "d": "12 Jun",
+          "eps": 201.8,
+          "price": 2497
+        },
+        {
+          "d": "19 Jun",
+          "eps": 201.9,
+          "price": 2509
+        },
+        {
+          "d": "26 Jun",
+          "eps": 201.9,
+          "price": 2505
+        },
+        {
+          "d": "03 Jul",
+          "eps": 201.9,
+          "price": 2622
+        },
+        {
+          "d": "10 Jul",
+          "eps": 201.8,
+          "price": 2608
+        },
+        {
+          "d": "17 Jul",
+          "eps": 201.3,
+          "price": 2681
+        },
+        {
+          "d": "24 Jul",
+          "eps": 201.7,
+          "price": 2655
+        },
+        {
+          "d": "31 Jul",
+          "eps": 201.7,
+          "price": 2898
+        },
+        {
+          "d": "07 Aug",
+          "eps": 201.7,
+          "price": 2830
+        },
+        {
+          "d": "14 Aug",
+          "eps": 201.7,
+          "price": 2811
+        },
+        {
+          "d": "21 Aug",
+          "eps": 201.7,
+          "price": 2966
+        },
+        {
+          "d": "28 Aug",
+          "eps": 201.5,
+          "price": 3045
+        },
+        {
+          "d": "07 Sep",
+          "eps": 201.5,
+          "price": 2943
+        },
+        {
+          "d": "11 Sep",
+          "eps": 201.5,
+          "price": 2782
+        },
+        {
+          "d": "18 Sep",
+          "eps": 201.6,
+          "price": 2727
+        },
+        {
+          "d": "25 Sep",
+          "eps": 201.6,
+          "price": 2636
+        },
+        {
+          "d": "02 Oct",
+          "eps": 201.6,
+          "price": 2427
+        },
+        {
+          "d": "09 Oct",
+          "eps": 201.2,
+          "price": 2574
+        },
+        {
+          "d": "16 Oct",
+          "eps": 201.1,
+          "price": 2855
+        },
+        {
+          "d": "23 Oct",
+          "eps": 201.2,
+          "price": 3084
+        },
+        {
+          "d": "30 Oct",
+          "eps": 201.2,
+          "price": 2930
+        },
+        {
+          "d": "06 Nov",
+          "eps": 201.2,
+          "price": 3132
+        },
+        {
+          "d": "13 Nov",
+          "eps": 201.1,
+          "price": 2964
+        }
+      ],
+      "calData": {
+        "beat": false,
+        "beatPhrase": "",
+        "double": false,
+        "events": [
+          {
+            "event": "Q3 trading update",
+            "type": "Q3",
+            "from": "2027-02-02",
+            "to": "2027-02-02",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          },
+          {
+            "event": "Full-year results",
+            "type": "FY results",
+            "from": "2027-05-19",
+            "to": "2027-05-19",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          },
+          {
+            "event": "Annual General Meeting",
+            "type": "AGM",
+            "from": "2027-07-21",
+            "to": "2027-07-21",
+            "label": "",
+            "conf": "confirmed",
+            "src": "RNS"
+          }
+        ]
+      }
     }
   ],
   "scorecardIndex": [
@@ -239139,6 +239817,32 @@
       "index": "AIM ALL-SHARE",
       "entryPrice": 24.25,
       "importedAt": "2026-11-19T08:05:51.457Z",
+      "arc": null
+    },
+    {
+      "id": "SSE_2026_11_18",
+      "ticker": "SSE",
+      "company": "SSE PLC",
+      "score": 64,
+      "verdict": "Hold and wait",
+      "date": "2026-11-18",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FTSE 100",
+      "importedAt": "2026-11-19T09:22:58.969Z",
+      "arc": null
+    },
+    {
+      "id": "EXPN_2026_11_18",
+      "ticker": "EXPN",
+      "company": "Experian PLC",
+      "score": 56,
+      "verdict": "Hold and wait",
+      "date": "2026-11-18",
+      "rnsType": "H1 Results",
+      "mode": "Q4",
+      "index": "FT 30, FTSE 100",
+      "importedAt": "2026-11-19T09:22:58.970Z",
       "arc": null
     }
   ],
