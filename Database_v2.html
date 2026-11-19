@@ -5189,7 +5189,7 @@ function scParseMetricBlock(lines) {
     else if (line.includes('1y ago'))              { [r.y1_h1,r.y1_h2]=scParseH1H2(line); r.y1_fy=scParseFY(line); }
     else if (line.trim().startsWith('Current'))    { [r.cur_h1,r.cur_h2]=scParseH1H2(line); }
     else if (line.includes('H1 avg split'))        { r.h1_avg_split=scParseSplit(line); }
-    else if (/FY1 fc (EPS|Revenue|PBT)/.test(line)){ r.fy1_fc=scParseFcLn(line); }
+    else if (/FY1 fc (EPS|Revenue|PBT)\s*:/.test(line)){ r.fy1_fc=scParseFcLn(line); }   /* the upload's FY1, not the 'FY1 fc … live' line under it */
   }
   const histSplit = (h1, h2, fyLine) => {
     // Prefer H1+H2 sum as the FY denominator — the FY line can be corrupt (GLITCH: H2=FY)
