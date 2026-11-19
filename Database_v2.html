@@ -7385,7 +7385,8 @@ function _hmRedrawFull(rows, tbl) {
 function hmToggleRow(tr) {
   const sel = tr.classList.contains('hm-row-sel');
   // Clear all selections in this table
-  tr.closest('table').querySelectorAll('tr.hm-row-sel').forEach(function(r){ r.classList.remove('hm-row-sel'); });
+  var tb=tr.closest('table'); if(!tb)return;   /* row from a table that has since been redrawn */
+  tb.querySelectorAll('tr.hm-row-sel').forEach(function(r){ r.classList.remove('hm-row-sel'); });
   if (!sel) tr.classList.add('hm-row-sel');
 }
 
