@@ -6638,7 +6638,7 @@ function ignALoad(){
 function ignA(tk){return IGN_A&&IGN_A[String(tk||'').trim().toUpperCase()]||null;}
 window.ignA=ignA;
 /* Today's forecasts for a ticker, for the "since Friday" step, the event log's live row and the scorecard's
-   "broker moves since card": EPS from the live sheets (Ignition Group A if blank), revenue from Ignition Group A.
+   "broker moves since card": EPS and revenue from Ignition Group A (EPS falls back to the Sectors live sheets if blank).
    null when the company published full-year results in (or since) the latest snapshot's week, because the forecast
    year has probably rolled; Friday's snapshot puts it right. rows = the weekly broker rows (fcFetchFromExtractor). */
 function fcLive(tk,rows){
@@ -6647,13 +6647,15 @@ function fcLive(tk,rows){
   if(snapD&&fyD&&fyD>snapD.dt-7*864e5)return null;
   var L=(typeof liveData!=='undefined'&&liveData[tk])||{}, IG=ignA(tk);
   var nz=function(a,b){return (a==null||a===''||isNaN(+a))?(b==null?null:+b):+a;};
-  var o={eps:nz(L.eps1,IG&&IG.e1),eps2:nz(L.eps2,IG&&IG.e2),rev:IG?IG.r1:null,rev2:IG?IG.r2:null,
+  var o={eps:nz(IG&&IG.e1,L.eps1),eps2:nz(IG&&IG.e2,L.eps2),rev:IG?IG.r1:null,rev2:IG?IG.r2:null,
     lab:'Now '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}),
     date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})};
   return (o.eps==null&&o.rev==null)?null:o;
 }
 /* a live figure worth showing against the latest weekly one: moved, and not a glitch-size jump */
-function fcLiveMoved(lv,last){return lv!=null&&last!=null&&!isNaN(lv)&&!isNaN(last)&&+last!==0&&Math.abs(lv/last-1)>=0.0005&&Math.abs(lv/last-1)<=0.6;}
+/* a data glitch = a units slip (pence vs pounds, ×100), not a real cut or upgrade: the size ratio is 50× or more; a live 0 against a real figure is a blank cell */
+function fcLiveGlitch(lv,last){var a=Math.abs(+lv),b=Math.abs(+last);if(!b)return false;if(!a)return true;return a/b>=50||b/a>=50;}
+function fcLiveMoved(lv,last){return lv!=null&&last!=null&&!isNaN(lv)&&!isNaN(last)&&+last!==0&&Math.abs(lv/last-1)>=0.0005&&!fcLiveGlitch(lv,last);}
 try{setTimeout(function(){ignALoad();},4000);}catch(e){}
 function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id);if(!canvas)return;var ctx=canvas.getContext('2d');
   var labels=rows.map(function(r){return r.date;});
@@ -6702,7 +6704,7 @@ function fcBuildChart2(store,id,rows,cfg){var canvas=document.getElementById(id)
   /* Since Friday's snapshot: one dashed step from the last weekly point to today's live-sheet figure (only when it moved) */
   if(cfg.live){var n0=labels.length,last=function(f){for(var k=n0-1;k>=0;k--){var v=rows[k][f];if(v!=null&&!isNaN(v))return {i:k,v:v};}return null;};
     var adds=[[cfg.f1,cfg.live.v1,cfg.c1,cfg.l1],[cfg.f2,cfg.live.v2,cfg.c2,cfg.l2]].map(function(q){var L=q[0]&&last(q[0]);
-      if(!L||q[1]==null||isNaN(q[1])||Math.abs(q[1]/L.v-1)<0.0005||Math.abs(q[1]/L.v-1)>0.6)return null;   /* unchanged, or a jump big enough to be a data glitch */
+      if(!L||q[1]==null||isNaN(q[1])||Math.abs(q[1]/L.v-1)<0.0005||fcLiveGlitch(q[1],L.v))return null;   /* unchanged, or a jump big enough to be a data glitch */
       var d=new Array(n0+1).fill(null);d[L.i]=L.v;d[n0]=q[1];
       return {label:q[3]+' · since Fri',data:d,borderColor:q[2],backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],tension:0,fill:false,spanGaps:true,
         pointRadius:d.map(function(v,k){return k===n0?4:0;}),pointBackgroundColor:'#0f0f15',pointBorderColor:q[2],pointBorderWidth:2,yAxisID:'y'};}).filter(Boolean);
@@ -9226,7 +9228,7 @@ html.calframe #pp-ov,html.calframe [id$="-tip"]{visibility:visible}
         var sc=pick(q[2],q[3]),from,to,it_live=false,sub=String((sc&&sc.sub)||''),eps=q[0].indexOf('eps')===0;
         if(!why&&!(rolled&&q[3]===0)){
           to=rows[z][rolled?q[0].slice(0,3):q[0]]; it_live=false;
-          if(LVc&&!rolled&&LVc[q[0]]!=null&&!isNaN(LVc[q[0]])&&(to==null||Math.abs(LVc[q[0]]/to-1)<=0.6)){to=LVc[q[0]];it_live=true;}
+          if(LVc&&!rolled&&LVc[q[0]]!=null&&!isNaN(LVc[q[0]])&&(to==null||!fcLiveGlitch(LVc[q[0]],to))){to=LVc[q[0]];it_live=true;}
           var rf=a>=0?rows[a][q[0]]:null,cs=cardStart(sub,eps),num=function(v){return v!=null&&!isNaN(v)&&+v!==0;};
           /* card figure unless it's clearly a different unit / basis from the broker data */
           if(cs&&(num(rf)?cs/rf>0.8&&cs/rf<1.25:num(to)&&cs/to>0.5&&cs/to<2))from=cs;else from=rf;}
