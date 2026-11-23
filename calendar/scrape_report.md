@@ -1,14 +1,14 @@
 # Calendar scrape - 2026-11-23
 
-**280 sources · 38 events staged for approval**
+**280 sources · 41 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 122 | read OK, upcoming events found |
-| EMPTY | 148 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 123 | read OK, upcoming events found |
+| EMPTY | 146 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
-| ERROR | 3 | timeout, DNS or server error |
+| ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
@@ -36,7 +36,6 @@
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
 - Property Franchise Group (TPFG) - http 200, browser - https://thepropertyfranchisegroup.co.uk/financial-calendar
-- AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
 - Alumasc (ALU) - http 200, browser - https://www.alumasc.co.uk/key-dates
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
 - Babcock (BAB) - http 200, http - https://www.babcockinternational.com/investors/financial-calendar/
@@ -118,7 +117,6 @@
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
 - Judges Scientific (JDG) - http 200, http - https://www.judges.uk.com/financial-performance/financial-calendar.html
-- Strix (KETL) - http 200, http - https://www.strixplc.com/financial-calendar-strix.html
 - Kooth (KOO) - http 200, http - https://investors.kooth.com/financial-calendar/
 - LBG Media (LBG) - http 200, http - https://www.lbgmedia.co.uk/results-reports-presentations/financial-calendar.asp
 - London Stock Exchange (LSEG) - http 200, http - https://www.lseg.com/en/investor-relations/financial-calendar
@@ -176,6 +174,7 @@
 - Wise (WISE) - http None, chrome - https://wise.com/owners/
 - Admiral (ADM) - http None, chrome - https://www.admiralgroup.co.uk/investor-relations/financial-calendar
 - Computacenter (CCC) - http None, chrome - https://investors.computacenter.com/events/
+- Shoe Zone (SHOE) - http 503, browser - https://www.shoezone.com/Investors/Investors/Financial-Calendar
 
 ## Approved events not re-verified tonight
 
