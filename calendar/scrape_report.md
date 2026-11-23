@@ -1,11 +1,11 @@
-# Calendar scrape - 2026-11-20
+# Calendar scrape - 2026-11-23
 
-**280 sources · 31 events staged for approval**
+**280 sources · 38 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 119 | read OK, upcoming events found |
-| EMPTY | 151 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 122 | read OK, upcoming events found |
+| EMPTY | 148 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 3 | timeout, DNS or server error |
@@ -95,7 +95,6 @@
 - Beeks Financial Cloud (BKS) - http 200, http - https://beeksgroup.com/investor-relations/shareholder-information/
 - B&M European Value Retail (BME) - http 200, http - https://www.bandmretail.com/investors/financial-calendar
 - Boku Inc (BOKU) - http 200, http - https://investors.boku.com/events/
-- Boot (Henry) (BOOT) - http 200, http - https://www.henryboot.co.uk/investors/financial-calendar/
 - Barratt Redrow (BTRW) - http 200, http - https://www.barrattredrow.co.uk/investors/financial-calendar
 - Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
@@ -114,7 +113,6 @@
 - Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
-- Hostelworld (HSW) - http 200, http - https://www.hostelworldgroup.com/investors/financial-calendar
 - Hunting (HTG) - http 200, http - https://huntingplc.com/investors/financial-calendar/
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
@@ -134,7 +132,6 @@
 - Ondo Insurtech (ONDO) - http 200, http - https://www.ondoplc.com/investors/financial-calendar/
 - Oxford Instruments (OXIG) - http 200, http - https://www.oxinst.com/investors/financial-calendar
 - Portmeirion (PMP) - http 200, http - https://www.portmeiriongroup.com/investors/financial-calendar
-- Persimmon (PSN) - http 200, http - https://www.persimmonhomes.com/corporate/investors/financial-calendar
 - Quartix Technologies (QTX) - http 200, http - https://www.quartix.com/en-gb/company/investors/
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Rotork (ROR) - http 200, http - https://www.rotork.com/en/investors/financial-calendar
