@@ -1,11 +1,11 @@
-# Calendar scrape - 2026-11-23
+# Calendar scrape - 2026-11-24
 
-**280 sources · 41 events staged for approval**
+**280 sources · 43 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 123 | read OK, upcoming events found |
-| EMPTY | 146 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 121 | read OK, upcoming events found |
+| EMPTY | 148 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 0 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
@@ -29,6 +29,7 @@
 - Raspberry Pi (RPI) - http 200, browser - https://investors.raspberrypi.com/financial-calendar
 - Tristel (TSTL) - http 200, http - https://investors.tristel.com/investor-hub/
 - Iofina (IOF) - http 200, http - https://iofina.com/investors/financial-calendar/
+- RHI Magnesita (RHIM) - http 200, browser - https://ir.rhimagnesita.com/investors-old/events-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
 - Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
@@ -40,6 +41,7 @@
 - AO World (AO.) - http 200, http - https://www.ao-world.com/investor-centre/events-calendar/
 - Babcock (BAB) - http 200, http - https://www.babcockinternational.com/investors/financial-calendar/
 - Bloomsbury (BMY) - http 200, http - https://www.bloomsbury-ir.co.uk/investor/i_dates.asp
+- Cerillion (CER) - http 200, http - https://www.cerillion.com/investors/financial-calendar/
 - Crown Agents Bank (CABP) - http 200, http - https://www.crownagentsbank.com/investors/corporate-reporting-and-regulatory-documents/#events
 - Elementis (ELM) - http 200, browser - https://www.elementis.com/investors/investor-information/financial-calendar/
 - Forterra (FORT) - http 200, http - https://www.forterra.co.uk/investors/financial-calendar/
@@ -105,6 +107,7 @@
 - Ceres Power (CWR) - http 200, http - https://www.ceres.tech/investors/financial-calendar/
 - Dialight (DIA) - http 200, http - https://www.dialight.com/ir/shareholder-information/
 - Diales (DIAL) - http 200, http - https://www.diales.com/en/investors/financial-calendar
+- DSW Capital (DSW) - http 200, browser - https://dswcapital.com/investors/financial-calendar/
 - Man (EMG) - http 200, http - https://www.man.com/shareholder-relations
 - Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
@@ -145,7 +148,6 @@
 - TP ICAP (TCAP) - http 200, http - https://tpicap.com/tpicap/investors/financial-calendar-upcoming
 - THG (THG) - http 200, http - https://www.thg.com/investor-relations/financial-calendar
 - Team Internet Group (TIG) - http 200, http - https://teaminternet.com/investors/
-- Tullow Oil (TLW) - http 200, http - https://www.tullowoil.com/investors/events/
 - Titon (TON) - http 200, http - https://www.titon.com/shareholder-information
 - Trainline (TRN) - http 200, http - https://www.trainlinegroup.com/investors/shareholder-centre/financial-calendar/
 - United Utilities (UU.) - http 200, http - https://www.unitedutilities.com/corporate/investors/financial-news/financial-calendar/
