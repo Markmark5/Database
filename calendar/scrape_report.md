@@ -1,12 +1,12 @@
-# Calendar scrape - 2026-11-25
+# Calendar scrape - 2026-11-26
 
-**280 sources · 39 events staged for approval**
+**280 sources · 38 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 112 | read OK, upcoming events found |
-| EMPTY | 156 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
-| UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
+| CLEAN | 107 | read OK, upcoming events found |
+| EMPTY | 153 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| UNREADABLE | 9 | page loaded but little text (JS-rendered even in browser) |
 | BLOCKED | 7 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
@@ -33,7 +33,6 @@
 - RHI Magnesita (RHIM) - http 200, browser - https://ir.rhimagnesita.com/investors-old/events-calendar/
 - Kistos (KIST) - http 200, http - https://kistosplc.com/investors/financial-calendar/
 - Oxford Metrics (OMG) - http 200, http - https://oxfordmetrics.com/financials
-- Rightmove (RMV) - http 200, http - https://plc.rightmove.co.uk/#financial_calendar
 - Sanderson Design (SDG) - http 200, http - https://sandersondesign.group/investors/financial-calendar/
 - Synectics (SNX) - http 200, http - https://synecticsplc.com/investors/calendar
 - System1 (SYS1) - http 200, http - https://system1group.com/investors/shareholder-info
@@ -58,10 +57,9 @@
 - Knights (KGH) - http 200, http - https://www.knightsplc.com/company/investors/financial-calendar/
 - Lords Group Trading (LORD) - http 200, http - https://www.lordsgrouptradingplc.co.uk/financials/financial-calendar.asp
 - Marston's (MARS) - http 200, http - https://www.marstonspubs.co.uk/investors/
-- MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
+- MBH Corporation (MBH) - http 200, browser - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mitie (MTO) - http 200, http - https://www.mitie.com/investors/financial-calendar/
-- Next 15 (NFG) - http 200, http - https://www.next15.com/investors/financial-calendar/
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
 - Peel Hunt (PEEL) - http 200, browser - https://www.peelhunt.com/investors/financial-calendar/
 - Personal Group (PGH) - http 200, browser - https://www.personalgroup.com/financial-calendar
@@ -77,7 +75,6 @@
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
 - Beauty Tech Group (TBTG) - http 200, http - https://www.thebeautytechgroup.com/financial-calendar
-- Pebble Group (PEBB) - http 200, http - https://www.thepebblegroup.com/investors/financial-calendar/
 - Travis Perkins (TPK) - http 200, http - https://www.travisperkinsplc.co.uk/investors/financial-calendar/
 - Tribal Group (TRB) - http 200, http - https://www.tribalgroup.com/investors/announcements
 - Volex (VLX) - http 200, http - https://www.volex.com/investors
@@ -93,7 +90,7 @@
 - Advanced Medical Solutions Group (AMS) - http 200, http - https://admedsol.com/investor-relations/shareholder-information/financial-calendar/
 - ASOS (ASC) - http 200, http - https://www.asosplc.com/investors/shareholder-centre/shareholder-information/
 - Auction Technology (ATG) - http 200, browser - https://www.auctiontechnologygroup.com/investors/financial-calendar/
-- Avation (AVAP) - http 200, http - https://www.avation.net/results.html
+- Avation (AVAP) - http 200, browser - https://www.avation.net/results.html
 - Avacta (AVCT) - http 200, http - https://avacta.com/investors/events/
 - AstraZeneca (AZN) - http 200, browser - https://www.astrazeneca.com/investor-relations/shareholder-information.html
 - Balfour Beatty (BBY) - http 200, http - https://www.balfourbeatty.com/investors/financial-calendar
@@ -104,7 +101,7 @@
 - Card Factory (CARD) - http 200, http - https://www.cardfactoryinvestors.com/investors/financial-calendar
 - Checkit (CKT) - http 200, http - https://www.checkit.net/investor-relations/financial-calendar
 - CLS (CLI) - http 200, http - https://clsholdings.com/investors/financial-calendar
-- Calnex Solutions (CLX) - http 200, http - https://investors.calnexsol.com/investors/financial-calendar/
+- Calnex Solutions (CLX) - http 200, browser - https://investors.calnexsol.com/investors/financial-calendar/
 - CML Microsystems (CML) - http 200, http - https://www.cmlmicroplc.com/shareholder-information-2/
 - Coats (COA) - http 200, http - https://www.coats.com/en/investors/financial-calendar
 - Northcoders (CODE) - http 200, http - https://investors.northcodersgroup.com/investors/financial-calendar.asp
@@ -115,14 +112,13 @@
 - Diales (DIAL) - http 200, http - https://www.diales.com/en/investors/financial-calendar
 - DSW Capital (DSW) - http 200, browser - https://dswcapital.com/investors/financial-calendar/
 - Man (EMG) - http 200, http - https://www.man.com/shareholder-relations
-- Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
 - Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
-- Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
+- Gemfields Group (GEM) - http 200, browser - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
 - Hunting (HTG) - http 200, http - https://huntingplc.com/investors/financial-calendar/
-- Intercede (IGP) - http 200, http - https://ir.intercede.com/results-reports/
+- Intercede (IGP) - http 200, browser - https://ir.intercede.com/results-reports/
 - Inchcape (INCH) - http 200, http - https://www.inchcape.com/en/investors/share-price-and-tools/investor-calendar
 - IQE (IQE) - http 200, http - https://www.iqep.com/investors/events/financial-calendar/
 - Ixico (IXI) - http 200, http - https://ixico.com/investors/investor-resources/financial-calendar
@@ -143,6 +139,7 @@
 - Quartix Technologies (QTX) - http 200, http - https://www.quartix.com/en-gb/company/investors/
 - Rio Tinto (RIO) - http 200, http - https://www.riotinto.com/en/invest/financial-calendar
 - Rotork (ROR) - http 200, http - https://www.rotork.com/en/investors/financial-calendar
+- Rosebank Industries (ROSE) - http 200, http - https://www.rosebankindustries.com/investors/shareholder-resources/financial-calendar/
 - Severfield (SFR) - http 200, http - https://www.severfield.com/calendar
 - WH Smith (SMWH) - http 200, browser - https://www.whsmithplc.co.uk/investors/financial-calendar
 - Smiths News (SNWS) - http 200, http - https://smithsnews.co.uk/investor-zone/investors/key-dates/
@@ -171,7 +168,15 @@
 
 ## UNREADABLE
 
+- AB Dynamics (ABDP) - http 200, http - https://www.abdplc.com/investors/shareholder-services/financial-calendar/
+- Anpario (ANP) - http 200, http - https://www.anpario.com/investor/financial-calendar/
+- Applied Nutrition (APN) - http 200, http - https://www.appliednutritionplc.com/financial-calendar/
+- Next 15 (NFG) - http 200, http - https://www.next15.com/investors/financial-calendar/
+- Pebble Group (PEBB) - http 200, http - https://www.thepebblegroup.com/investors/financial-calendar/
+- Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - IG Design (IGR) - http 200, http - https://www.thedesigngroup.com/shareholder-calendar/
+- Rank Group (The) (RNK) - http 200, http - https://www.rank.com/investors/news-events-alerts/financial-calendar/
+- TheWorks.co.uk (WRKS) - http 200, http - https://corporate.theworks.co.uk/investors/financial-calendar/
 
 ## BLOCKED
 
@@ -192,5 +197,9 @@
 
 ## Approved events not re-verified tonight
 
+- Anpario FY results 2027-03-01
+- Applied Nutrition H1 results 2027-03-01
+- TheWorks.co.uk H1 results 2027-01-21
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
+- Applied Nutrition AGM 2027-01-14
