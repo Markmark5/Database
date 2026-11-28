@@ -1,17 +1,18 @@
-# Calendar scrape - 2026-11-27
+# Calendar scrape - 2026-11-28
 
-**280 sources · 43 events staged for approval**
+**280 sources · 41 events staged for approval**
 
 | Outcome | Count | Meaning |
 |---|---|---|
-| CLEAN | 110 | read OK, upcoming events found |
-| EMPTY | 158 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
+| CLEAN | 103 | read OK, upcoming events found |
+| EMPTY | 164 | read OK, no upcoming results/TU/AGM on page (may be genuine) |
 | UNREADABLE | 1 | page loaded but little text (JS-rendered even in browser) |
-| BLOCKED | 7 | 401/403/429 - bot protection or login |
+| BLOCKED | 8 | 401/403/429 - bot protection or login |
 | ERROR | 4 | timeout, DNS or server error |
 
 ## EMPTY
 
+- Brickability (BRCK) - http 200, http - https://brckgroup.com/investors/financial-timetable
 - Cake Box (CBOX) - http 200, http - https://cakeboxinvestors.com/investor-hub/financial-calendar/
 - Castings (CGS) - http 200, http - https://castings.plc.uk/investors/financial-calendar/
 - XP Power (XPP) - http 200, http - https://corporate.xppower.com/investors/financial-calendar
@@ -61,6 +62,7 @@
 - MBH Corporation (MBH) - http 200, http - https://www.mbhplc.co.uk/investor-relations/
 - Microlise (SAAS) - http 200, browser - https://www.microlise.com/investors/financial-calendar/
 - Mitie (MTO) - http 200, http - https://www.mitie.com/investors/financial-calendar/
+- Motorpoint (MOTR) - http 200, http - https://www.motorpoint.co.uk/plc/investor-relations/financial-calendar
 - Next 15 (NFG) - http 200, http - https://www.next15.com/investors/financial-calendar/
 - On the Beach (OTB) - http 200, http - https://www.onthebeachgroupplc.com/investor-centre/financial-calendar
 - Peel Hunt (PEEL) - http 200, browser - https://www.peelhunt.com/investors/financial-calendar/
@@ -76,6 +78,7 @@
 - Speedy Hire (SDY) - http 200, http - https://www.speedyhire.com/investors/financial-calendar/
 - Staffline (STAF) - http 200, http - https://www.stafflinegroupplc.co.uk/investor-relations/financial-calendar/
 - STV (STVG) - http 200, http - https://www.stvplc.tv/investors/financial-calendar/
+- Telecom Plus (TEP) - http 200, browser - https://www.telecomplus.co.uk/site-services/financial-calendar
 - Beauty Tech Group (TBTG) - http 200, http - https://www.thebeautytechgroup.com/financial-calendar
 - Pebble Group (PEBB) - http 200, http - https://www.thepebblegroup.com/investors/financial-calendar/
 - Travis Perkins (TPK) - http 200, http - https://www.travisperkinsplc.co.uk/investors/financial-calendar/
@@ -118,6 +121,7 @@
 - Evoke (EVOK) - http 200, http - https://www.evokeplc.com/investors/shareholder-information/financial-calendar/
 - W.A.G Payment Solutions PLC (Eurowag) (EWG) - http 202, browser - https://investors.eurowag.com/investors/financial-calendar/
 - Funding Circle (FCH) - http 200, http - https://corporate.fundingcircle.com/investors/financial-calendar
+- Gemfields Group (GEM) - http 200, http - https://www.gemfieldsgroup.com/investor-calendar/
 - Headlam Group (HEAD) - http 200, http - https://www.headlam.com/investors/financial-calendar/
 - Halfords (HFD) - http 200, http - https://www.halfordscompany.com/investor-hub/financial-calendar/
 - Hilton Food (HFG) - http 200, http - https://www.hiltonfoods.com/investors/financial-calendar/
@@ -150,6 +154,7 @@
 - Inspecs (SPEC) - http 200, browser - https://www.inspecs.com/investors/financial-calendar/
 - Spirax (SPX) - http 200, browser - https://www.spiraxgroup.com/en/investors/investment-case/events-calendar
 - Serica Energy (SQZ) - http 200, http - https://www.serica-energy.com/investors/financial-calendar/
+- Stelrad (SRAD) - http 200, browser - https://stelradplc.com/investors-2/financial-calendar/
 - S & U (SUS) - http 200, http - https://www.suplc.co.uk/financial-calendar.html
 - Synthomer (SYNT) - http 200, http - https://www.synthomer.com/investor-relations/financial-calendar/
 - Tate & Lyle (TATE) - http 200, browser - https://www.tateandlyle.com/investors/financial-calendar
@@ -162,6 +167,7 @@
 - Trainline (TRN) - http 200, http - https://www.trainlinegroup.com/investors/shareholder-centre/financial-calendar/
 - United Utilities (UU.) - http 200, http - https://www.unitedutilities.com/corporate/investors/financial-news/financial-calendar/
 - Victoria (VCP) - http 200, http - https://www.victoriaplc.com/financial-calendar/
+- Virgin Wines UK (VINO) - http 200, http - https://www.virginwinesplc.co.uk/investors/financial-calendar/
 - Vertu Motors (VTU) - http 200, http - https://investors.vertumotors.com/investors/
 - Vistry (VTY) - http 200, http - https://www.vistry.co.uk/investors/financial-calendar
 - Watkin Jones (WJG) - http 200, http - https://watkinjonesplc.com/investors/shareholder-centre/financial-calendar/
@@ -183,6 +189,7 @@
 - Avon Technologies (AVON) - http 403, chrome - https://www.avon-technologiesplc.com/investors/financial-calendar/
 - Currys (CURY) - http 403, chrome - https://www.currysplc.com/investors/financial-calendar/
 - Informa (INF) - http 403, chrome - https://www.informa.com/investors/financial-calendar/
+- MHA (MHA) - http 403, chrome - https://www.mha.co.uk/investors/investor-information/financial-calendar
 - Beazley (BEZ) - http 403, chrome - https://www.beazley.com/en-US/investor-relations/financial-calendar
 
 ## ERROR
@@ -194,5 +201,7 @@
 
 ## Approved events not re-verified tonight
 
+- MHA Trading update 2026-11-01
 - Time Finance AGM 2026-11-30
 - Informa FY results 2027-03-11
+- MHA H1 results 2026-11-01
